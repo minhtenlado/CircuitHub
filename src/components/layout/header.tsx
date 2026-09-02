@@ -6,6 +6,7 @@ import { useNavStore, type ViewRole } from '@/stores/nav-store';
 import { useCartStore } from '@/stores/cart-store';
 import { useWishlistStore } from '@/stores/wishlist-store';
 import { useAuthStore } from '@/stores/auth-store';
+import { useSearchHistoryStore } from '@/stores/search-history-store';
 import { useNotifications } from '@/lib/api/hooks';
 import { Logo } from '@/components/logo';
 import {
@@ -46,6 +47,8 @@ import {
   Zap,
   Store,
   FileSpreadsheet,
+  Clock,
+  X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
@@ -171,6 +174,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
   const goProduct = useNavStore((s) => s.goProduct);
   const goCategory = useNavStore((s) => s.goCategory);
   const goShop = useNavStore((s) => s.goShop);
+  const searchHistory = useSearchHistoryStore();
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
   const [results, setResults] = useState<SearchResult | null>(null);
@@ -218,6 +222,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
 
   const submit = (q?: string) => {
     const term = (q ?? query).trim();
+    if (term) searchHistory.add(term);
     goProducts(term ? { q: term } : {});
     setFocused(false);
   };
@@ -315,22 +320,57 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
             transition={{ duration: 0.15 }}
             className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 rounded-xl border border-border/70 bg-popover/95 shadow-lg backdrop-blur-md max-h-[70vh] overflow-y-auto"
           >
-            {/* No query: show popular searches */}
+            {/* No query: show recent + popular searches */}
             {!query.trim() && (
-              <div className="p-3">
-                <div className="px-1 pb-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                  Popular searches
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {POPULAR_SEARCHES.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => { setQuery(s); submit(s); }}
-                      className="rounded-full border border-cyan-200/60 bg-cyan-50/60 px-2.5 py-1 text-xs font-medium text-cyan-800 transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
-                    >
-                      {s}
-                    </button>
-                  ))}
+              <div className="p-3 space-y-3">
+                {searchHistory.searches.length > 0 && (
+                  <div>
+                    <div className="flex items-center justify-between px-1 pb-1.5">
+                      <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                        Recent searches
+                      </span>
+                      <button
+                        onClick={() => searchHistory.clear()}
+                        className="text-[10px] text-muted-foreground hover:text-rose-500 transition-colors"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                    <div className="space-y-0.5">
+                      {searchHistory.searches.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => { setQuery(s); submit(s); }}
+                          className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-left hover:bg-cyan-50 transition-colors group"
+                        >
+                          <Clock className="h-3.5 w-3.5 text-muted-foreground group-hover:text-cyan-600 flex-shrink-0" />
+                          <span className="flex-1 truncate text-slate-700">{s}</span>
+                          <span
+                            onClick={(e) => { e.stopPropagation(); searchHistory.remove(s); }}
+                            className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-rose-500 p-0.5 rounded transition-all"
+                          >
+                            <X className="h-3 w-3" />
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <div className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                    Popular searches
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {POPULAR_SEARCHES.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => { setQuery(s); submit(s); }}
+                        className="rounded-full border border-cyan-200/60 bg-cyan-50/60 px-2.5 py-1 text-xs font-medium text-cyan-800 transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

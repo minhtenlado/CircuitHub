@@ -37,6 +37,7 @@ import { useNavStore } from '@/stores/nav-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { useToast } from '@/hooks/use-toast';
 import { formatVND, formatDate, timeAgo, formatFileSize, initials } from '@/lib/format';
+import { downloadInvoice } from '@/lib/invoice';
 import { Rating } from '@/components/common/rating';
 import { ProductTypeBadge, VerifiedBadge, TechBadge } from '@/components/common/badges';
 import { WishlistShareDialog } from '@/components/buyer/wishlist-share-dialog';
@@ -917,7 +918,10 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => toast({ title: 'Invoice download', description: `Invoice for ${order.code} is being prepared.` })}
+                    onClick={() => {
+                      downloadInvoice(order);
+                      toast({ title: 'Invoice opened', description: `${order.code} invoice opened in a new tab. Use Ctrl+P to save as PDF.` });
+                    }}
                   >
                     <FileText className="h-3.5 w-3.5" />
                     Invoice

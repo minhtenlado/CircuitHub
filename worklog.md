@@ -986,3 +986,82 @@ Project was stable after Round 4 with live search autocomplete and wishlist shar
 6. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
 7. **Seed fix: version release dates** — Set version `releaseDate` to match product `releaseDate` in seed script
 
+
+---
+Task ID: Round-6 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: Implement real invoice download + search history feature
+
+## Current Project Status Assessment
+
+Project was stable after Round 5 with version sorting fix and wishlist import. QA via agent-browser confirmed all existing features working. Identified two improvement opportunities from the Round 5 recommendations:
+
+1. **Invoice button was a stub** — The buyer dashboard's Invoice button only showed a toast ("Invoice for CH-226347 is being prepared") instead of generating a real downloadable invoice.
+2. **No search history** — The search bar showed static "Popular searches" but didn't remember the user's recent searches.
+
+## Completed Modifications
+
+### New Features
+
+1. **Real Invoice Download** (`/src/lib/invoice.ts` + buyer dashboard integration)
+   - **`generateInvoiceHTML()` function** — Generates a complete, printable HTML invoice with:
+     - Cyan gradient header with CircuitHub logo (SVG), brand name, tagline, and "INVOICE" title
+     - Invoice details block: order code, date, order status badge, payment status badge + method
+     - Shipping address block: parsed from JSON, shows full name, phone, address lines, ward/district/city/country
+     - Items table with columns: Item (with SKU + product type), Qty, Unit Price, Line Total
+     - Totals section: Subtotal, Discount (with emerald minus), Shipping, Grand Total (cyan-700, 22px bold)
+     - Footer with brand tagline, support contact, and "valid without signature" disclaimer
+     - "Print / Save PDF" floating button (hidden in print mode)
+     - Full CSS styling with responsive layout, print media queries, status badge colors
+   - **`downloadInvoice()` function** — Creates a Blob from the HTML, opens it in a new browser tab via `window.open()`, cleans up the object URL after 1 second
+   - **Buyer dashboard integration** — Replaced the toast-only Invoice button with `downloadInvoice(order)` call + helpful toast: "Invoice opened in a new tab. Use Ctrl+P to save as PDF."
+   - Verified: Clicking Invoice button opens a new tab with the full styled invoice, user can print to PDF
+
+2. **Search History** (`/src/stores/search-history-store.ts` + header SearchBar integration)
+   - **`useSearchHistoryStore` Zustand store** with persist middleware:
+     - Stores up to 5 recent search queries in localStorage
+     - `add(query)` — adds to front, deduplicates, caps at 5
+     - `remove(query)` — removes individual entry
+     - `clear()` — clears all history
+   - **Header SearchBar integration**:
+     - When search input is focused and empty, dropdown now shows two sections:
+       - **"RECENT SEARCHES"** (only if history exists): list of recent queries with Clock icon, each with hover-reveal X button to remove individual entry, "Clear" button at top to clear all
+       - **"POPULAR SEARCHES"**: existing static chips (ESP32, STM32, KiCad 9, 4-layer PCB)
+     - Search queries saved to history on submit (Enter or clicking a suggestion)
+     - Clicking a recent search immediately re-runs that search
+     - Individual remove (X) on hover for each recent search
+   - Verified: Typing "ESP32" → pressing Enter → clearing search → focusing input shows "RECENT SEARCHES" with "ESP32" entry
+
+### Styling Improvements
+
+- Invoice HTML uses cyan gradient header (#06b6d4 → #2dd4bf), professional typography, tabular-nums for prices
+- Status badges on invoice: emerald for paid/completed, amber for pending, red for cancelled
+- Print button is cyan with shadow, hidden during print
+- Search history list items have hover state with Clock icon turning cyan
+- Individual search history remove (X) appears on hover with rose color on hover
+- "RECENT SEARCHES" label has "Clear" link on the right (rose on hover)
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200
+- Invoice download: opens new tab with full HTML invoice (INVOICE heading, order details, items table, totals, footer)
+- Search history: "ESP32" appears in "RECENT SEARCHES" after submitting a search, persists across page reloads via localStorage
+- No console errors
+
+## Unresolved Issues / Risks
+
+1. **Invoice popup may be blocked** — Some browsers block `window.open()` if not triggered by a direct user click. The invoice button is a click handler so it should work, but popup blockers could still interfere in edge cases.
+2. **Search history persists indefinitely** — There's no automatic expiry. Old searches stay until manually cleared. This is fine for MVP but production might want to expire after 30 days.
+3. **Invoice doesn't include seller information** — Currently shows items but not which shop each item came from. For multi-seller orders, the invoice should show seller breakdown.
+
+## Priority Recommendations for Next Phase
+
+1. **Admin product moderation** — Approve/reject pending products with reason field and seller notification
+2. **Real-time notifications** — Polling-based notification badge that updates without page refresh
+3. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
+4. **Order detail full page** — Dedicated full-page order detail view (not just expandable card)
+5. **Product image upload** — Real file upload in Add Product dialog with preview and progress
+6. **Seller breakdown in invoice** — For multi-seller orders, show which shop each item came from
+7. **Search history expiry** — Auto-expire searches older than 30 days
+
