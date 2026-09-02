@@ -51,6 +51,7 @@ import {
   RefreshCw,
   ThumbsUp,
   Star as StarIcon,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -110,6 +111,137 @@ const CATEGORY_ICONS: Record<string, typeof CircuitBoard> = {
   firmware: Binary,
   services: Cog,
 };
+
+/* ============================================================
+   FrequentlyBoughtTogether
+   ============================================================ */
+function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; related: any[] }) {
+  const { toast } = useToast();
+  const cart = useCartStore();
+  const [selected, setSelected] = useState<Set<string>>(new Set(related.map((r) => r.id)));
+
+  const items = [mainProduct, ...related];
+  const checkedItems = items.filter((i) => i.id === mainProduct.id || selected.has(i.id));
+  const bundleTotal = checkedItems.reduce((sum, i) => sum + i.price, 0);
+  const bundleOriginal = checkedItems.reduce((sum, i) => sum + (i.compareAtPrice ?? i.price), 0);
+  const savings = bundleOriginal - bundleTotal;
+
+  function toggle(id: string) {
+    if (id === mainProduct.id) return; // main product always selected
+    setSelected((s) => {
+      const next = new Set(s);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function addBundleToCart() {
+    checkedItems.forEach((item) => {
+      cart.addItem({
+        productId: item.id,
+        slug: item.slug,
+        name: item.name,
+        imageUrl: item.images?.[0]?.url,
+        price: item.price,
+        productType: item.productType,
+        shopId: item.shop?.id ?? item.shopId,
+        shopName: item.shop?.name ?? 'Shop',
+      });
+    });
+    toast({
+      title: 'Bundle added to cart',
+      description: `${checkedItems.length} items · ${formatVND(bundleTotal)}`,
+    });
+  }
+
+  return (
+    <section className="mt-12">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-cyan-500" />
+            Frequently Bought Together
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">Customers who bought this item also bought</p>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-cyan-200/60 bg-gradient-to-br from-cyan-50/40 via-white to-teal-50/30 p-5 sm:p-6">
+        <div className="grid lg:grid-cols-[1fr_300px] gap-6">
+          {/* Products visual */}
+          <div className="flex items-center gap-3 flex-wrap">
+            {items.map((item, idx) => {
+              const isMain = item.id === mainProduct.id;
+              const isChecked = isMain || selected.has(item.id);
+              return (
+                <div key={item.id} className="flex items-center gap-3">
+                  {idx > 0 && <Plus className="h-4 w-4 text-muted-foreground flex-shrink-0" />}
+                  <button
+                    onClick={() => toggle(item.id)}
+                    className={`relative w-28 sm:w-32 rounded-xl overflow-hidden border-2 transition-all text-left ${
+                      isChecked ? 'border-cyan-500 shadow-md' : 'border-border opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <div className="aspect-square bg-muted relative">
+                      {item.images?.[0]?.url && (
+                        <img src={item.images[0].url} alt={item.name} className="absolute inset-0 w-full h-full object-cover" />
+                      )}
+                      {isMain && (
+                        <span className="absolute top-1 left-1 text-[9px] font-bold bg-cyan-500 text-white px-1.5 py-0.5 rounded">
+                          THIS ITEM
+                        </span>
+                      )}
+                      <div className={`absolute top-1 right-1 h-4 w-4 rounded-full border-2 flex items-center justify-center ${
+                        isChecked ? 'bg-cyan-500 border-cyan-500' : 'bg-white border-border'
+                      }`}>
+                        {isChecked && <CheckCircle2 className="h-3 w-3 text-white" />}
+                      </div>
+                    </div>
+                    <div className="p-2 bg-white">
+                      <p className="text-xs font-medium line-clamp-2 leading-tight">{item.name}</p>
+                      <p className="text-xs font-bold text-cyan-700 mt-1">{formatVND(item.price)}</p>
+                    </div>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bundle summary */}
+          <div className="rounded-xl bg-white border border-border/60 p-4 flex flex-col gap-3 justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                Bundle Price ({checkedItems.length} items)
+              </p>
+              <div className="space-y-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl font-bold text-cyan-700">{formatVND(bundleTotal)}</span>
+                  {savings > 0 && (
+                    <span className="text-sm text-muted-foreground line-through">{formatVND(bundleOriginal)}</span>
+                  )}
+                </div>
+                {savings > 0 && (
+                  <p className="text-xs text-emerald-600 font-medium flex items-center gap-1">
+                    <Sparkles className="h-3 w-3" />
+                    You save {formatVND(savings)}
+                  </p>
+                )}
+              </div>
+            </div>
+            <Button
+              onClick={addBundleToCart}
+              className="w-full bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white"
+            >
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              Add Bundle to Cart
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 /* ============================================================
    ProductDetailView
@@ -574,6 +706,11 @@ function ProductDetailContent({ product }: { product: any }) {
 
         {/* Below the fold — Tabs */}
         <ProductTabs product={product} activeTab={activeTab} onTabChange={setActiveTab} />
+
+        {/* Frequently Bought Together */}
+        {product.related && product.related.length >= 2 && (
+          <FrequentlyBoughtTogether mainProduct={product} related={product.related.slice(0, 3)} />
+        )}
 
         {/* Related products */}
         {product.related && product.related.length > 0 && (

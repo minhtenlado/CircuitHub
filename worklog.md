@@ -704,3 +704,100 @@ Additionally found: Seller Analytics API 500 due to `db.review.findMany({ where:
 5. **Notification system** — Real-time notification dropdown with WebSocket, mark-all-as-read, notification preferences
 6. **Mobile app PWA** — Service worker, offline cart, push notifications
 
+
+---
+Task ID: Round-3 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: QA testing, fix navigation + review submission bugs, add Add Product dialog + Frequently Bought Together, implement hash-based routing with browser back/forward support
+
+## Current Project Status Assessment
+
+Project was stable after Round 2 with BOM tool, Product Comparison, and Recently Viewed features. QA via agent-browser revealed:
+
+1. **Review submission failed** — POST /api/v1/reviews returned 500 (foreign key violation) because `userId: 'demo-buyer'` doesn't exist in User table. Same class of bug as Round 2's order creation issue.
+2. **No URL hash routing** — All `goXxx()` methods in nav store used `set({ view, params })` directly without updating the URL hash. This meant browser back/forward didn't work, page refresh lost the current view, and URLs weren't shareable.
+3. **Seller Center "Add Product" was a stub** — Button only showed a toast saying "Product editor will open here" instead of a real form.
+4. **Product detail lacked "Frequently Bought Together"** — A key e-commerce UX pattern was missing.
+
+## Completed Modifications
+
+### Bug Fixes
+
+1. **Reviews API demo user resolution** (`/src/app/api/v1/reviews/route.ts`)
+   - Added `resolveDemoUserId()` call to map `demo-buyer` to a real DB user before creating the review
+   - Verified: POST /api/v1/reviews now returns 200, "Review submitted - Thanks for your feedback!" toast appears
+
+2. **Hash-based routing with browser back/forward** (`/src/stores/nav-store.ts`)
+   - Rewrote nav store: all `goXxx()` methods now delegate to `setView()` which calls `window.history.pushState()` 
+   - Added `parseHash()` and `buildHash()` helpers for URL hash ↔ state conversion
+   - Added `restoreFromHash()` method to restore state from URL on page load
+   - Added `setupHashListener()` exported function that sets up `popstate` and `hashchange` listeners
+   - Called `setupHashListener()` in `useEffect` in the main `Home` component in `page.tsx`
+   - Verified: URL updates correctly when navigating (#/products, #/category?slug=pcb-boards, #/product-detail?slug=...), browser back/forward works, page refresh restores the correct view
+
+3. **Seller products POST API demo user resolution** (`/src/app/api/v1/seller/products/route.ts`)
+   - Added `resolveDemoUserId()` for sellerId
+   - Added shopId resolution: if shopId is 'demo-shop', find the real shop by sellerId
+   - Fixed audit log creation to use resolved sellerId
+   - Verified: POST /api/v1/seller/products now returns 200, product appears in seller's product list immediately
+
+### New Features
+
+1. **Add Product Dialog** (`/src/components/seller/add-product-dialog.tsx` — ~300 LOC)
+   - 4-step wizard dialog: Type → Basic Info → Specifications → Review
+   - Step 1 (Type): Choose PHYSICAL / DIGITAL / SERVICE with icon cards
+   - Step 2 (Basic Info): Name, short description, category dropdown, brand, SKU, MPN, price, compare-at price, stock (with unlimited toggle for non-digital), image URL
+   - Step 3 (Specifications): Type-specific fields:
+     - PHYSICAL: PCB layers, thickness, material, surface finish, color, dimensions
+     - DIGITAL: Software, software version, current version, file format, license type
+     - SERVICE: Scope, deliverables, duration days, revisions
+   - Step 4 (Review): Summary of all entered data with "Create Product" button
+   - Step indicator with checkmarks for completed steps
+   - Form validation per step (can't proceed without required fields)
+   - On success: invalidates seller-products + seller-analytics query caches, closes dialog, shows toast
+   - Wired into `ProductsTab` in seller-center.tsx with `sellerId`, `shopId`, `categories` props
+   - Categories fetched via inline `useQuery` in SellerCenter component (flattened from tree)
+
+2. **Frequently Bought Together** (`/src/features/products/product-detail-view.tsx`)
+   - New `FrequentlyBoughtTogether` component rendered between the tabs and Related Products
+   - Shows main product + up to 3 related products in a horizontal row with + icons between them
+   - Each product has a checkbox toggle (main product always checked)
+   - Bundle price summary panel on the right: total price, original price (strikethrough), savings
+   - "Add Bundle to Cart" button adds all checked items to cart at once
+   - Cyan gradient background card with glass effect
+   - "THIS ITEM" badge on the main product
+   - Verified: 4 items added to cart, "Bundle added to cart" toast shown
+
+### Styling Improvements
+
+- Add Product dialog uses cyan gradient header, step indicator with emerald checkmarks for completed steps
+- Frequently Bought Together uses cyan-50/teal-50 gradient card with rounded-2xl border
+- Bundle summary panel is a white card with cyan-700 total price and emerald savings text
+- "Add Bundle to Cart" button uses cyan-to-teal gradient
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200: products, product detail, reviews (POST), seller products (POST), orders, wallet, analytics
+- Hash routing verified: URL updates on navigation, browser back/forward works, page refresh restores view
+- Review submission: 5-star rating + comment → "Review submitted - Thanks for your feedback!" → POST returns 200
+- Add Product dialog: 4-step wizard completed → "Test Digital Product" created → appears in seller's product list (18 products, was 17)
+- Frequently Bought Together: 4-item bundle added to cart → "Cart, 4 items" → "Bundle added to cart" toast
+- No console errors or hydration warnings
+
+## Unresolved Issues / Risks
+
+1. **Stale React Query cache after compilation errors** — When a file has a compilation error, the page can show "No products found" even after the error is fixed, because the query cache retains the error state. A full page reload fixes this. Consider adding `retry: 2` and `refetchOnMount: 'always'` to critical queries.
+2. **Product creation doesn't upload real images** — The Add Product dialog only accepts an image URL. Production needs file upload with storage provider (S3/Cloudinary).
+3. **Frequently Bought Together uses related products as a proxy** — Real "frequently bought together" data requires order co-occurrence analysis. Current implementation uses same-category products as a stand-in.
+4. **Hash routing doesn't handle deep links on first load** — If a user visits `/#/product-detail?slug=esp32-wroom-32-devkit-v1` directly, the `setupHashListener` runs in useEffect which is after initial render. There may be a brief flash of the home view before the correct view loads.
+
+## Priority Recommendations for Next Phase
+
+1. **Search autocomplete** — Add dropdown suggestions when typing in the header search bar (popular products, categories, recent searches)
+2. **Product image upload** — Real file upload in Add Product dialog with preview, progress bar, and storage provider integration
+3. **Order detail page for buyers** — Expandable order cards with full timeline, tracking link, and invoice download
+4. **Admin product moderation** — Approve/reject pending products with reason field and seller notification
+5. **Real-time notifications** — WebSocket or polling-based notification badge that updates without page refresh
+6. **Wishlist sharing** — Generate a shareable link for wishlist items
+

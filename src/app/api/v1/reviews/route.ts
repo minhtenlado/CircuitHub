@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { resolveDemoUserId } from '@/lib/api/auth-resolver';
 
 export function ok<T>(data: T, message = 'Success') {
   return NextResponse.json({ success: true, data, message });
@@ -11,18 +12,19 @@ export async function POST(req: NextRequest) {
   if (!body?.userId || !body?.productId || !body?.rating)
     return NextResponse.json({ success: false, message: 'userId, productId, rating required' }, { status: 422 });
 
+  const userId = await resolveDemoUserId(body.userId);
   const rating = Math.max(1, Math.min(5, parseInt(body.rating, 10)));
   const product = await db.product.findUnique({ where: { id: body.productId } });
   if (!product) return NextResponse.json({ success: false, message: 'Product not found' }, { status: 404 });
 
   // Check verified purchase
   const hasPurchased = await db.orderItem.findFirst({
-    where: { productId: body.productId, order: { userId: body.userId, paymentStatus: 'SUCCESS' } },
+    where: { productId: body.productId, order: { userId, paymentStatus: 'SUCCESS' } },
   });
 
   const review = await db.review.create({
     data: {
-      userId: body.userId,
+      userId,
       productId: body.productId,
       reviewType: 'PRODUCT',
       rating,

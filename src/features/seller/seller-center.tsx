@@ -60,6 +60,7 @@ import {
 } from '@/lib/api/hooks';
 import { useNavStore } from '@/stores/nav-store';
 import { useToast } from '@/hooks/use-toast';
+import { AddProductDialog } from '@/components/seller/add-product-dialog';
 import {
   formatVND,
   formatVNDCompact,
@@ -936,9 +937,10 @@ function OverviewTab({
    Tab 2: Products
    ============================================================ */
 
-function ProductsTab({ products, toast, goProduct }: { products: any[]; toast: any; goProduct: (slug: string) => void }) {
+function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories }: { products: any[]; toast: any; goProduct: (slug: string) => void; sellerId: string; shopId: string; categories: { id: string; name: string; slug: string }[] }) {
   const [type, setType] = useState<'ALL' | 'PHYSICAL' | 'DIGITAL' | 'SERVICE'>('ALL');
   const [query, setQuery] = useState('');
+  const [showAddProduct, setShowAddProduct] = useState(false);
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
@@ -965,12 +967,20 @@ function ProductsTab({ products, toast, goProduct }: { products: any[]; toast: a
           <Button
             size="sm"
             className="bg-cyan-500 hover:bg-cyan-600 text-white"
-            onClick={() => toast({ title: 'Add product', description: 'Product editor will open here.' })}
+            onClick={() => setShowAddProduct(true)}
           >
             <Plus className="h-3.5 w-3.5" />
             Add Product
           </Button>
         }
+      />
+
+      <AddProductDialog
+        open={showAddProduct}
+        onOpenChange={setShowAddProduct}
+        sellerId={sellerId}
+        shopId={shopId}
+        categories={categories}
       />
 
       <Card className="border-cyan-100/70">
@@ -2622,6 +2632,31 @@ export function SellerCenter() {
   const { data: sellerOrders } = useOrders(SELLER_ID, 'seller');
   const { data: withdrawals } = useWithdrawals(SELLER_ID);
 
+  // Categories for Add Product dialog
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories-flat'],
+    queryFn: async () => {
+      const res = await fetch('/api/v1/categories');
+      const json = await res.json();
+      if (!json.success) return [];
+      // Flatten the tree
+      const flat: { id: string; name: string; slug: string }[] = [];
+      const walk = (cats: any[]) => {
+        for (const c of cats) {
+          flat.push({ id: c.id, name: c.name, slug: c.slug });
+          if (c.children?.length) walk(c.children);
+        }
+      };
+      walk(json.data);
+      return flat;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+  const categories = categoriesData ?? [];
+
+  // Resolve shopId from analytics data (wallet has sellerId, products have shopId)
+  const shopId = (sellerProducts?.[0] as any)?.shopId ?? analyticsData?.wallet?.sellerId ?? 'demo-shop';
+
   const products = (sellerProducts ?? []) as any[];
   const orders = (sellerOrders ?? []) as any[];
 
@@ -2745,7 +2780,7 @@ export function SellerCenter() {
                   <OverviewTab data={analyticsData} goShop={goShop} goProducts={() => setActiveTab('products')} />
                 )}
                 {activeTab === 'products' && (
-                  <ProductsTab products={products} toast={toast} goProduct={goProduct} />
+                  <ProductsTab products={products} toast={toast} goProduct={goProduct} sellerId={SELLER_ID} shopId={shopId} categories={categories} />
                 )}
                 {activeTab === 'digital' && <DigitalAssetsTab products={products} toast={toast} />}
                 {activeTab === 'pcb' && <PCBProjectsTab products={products} toast={toast} />}

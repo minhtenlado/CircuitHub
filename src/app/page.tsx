@@ -1,6 +1,7 @@
 'use client';
 
-import { useNavStore } from '@/stores/nav-store';
+import { useEffect } from 'react';
+import { useNavStore, setupHashListener } from '@/stores/nav-store';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { CartDrawer } from '@/components/checkout/cart-drawer';
@@ -288,6 +289,11 @@ function PageRouter() {
 }
 
 export default function Home() {
+  // Initialize hash-based routing on mount
+  useEffect(() => {
+    setupHashListener();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />

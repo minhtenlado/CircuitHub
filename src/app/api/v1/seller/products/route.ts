@@ -33,11 +33,20 @@ export async function POST(req: NextRequest) {
   if (!body?.sellerId || !body?.shopId || !body?.name || !body?.price)
     return fail('sellerId, shopId, name, price required', 'VALIDATION_ERROR', 422);
 
+  // Resolve demo seller ID to a real DB user
+  const sellerId = await resolveDemoUserId(body.sellerId);
+  // Resolve shopId: if it's not a real shop, find the seller's shop
+  let shopId = body.shopId;
+  if (shopId === 'demo-shop' || shopId === sellerId) {
+    const shop = await db.shop.findUnique({ where: { sellerId } });
+    shopId = shop?.id ?? body.shopId;
+  }
+
   const slug = (body.slug ?? String(body.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')) + '-' + Math.random().toString(36).slice(2, 6);
   const product = await db.product.create({
     data: {
-      sellerId: body.sellerId,
-      shopId: body.shopId,
+      sellerId,
+      shopId,
       categoryId: body.categoryId,
       name: body.name,
       slug,
@@ -79,7 +88,7 @@ export async function POST(req: NextRequest) {
   }
 
   await db.auditLog.create({
-    data: { userId: body.sellerId, action: 'PRODUCT_CREATED', entityType: 'product', entityId: product.id, newValue: product.name },
+    data: { userId: sellerId, action: 'PRODUCT_CREATED', entityType: 'product', entityId: product.id, newValue: product.name },
   });
 
   return ok({ product }, 'Product created');

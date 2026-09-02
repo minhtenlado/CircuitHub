@@ -41,6 +41,8 @@ interface NavState {
   role: ViewRole;
   setView: (view: AppView, params?: Record<string, string>) => void;
   setRole: (role: ViewRole) => void;
+  /** Restore state from a hash string (used on page load + back/forward) */
+  restoreFromHash: () => void;
   /** Convenience navigation handlers */
   goHome: () => void;
   goProducts: (filters?: Record<string, string>) => void;
@@ -55,29 +57,78 @@ interface NavState {
   goAuth: (mode: 'login' | 'register') => void;
 }
 
-export const useNavStore = create<NavState>((set) => ({
+/** Parse the URL hash into { view, params }.
+ *  Hash format: #/view?param1=value1&param2=value2
+ */
+function parseHash(): { view: AppView; params: Record<string, string> } {
+  if (typeof window === 'undefined') return { view: 'home', params: {} };
+  const hash = window.location.hash.replace(/^#/, '');
+  if (!hash) return { view: 'home', params: {} };
+  // Remove leading slash
+  const path = hash.replace(/^\//, '');
+  const [viewPart, queryPart] = path.split('?');
+  const view = (viewPart || 'home') as AppView;
+  const params: Record<string, string> = {};
+  if (queryPart) {
+    const sp = new URLSearchParams(queryPart);
+    sp.forEach((v, k) => { if (v) params[k] = v; });
+  }
+  return { view, params };
+}
+
+/** Build a hash string from view + params */
+function buildHash(view: AppView, params: Record<string, string>): string {
+  const qs = Object.keys(params).length ? '?' + new URLSearchParams(params).toString() : '';
+  return `/${view}${qs}`;
+}
+
+export const useNavStore = create<NavState>((set, get) => ({
   view: 'home',
   params: {},
   role: 'buyer',
   setView: (view, params = {}) => {
     set({ view, params });
     if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      url.hash = `/${view}${Object.keys(params).length ? '?' + new URLSearchParams(params).toString() : ''}`;
-      window.history.replaceState(null, '', url.toString());
+      const hash = buildHash(view, params);
+      // Only push to history if the hash actually changed (avoid duplicate entries)
+      const currentHash = window.location.hash.replace(/^#/, '');
+      if (currentHash !== hash) {
+        window.history.pushState(null, '', `#${hash}`);
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   },
   setRole: (role) => set({ role }),
-  goHome: () => set({ view: 'home', params: {} }),
-  goProducts: (filters = {}) => set({ view: 'products', params: filters }),
-  goCategory: (slug) => set({ view: 'category', params: { slug } }),
-  goProduct: (slug) => set({ view: 'product-detail', params: { slug } }),
-  goShop: (slug) => set({ view: 'shop', params: { slug } }),
-  goCart: () => set({ view: 'cart', params: {} }),
-  goCheckout: () => set({ view: 'checkout', params: {} }),
-  goBuyer: (view) => set({ view, params: {} }),
-  goSeller: (view = 'seller') => set({ view, params: {} }),
-  goAdmin: (view = 'admin') => set({ view, params: {} }),
-  goAuth: (mode) => set({ view: mode, params: {} }),
+  restoreFromHash: () => {
+    if (typeof window === 'undefined') return;
+    const { view, params } = parseHash();
+    set({ view, params });
+  },
+  goHome: () => get().setView('home', {}),
+  goProducts: (filters = {}) => get().setView('products', filters),
+  goCategory: (slug) => get().setView('category', { slug }),
+  goProduct: (slug) => get().setView('product-detail', { slug }),
+  goShop: (slug) => get().setView('shop', { slug }),
+  goCart: () => get().setView('cart', {}),
+  goCheckout: () => get().setView('checkout', {}),
+  goBuyer: (view) => get().setView(view, {}),
+  goSeller: (view = 'seller') => get().setView(view, {}),
+  goAdmin: (view = 'admin') => get().setView(view, {}),
+  goAuth: (mode) => get().setView(mode, {}),
 }));
+
+/** Setup hash-change listener for browser back/forward navigation.
+ *  Call this once in the root layout (client-side). */
+export function setupHashListener() {
+  if (typeof window === 'undefined') return;
+  // Restore on initial load
+  useNavStore.getState().restoreFromHash();
+  // Listen for back/forward
+  window.addEventListener('popstate', () => {
+    useNavStore.getState().restoreFromHash();
+  });
+  // Also listen for hashchange as a fallback
+  window.addEventListener('hashchange', () => {
+    useNavStore.getState().restoreFromHash();
+  });
+}
