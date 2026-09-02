@@ -146,6 +146,22 @@ export function useAdminSellers() {
   });
 }
 
+/** Admin products — returns ALL products regardless of status */
+export function useAdminProducts(params: Record<string, string | undefined> = {}) {
+  const qs = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== '') qs.set(k, String(v));
+  return useQuery<{ items: any[]; total: number }>({
+    queryKey: ['admin-products', params],
+    queryFn: async () => {
+      const res = await fetch(`/api/v1/admin/products/list?${qs.toString()}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      return json.data;
+    },
+    staleTime: 15 * 1000,
+  });
+}
+
 export function useAdminUsers(role?: string) {
   return useQuery<any>({
     queryKey: ['admin-users', role],

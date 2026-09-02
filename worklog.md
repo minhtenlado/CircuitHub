@@ -1156,3 +1156,79 @@ Project was stable after Round 6 with invoice download and search history. QA vi
 6. **Seller breakdown in invoice** — For multi-seller orders, show which shop each item came from
 7. **Bulk product moderation** — Select multiple products and approve/reject in bulk
 
+
+---
+Task ID: Round-8 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: Fix admin products list bug — create dedicated admin products API to show ALL statuses
+
+## Current Project Status Assessment
+
+Project was stable after Round 7 with product moderation. QA via agent-browser confirmed a critical bug:
+
+1. **Admin products list only showed ACTIVE products** — The admin ProductsTab used `useProducts({})` which calls the public API that filters by `status: 'ACTIVE'`. This meant admins couldn't see REJECTED, SUSPENDED, or DRAFT products in their management list. When filtering by "Rejected" status, the admin saw "No products found" even though 2 products had been rejected in Round 7.
+
+## Completed Modifications
+
+### Bug Fixes
+
+1. **Admin Products API** (`/src/app/api/v1/admin/products/list/route.ts`)
+   - New `GET /api/v1/admin/products/list` endpoint that returns ALL products regardless of status
+   - Supports query params: `status`, `productType`, `q` (search), `sort`, `limit`, `offset`
+   - When `status` is 'all' or omitted, returns all products (ACTIVE, REJECTED, SUSPENDED, DRAFT, PENDING_REVIEW)
+   - When `status` is specified (e.g. 'REJECTED'), filters by that exact status
+   - Includes shop, category, and first image in the response
+   - Sort options: newest, oldest, price-asc, price-desc, sold, rating
+
+2. **`useAdminProducts` hook** (`/src/lib/api/hooks.ts`)
+   - New React Query hook that calls the admin products API
+   - Accepts params: `{ status, productType, q }`
+   - 15-second stale time for fresh data
+   - Query key: `['admin-products', params]`
+
+3. **Admin ProductsTab updated** (`/src/features/admin/admin-center.tsx`)
+   - Replaced `useProducts({})` with `useAdminProducts({ status, productType, q })`
+   - Removed client-side filtering (API now handles it server-side)
+   - Status filter, type filter, and search now pass directly to the API as query params
+   - The `filtered` variable now equals `products` directly (API already filters)
+   - Added `useAdminProducts` to imports
+
+4. **ProductModerationDialog cache invalidation** (`/src/components/admin/product-moderation-dialog.tsx`)
+   - Added `queryClient.invalidateQueries({ queryKey: ['admin-products'] })` after successful moderation
+   - This ensures the admin product list refreshes immediately after approve/reject/feature actions
+   - Previously only `['products']` and `['admin-analytics']` were invalidated
+
+### Styling Improvements
+
+- Admin products table now correctly shows status badges for all statuses (not just ACTIVE)
+- Rejected products show "Approve" button (for re-approval)
+- Active products show "Reject" button
+- Feature/Unfeature star icons work for all statuses
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200 including new `/api/v1/admin/products/list`
+- Admin ProductsTab with "Rejected" filter now shows "2 of 2 products" (was "0 of 0")
+- Both rejected products visible: OLED Display and STM32 Blue Pill
+- Approve action tested: clicked "Approve" on OLED Display → dialog opened → confirmed → API returned 200 → product status changed to ACTIVE → admin list auto-refreshed to "1 of 1 products"
+- Query cache invalidation works: list updates immediately after moderation action
+- No console errors
+
+## Unresolved Issues / Risks
+
+1. **No pagination** — The admin products API returns up to 200 products. For large catalogs, should add proper pagination UI.
+2. **No bulk moderation** — Admins can only moderate one product at a time. Bulk approve/reject would be more efficient.
+3. **Search is not debounced** — The search input triggers an API call on every keystroke. Should add 300ms debounce for better performance.
+
+## Priority Recommendations for Next Phase
+
+1. **Debounce admin search** — Add 300ms debounce to the admin product search input to reduce API calls
+2. **Real-time notifications** — Polling-based notification badge that updates without page refresh
+3. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
+4. **Order detail full page** — Dedicated full-page order detail view
+5. **Product image upload** — Real file upload in Add Product dialog with preview and progress
+6. **Seller breakdown in invoice** — For multi-seller orders, show which shop each item came from
+7. **Bulk product moderation** — Select multiple products and approve/reject in bulk
+8. **Admin pagination** — Add proper pagination UI for admin product list when catalog grows large
+

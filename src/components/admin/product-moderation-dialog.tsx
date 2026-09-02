@@ -105,6 +105,7 @@ export function ProductModerationDialog({ open, onOpenChange, product, action }:
         });
         // Invalidate queries to refresh data
         queryClient.invalidateQueries({ queryKey: ['products'] });
+        queryClient.invalidateQueries({ queryKey: ['admin-products'] });
         queryClient.invalidateQueries({ queryKey: ['admin-analytics'] });
         onOpenChange(false);
         setReason('');

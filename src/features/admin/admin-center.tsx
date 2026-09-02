@@ -69,6 +69,7 @@ import {
 import {
   useAdminAnalytics,
   useAdminSellers,
+  useAdminProducts,
   useAdminUsers,
   useAdminWithdrawals,
   useAuditLogs,
@@ -1323,17 +1324,14 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [moderation, setModeration] = useState<{ product: any; action: 'APPROVE' | 'REJECT' | 'SUSPEND' | 'FEATURE' | 'UNFEATURE' } | null>(null);
-  const { data } = useProducts({});
+  const { data } = useAdminProducts({
+    status: statusFilter !== 'all' ? statusFilter : undefined,
+    productType: typeFilter !== 'all' ? typeFilter : undefined,
+    q: search.trim() || undefined,
+  });
   const products: any[] = (data?.items ?? []) as any[];
 
-  const filtered = useMemo(() => {
-    let arr = products;
-    if (typeFilter !== 'all') arr = arr.filter((p) => p.productType === typeFilter);
-    if (statusFilter !== 'all') arr = arr.filter((p) => (p.status ?? 'ACTIVE') === statusFilter);
-    const s = search.trim().toLowerCase();
-    if (s) arr = arr.filter((p) => String(p.name ?? '').toLowerCase().includes(s) || String(p.shop?.name ?? '').toLowerCase().includes(s));
-    return arr;
-  }, [products, typeFilter, statusFilter, search]);
+  const filtered = products; // API already filters
 
   const typeOptions = [
     { id: 'all', label: 'All types' },
