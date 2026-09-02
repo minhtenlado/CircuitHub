@@ -1,0 +1,4939 @@
+# MASTER SPECIFICATION & EXECUTION PROMPT
+
+# TECH ELECTRONICS + PCB + DIGITAL DESIGN MARKETPLACE
+
+---
+
+# 0. PROJECT ROLE
+
+You are responsible for designing and implementing a complete, production-oriented, full-stack e-commerce marketplace.
+
+Act simultaneously as:
+
+* Principal Software Architect
+* Senior Full-Stack Engineer
+* Backend Architect
+* Frontend Architect
+* Database Architect
+* UI/UX Designer
+* Product Designer
+* Security Engineer
+* DevOps Engineer
+* QA/Test Engineer
+* Payment Integration Engineer
+* Logistics Integration Engineer
+* E-commerce Architect
+* Technical Product Manager
+
+Do NOT treat this as a simple online store.
+
+Do NOT build a basic CRUD application.
+
+Do NOT build only a frontend prototype.
+
+Build a complete:
+
+# TECHNICAL ELECTRONICS MARKETPLACE
+
+The platform combines:
+
+* Physical Electronics Store
+* PCB Store
+* Digital PCB/CAD Marketplace
+* Electronics Engineering Services
+* Engineering Resource Marketplace
+* Multi-Vendor Seller Platform
+
+The system must be designed so it can evolve from an advanced MVP into a real production platform.
+
+---
+
+# 1. PROJECT NAME
+
+Temporary project name:
+
+# [YOUR BRAND NAME]
+
+Example:
+
+CircuitHub
+BoardLab
+PCBForge
+ElectroHub
+
+The brand name must be configurable and easy to change later.
+
+Do NOT hard-code the brand name throughout the application.
+
+Use centralized branding/configuration.
+
+---
+
+# 2. CORE BUSINESS MODEL
+
+The platform supports three primary product types.
+
+## A. PHYSICAL PRODUCTS
+
+Examples:
+
+* PCB boards
+* ESP32 boards
+* STM32 boards
+* Raspberry Pi accessories
+* Sensors
+* Relay modules
+* Development boards
+* Electronic components
+* ICs
+* Connectors
+* Cables
+* Power supplies
+* Displays
+* Modules
+* Tools
+* Accessories
+
+## B. DIGITAL PRODUCTS
+
+Examples:
+
+* KiCad projects
+* KiCad schematic files
+* KiCad PCB files
+* KiCad project packages
+* Proteus projects
+* Altium projects
+* Gerber files
+* Drill files
+* BOM files
+* Pick-and-place files
+* Firmware
+* Source code
+* 3D models
+* Datasheets
+* Technical documentation
+* Project templates
+
+## C. TECHNICAL SERVICES
+
+Examples:
+
+* PCB design
+* Schematic design
+* PCB layout
+* PCB review
+* Gerber verification
+* BOM optimization
+* PCB manufacturing
+* PCB assembly
+* Firmware development
+* Custom electronics development
+* Technical consultation
+
+---
+
+# 3. PRODUCT TYPES
+
+The database must support:
+
+```text
+PHYSICAL
+DIGITAL
+SERVICE
+BUNDLE
+```
+
+Do not force all products into the same business logic.
+
+Each product type has different:
+
+* fulfillment
+* inventory
+* pricing
+* delivery
+* license
+* refund
+* download
+* service completion
+* review behavior
+
+---
+
+# 4. MIXED ORDERS
+
+A single checkout must be capable of containing:
+
+* Physical products
+* Digital products
+* Services
+
+Example:
+
+Buyer purchases:
+
+* ESP32 PCB
+* KiCad source project
+* PCB design review service
+
+All within one checkout.
+
+However, fulfillment must be separated internally.
+
+Example:
+
+```text
+ORDER
+│
+├── PHYSICAL FULFILLMENT
+│
+├── DIGITAL FULFILLMENT
+│
+└── SERVICE FULFILLMENT
+```
+
+---
+
+# 5. MULTI-VENDOR MARKETPLACE
+
+The platform must support multiple sellers.
+
+Example:
+
+```text
+SELLER A
+ ├── ESP32 PCB
+ └── STM32 PCB
+
+SELLER B
+ ├── KiCad Project
+ └── Gerber Package
+
+SELLER C
+ └── PCB Design Service
+```
+
+A buyer can purchase products from multiple sellers during one checkout.
+
+---
+
+# 6. USER ROLES
+
+Minimum roles:
+
+```text
+BUYER
+SELLER
+SUPPORT
+MODERATOR
+ACCOUNTANT
+ADMIN
+SUPER_ADMIN
+```
+
+The architecture must support additional roles in the future.
+
+---
+
+# 7. BUYER FEATURES
+
+Buyer must be able to:
+
+* Register
+* Login
+* Logout
+* Verify email
+* Recover password
+* Reset password
+* Manage profile
+* Manage addresses
+* Browse products
+* Search products
+* Search technical specifications
+* Filter products
+* Sort products
+* Compare products
+* View products
+* View shops
+* Follow shops
+* Add products to wishlist
+* Add products to cart
+* Update cart
+* Checkout
+* Apply vouchers
+* Select shipping method
+* Select payment method
+* Pay
+* Track orders
+* Cancel orders
+* Request return
+* Request refund
+* Download digital products
+* Manage licenses
+* View purchased files
+* View product versions
+* Review products
+* Review sellers
+* Review services
+* Receive notifications
+* View purchase history
+* View digital library
+
+---
+
+# 8. SELLER FEATURES
+
+Seller must be able to:
+
+* Register
+* Apply as seller
+* Complete seller onboarding
+* Submit verification information
+* Create shop
+* Edit shop
+* Upload shop logo
+* Upload shop banner
+* Create products
+* Create physical products
+* Create digital products
+* Create services
+* Create bundles
+* Upload technical files
+* Upload PCB files
+* Upload source files
+* Manage product versions
+* Manage licenses
+* Manage inventory
+* Manage PCB revisions
+* Manage orders
+* Manage shipping
+* View revenue
+* View commissions
+* Manage wallet
+* Request withdrawals
+* Create vouchers
+* View reviews
+* Reply to reviews
+* View analytics
+* Manage shop settings
+
+---
+
+# 9. ADMIN FEATURES
+
+Admin must manage:
+
+* Users
+* Sellers
+* Seller verification
+* Shops
+* Products
+* Product moderation
+* Digital files
+* PCB projects
+* Categories
+* Attributes
+* Orders
+* Payments
+* Shipping
+* Returns
+* Refunds
+* Reviews
+* Vouchers
+* Promotions
+* Wallets
+* Withdrawals
+* Commission
+* Settlements
+* Notifications
+* Analytics
+* Audit logs
+* System settings
+
+---
+
+# 10. DESIGN DIRECTION
+
+The platform must look:
+
+* Modern
+* Premium
+* Clean
+* Technical
+* Elegant
+* Minimal
+* Professional
+* Trustworthy
+* Engineering-oriented
+
+The visual identity must be unique.
+
+Do NOT copy:
+
+* Shopee
+* Lazada
+* Amazon
+* eBay
+* AliExpress
+* Digi-Key
+* LCSC
+* Any other marketplace
+
+You may study general UX patterns, but the final design must be original.
+
+---
+
+# 11. COLOR SYSTEM
+
+Primary design language:
+
+# WHITE + CYAN + AQUA
+
+Primary:
+
+```text
+#06B6D4
+```
+
+Primary Hover:
+
+```text
+#0891B2
+```
+
+Secondary Cyan:
+
+```text
+#22D3EE
+```
+
+Aqua:
+
+```text
+#2DD4BF
+```
+
+Soft Cyan:
+
+```text
+#ECFEFF
+```
+
+Background:
+
+```text
+#FFFFFF
+```
+
+Secondary Background:
+
+```text
+#F8FAFC
+```
+
+Text:
+
+```text
+#0F172A
+```
+
+Secondary Text:
+
+```text
+#475569
+```
+
+Muted:
+
+```text
+#94A3B8
+```
+
+Border:
+
+```text
+#E2E8F0
+```
+
+Success:
+
+```text
+#10B981
+```
+
+Warning:
+
+```text
+#F59E0B
+```
+
+Danger:
+
+```text
+#EF4444
+```
+
+Info:
+
+```text
+#3B82F6
+```
+
+Use centralized design tokens.
+
+Do not randomly introduce additional colors.
+
+---
+
+# 12. TYPOGRAPHY
+
+Use:
+
+# Inter
+
+or a visually equivalent modern sans-serif font.
+
+Create a clear typography system:
+
+* Display
+* H1
+* H2
+* H3
+* H4
+* Body
+* Body Small
+* Caption
+* Label
+* Technical Data
+
+Typography must remain consistent throughout:
+
+* Buyer UI
+* Seller Center
+* Admin Center
+
+---
+
+# 13. UI DESIGN PRINCIPLES
+
+Use:
+
+* generous whitespace
+* subtle borders
+* soft shadows
+* moderate corner radius
+* strong visual hierarchy
+* clear CTAs
+* consistent spacing
+* consistent iconography
+* high-quality typography
+
+Allowed:
+
+* subtle gradients
+* subtle glass effects
+* soft cyan glow
+* abstract technical patterns
+
+Do NOT overuse:
+
+* gradients
+* glassmorphism
+* neon effects
+* excessive shadows
+* oversized cards
+* excessive animation
+
+---
+
+# 14. VISUAL IDENTITY
+
+The visual language should subtly reference:
+
+* PCB traces
+* electronic circuits
+* engineering grids
+* schematic patterns
+* technical diagrams
+* component footprints
+* coordinates
+* board dimensions
+* data cards
+* specification panels
+
+Keep these references subtle and premium.
+
+Do NOT turn the website into a cyberpunk interface.
+
+---
+
+# 15. ANIMATION SYSTEM
+
+Use:
+
+# Framer Motion
+
+Animations should be:
+
+* Smooth
+* Fast
+* Natural
+* Subtle
+* Professional
+* Purposeful
+
+Use animation for:
+
+* Page transitions
+* Modal transitions
+* Drawers
+* Dropdowns
+* Product card hover
+* Product image interactions
+* Add-to-cart
+* Wishlist
+* Toast
+* Notifications
+* Skeleton transitions
+* Dashboard charts
+* Order timeline
+* Mobile navigation
+
+Support:
+
+```text
+prefers-reduced-motion
+```
+
+Animations must not negatively affect performance.
+
+---
+
+# 16. RESPONSIVE DESIGN
+
+Support:
+
+* Mobile
+* Tablet
+* Laptop
+* Desktop
+* Large Desktop
+
+Minimum target:
+
+320px width and above.
+
+Do NOT simply shrink the desktop UI.
+
+Create proper mobile experiences for:
+
+* Header
+* Navigation
+* Filters
+* Checkout
+* Product details
+* Orders
+* Seller Center
+* Admin Center
+
+---
+
+# 17. ACCESSIBILITY
+
+Implement:
+
+* Semantic HTML
+* Keyboard navigation
+* Visible focus states
+* ARIA labels
+* Accessible forms
+* Accessible dialogs
+* Accessible dropdowns
+* Accessible tables
+* Sufficient contrast
+* Reduced-motion support
+
+---
+
+# 18. TECHNOLOGY STACK
+
+## FRONTEND
+
+Use:
+
+* Next.js
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* Framer Motion
+* React Hook Form
+* Zod
+* TanStack Query
+* Zustand
+* Lucide React
+
+Do not use emojis as production UI icons.
+
+---
+
+# 19. BACKEND
+
+Use:
+
+* NestJS
+* TypeScript
+* Prisma ORM
+* PostgreSQL
+* Redis
+* BullMQ
+
+Architecture:
+
+# MODULAR MONOLITH
+
+Do not build microservices in the first version.
+
+However, design modules so selected domains can later be extracted into independent services.
+
+---
+
+# 20. MONOREPO
+
+Use:
+
+* pnpm
+* Turborepo
+
+Recommended root:
+
+```text
+marketplace/
+│
+├── apps/
+│   ├── web/
+│   └── api/
+│
+├── packages/
+│   ├── ui/
+│   ├── types/
+│   ├── config/
+│   ├── eslint-config/
+│   └── tsconfig/
+│
+├── database/
+├── docs/
+├── scripts/
+├── docker/
+│
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── package.json
+├── pnpm-workspace.yaml
+└── turbo.json
+```
+
+---
+
+# 21. COMPLETE PROJECT STRUCTURE
+
+Before writing code, you MUST provide the full project tree.
+
+Do not provide only:
+
+```text
+frontend/
+backend/
+```
+
+Provide the actual module structure.
+
+Recommended structure:
+
+```text
+marketplace/
+│
+├── apps/
+│   │
+│   ├── web/
+│   │   │
+│   │   ├── app/
+│   │   │   ├── (public)/
+│   │   │   ├── (auth)/
+│   │   │   ├── products/
+│   │   │   ├── categories/
+│   │   │   ├── shop/
+│   │   │   ├── cart/
+│   │   │   ├── checkout/
+│   │   │   ├── orders/
+│   │   │   ├── downloads/
+│   │   │   ├── licenses/
+│   │   │   ├── profile/
+│   │   │   ├── seller/
+│   │   │   └── admin/
+│   │   │
+│   │   ├── components/
+│   │   │   ├── ui/
+│   │   │   ├── product/
+│   │   │   ├── pcb/
+│   │   │   ├── digital/
+│   │   │   ├── service/
+│   │   │   ├── cart/
+│   │   │   ├── checkout/
+│   │   │   ├── orders/
+│   │   │   ├── shipping/
+│   │   │   ├── seller/
+│   │   │   └── admin/
+│   │   │
+│   │   ├── features/
+│   │   ├── services/
+│   │   ├── hooks/
+│   │   ├── stores/
+│   │   ├── lib/
+│   │   ├── types/
+│   │   ├── constants/
+│   │   └── utils/
+│   │
+│   └── api/
+│       │
+│       ├── src/
+│       │   ├── modules/
+│       │   │   ├── auth/
+│       │   │   ├── users/
+│       │   │   ├── roles/
+│       │   │   ├── permissions/
+│       │   │   ├── sellers/
+│       │   │   ├── shops/
+│       │   │   ├── categories/
+│       │   │   ├── attributes/
+│       │   │   ├── products/
+│       │   │   ├── pcb/
+│       │   │   ├── components/
+│       │   │   ├── digital-assets/
+│       │   │   ├── licenses/
+│       │   │   ├── services/
+│       │   │   ├── bom/
+│       │   │   ├── inventory/
+│       │   │   ├── carts/
+│       │   │   ├── checkout/
+│       │   │   ├── orders/
+│       │   │   ├── payments/
+│       │   │   ├── shipping/
+│       │   │   ├── commissions/
+│       │   │   ├── wallets/
+│       │   │   ├── settlements/
+│       │   │   ├── withdrawals/
+│       │   │   ├── vouchers/
+│       │   │   ├── promotions/
+│       │   │   ├── reviews/
+│       │   │   ├── returns/
+│       │   │   ├── refunds/
+│       │   │   ├── notifications/
+│       │   │   ├── analytics/
+│       │   │   ├── audit-logs/
+│       │   │   └── admin/
+│       │   │
+│       │   ├── common/
+│       │   │   ├── guards/
+│       │   │   ├── decorators/
+│       │   │   ├── interceptors/
+│       │   │   ├── filters/
+│       │   │   ├── pipes/
+│       │   │   ├── middleware/
+│       │   │   ├── exceptions/
+│       │   │   └── constants/
+│       │   │
+│       │   ├── integrations/
+│       │   │   ├── payments/
+│       │   │   │   ├── vnpay/
+│       │   │   │   ├── momo/
+│       │   │   │   ├── zalopay/
+│       │   │   │   └── mock/
+│       │   │   │
+│       │   │   ├── shipping/
+│       │   │   │   ├── ghn/
+│       │   │   │   ├── ghtk/
+│       │   │   │   ├── viettel-post/
+│       │   │   │   ├── jnt/
+│       │   │   │   ├── vnpost/
+│       │   │   │   └── mock/
+│       │   │   │
+│       │   │   ├── storage/
+│       │   │   ├── email/
+│       │   │   └── antivirus/
+│       │   │
+│       │   ├── config/
+│       │   ├── database/
+│       │   ├── app.module.ts
+│       │   └── main.ts
+│       │
+│       ├── prisma/
+│       │   ├── schema.prisma
+│       │   ├── seed.ts
+│       │   └── migrations/
+│       │
+│       └── test/
+│
+├── packages/
+│   ├── ui/
+│   ├── types/
+│   ├── config/
+│   ├── eslint-config/
+│   └── tsconfig/
+│
+├── database/
+│   ├── diagrams/
+│   └── seeds/
+│
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── DATABASE.md
+│   ├── PRODUCT-SYSTEM.md
+│   ├── PCB-SYSTEM.md
+│   ├── DIGITAL-ASSETS.md
+│   ├── BOM.md
+│   ├── LICENSE.md
+│   ├── ORDER-FLOW.md
+│   ├── PAYMENT.md
+│   ├── SHIPPING.md
+│   ├── WALLET.md
+│   ├── SECURITY.md
+│   ├── RBAC.md
+│   ├── API.md
+│   ├── TESTING.md
+│   └── DEPLOYMENT.md
+│
+├── docker/
+├── scripts/
+│
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── package.json
+├── pnpm-workspace.yaml
+├── turbo.json
+└── README.md
+```
+
+This is the baseline.
+
+You may improve the structure if technically justified.
+
+---
+
+# 22. RESPONSIBILITY MAP
+
+Before coding, explain:
+
+* What each folder is responsible for.
+* What each backend module is responsible for.
+* Which modules may depend on which other modules.
+* Where business logic lives.
+* Where infrastructure logic lives.
+* Where integration logic lives.
+* Where UI state lives.
+* Where shared types live.
+
+Avoid:
+
+* circular dependencies
+* giant services
+* giant components
+* giant utility files
+* duplicated business logic
+
+---
+
+# 23. BACKEND MODULE STRUCTURE
+
+Each domain module should follow a consistent structure.
+
+Example:
+
+```text
+products/
+│
+├── dto/
+│   ├── create-product.dto.ts
+│   ├── update-product.dto.ts
+│   └── query-product.dto.ts
+│
+├── entities/
+├── repositories/
+├── guards/
+├── products.controller.ts
+├── products.service.ts
+├── products.repository.ts
+├── products.mapper.ts
+├── products.types.ts
+└── products.module.ts
+```
+
+Do not create one giant service that handles unrelated business domains.
+
+---
+
+# 24. DATABASE ARCHITECTURE
+
+Database:
+
+# PostgreSQL
+
+ORM:
+
+# Prisma
+
+The database must be designed for:
+
+* data integrity
+* transactional consistency
+* scalability
+* indexing
+* auditability
+* future extensibility
+
+Use:
+
+* primary keys
+* foreign keys
+* unique constraints
+* indexes
+* appropriate cascading rules
+* timestamps
+* soft deletion where appropriate
+
+---
+
+# 25. DATABASE ENTITIES
+
+Minimum entities:
+
+```text
+users
+roles
+permissions
+role_permissions
+user_roles
+sessions
+
+addresses
+
+seller_profiles
+seller_documents
+seller_bank_accounts
+
+shops
+shop_followers
+
+categories
+category_attributes
+attributes
+attribute_values
+
+products
+product_variants
+product_images
+product_attributes
+product_specs
+
+product_versions
+product_files
+product_licenses
+product_compatibility
+
+digital_assets
+digital_downloads
+download_logs
+
+pcb_specs
+pcb_revisions
+
+component_specs
+
+service_specs
+service_deliverables
+
+bom_files
+bom_items
+bom_matches
+
+inventory
+inventory_transactions
+inventory_batches
+
+carts
+cart_items
+
+wishlists
+wishlist_items
+
+orders
+seller_orders
+order_items
+
+payments
+payment_transactions
+
+shipping_providers
+shipping_services
+shipments
+shipment_items
+shipping_events
+
+commission_rules
+commission_transactions
+
+wallets
+wallet_transactions
+settlements
+withdrawals
+
+vouchers
+voucher_usages
+promotions
+
+reviews
+review_images
+
+returns
+return_items
+refunds
+
+notifications
+notification_preferences
+
+audit_logs
+
+system_settings
+```
+
+---
+
+# 26. DATABASE DESIGN DELIVERABLES
+
+Before coding, provide:
+
+1. Complete ERD
+2. Database dictionary
+3. Relationship map
+4. Index strategy
+5. Constraints
+6. Cascade strategy
+7. Soft-delete strategy
+8. Transaction boundaries
+9. Data ownership rules
+10. Data retention strategy where appropriate
+
+---
+
+# 27. PRODUCT ARCHITECTURE
+
+Products must support:
+
+```text
+PHYSICAL
+DIGITAL
+SERVICE
+BUNDLE
+```
+
+Product fields should include:
+
+* id
+* sellerId
+* name
+* slug
+* productType
+* description
+* shortDescription
+* SKU
+* price
+* compareAtPrice
+* status
+* category
+* brand
+* metadata
+* SEO metadata
+* createdAt
+* updatedAt
+
+---
+
+# 28. PHYSICAL PRODUCT DATA
+
+Physical products may have:
+
+* SKU
+* MPN
+* Manufacturer
+* Weight
+* Length
+* Width
+* Height
+* Stock
+* Reserved stock
+* Cost price
+* Selling price
+* Shipping class
+* Country of origin
+* Warranty
+* Datasheet
+
+---
+
+# 29. PCB PRODUCT DATA
+
+PCB-specific data:
+
+* Board width
+* Board height
+* Dimensions
+* Number of layers
+* Thickness
+* Material
+* Surface finish
+* Copper weight
+* Solder mask
+* Silkscreen
+* Minimum track width
+* Minimum track spacing
+* Via type
+* Impedance control
+* Board color
+* Panelization
+* Manufacturing lead time
+* MOQ
+* Revision
+* Manufacturer
+
+---
+
+# 30. COMPONENT PRODUCT DATA
+
+Electronic components may include:
+
+* Manufacturer
+* Manufacturer Part Number
+* MPN
+* SKU
+* Package
+* Footprint
+* Datasheet
+* Operating voltage
+* Current
+* Tolerance
+* Temperature range
+* RoHS
+* REACH
+* Lifecycle
+* MOQ
+* Lead time
+* Availability
+
+---
+
+# 31. DIGITAL PRODUCT DATA
+
+Digital products must support:
+
+* file upload
+* file preview
+* file type
+* file size
+* version
+* changelog
+* compatibility
+* license
+* download rules
+* release date
+* purchase verification
+
+Supported examples:
+
+```text
+.kicad_pro
+.kicad_pcb
+.kicad_sch
+.kicad_wks
+.pcb
+.sch
+.brd
+.PrjPcb
+.SchDoc
+.PcbDoc
+.zip
+.rar
+.7z
+.csv
+.xlsx
+.pdf
+.hex
+.bin
+.uf2
+```
+
+The architecture must allow additional file formats.
+
+---
+
+# 32. PCB/CAD SOFTWARE COMPATIBILITY
+
+Digital products can define:
+
+Software:
+
+```text
+KiCad
+Proteus
+Altium Designer
+```
+
+Versions:
+
+```text
+KiCad 8
+KiCad 9
+Proteus 8
+Altium 24
+Altium 25
+```
+
+Operating systems:
+
+```text
+Windows
+Linux
+macOS
+```
+
+---
+
+# 33. DIGITAL PRODUCT VERSIONING
+
+Support versioning:
+
+```text
+v1.0.0
+v1.1.0
+v2.0.0
+```
+
+Example:
+
+```text
+KiCad Project
+
+Version 1.0
+Version 1.1
+Version 2.0
+```
+
+A buyer who purchased a product may receive later versions according to the license policy.
+
+Product page must show:
+
+* Current Version
+* Release Date
+* File Size
+* Changelog
+* Compatible Software
+* Version history
+
+Do not destructively overwrite previous versions.
+
+---
+
+# 34. DIGITAL LICENSE SYSTEM
+
+Supported license types:
+
+```text
+PERSONAL
+COMMERCIAL
+EDUCATIONAL
+EXTENDED_COMMERCIAL
+PRIVATE_USE
+CUSTOM
+```
+
+License rules must define:
+
+* usage rights
+* commercial rights
+* redistribution rights
+* modification rights
+* number of users if applicable
+* expiration if applicable
+
+Buyer may be required to accept the license before download.
+
+---
+
+# 35. DIGITAL FILE SECURITY
+
+Private files must never be publicly accessible.
+
+After successful payment:
+
+Generate:
+
+# SECURE DOWNLOAD AUTHORIZATION
+
+Use:
+
+* signed URLs
+* authenticated download endpoint
+* short-lived tokens
+
+Verify:
+
+* user ownership
+* paid order
+* refund status
+* license status
+* download permission
+* download expiration
+* download limits
+
+Store:
+
+```text
+download_logs
+```
+
+with:
+
+* user
+* product
+* order
+* file
+* IP address
+* user agent
+* timestamp
+
+---
+
+# 36. DIGITAL FILE SCANNING
+
+Uploaded files must use:
+
+```text
+UPLOAD
+ ↓
+QUARANTINE
+ ↓
+VALIDATE
+ ↓
+SCAN
+ ↓
+APPROVE
+ ↓
+PUBLISH
+```
+
+Do not expose uploaded files before validation/scanning is complete.
+
+Create an antivirus scanning abstraction.
+
+ZIP/RAR/7Z archives must never be executed.
+
+Never execute uploaded binaries or scripts.
+
+---
+
+# 37. BUNDLE SYSTEM
+
+Support bundles such as:
+
+```text
+PCB
++
+KiCad Source
++
+Gerber
++
+BOM
++
+3D Model
++
+Documentation
+```
+
+Bundles may have:
+
+* bundle price
+* bundle license
+* bundled assets
+* individual asset permissions
+
+---
+
+# 38. PCB REVISION SYSTEM
+
+Physical PCB products may have:
+
+```text
+Rev A
+Rev B
+Rev C
+```
+
+Each revision should support:
+
+* version
+* notes
+* manufacturing files
+* dimensions
+* specifications
+* revision date
+* change log
+
+---
+
+# 39. INVENTORY SYSTEM
+
+Physical products must support:
+
+* Total stock
+* Reserved stock
+* Available stock
+* Incoming stock
+* Damaged stock
+* Returned stock
+
+Digital products may support:
+
+* unlimited licensing
+* limited license quantity
+
+Services may support:
+
+* available capacity
+* available slots
+
+---
+
+# 40. INVENTORY TRANSACTIONS
+
+Inventory transaction types:
+
+```text
+SALE
+RESERVATION
+RELEASE
+RESTOCK
+RETURN
+DAMAGE
+ADJUSTMENT
+CANCEL
+```
+
+Every inventory modification must be traceable.
+
+---
+
+# 41. INVENTORY CONCURRENCY
+
+The system must prevent overselling.
+
+Example:
+
+Stock = 1
+
+Two buyers attempt to purchase simultaneously.
+
+Only one transaction may successfully reserve the final item.
+
+Use appropriate:
+
+* database transactions
+* atomic updates
+* row-level locking
+* optimistic/pessimistic concurrency strategy
+
+Never assume application-level checks alone are sufficient.
+
+---
+
+# 42. BOM SYSTEM
+
+Architecture must support BOM upload.
+
+Input:
+
+```text
+CSV
+XLSX
+```
+
+Possible fields:
+
+* Reference
+* Part number
+* Quantity
+* Description
+* Manufacturer
+
+The platform should be able to:
+
+* parse BOM
+* normalize part numbers
+* match products
+* suggest alternatives
+* check inventory
+* estimate total component cost
+
+Modules:
+
+```text
+bom
+bom-parser
+bom-matching
+bom-pricing
+```
+
+---
+
+# 43. PCB FILE PREVIEW
+
+Architecture should support:
+
+* PCB image
+* schematic preview
+* 3D preview
+* Gerber preview
+* PDF preview
+* technical drawings
+
+Future support may include:
+
+* Gerber viewer
+* STEP viewer
+* GLTF viewer
+* interactive PCB viewer
+
+The first version may use image previews, but architecture must allow a richer viewer later.
+
+---
+
+# 44. SEARCH SYSTEM
+
+Search must support:
+
+* Product name
+* SKU
+* MPN
+* Manufacturer
+* Part number
+* Category
+* Tags
+* Technical specifications
+* Seller
+* PCB specifications
+* Software compatibility
+
+Example searches:
+
+```text
+STM32F103C8T6
+ESP32-S3
+10K 0603 1%
+KiCad 9 ESP32 PCB
+4-layer FR4 PCB
+```
+
+Initial implementation may use PostgreSQL.
+
+Architecture must allow migration to:
+
+* Elasticsearch
+* OpenSearch
+
+---
+
+# 45. TECHNICAL FILTER SYSTEM
+
+Filters must be category-specific.
+
+For components:
+
+* Manufacturer
+* Package
+* Voltage
+* Current
+* Tolerance
+* Availability
+
+For PCB:
+
+* Layers
+* Thickness
+* Material
+* Surface finish
+* Copper
+* Dimensions
+* Color
+* MOQ
+* Lead time
+
+For digital products:
+
+* Software
+* Software version
+* File type
+* License
+* Compatibility
+
+Do NOT use one generic filter model for everything.
+
+---
+
+# 46. PRODUCT COMPARISON
+
+Allow buyers to compare technical products.
+
+Example:
+
+```text
+ESP32 Board A
+vs
+ESP32 Board B
+```
+
+Comparison fields:
+
+* Price
+* MCU
+* Flash
+* RAM
+* Wi-Fi
+* Bluetooth
+* GPIO
+* Voltage
+* USB
+* Dimensions
+* Seller
+* Rating
+
+PCB comparison:
+
+* Size
+* Layers
+* Thickness
+* Material
+* Surface finish
+* Copper
+* Color
+* MOQ
+* Lead time
+* Price
+
+---
+
+# 47. SHOP SYSTEM
+
+Each seller owns a shop.
+
+Shop properties:
+
+* Name
+* Slug
+* Logo
+* Banner
+* Description
+* Rating
+* Followers
+* Product count
+* Completed orders
+* Response rate
+* Response time
+* Verification status
+* Specializations
+
+Possible badges:
+
+```text
+Verified Seller
+PCB Specialist
+Digital Design Seller
+Hardware Specialist
+```
+
+---
+
+# 48. SELLER ONBOARDING
+
+Seller registration:
+
+```text
+REGISTER
+ ↓
+SELLER APPLICATION
+ ↓
+PROFILE
+ ↓
+SHOP INFORMATION
+ ↓
+BANK INFORMATION
+ ↓
+IDENTITY/BUSINESS VERIFICATION
+ ↓
+ADMIN REVIEW
+ ↓
+APPROVED
+ ↓
+ACTIVE
+```
+
+Rejected applications must store rejection reasons.
+
+Suspended sellers must be prevented from performing restricted seller operations.
+
+---
+
+# 49. MULTI-SELLER CART
+
+Example:
+
+```text
+SHOP A
+ ├── ESP32 PCB
+ └── STM32 PCB
+
+SHOP B
+ └── KiCad Project
+
+SHOP C
+ └── PCB Design Service
+```
+
+The frontend should group cart items by seller.
+
+Support:
+
+* select all
+* select shop
+* quantity
+* remove
+* save for later
+* voucher
+* shipping
+* subtotal
+
+---
+
+# 50. ORDER ARCHITECTURE
+
+A single buyer order may contain multiple seller orders.
+
+Example:
+
+```text
+ORDER #10001
+│
+├── SELLER_ORDER A
+│    ├── ITEM
+│    └── ITEM
+│
+├── SELLER_ORDER B
+│    └── DIGITAL ITEM
+│
+└── SELLER_ORDER C
+     └── SERVICE ITEM
+```
+
+Each seller order must track:
+
+* seller
+* subtotal
+* discount
+* shipping
+* commission
+* seller revenue
+* fulfillment
+* status
+* shipment if applicable
+
+---
+
+# 51. FULFILLMENT TYPES
+
+Physical:
+
+```text
+ORDER
+ ↓
+PACKING
+ ↓
+SHIPPING
+ ↓
+DELIVERED
+ ↓
+COMPLETED
+```
+
+Digital:
+
+```text
+PAYMENT
+ ↓
+LICENSE GRANTED
+ ↓
+DOWNLOAD AVAILABLE
+```
+
+Service:
+
+```text
+ORDER
+ ↓
+ACCEPTED
+ ↓
+IN_PROGRESS
+ ↓
+DELIVERABLE
+ ↓
+COMPLETED
+```
+
+---
+
+# 52. ORDER STATE MACHINE
+
+Buyer order states:
+
+```text
+PENDING_PAYMENT
+PAID
+CONFIRMED
+PROCESSING
+SHIPPED
+DELIVERED
+COMPLETED
+CANCELLED
+RETURN_REQUESTED
+RETURNED
+REFUNDED
+```
+
+Seller order states:
+
+```text
+PENDING
+CONFIRMED
+PACKING
+READY_TO_SHIP
+SHIPPING
+DELIVERED
+COMPLETED
+CANCELLED
+```
+
+Service states:
+
+```text
+PENDING
+ACCEPTED
+IN_PROGRESS
+DELIVERABLE_SUBMITTED
+REVISION_REQUESTED
+COMPLETED
+CANCELLED
+```
+
+Digital fulfillment states:
+
+```text
+PENDING_PAYMENT
+PAID
+LICENSE_GRANTED
+DOWNLOAD_AVAILABLE
+REFUNDED
+REVOKED
+```
+
+Do not allow arbitrary status transitions.
+
+Implement a formal transition validation system.
+
+---
+
+# 53. CHECKOUT
+
+Backend must recalculate:
+
+* product price
+* quantity
+* subtotal
+* discounts
+* voucher
+* shipping
+* fees
+* commission
+* taxes if applicable
+* final total
+
+Never trust financial values sent by the frontend.
+
+Frontend only provides user selections and inputs.
+
+Backend is the source of truth.
+
+---
+
+# 54. PAYMENT ARCHITECTURE
+
+Create:
+
+```text
+PaymentProvider
+```
+
+Providers:
+
+```text
+COD
+VNPAY
+MOMO
+ZALOPAY
+MOCK
+```
+
+Methods should include concepts such as:
+
+```text
+createPayment()
+verifyPayment()
+handleWebhook()
+refundPayment()
+```
+
+Use an adapter/provider architecture.
+
+---
+
+# 55. PAYMENT FLOW
+
+```text
+BUYER
+ ↓
+CHECKOUT
+ ↓
+CREATE ORDER
+ ↓
+CREATE PAYMENT
+ ↓
+PAYMENT PROVIDER
+ ↓
+USER PAYMENT
+ ↓
+CALLBACK / WEBHOOK
+ ↓
+VERIFY SIGNATURE
+ ↓
+VERIFY AMOUNT
+ ↓
+VERIFY TRANSACTION
+ ↓
+UPDATE PAYMENT
+ ↓
+UPDATE ORDER
+```
+
+Never trust:
+
+```text
+payment_success=true
+```
+
+from the browser.
+
+---
+
+# 56. PAYMENT SECURITY
+
+Payment processing must include:
+
+* signature verification
+* amount verification
+* transaction verification
+* order verification
+* idempotency
+* replay protection when appropriate
+* webhook logging
+* state validation
+
+Do not process the same payment twice.
+
+---
+
+# 57. PAYMENT IDEMPOTENCY
+
+Payment providers may send duplicate callbacks.
+
+The system must safely handle repeated callbacks.
+
+Use:
+
+* unique transaction identifiers
+* idempotency records
+* database constraints
+* state validation
+
+The same payment must never create duplicate settlement logic.
+
+---
+
+# 58. COD
+
+Support:
+
+* COD amount
+* COD collection
+* COD remittance
+* COD failure
+* COD reconciliation
+* shipping COD fee when applicable
+
+---
+
+# 59. SHIPPING ARCHITECTURE
+
+Do NOT hard-code a single shipping provider.
+
+Create:
+
+```text
+ShippingProvider
+```
+
+Methods:
+
+```text
+calculateRate()
+getServices()
+createShipment()
+cancelShipment()
+getTracking()
+getShipmentStatus()
+printLabel()
+createReturn()
+handleWebhook()
+```
+
+---
+
+# 60. SHIPPING PROVIDERS
+
+Prepare adapters for:
+
+```text
+GHN
+GHTK
+Viettel Post
+J&T Express
+VNPost
+Ahamove or another appropriate last-mile provider
+MOCK
+```
+
+If credentials are unavailable:
+
+Use a mock/sandbox provider.
+
+Do not put fake credentials in the source code.
+
+---
+
+# 61. SHIPPING DATA
+
+Shipment records should include:
+
+* Provider
+* External order ID
+* Tracking number
+* Service
+* Shipping fee
+* Insurance fee
+* COD amount
+* Weight
+* Length
+* Width
+* Height
+* Pickup address
+* Delivery address
+* Return address
+* Estimated delivery time
+* Shipment status
+
+---
+
+# 62. SHIPPING FEE CALCULATION
+
+Checkout should support:
+
+```text
+Product subtotal
+- Product discount
+- Voucher discount
++ Shipping fee
++ Insurance fee
++ COD fee
+- Seller shipping subsidy
++ Applicable platform fees
+=
+Final total
+```
+
+Backend must calculate the final amount.
+
+---
+
+# 63. SHIPPING WEBHOOK
+
+Shipping providers may send statuses such as:
+
+```text
+PICKED_UP
+IN_TRANSIT
+OUT_FOR_DELIVERY
+DELIVERED
+DELIVERY_FAILED
+RETURNING
+RETURNED
+```
+
+Webhook processing must:
+
+* validate authenticity when supported
+* be idempotent
+* store raw event
+* map external statuses to internal statuses
+* prevent duplicate state transitions
+
+---
+
+# 64. COMMISSION SYSTEM
+
+Commission must be configurable by:
+
+* platform
+* category
+* seller
+* product
+
+Example:
+
+```text
+Order = 1,000,000 VND
+Commission = 5%
+Seller Revenue = 950,000 VND
+Platform Revenue = 50,000 VND
+```
+
+Do not hard-code the commission percentage.
+
+---
+
+# 65. SELLER WALLET
+
+Seller wallet must support:
+
+```text
+PENDING_BALANCE
+AVAILABLE_BALANCE
+FROZEN_BALANCE
+TOTAL_EARNED
+TOTAL_WITHDRAWN
+```
+
+Do NOT rely on a single mutable balance field as the only source of truth.
+
+Use a ledger:
+
+```text
+wallet_transactions
+```
+
+Transaction types:
+
+```text
+SALE
+COMMISSION
+REFUND
+ADJUSTMENT
+WITHDRAWAL
+REVERSAL
+```
+
+---
+
+# 66. SETTLEMENT
+
+After order completion:
+
+```text
+SELLER REVENUE
+ ↓
+PENDING
+ ↓
+SETTLEMENT PERIOD
+ ↓
+AVAILABLE
+ ↓
+WITHDRAWABLE
+```
+
+Settlement period must be configurable.
+
+---
+
+# 67. WITHDRAWAL
+
+Seller flow:
+
+```text
+REQUEST WITHDRAWAL
+ ↓
+PENDING
+ ↓
+REVIEW
+ ↓
+APPROVED
+ ↓
+PROCESSING
+ ↓
+COMPLETED
+```
+
+or:
+
+```text
+REJECTED
+```
+
+Prevent:
+
+* withdrawing above available balance
+* duplicate withdrawal
+* negative wallet balance
+* concurrent withdrawal race conditions
+
+---
+
+# 68. REFUND
+
+Support:
+
+* Full refund
+* Partial refund
+* Item refund
+* Shipping refund
+* Digital refund according to policy
+* Service refund according to policy
+
+Refund must never exceed the paid amount.
+
+---
+
+# 69. RETURNS
+
+Physical product flow:
+
+```text
+RETURN_REQUESTED
+ ↓
+UNDER_REVIEW
+ ↓
+APPROVED
+ ↓
+RETURN_SHIPPING
+ ↓
+RETURN_RECEIVED
+ ↓
+REFUND_PROCESSING
+ ↓
+REFUNDED
+```
+
+Digital products should have a separate refund policy.
+
+For example, a digital product may have restricted refund eligibility after download depending on the business rules.
+
+---
+
+# 70. REVIEW SYSTEM
+
+Buyer may review:
+
+* Product
+* Seller
+* Service
+
+Review requires verified purchase.
+
+Review fields:
+
+* rating
+* comment
+* images
+* verified purchase
+* seller reply
+* moderation status
+
+Prevent fraudulent reviews.
+
+---
+
+# 71. VOUCHERS
+
+Support:
+
+* Platform voucher
+* Seller voucher
+* Product voucher
+* Category voucher
+* Shipping voucher
+* Digital product voucher
+
+Features:
+
+* percentage discount
+* fixed amount
+* minimum order
+* maximum discount
+* total usage limit
+* per-user limit
+* start date
+* end date
+* seller scope
+* product scope
+* category scope
+
+Backend validates everything.
+
+---
+
+# 72. NOTIFICATIONS
+
+Notification types:
+
+```text
+Order created
+Payment successful
+Payment failed
+Seller approved
+Seller rejected
+Product approved
+Product rejected
+Order shipped
+Order delivered
+Order completed
+Digital download available
+Product version updated
+Refund processed
+Return updated
+Withdrawal updated
+Security alert
+Promotion
+```
+
+Support abstraction for:
+
+* in-app
+* email
+* push notifications
+
+---
+
+# 73. EMAIL SYSTEM
+
+Create:
+
+```text
+EmailProvider
+```
+
+Templates:
+
+* Welcome
+* Email verification
+* Password reset
+* Order confirmation
+* Payment success
+* Shipping update
+* Delivery confirmation
+* Refund
+* Seller approval
+* Withdrawal
+* Digital purchase
+* Digital version update
+
+---
+
+# 74. FILE STORAGE
+
+Create:
+
+```text
+StorageProvider
+```
+
+Providers:
+
+```text
+LocalStorage
+S3
+S3-Compatible
+Cloudinary
+```
+
+Images may use Cloudinary or similar storage.
+
+Private digital assets must not be exposed through unrestricted public URLs.
+
+---
+
+# 75. SERVICE MARKETPLACE
+
+Services should support:
+
+* service scope
+* deliverables
+* starting price
+* estimated duration
+* requirements
+* revisions
+* seller portfolio
+* reviews
+* milestones if appropriate
+
+Examples:
+
+```text
+PCB Design
+PCB Review
+Gerber Check
+BOM Optimization
+Firmware Development
+Embedded Development
+Custom Electronics
+```
+
+---
+
+# 76. SERVICE ORDER FLOW
+
+Example:
+
+```text
+Buyer purchases service
+ ↓
+Seller accepts
+ ↓
+Requirements submitted
+ ↓
+Work in progress
+ ↓
+Deliverable submitted
+ ↓
+Buyer reviews
+ ↓
+Revision if needed
+ ↓
+Approved
+ ↓
+Completed
+```
+
+---
+
+# 77. HOMEPAGE
+
+The homepage must be designed specifically for:
+
+* Electronics Engineers
+* Embedded Developers
+* IoT Developers
+* PCB Designers
+* Makers
+* Robotics Developers
+* Students
+* Hardware Startups
+* Hardware Hobbyists
+
+Suggested sections:
+
+```text
+Hero
+Technical Search
+Explore Categories
+Featured PCB Projects
+Popular Development Boards
+Trending Digital Designs
+New Releases
+Top Sellers
+PCB Services
+BOM / Engineering Tools
+Engineering Resources
+Recently Viewed
+Trust Section
+Footer
+```
+
+---
+
+# 78. HERO SECTION
+
+Create an original hero.
+
+Possible message:
+
+# Build it. Design it. Ship it.
+
+But you may create a better tagline.
+
+Visual ideas:
+
+* subtle PCB traces
+* floating specification cards
+* PCB renders
+* schematic preview
+* technical data panels
+* subtle aqua highlights
+
+Do NOT make the hero resemble another marketplace.
+
+---
+
+# 79. TECHNICAL SEARCH UI
+
+Search placeholder:
+
+```text
+Search by product, MPN, PCB, KiCad project, component...
+```
+
+Autocomplete suggestions can include:
+
+* Product
+* MPN
+* Manufacturer
+* Category
+* Seller
+* Project
+* Service
+
+---
+
+# 80. PRODUCT CARDS
+
+## Physical Product Card
+
+Show:
+
+* image
+* product name
+* seller
+* rating
+* price
+* stock
+* shipping badge
+* technical badge
+* wishlist
+* add to cart
+
+## Digital Product Card
+
+Show:
+
+* preview
+* product name
+* software
+* version
+* file types
+* license
+* rating
+* price
+* download badge
+
+## Service Card
+
+Show:
+
+* service name
+* seller
+* starting price
+* delivery time
+* rating
+* CTA
+
+---
+
+# 81. PRODUCT DETAIL — PHYSICAL
+
+Must contain:
+
+* Gallery
+* Product title
+* Rating
+* Reviews
+* Price
+* Discount
+* Variants
+* Quantity
+* Stock
+* Shipping estimate
+* Seller information
+* Technical specifications
+* Datasheet
+* Documentation
+* Compatibility
+* Reviews
+* Related products
+* Add to Cart
+* Buy Now
+* Wishlist
+
+---
+
+# 82. PRODUCT DETAIL — DIGITAL
+
+Must contain:
+
+* Preview
+* Screenshots
+* Technical overview
+* Software
+* Version
+* File list
+* File sizes
+* License
+* Changelog
+* Compatibility
+* 3D preview if available
+* Seller
+* Reviews
+* Pricing
+* Download policy
+* Update policy
+
+---
+
+# 83. PRODUCT DETAIL — SERVICE
+
+Must contain:
+
+* Service scope
+* Deliverables
+* Workflow
+* Estimated duration
+* Starting price
+* Requirements
+* Portfolio
+* Revisions
+* Seller
+* Ratings
+* Reviews
+* Request quote
+* Buy service
+
+---
+
+# 84. PCB PRODUCT PAGE
+
+Display technical specifications beautifully:
+
+```text
+Board Size
+Layers
+Thickness
+Material
+Surface Finish
+Copper Weight
+Minimum Track
+Minimum Spacing
+Via Type
+Color
+Revision
+Lead Time
+MOQ
+Manufacturing Options
+```
+
+---
+
+# 85. DIGITAL LIBRARY
+
+Buyer dashboard must provide:
+
+```text
+My Digital Products
+Downloads
+Licenses
+Versions
+Updates
+Files
+Purchase History
+```
+
+---
+
+# 86. FOLLOW SELLER
+
+Buyers can follow shops.
+
+When a seller publishes:
+
+* New product
+* New version
+* Promotion
+
+followers can receive notifications.
+
+---
+
+# 87. PRODUCT VERSION UPDATE
+
+If a buyer purchased:
+
+```text
+Product v1.0
+```
+
+and seller releases:
+
+```text
+v1.1
+```
+
+The system should:
+
+* preserve the buyer license
+* notify the buyer
+* show changelog
+* provide download access according to the license
+
+---
+
+# 88. ADMIN DASHBOARD
+
+The Admin Dashboard should be completely different from the Buyer UI.
+
+Style:
+
+* Professional
+* Data-driven
+* Efficient
+* Clean
+* Information-rich
+
+Metrics:
+
+```text
+GMV
+Platform Revenue
+Commission
+Orders
+Buyers
+Sellers
+Products
+Digital Sales
+Physical Sales
+Service Sales
+Refunds
+Withdrawals
+Downloads
+Shipping
+```
+
+Charts:
+
+* Revenue over time
+* Orders over time
+* GMV
+* Top sellers
+* Top products
+* Sales by category
+* Digital downloads
+* Payment methods
+* Order states
+* Refund rate
+
+Include date range filtering.
+
+---
+
+# 89. SELLER CENTER
+
+Sidebar:
+
+```text
+Overview
+Products
+Digital Assets
+PCB Projects
+Services
+BOM
+Inventory
+Orders
+Shipping
+Customers
+Revenue
+Wallet
+Withdrawals
+Reviews
+Analytics
+Marketing
+Settings
+```
+
+Dashboard:
+
+* Revenue
+* Orders
+* Pending orders
+* Completed orders
+* Products
+* Low stock
+* Available balance
+* Pending balance
+* Top products
+* Sales chart
+
+---
+
+# 90. ADMIN CENTER
+
+Sidebar:
+
+```text
+Overview
+Users
+Sellers
+Shops
+Products
+PCB
+Digital Products
+Files
+Categories
+Orders
+Payments
+Shipping
+Returns
+Refunds
+Wallets
+Withdrawals
+Reviews
+Moderation
+Analytics
+Audit Logs
+System
+```
+
+---
+
+# 91. BUYER ROUTES
+
+Minimum:
+
+```text
+/
+ /search
+ /category/[slug]
+ /product/[slug]
+ /shop/[slug]
+ /cart
+ /checkout
+ /orders
+ /orders/[id]
+ /downloads
+ /licenses
+ /wishlist
+ /profile
+ /profile/addresses
+ /profile/reviews
+ /notifications
+```
+
+---
+
+# 92. SELLER ROUTES
+
+Minimum:
+
+```text
+/seller
+/seller/products
+/seller/products/create
+/seller/products/[id]
+/seller/digital-assets
+/seller/pcb-projects
+/seller/services
+/seller/bom
+/seller/orders
+/seller/orders/[id]
+/seller/inventory
+/seller/shipping
+/seller/revenue
+/seller/wallet
+/seller/withdrawals
+/seller/vouchers
+/seller/reviews
+/seller/analytics
+/seller/settings
+```
+
+---
+
+# 93. ADMIN ROUTES
+
+Minimum:
+
+```text
+/admin
+/admin/users
+/admin/sellers
+/admin/shops
+/admin/products
+/admin/pcb
+/admin/digital-products
+/admin/files
+/admin/categories
+/admin/orders
+/admin/payments
+/admin/shipping
+/admin/returns
+/admin/refunds
+/admin/withdrawals
+/admin/reviews
+/admin/analytics
+/admin/audit-logs
+/admin/settings
+```
+
+---
+
+# 94. RBAC
+
+Implement real Role-Based Access Control.
+
+Example permissions:
+
+```text
+user.read
+user.update
+user.suspend
+
+seller.read
+seller.approve
+seller.reject
+seller.suspend
+
+shop.read
+shop.update
+
+product.read
+product.create
+product.update
+product.delete
+product.approve
+product.reject
+
+digital_asset.read
+digital_asset.upload
+digital_asset.approve
+
+order.read
+order.update
+order.cancel
+
+payment.read
+payment.refund
+
+shipping.read
+shipping.manage
+
+withdrawal.read
+withdrawal.approve
+
+review.read
+review.moderate
+
+analytics.read
+
+system.manage
+```
+
+Backend authorization is mandatory.
+
+Frontend permissions only control UI visibility.
+
+Frontend is NOT a security boundary.
+
+---
+
+# 95. OWNERSHIP SECURITY
+
+Seller A must not be able to:
+
+* view Seller B orders
+* edit Seller B products
+* view Seller B wallet
+* access Seller B private files
+* access Seller B private customer data
+
+Buyer A must not be able to:
+
+* view Buyer B orders
+* view Buyer B addresses
+* view Buyer B downloads
+* view Buyer B private information
+
+Every protected resource must verify ownership.
+
+---
+
+# 96. ADMIN PERMISSION ISOLATION
+
+Not every admin role has full permissions.
+
+Example:
+
+ACCOUNTANT may access:
+
+* payments
+* commissions
+* settlements
+* wallets
+* withdrawals
+
+but not:
+
+* delete users
+* change system configuration
+* manage security settings
+
+---
+
+# 97. AUDIT LOGGING
+
+Log important events:
+
+```text
+LOGIN
+LOGOUT
+PASSWORD_CHANGED
+ROLE_CHANGED
+
+SELLER_APPROVED
+SELLER_REJECTED
+SELLER_SUSPENDED
+
+PRODUCT_APPROVED
+PRODUCT_REJECTED
+PRODUCT_SUSPENDED
+
+PRICE_CHANGED
+
+DIGITAL_FILE_UPLOADED
+DIGITAL_FILE_APPROVED
+DIGITAL_VERSION_RELEASED
+
+ORDER_STATUS_CHANGED
+
+PAYMENT_EVENT
+
+REFUND_EVENT
+
+WITHDRAWAL_EVENT
+
+SHIPPING_EVENT
+
+ADMIN_ACTION
+```
+
+Audit fields:
+
+```text
+userId
+action
+entityType
+entityId
+oldValue
+newValue
+ipAddress
+userAgent
+createdAt
+```
+
+---
+
+# 98. SECURITY REQUIREMENTS
+
+Implement:
+
+* Password hashing with Argon2 or bcrypt
+* JWT authentication
+* Refresh token protection
+* RBAC
+* Ownership checks
+* Rate limiting
+* Input validation
+* DTO validation
+* SQL injection protection
+* XSS mitigation
+* CORS
+* Secure headers
+* File upload validation
+* MIME validation
+* File size limits
+* Audit logging
+* Secret management
+
+Never store plaintext passwords.
+
+Never expose private files.
+
+Never hard-code secrets.
+
+---
+
+# 99. FILE UPLOAD SECURITY
+
+Validate:
+
+* MIME type
+* extension
+* file size
+* filename
+* storage path
+* archive behavior
+
+Do not execute uploaded files.
+
+Never trust file extensions alone.
+
+---
+
+# 100. RATE LIMITING
+
+Rate-limit sensitive endpoints:
+
+* login
+* registration
+* password recovery
+* payment-related endpoints
+* webhook-sensitive endpoints where appropriate
+* public APIs vulnerable to abuse
+
+---
+
+# 101. API ARCHITECTURE
+
+REST API.
+
+Base version:
+
+```text
+/api/v1
+```
+
+Domains:
+
+```text
+/auth
+/users
+/sellers
+/shops
+/categories
+/products
+/pcb
+/digital-assets
+/licenses
+/bom
+/cart
+/checkout
+/orders
+/payments
+/shipping
+/commissions
+/wallets
+/withdrawals
+/refunds
+/returns
+/reviews
+/notifications
+/analytics
+/admin
+```
+
+---
+
+# 102. API RESPONSE STANDARD
+
+Success:
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "Success"
+}
+```
+
+Error:
+
+```json
+{
+  "success": false,
+  "message": "Product not found",
+  "code": "PRODUCT_NOT_FOUND"
+}
+```
+
+Validation:
+
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "code": "VALIDATION_ERROR",
+  "errors": []
+}
+```
+
+Never expose internal stack traces in production.
+
+---
+
+# 103. SWAGGER / OPENAPI
+
+Integrate Swagger/OpenAPI.
+
+Every important endpoint must include:
+
+* description
+* authentication requirements
+* request schema
+* response schema
+* error responses
+* examples when useful
+
+---
+
+# 104. ERROR HANDLING
+
+Use centralized error handling.
+
+Handle:
+
+* validation errors
+* authentication errors
+* authorization errors
+* not found
+* conflicts
+* business rule violations
+* payment errors
+* shipping errors
+* storage errors
+* database errors
+* external provider errors
+
+---
+
+# 105. TRANSACTIONS
+
+Use database transactions for important operations:
+
+* checkout
+* inventory reservation
+* order creation
+* payment confirmation
+* refund
+* wallet settlement
+* withdrawal
+
+Maintain state consistency.
+
+Do not allow contradictory states such as:
+
+```text
+Payment = SUCCESS
+Order = PENDING_PAYMENT
+```
+
+without a valid transactional transition.
+
+---
+
+# 106. IDEMPOTENCY
+
+Design idempotency for:
+
+* checkout
+* payment
+* payment webhook
+* shipping webhook
+* refund
+* withdrawal
+
+Retries must not create duplicate business records.
+
+---
+
+# 107. PERFORMANCE
+
+Optimize:
+
+* database queries
+* indexes
+* pagination
+* caching
+* image loading
+* code splitting
+* lazy loading
+* API request deduplication
+* server rendering where appropriate
+* client caching
+
+Avoid unnecessary:
+
+```text
+SELECT *
+```
+
+Do not load entire tables when only a page is required.
+
+---
+
+# 108. REDIS
+
+Use Redis where appropriate for:
+
+* caching
+* sessions if needed
+* rate limiting
+* queues
+* temporary data
+* frequently accessed catalog data
+
+Do not use caching blindly for sensitive information.
+
+---
+
+# 109. BACKGROUND JOBS
+
+Use BullMQ/Redis for tasks such as:
+
+* email delivery
+* notifications
+* payment reconciliation
+* shipping synchronization
+* file scanning
+* analytics aggregation
+* abandoned cart processing
+* digital release notifications
+
+---
+
+# 110. OBSERVABILITY
+
+Create:
+
+```text
+/health
+```
+
+Health checks should cover:
+
+* application
+* database
+* Redis
+* essential dependencies
+
+Support:
+
+* application logs
+* request logs
+* error logs
+* worker logs
+* audit logs
+
+---
+
+# 111. SEO
+
+Implement:
+
+* dynamic metadata
+* OpenGraph
+* canonical URLs
+* sitemap
+* robots.txt
+* product structured data
+* breadcrumb structured data
+* organization structured data
+* SEO-friendly product URLs
+* SEO-friendly category URLs
+* SEO-friendly shop URLs
+
+---
+
+# 112. INTERNATIONALIZATION
+
+Default language:
+
+# English or Vietnamese according to deployment configuration
+
+Architecture must support additional languages.
+
+Do not hard-code UI text inside business logic.
+
+---
+
+# 113. CURRENCY
+
+Default currency:
+
+```text
+VND
+```
+
+Display:
+
+```text
+₫
+```
+
+Monetary calculations must use safe integer/decimal handling.
+
+Do not use unsafe floating-point arithmetic for financial calculations.
+
+---
+
+# 114. TIMEZONE
+
+Default timezone:
+
+```text
+Asia/Ho_Chi_Minh
+```
+
+Date/time handling must be consistent across:
+
+* backend
+* database
+* frontend
+* reports
+* orders
+* shipping
+* payments
+
+---
+
+# 115. ACCESSIBLE UI COMPONENT SYSTEM
+
+Create reusable components:
+
+```text
+Button
+Input
+Textarea
+Select
+Checkbox
+Radio
+Switch
+Dialog
+Modal
+Drawer
+Dropdown
+Tooltip
+Toast
+Tabs
+Card
+Badge
+Avatar
+Table
+Pagination
+Breadcrumb
+Skeleton
+EmptyState
+ErrorState
+
+ProductCard
+ShopCard
+ServiceCard
+PriceDisplay
+Rating
+QuantitySelector
+ImageGallery
+TechnicalSpecs
+ComparisonTable
+CheckoutSummary
+OrderTimeline
+StatusBadge
+DashboardCard
+Chart
+Sidebar
+Navbar
+Footer
+SearchBar
+FilterPanel
+TechnicalFilter
+```
+
+---
+
+# 116. PRODUCT LISTING UX
+
+Desktop:
+
+* sidebar filters
+* product grid
+* sorting
+* pagination
+* compare
+* wishlist
+* technical badges
+
+Mobile:
+
+* filter drawer
+* compact product cards
+* sticky sort/filter controls where appropriate
+
+---
+
+# 117. ADMIN TABLE UX
+
+Tables must support:
+
+* search
+* filter
+* sort
+* pagination
+* row actions
+* bulk actions where appropriate
+* loading
+* empty state
+* error state
+* responsive behavior
+
+On mobile, tables may transform into cards/lists.
+
+---
+
+# 118. ORDER TIMELINE
+
+Order details must include a visual timeline:
+
+```text
+Order Placed
+ ↓
+Payment Confirmed
+ ↓
+Seller Confirmed
+ ↓
+Packing
+ ↓
+Shipped
+ ↓
+Out for Delivery
+ ↓
+Delivered
+ ↓
+Completed
+```
+
+Show timestamps and state descriptions.
+
+---
+
+# 119. DESIGN QUALITY
+
+Every screen must look intentional.
+
+Avoid:
+
+* raw HTML forms
+* default browser controls
+* random spacing
+* inconsistent colors
+* inconsistent radii
+* inconsistent icons
+* unnecessary borders
+* low-quality placeholder layouts
+
+The UI should look like a polished product, not an AI-generated admin template.
+
+---
+
+# 120. DEMO DATA
+
+Create realistic seed data:
+
+```text
+1 SUPER_ADMIN
+1 ADMIN
+1 MODERATOR
+1 SUPPORT
+1 ACCOUNTANT
+
+3+ SELLERS
+10+ BUYERS
+
+20+ PHYSICAL PRODUCTS
+20+ DIGITAL PRODUCTS
+10+ SERVICES
+
+PCB PRODUCTS
+KiCad PROJECTS
+Proteus PROJECTS
+Altium PROJECTS
+GERBER PACKAGES
+BOM FILES
+ESP32 PRODUCTS
+STM32 PRODUCTS
+SENSORS
+MODULES
+COMPONENTS
+
+ORDERS
+REVIEWS
+VOUCHERS
+NOTIFICATIONS
+```
+
+The dashboard must look populated and realistic.
+
+---
+
+# 121. DEMO ACCOUNTS
+
+README must document development-only accounts:
+
+```text
+Admin
+Email:
+Password:
+
+Seller
+Email:
+Password:
+
+Buyer
+Email:
+Password:
+```
+
+These credentials must only be used for development/demo purposes.
+
+---
+
+# 122. DOCKER
+
+Create Dockerfiles for:
+
+* frontend
+* backend
+
+Create:
+
+```text
+docker-compose.yml
+```
+
+Services:
+
+```text
+web
+api
+postgres
+redis
+worker
+```
+
+Include health checks.
+
+---
+
+# 123. ENVIRONMENT CONFIGURATION
+
+Create:
+
+```text
+.env.example
+```
+
+Example variables:
+
+```text
+DATABASE_URL=
+REDIS_URL=
+
+JWT_SECRET=
+JWT_REFRESH_SECRET=
+
+NEXT_PUBLIC_API_URL=
+
+STORAGE_PROVIDER=
+STORAGE_BUCKET=
+
+VNPAY_TMN_CODE=
+VNPAY_HASH_SECRET=
+
+MOMO_ACCESS_KEY=
+MOMO_SECRET_KEY=
+
+ZALOPAY_KEY=
+
+EMAIL_PROVIDER=
+EMAIL_API_KEY=
+```
+
+Never commit actual secrets.
+
+---
+
+# 124. TESTING
+
+## Unit Tests
+
+At minimum:
+
+* authentication
+* authorization
+* RBAC
+* inventory
+* order state transitions
+* commission
+* voucher
+* payment verification
+* wallet
+* license
+* download authorization
+* shipping status mapping
+
+## Integration Tests
+
+At minimum:
+
+* registration
+* login
+* seller onboarding
+* seller approval
+* product creation
+* digital upload
+* checkout
+* multi-seller checkout
+* payment webhook
+* shipment creation
+* refund
+* withdrawal
+* digital download
+
+## E2E Test
+
+Full flow:
+
+```text
+Buyer registers
+ ↓
+Seller registers
+ ↓
+Admin approves seller
+ ↓
+Seller creates shop
+ ↓
+Seller creates product
+ ↓
+Admin approves product
+ ↓
+Buyer purchases product
+ ↓
+Payment
+ ↓
+Seller fulfills order
+ ↓
+Shipping
+ ↓
+Delivery
+ ↓
+Order completion
+ ↓
+Settlement
+ ↓
+Seller withdrawal
+```
+
+Also test:
+
+* cancellation
+* refund
+* return
+* voucher
+* review
+* permissions
+* notifications
+* digital downloads
+
+---
+
+# 125. DOCUMENTATION
+
+Create:
+
+```text
+README.md
+
+docs/
+├── ARCHITECTURE.md
+├── DATABASE.md
+├── PRODUCT-SYSTEM.md
+├── PCB-SYSTEM.md
+├── DIGITAL-ASSETS.md
+├── BOM.md
+├── LICENSE.md
+├── ORDER-FLOW.md
+├── PAYMENT.md
+├── SHIPPING.md
+├── WALLET.md
+├── REFUND.md
+├── SECURITY.md
+├── RBAC.md
+├── API.md
+├── TESTING.md
+└── DEPLOYMENT.md
+```
+
+README must explain:
+
+* requirements
+* installation
+* environment variables
+* database setup
+* migrations
+* seed
+* development
+* testing
+* Docker
+* production deployment
+
+---
+
+# 126. DEVELOPMENT COMMANDS
+
+Provide scripts such as:
+
+```text
+pnpm dev
+pnpm build
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:e2e
+
+pnpm db:migrate
+pnpm db:seed
+pnpm db:reset
+
+pnpm docker:up
+pnpm docker:down
+```
+
+---
+
+# 127. DEVELOPMENT PHASES
+
+Work in strict phases.
+
+## PHASE 0
+
+Product specification
+
+## PHASE 1
+
+System architecture
+
+## PHASE 2
+
+Monorepo foundation
+
+## PHASE 3
+
+Database
+
+## PHASE 4
+
+Authentication
+
+## PHASE 5
+
+RBAC
+
+## PHASE 6
+
+Users
+
+## PHASE 7
+
+Seller onboarding
+
+## PHASE 8
+
+Shops
+
+## PHASE 9
+
+Categories and attributes
+
+## PHASE 10
+
+Products
+
+## PHASE 11
+
+PCB system
+
+## PHASE 12
+
+Digital assets
+
+## PHASE 13
+
+Licensing
+
+## PHASE 14
+
+BOM
+
+## PHASE 15
+
+Inventory
+
+## PHASE 16
+
+Cart
+
+## PHASE 17
+
+Checkout
+
+## PHASE 18
+
+Orders
+
+## PHASE 19
+
+Payments
+
+## PHASE 20
+
+Shipping
+
+## PHASE 21
+
+Commission
+
+## PHASE 22
+
+Wallet
+
+## PHASE 23
+
+Settlement
+
+## PHASE 24
+
+Withdrawal
+
+## PHASE 25
+
+Returns
+
+## PHASE 26
+
+Refunds
+
+## PHASE 27
+
+Reviews
+
+## PHASE 28
+
+Vouchers
+
+## PHASE 29
+
+Notifications
+
+## PHASE 30
+
+Buyer UI
+
+## PHASE 31
+
+Seller UI
+
+## PHASE 32
+
+Admin UI
+
+## PHASE 33
+
+Analytics
+
+## PHASE 34
+
+Security hardening
+
+## PHASE 35
+
+Testing
+
+## PHASE 36
+
+Performance
+
+## PHASE 37
+
+SEO
+
+## PHASE 38
+
+Docker
+
+## PHASE 39
+
+Deployment
+
+## PHASE 40
+
+Final audit
+
+---
+
+# 128. BEFORE EACH PHASE
+
+Verify:
+
+1. Existing architecture
+2. Dependencies
+3. Database relations
+4. API dependencies
+5. Security implications
+6. Naming consistency
+7. Regression risk
+8. Existing tests
+
+Do not unnecessarily break previously completed work.
+
+---
+
+# 129. AFTER EACH PHASE
+
+Verify:
+
+```text
+TypeScript errors
+Lint errors
+Build errors
+Database errors
+Migration errors
+API errors
+Business logic errors
+Authorization errors
+Security issues
+Broken imports
+Broken routes
+Broken dependencies
+Regression
+```
+
+If an error is found:
+
+# FIX IT BEFORE CONTINUING.
+
+Do not ignore errors.
+
+---
+
+# 130. CODE QUALITY RULES
+
+Code must be:
+
+* Type-safe
+* Modular
+* Testable
+* Reusable
+* Maintainable
+* Secure
+* Readable
+
+Avoid:
+
+* unnecessary `any`
+* duplicated logic
+* magic numbers
+* magic strings
+* giant components
+* giant services
+* circular dependencies
+
+---
+
+# 131. FILE SIZE / COMPLEXITY
+
+Do not create enormous files.
+
+If a component or service becomes too large:
+
+# REFACTOR IT.
+
+Do not create:
+
+```text
+page.tsx
+```
+
+with thousands of lines.
+
+Do not create:
+
+```text
+mega-service.ts
+```
+
+that handles half the system.
+
+---
+
+# 132. NO HARDCODED BUSINESS LOGIC
+
+Do not hard-code:
+
+* commission percentages
+* shipping fees
+* voucher restrictions
+* payment provider configuration
+* roles
+* currency
+* timezone
+* business settings
+
+Use:
+
+* configuration
+* constants
+* database-driven settings
+* provider abstractions
+
+where appropriate.
+
+---
+
+# 133. FILE OUTPUT FORMAT
+
+Whenever creating a file, output:
+
+```text
+FILE:
+apps/api/src/modules/products/products.service.ts
+```
+
+Then provide the complete file content.
+
+Never write:
+
+```text
+// TODO
+```
+
+```text
+// implementation omitted
+```
+
+```text
+// rest of the code
+```
+
+```text
+// continue here
+```
+
+For core functionality, provide complete implementation.
+
+---
+
+# 134. NO PLACEHOLDERS FOR CORE FEATURES
+
+Do not use placeholders for:
+
+* authentication
+* RBAC
+* products
+* inventory
+* cart
+* checkout
+* orders
+* payments
+* shipping
+* commission
+* wallet
+* withdrawals
+* refunds
+* licenses
+* digital download authorization
+
+Mocks are allowed only for external services that do not yet have credentials.
+
+Examples:
+
+* payment sandbox
+* shipping mock
+* email mock
+* storage mock
+* antivirus mock
+
+But the abstraction must be production-ready.
+
+---
+
+# 135. SECURITY BUSINESS RULES
+
+Mandatory:
+
+1. Frontend never determines final price.
+2. Backend recalculates all financial values.
+3. Inventory must be validated atomically.
+4. Sellers cannot sell before approval.
+5. Buyer reviews require valid purchase.
+6. Withdrawal cannot exceed available balance.
+7. Refund cannot exceed amount paid.
+8. Payment callbacks must be verified.
+9. Webhooks must be idempotent.
+10. Seller ownership must be verified.
+11. Buyer ownership must be verified.
+12. Admin actions must be audited.
+13. Private digital assets must not be public.
+14. Uploaded files must be validated and scanned.
+15. Sensitive data must not be exposed through APIs.
+
+---
+
+# 136. INTERNATIONALIZATION
+
+The system architecture must be prepared for:
+
+```text
+English
+Vietnamese
+```
+
+and future languages.
+
+Do not hard-code UI text inside business logic.
+
+---
+
+# 137. BRAND CONFIGURATION
+
+Centralize:
+
+* application name
+* logo
+* favicon
+* colors
+* metadata
+* social links
+* contact information
+* currency
+* timezone
+
+The entire brand should be replaceable without manually modifying dozens of components.
+
+---
+
+# 138. PRODUCTION DEPLOYMENT
+
+Target architecture:
+
+```text
+Frontend
+→ Vercel or equivalent
+
+Backend
+→ Docker
+→ VPS / Cloud
+
+PostgreSQL
+→ Managed PostgreSQL or production PostgreSQL
+
+Redis
+→ Managed Redis or dedicated Redis
+
+Storage
+→ S3-compatible storage / Cloudinary
+
+Worker
+→ Docker
+```
+
+Document deployment clearly.
+
+---
+
+# 139. FUTURE SCALABILITY
+
+Architecture should make it possible to later extract:
+
+* Search Service
+* Payment Service
+* Shipping Service
+* Notification Service
+* Recommendation Service
+* Analytics Service
+* File Processing Service
+
+Do not implement microservices now unless there is a strong technical reason.
+
+---
+
+# 140. OBSERVABILITY AND AUDITING
+
+Every important financial and business event must be traceable.
+
+A support/admin user should be able to answer:
+
+* Who performed the action?
+* What changed?
+* When?
+* On which record?
+* What was the previous value?
+* What is the new value?
+* What payment/shipping transaction caused the change?
+
+---
+
+# 141. FINAL END-TO-END SCENARIOS
+
+You must test at least these scenarios.
+
+## SCENARIO A — PHYSICAL PCB
+
+```text
+Buyer
+ ↓
+Search PCB
+ ↓
+Open Product
+ ↓
+Select Variant
+ ↓
+Add to Cart
+ ↓
+Checkout
+ ↓
+Select Address
+ ↓
+Select Shipping
+ ↓
+Choose Payment
+ ↓
+Pay
+ ↓
+Seller Confirms
+ ↓
+Inventory Reserved
+ ↓
+Shipment Created
+ ↓
+Tracking
+ ↓
+Delivery
+ ↓
+Order Complete
+ ↓
+Seller Settlement
+```
+
+## SCENARIO B — DIGITAL KICAD PROJECT
+
+```text
+Buyer
+ ↓
+Open KiCad Product
+ ↓
+Review Preview
+ ↓
+Review License
+ ↓
+Purchase
+ ↓
+Payment
+ ↓
+License Granted
+ ↓
+Secure Download
+ ↓
+Download Log
+```
+
+## SCENARIO C — MIXED ORDER
+
+```text
+Physical PCB
++
+KiCad Source
++
+PCB Design Service
+```
+
+One checkout.
+
+Separate internal fulfillment flows.
+
+## SCENARIO D — SELLER WITHDRAWAL
+
+```text
+Order Completed
+ ↓
+Commission Calculated
+ ↓
+Seller Revenue
+ ↓
+Pending Balance
+ ↓
+Settlement
+ ↓
+Available Balance
+ ↓
+Withdrawal Request
+ ↓
+Admin Approval
+ ↓
+Processing
+ ↓
+Completed
+```
+
+## SCENARIO E — RETURN / REFUND
+
+```text
+Delivered
+ ↓
+Return Requested
+ ↓
+Admin/Seller Review
+ ↓
+Approved
+ ↓
+Return Shipment
+ ↓
+Received
+ ↓
+Refund
+```
+
+---
+
+# 142. FINAL DEFINITION OF DONE
+
+The project is NOT complete until the following are operational.
+
+## FOUNDATION
+
+* Monorepo
+* Frontend
+* Backend
+* Database
+* Redis
+* Docker
+* Environment configuration
+
+## AUTHENTICATION
+
+* Registration
+* Login
+* Logout
+* Refresh
+* Password reset
+* Email verification
+* Session management
+
+## AUTHORIZATION
+
+* RBAC
+* Permissions
+* Ownership checks
+* Admin roles
+
+## MARKETPLACE
+
+* Seller onboarding
+* Shops
+* Categories
+* Attributes
+* Physical products
+* Digital products
+* Services
+* Bundles
+
+## PCB
+
+* PCB specifications
+* Revisions
+* Manufacturing metadata
+* Technical comparison
+
+## DIGITAL
+
+* File upload
+* Versioning
+* License
+* Download authorization
+* Download logs
+* Secure storage
+* File scanning abstraction
+
+## BOM
+
+* Upload
+* Parsing
+* Matching
+* Availability
+* Cost estimation architecture
+
+## INVENTORY
+
+* Reservations
+* Transactions
+* Concurrency protection
+* Stock management
+
+## ORDER
+
+* Cart
+* Checkout
+* Multi-seller orders
+* Mixed orders
+* State machine
+* Cancellation
+
+## PAYMENT
+
+* Payment abstraction
+* Sandbox/mock provider
+* Webhook
+* Signature verification
+* Idempotency
+* COD
+
+## SHIPPING
+
+* Provider abstraction
+* Multiple provider adapters
+* Rate calculation
+* Shipment creation
+* Tracking
+* Webhook
+* Return shipping
+
+## MONEY
+
+* Commission
+* Wallet
+* Ledger
+* Settlement
+* Withdrawal
+
+## AFTER SALES
+
+* Return
+* Refund
+* Review
+
+## MARKETING
+
+* Voucher
+* Promotion
+* Seller marketing
+
+## COMMUNICATION
+
+* Notification
+* Email abstraction
+
+## DASHBOARDS
+
+* Buyer
+* Seller
+* Admin
+
+## QUALITY
+
+* Unit tests
+* Integration tests
+* E2E
+* Security review
+* Performance review
+* Accessibility
+* SEO
+* Responsive design
+
+## DOCUMENTATION
+
+* README
+* Architecture
+* Database
+* API
+* RBAC
+* Payment
+* Shipping
+* Wallet
+* License
+* Security
+* Testing
+* Deployment
+
+---
+
+# 143. FINAL AUDIT
+
+Before declaring the system complete, perform a final audit.
+
+Check:
+
+```text
+Architecture
+Database
+API
+Authentication
+Authorization
+Ownership
+Inventory
+Orders
+Payments
+Shipping
+Commission
+Wallet
+Settlement
+Withdrawal
+Refund
+Return
+Reviews
+Voucher
+Digital Files
+Licenses
+Downloads
+BOM
+PCB
+Notifications
+Admin
+Seller Center
+Buyer Experience
+Security
+Performance
+Accessibility
+SEO
+Docker
+Deployment
+Documentation
+Testing
+```
+
+If something is incomplete:
+
+# DO NOT CLAIM COMPLETION.
+
+Fix it first.
+
+---
+
+# 144. FIRST RESPONSE REQUIREMENT
+
+Do NOT immediately generate hundreds of files.
+
+Your first response must contain ONLY the architecture and implementation plan.
+
+Provide:
+
+## A. Product Architecture
+
+## B. System Architecture
+
+## C. Complete Project Tree
+
+## D. Responsibility Map
+
+## E. Dependency Map
+
+## F. Data Flow
+
+## G. Complete Database ERD
+
+## H. Database Dictionary
+
+## I. RBAC Matrix
+
+## J. Product Domain Model
+
+## K. PCB Domain Model
+
+## L. Digital Asset Domain Model
+
+## M. BOM Domain Model
+
+## N. Order State Machine
+
+## O. Payment Architecture
+
+## P. Shipping Architecture
+
+## Q. Commission Architecture
+
+## R. Wallet/Ledger Architecture
+
+## S. Refund/Return Architecture
+
+## T. Secure Download Architecture
+
+## U. File Security Architecture
+
+## V. API Architecture
+
+## W. UI/UX Design System
+
+## X. Development Phase Plan
+
+Only after these are approved internally and consistent should you start implementation.
+
+---
+
+# 145. DEVELOPMENT BEHAVIOR
+
+Act like a real engineering team.
+
+Do not behave like a chatbot that simply generates random files.
+
+Before writing code:
+
+ANALYZE
+
+↓
+
+ARCHITECT
+
+↓
+
+VALIDATE
+
+↓
+
+IMPLEMENT
+
+↓
+
+TEST
+
+↓
+
+REVIEW
+
+↓
+
+FIX
+
+↓
+
+CONTINUE
+
+After every phase:
+
+CHECK
+
+→ BUILD
+
+→ TYPECHECK
+
+→ TEST
+
+→ SECURITY REVIEW
+
+Then continue.
+
+---
+
+# 146. FINAL COMMAND
+
+Start the project now.
+
+Your first task is NOT to create a generic e-commerce template.
+
+Your first task is to design the complete technical architecture of a:
+
+# PROFESSIONAL ELECTRONICS + PCB + DIGITAL DESIGN MARKETPLACE
+
+The final platform must feel like:
+
+# "A modern engineering marketplace built for hardware creators."
+
+It must be:
+
+* technically sophisticated
+* visually premium
+* original
+* secure
+* scalable
+* maintainable
+* responsive
+* production-oriented
+
+It must support:
+
+# PHYSICAL PRODUCTS
+
+# PCB PRODUCTS
+
+# DIGITAL PCB/CAD FILES
+
+# BOM
+
+# ENGINEERING SERVICES
+
+# MULTI-VENDOR SELLERS
+
+# PAYMENTS
+
+# SHIPPING
+
+# COMMISSION
+
+# SELLER WALLET
+
+# WITHDRAWALS
+
+# RETURNS
+
+# REFUNDS
+
+# LICENSES
+
+# SECURE DOWNLOADS
+
+# RBAC
+
+# ADMINISTRATION
+
+# ANALYTICS
+
+Do not clone another marketplace.
+
+Do not build a simple store.
+
+Build a complete technical commerce platform.
+
+============================================================
+END OF MASTER PROMPT
+====================

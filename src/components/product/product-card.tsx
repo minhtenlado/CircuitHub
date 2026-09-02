@@ -1,0 +1,194 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { Heart, ShoppingBag, Eye } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useNavStore } from '@/stores/nav-store';
+import { useWishlistStore } from '@/stores/wishlist-store';
+import { useCartStore } from '@/stores/cart-store';
+import { useToast } from '@/hooks/use-toast';
+import { formatVND, discountPct as calcPct } from '@/lib/format';
+import { Rating } from '@/components/common/rating';
+import { ProductTypeBadge, StockBadge, DiscountBadge, NewBadge, TrendingBadge, TechBadge } from '@/components/common/badges';
+import { Cpu, Layers, FileCode, Download } from 'lucide-react';
+
+export function ProductCard({ product, index = 0 }: { product: any; index?: number }) {
+  const goProduct = useNavStore((s) => s.goProduct);
+  const goShop = useNavStore((s) => s.goShop);
+  const wishlist = useWishlistStore();
+  const cart = useCartStore();
+  const { toast } = useToast();
+
+  const inWishlist = wishlist.has(product.id);
+  const pct = product.compareAtPrice ? calcPct(product.price, product.compareAtPrice) : 0;
+  const image = product.images?.[0]?.url ?? '/logo.svg';
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.025, 0.4) }}
+      className="group relative flex flex-col bg-card border border-border/70 rounded-xl overflow-hidden hover:border-cyan-400/50 hover:shadow-[0_10px_40px_-12px_rgba(6,182,212,0.25)] transition-all duration-300"
+    >
+      {/* Image */}
+      <button
+        onClick={() => goProduct(product.slug)}
+        className="relative block aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-50 to-cyan-50/40 cursor-pointer"
+        aria-label={product.name}
+      >
+        <Image
+          src={image}
+          alt={product.name}
+          fill
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        {/* Top-left badges */}
+        <div className="absolute top-2 left-2 flex flex-col items-start gap-1.5">
+          {pct > 0 && <DiscountBadge pct={pct} />}
+          {product.isNew && <NewBadge />}
+          {product.isTrending && <TrendingBadge />}
+        </div>
+        {/* Top-right wishlist */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            wishlist.toggle({
+              productId: product.id,
+              slug: product.slug,
+              name: product.name,
+              imageUrl: image,
+              price: product.price,
+            });
+            toast({
+              title: inWishlist ? 'Removed from wishlist' : 'Added to wishlist',
+              description: product.name,
+            });
+          }}
+          className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur rounded-full text-slate-600 hover:text-rose-500 transition-colors"
+          aria-label="Toggle wishlist"
+        >
+          <Heart className={inWishlist ? 'h-4 w-4 fill-rose-500 text-rose-500' : 'h-4 w-4'} />
+        </button>
+        {/* Bottom-left product type */}
+        <div className="absolute bottom-2 left-2">
+          <ProductTypeBadge type={product.productType} />
+        </div>
+      </button>
+
+      {/* Body */}
+      <div className="flex flex-col gap-2 p-3 flex-1">
+        {/* Shop + rating */}
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <button
+            onClick={() => goShop(product.shop.slug)}
+            className="flex items-center gap-1.5 hover:text-cyan-600 truncate"
+          >
+            <span className="relative h-4 w-4 rounded overflow-hidden bg-cyan-50 border border-cyan-100">
+              {product.shop.logoUrl && (
+                <Image src={product.shop.logoUrl} alt={product.shop.name} fill className="object-cover" sizes="16px" />
+              )}
+            </span>
+            <span className="font-medium truncate max-w-[140px]">{product.shop.name}</span>
+            {product.shop.verified && <span className="text-cyan-500">✓</span>}
+          </button>
+          <Rating value={product.rating} count={product.ratingCount} size="xs" showCount={false} />
+        </div>
+
+        {/* Name */}
+        <button
+          onClick={() => goProduct(product.slug)}
+          className="text-sm font-semibold leading-snug text-foreground text-left line-clamp-2 hover:text-cyan-700 transition-colors"
+        >
+          {product.name}
+        </button>
+
+        {/* Short description */}
+        {product.shortDescription && (
+          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{product.shortDescription}</p>
+        )}
+
+        {/* Tech badges */}
+        <div className="flex flex-wrap gap-1 mt-auto">
+          {product.productType === 'DIGITAL' && product.software && (
+            <TechBadge icon={FileCode} label={`${product.software} ${product.softwareVersion ?? ''}`.trim()} />
+          )}
+          {product.productType === 'DIGITAL' && product.currentVersion && (
+            <TechBadge icon={Download} label={product.currentVersion} />
+          )}
+          {product.productType === 'PHYSICAL' && product.pcbLayers && (
+            <TechBadge icon={Layers} label={`${product.pcbLayers}L`} />
+          )}
+          {product.productType === 'PHYSICAL' && product.pcbColor && (
+            <TechBadge icon={Cpu} label={product.pcbColor} />
+          )}
+          {product.productType === 'SERVICE' && product.serviceDurationDays && (
+            <TechBadge icon={Layers} label={`${product.serviceDurationDays} days`} />
+          )}
+        </div>
+
+        {/* Price + cart */}
+        <div className="flex items-end justify-between pt-2 mt-1 border-t border-border/60">
+          <div className="flex flex-col">
+            {product.compareAtPrice && (
+              <span className="text-[11px] text-muted-foreground line-through">{formatVND(product.compareAtPrice)}</span>
+            )}
+            <span className="text-base font-bold text-cyan-700 tracking-tight">{formatVND(product.price)}</span>
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (product.productType === 'SERVICE') {
+                goProduct(product.slug);
+                return;
+              }
+              cart.addItem({
+                productId: product.id,
+                slug: product.slug,
+                name: product.name,
+                imageUrl: image,
+                price: product.price,
+                productType: product.productType,
+                shopId: product.shop.id,
+                shopName: product.shop.name,
+              });
+              toast({ title: 'Added to cart', description: product.name });
+            }}
+            className="flex items-center gap-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold px-2.5 py-1.5 transition-colors shadow-sm"
+            aria-label="Add to cart"
+          >
+            <ShoppingBag className="h-3.5 w-3.5" />
+            Add
+          </button>
+        </div>
+
+        {/* Stock footer */}
+        <div className="flex items-center justify-between pt-1">
+          <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
+          {product.soldCount > 0 && (
+            <span className="text-[10px] text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} sold</span>
+          )}
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+export function ProductCardSkeleton() {
+  return (
+    <div className="flex flex-col bg-card border border-border/70 rounded-xl overflow-hidden">
+      <div className="aspect-[4/3] bg-muted shimmer" />
+      <div className="p-3 space-y-2">
+        <div className="h-3 w-1/2 bg-muted rounded shimmer" />
+        <div className="h-4 w-3/4 bg-muted rounded shimmer" />
+        <div className="h-3 w-full bg-muted rounded shimmer" />
+        <div className="flex justify-between pt-2">
+          <div className="h-5 w-20 bg-muted rounded shimmer" />
+          <div className="h-7 w-12 bg-muted rounded shimmer" />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,318 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   CircuitHub Design System
+   Theme: WHITE + CYAN + AQUA
+   Brand: CircuitHub — "Build it. Design it. Ship it."
+   ============================================================ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* CircuitHub semantic colors */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-hover: var(--brand-primary-hover);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-aqua: var(--brand-aqua);
+  --color-brand-soft: var(--brand-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* Brand palette — WHITE + CYAN + AQUA */
+  --brand-primary: #06b6d4;
+  --brand-primary-hover: #0891b2;
+  --brand-secondary: #22d3ee;
+  --brand-aqua: #2dd4bf;
+  --brand-soft: #ecfeff;
+
+  /* Surfaces */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* Brand-primary as UI primary */
+  --primary: #06b6d4;
+  --primary-foreground: #ffffff;
+  --secondary: #f8fafc;
+  --secondary-foreground: #0f172a;
+  --muted: #f8fafc;
+  --muted-foreground: #475569;
+  --accent: #ecfeff;
+  --accent-foreground: #0e7490;
+  --destructive: #ef4444;
+
+  /* Borders & inputs */
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #06b6d4;
+
+  /* Status */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+
+  /* Charts */
+  --chart-1: #06b6d4;
+  --chart-2: #2dd4bf;
+  --chart-3: #22d3ee;
+  --chart-4: #0891b2;
+  --chart-5: #14b8a6;
+
+  /* Sidebar */
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #06b6d4;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ecfeff;
+  --sidebar-accent-foreground: #0e7490;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #06b6d4;
+}
+
+.dark {
+  --brand-primary: #22d3ee;
+  --brand-primary-hover: #06b6d4;
+  --brand-secondary: #67e8f9;
+  --brand-aqua: #5eead4;
+  --brand-soft: #083344;
+
+  --background: #0b1220;
+  --foreground: #e2e8f0;
+  --card: #111c2e;
+  --card-foreground: #e2e8f0;
+  --popover: #111c2e;
+  --popover-foreground: #e2e8f0;
+
+  --primary: #22d3ee;
+  --primary-foreground: #083344;
+  --secondary: #1e293b;
+  --secondary-foreground: #e2e8f0;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #083344;
+  --accent-foreground: #67e8f9;
+  --destructive: #f87171;
+
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #22d3ee;
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --info: #60a5fa;
+
+  --chart-1: #22d3ee;
+  --chart-2: #5eead4;
+  --chart-3: #67e8f9;
+  --chart-4: #06b6d4;
+  --chart-5: #2dd4bf;
+
+  --sidebar: #0b1220;
+  --sidebar-foreground: #e2e8f0;
+  --sidebar-primary: #22d3ee;
+  --sidebar-primary-foreground: #083344;
+  --sidebar-accent: #083344;
+  --sidebar-accent-foreground: #67e8f9;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #22d3ee;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #06b6d4, #2dd4bf);
+    border-radius: 999px;
+    border: 2px solid var(--background);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0891b2;
+  }
+
+  ::selection {
+    background: #06b6d4;
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  /* Subtle PCB / circuit grid background */
+  .pcb-grid-bg {
+    background-color: #ffffff;
+    background-image:
+      linear-gradient(rgba(6, 182, 212, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .pcb-grid-bg-soft {
+    background-color: #f8fafc;
+    background-image:
+      linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .dark .pcb-grid-bg,
+  .dark .pcb-grid-bg-soft {
+    background-color: #0b1220;
+    background-image:
+      linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* Soft cyan glow */
+  .glow-cyan {
+    box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.15), 0 8px 32px -8px rgba(6, 182, 212, 0.35);
+  }
+  .glow-cyan-strong {
+    box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.3), 0 12px 48px -8px rgba(6, 182, 212, 0.55);
+  }
+
+  /* Glass card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(226, 232, 240, 0.7);
+  }
+  .dark .glass-card {
+    background: rgba(17, 28, 46, 0.7);
+    border: 1px solid rgba(30, 41, 59, 0.7);
+  }
+
+  /* Brand gradient text */
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, #06b6d4 0%, #2dd4bf 50%, #22d3ee 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Hairline border */
+  .hairline {
+    border: 1px solid color-mix(in oklch, var(--border) 80%, transparent);
+  }
+
+  /* Tabular numbers for technical data */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  .technical-data {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    font-feature-settings: "tnum", "zero";
+  }
+
+  /* Animated circuit trace (decorative) */
+  .circuit-trace {
+    background: linear-gradient(90deg, transparent 0%, #06b6d4 50%, transparent 100%);
+    height: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+  .circuit-trace::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, #2dd4bf, transparent);
+    animation: trace-flow 3s linear infinite;
+  }
+  @keyframes trace-flow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Shimmer skeleton */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.15), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .circuit-trace::after,
+    .shimmer::after {
+      animation: none;
+    }
+    html { scroll-behavior: auto; }
+  }
+}
