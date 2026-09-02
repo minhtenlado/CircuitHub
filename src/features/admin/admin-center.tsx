@@ -85,6 +85,7 @@ import {
   initials,
 } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
+import { ProductModerationDialog } from '@/components/admin/product-moderation-dialog';
 import {
   ProductTypeBadge,
   VerifiedBadge,
@@ -1321,6 +1322,7 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const [moderation, setModeration] = useState<{ product: any; action: 'APPROVE' | 'REJECT' | 'SUSPEND' | 'FEATURE' | 'UNFEATURE' } | null>(null);
   const { data } = useProducts({});
   const products: any[] = (data?.items ?? []) as any[];
 
@@ -1348,10 +1350,9 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
   ];
 
   const handleAction = (p: any, action: 'approve' | 'reject') => {
-    toast({
-      title: action === 'approve' ? 'Product approved' : 'Product rejected',
-      description: `${p.name} is now ${action === 'approve' ? 'live on marketplace' : 'rejected'}.`,
-      variant: action === 'reject' ? 'destructive' : 'default',
+    setModeration({
+      product: p,
+      action: action === 'approve' ? 'APPROVE' : 'REJECT',
     });
   };
 
@@ -1431,27 +1432,52 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
                 <TableCell className="text-xs text-slate-600">{p.shop?.name ?? '—'}</TableCell>
                 <TableCell className="text-right">
                   <div className="inline-flex items-center gap-1">
-                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-cyan-700 hover:bg-cyan-50" onClick={() => goProduct(p.slug)}>
+                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-cyan-700 hover:bg-cyan-50" onClick={() => goProduct(p.slug)} title="View product">
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 px-2 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                      onClick={() => handleAction(p, 'approve')}
-                    >
-                      <Check className="h-3 w-3" />
-                      Approve
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 px-2 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
-                      onClick={() => handleAction(p, 'reject')}
-                    >
-                      <X className="h-3 w-3" />
-                      Reject
-                    </Button>
+                    {p.isFeatured ? (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-amber-500 hover:bg-amber-50"
+                        onClick={() => setModeration({ product: p, action: 'UNFEATURE' })}
+                        title="Remove feature"
+                      >
+                        <Star className="h-3.5 w-3.5 fill-amber-400" />
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-slate-400 hover:bg-amber-50 hover:text-amber-500"
+                        onClick={() => setModeration({ product: p, action: 'FEATURE' })}
+                        title="Feature product"
+                      >
+                        <Star className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                    {(p.status ?? 'ACTIVE') !== 'ACTIVE' && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                        onClick={() => handleAction(p, 'approve')}
+                      >
+                        <Check className="h-3 w-3" />
+                        Approve
+                      </Button>
+                    )}
+                    {(p.status ?? 'ACTIVE') === 'ACTIVE' && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                        onClick={() => handleAction(p, 'reject')}
+                      >
+                        <X className="h-3 w-3" />
+                        Reject
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -1460,6 +1486,13 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
         </Table>
         <PaginationFooter total={products.length} shown={filtered.length} label="products" />
       </Card>
+
+      <ProductModerationDialog
+        open={!!moderation}
+        onOpenChange={(o) => !o && setModeration(null)}
+        product={moderation?.product ?? null}
+        action={moderation?.action ?? null}
+      />
     </div>
   );
 }

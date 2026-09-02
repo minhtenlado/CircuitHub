@@ -1065,3 +1065,94 @@ Project was stable after Round 5 with version sorting fix and wishlist import. Q
 6. **Seller breakdown in invoice** — For multi-seller orders, show which shop each item came from
 7. **Search history expiry** — Auto-expire searches older than 30 days
 
+
+---
+Task ID: Round-7 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: Implement real admin product moderation with API + dialog, add Feature/Unfeature functionality
+
+## Current Project Status Assessment
+
+Project was stable after Round 6 with invoice download and search history. QA via agent-browser revealed:
+
+1. **Admin product moderation was a stub** — The ProductsTab in admin center had Approve/Reject buttons that only showed toasts ("Product approved" / "Product rejected") without calling any API. No actual database update happened, no audit log was created, and no seller notification was sent.
+2. **No Feature/Unfeature capability** — Admins had no way to feature or unfeature products (a common marketplace admin action).
+
+## Completed Modifications
+
+### New Features
+
+1. **Product Moderation API** (`/src/app/api/v1/admin/products/route.ts`)
+   - New `PATCH /api/v1/admin/products` endpoint that handles 5 actions:
+     - **APPROVE** — Sets product status to `ACTIVE`, clears moderation note
+     - **REJECT** — Sets status to `REJECTED`, requires reason (stored as `moderationNote`)
+     - **SUSPEND** — Sets status to `SUSPENDED`, optional reason
+     - **FEATURE** — Sets `isFeatured = true`
+     - **UNFEATURE** — Sets `isFeatured = false`
+   - Validates action values and requires reason for REJECT
+   - Creates an audit log entry with action type `PRODUCT_APPROVE`, `PRODUCT_REJECT`, etc.
+   - Sends a notification to the seller (PRODUCT_APPROVED / PRODUCT_REJECTED / PRODUCT_SUSPENDED)
+   - Uses `resolveDemoUserId` for the admin ID
+
+2. **Product Moderation Dialog** (`/src/components/admin/product-moderation-dialog.tsx`)
+   - Full dialog component with 5 action types (APPROVE, REJECT, SUSPEND, FEATURE, UNFEATURE)
+   - Action-specific configuration (title, description, icon, color, requireReason)
+   - Product summary card with thumbnail, name, type badge, shop name
+   - Required reason textarea for REJECT and SUSPEND actions (with validation)
+   - Submit button color-coded: emerald for approve, red for reject, amber for suspend, cyan for feature
+   - Loading spinner during submission
+   - On success: invalidates `products` and `admin-analytics` query caches, closes dialog, shows toast
+   - On error: shows destructive variant toast with error message
+
+3. **Admin ProductsTab enhancement** (`/src/features/admin/admin-center.tsx`)
+   - Replaced toast-only `handleAction` with dialog-based `setModeration({ product, action })`
+   - Added Feature/Unfeature star button for each product:
+     - Featured products: filled amber star (click to unfeature)
+     - Non-featured: outline slate star (click to feature)
+   - Smart action buttons based on status:
+     - ACTIVE products show "Reject" button
+     - Non-ACTIVE products show "Approve" button (for re-approval)
+   - All actions open the ProductModerationDialog with appropriate action type
+   - Query cache invalidation refreshes the product list after moderation
+
+### Styling Improvements
+
+- Feature star button: amber-500 with fill for featured, slate-400 outline for non-featured
+- Approve button: emerald border + text with emerald-50 hover
+- Reject button: red border + text with red-50 hover
+- Moderation dialog: action-colored icon (emerald/red/amber/cyan) in header
+- Product summary card in dialog: slate-50 background with 48×48 thumbnail
+- Submit button: action-colored (emerald/red/amber/cyan) with matching icon
+- Textarea with focus ring and helper text below
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200 including new `PATCH /api/v1/admin/products`
+- Product moderation flow tested end-to-end:
+  1. Click "Reject" on OLED Display product → dialog opens
+  2. Type reason "Product description needs more technical details."
+  3. Click "Reject Product" button → API returns 200
+  4. Verified: product status changed to `REJECTED` with moderationNote in database
+  5. Product no longer appears in public product listing (filtered by ACTIVE status)
+- Feature/Unfeature: star icons toggle correctly based on `isFeatured` status
+- Audit log created with `PRODUCT_REJECT` action
+- Seller notification created with reason text
+- No console errors
+
+## Unresolved Issues / Risks
+
+1. **Admin products list doesn't show REJECTED products** — The admin ProductsTab uses `useProducts({})` which calls the public API that only returns ACTIVE products. Rejected/suspended products aren't visible in the admin list. Should add a separate admin products API that returns all statuses.
+2. **No bulk moderation** — Admins can only moderate one product at a time. Bulk approve/reject would be more efficient.
+3. **Feature count not limited** — There's no limit on how many products can be featured. Could lead to too many featured products on the homepage.
+
+## Priority Recommendations for Next Phase
+
+1. **Admin products API** — Create a dedicated admin endpoint that returns ALL products regardless of status, so admins can see and manage rejected/suspended products
+2. **Real-time notifications** — Polling-based notification badge that updates without page refresh
+3. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
+4. **Order detail full page** — Dedicated full-page order detail view
+5. **Product image upload** — Real file upload in Add Product dialog with preview and progress
+6. **Seller breakdown in invoice** — For multi-seller orders, show which shop each item came from
+7. **Bulk product moderation** — Select multiple products and approve/reject in bulk
+
