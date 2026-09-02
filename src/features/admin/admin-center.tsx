@@ -41,7 +41,7 @@
    - Recharts charts use chart-1..5 palette tokens.
    ============================================================ */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -1323,11 +1323,21 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [moderation, setModeration] = useState<{ product: any; action: 'APPROVE' | 'REJECT' | 'SUSPEND' | 'FEATURE' | 'UNFEATURE' } | null>(null);
+
+  // Debounce search input (300ms) to reduce API calls
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 300);
+    return () => clearTimeout(t);
+  }, [search]);
+
   const { data } = useAdminProducts({
     status: statusFilter !== 'all' ? statusFilter : undefined,
     productType: typeFilter !== 'all' ? typeFilter : undefined,
-    q: search.trim() || undefined,
+    q: debouncedSearch || undefined,
   });
   const products: any[] = (data?.items ?? []) as any[];
 

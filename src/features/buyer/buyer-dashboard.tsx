@@ -919,7 +919,20 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
                     size="sm"
                     variant="outline"
                     onClick={() => {
-                      downloadInvoice(order);
+                      // Map sellerOrders for invoice (include shop name)
+                      downloadInvoice({
+                        ...order,
+                        sellerOrders: (order.sellerOrders ?? []).map((so: any) => ({
+                          shopName: so.shop?.name,
+                          shopSlug: so.shop?.slug,
+                          items: so.items ?? [],
+                          subtotal: so.subtotal ?? 0,
+                          shippingTotal: so.shippingTotal ?? 0,
+                          commissionAmount: so.commissionAmount,
+                          sellerRevenue: so.sellerRevenue,
+                          fulfillmentType: so.fulfillmentType,
+                        })),
+                      });
                       toast({ title: 'Invoice opened', description: `${order.code} invoice opened in a new tab. Use Ctrl+P to save as PDF.` });
                     }}
                   >

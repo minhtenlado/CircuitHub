@@ -1232,3 +1232,72 @@ Project was stable after Round 7 with product moderation. QA via agent-browser c
 7. **Bulk product moderation** — Select multiple products and approve/reject in bulk
 8. **Admin pagination** — Add proper pagination UI for admin product list when catalog grows large
 
+
+---
+Task ID: Round-9 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: Fix admin search debounce + add seller breakdown to invoice
+
+## Current Project Status Assessment
+
+Project was stable after Round 8 with admin products API. QA via agent-browser confirmed:
+
+1. **Admin search not debounced** — The admin ProductsTab search input triggered an API call on every keystroke (3 keystrokes = 3 API calls). This was identified as a performance issue in the Round 8 recommendations.
+2. **Invoice lacked seller breakdown** — For multi-seller orders, the invoice only showed a flat items list without grouping by shop. The Round 6 worklog identified this as a gap.
+
+## Completed Modifications
+
+### Bug Fixes
+
+1. **Admin search debounce** (`/src/features/admin/admin-center.tsx`)
+   - Added `debouncedSearch` state alongside `search`
+   - Added `useEffect` with 300ms timeout that updates `debouncedSearch` when `search` changes
+   - Changed `useAdminProducts` to use `debouncedSearch` instead of `search` for the `q` parameter
+   - Imported `useEffect` from React (was only importing `useState, useMemo`)
+   - Result: Typing 3 characters now produces only 1 API call (after 300ms of inactivity) instead of 3 calls
+
+### New Features
+
+1. **Seller Breakdown in Invoice** (`/src/lib/invoice.ts` + buyer dashboard integration)
+   - Added `InvoiceSellerOrder` interface with: `shopName`, `shopSlug`, `items`, `subtotal`, `shippingTotal`, `commissionAmount`, `sellerRevenue`, `fulfillmentType`
+   - Updated `InvoiceOrder` interface to accept optional `sellerOrders?: InvoiceSellerOrder[]`
+   - Added seller breakdown HTML section in `generateInvoiceHTML()`:
+     - "SELLER BREAKDOWN" heading with cyan accent
+     - Per-shop cards with: shop name, fulfillment type badge (PHYSICAL/DIGITAL/SERVICE), items list (name × quantity), subtotal + shipping + total
+     - Dashed border between items and totals within each shop card
+   - Updated buyer dashboard's Invoice button to map `order.sellerOrders` API data to the `InvoiceSellerOrder` format (maps `shop.name` → `shopName`, etc.)
+   - The seller breakdown appears between the items table and the totals section
+
+### Styling Improvements
+
+- Seller breakdown cards: 1px solid #e2e8f0 border, 8px border-radius, 12px padding
+- Fulfillment type badge: slate-50 background, uppercase letter-spacing
+- Shop name: 13px font-weight 600
+- Items list: 12px color #64748b, joined with " · "
+- Per-shop totals: dashed top border separator, right-aligned total
+- "SELLER BREAKDOWN" heading: 10px uppercase, cyan #06b6d4
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200: homepage, admin products, product detail, search, orders
+- Admin search debounce: code verified — `useEffect` with 300ms timeout, `debouncedSearch` used for API query
+- Invoice with seller breakdown: code verified — `sellerOrders` data mapped from API response, HTML generated with per-shop cards
+- No console errors
+
+## Unresolved Issues / Risks
+
+1. **Browser automation can't reliably test React state** — The `agent-browser fill` and `keyboard type` commands don't always trigger React's onChange handlers. The debounce code is correct but couldn't be verified via automated testing.
+2. **Invoice popup may be blocked** — The `window.open()` call for the invoice may be blocked by popup blockers in some browsers.
+3. **Seller orders items may be empty** — The API returns sellerOrders with items array, but in some cases the items array may be empty (only subtotal is populated). The invoice handles this gracefully.
+
+## Priority Recommendations for Next Phase
+
+1. **Real-time notifications** — Polling-based notification badge that updates without page refresh (already has 30s refetchInterval, could add visual pulse animation)
+2. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
+3. **Order detail full page** — Dedicated full-page order detail view (not just expandable card)
+4. **Product image upload** — Real file upload in Add Product dialog with preview and progress
+5. **Bulk product moderation** — Select multiple products and approve/reject in bulk
+6. **Admin pagination** — Add proper pagination UI for admin product list when catalog grows large
+7. **Notification pulse animation** — Add a subtle pulse animation on the notification bell when unread count increases
+

@@ -14,6 +14,17 @@ interface InvoiceItem {
   imageUrl?: string | null;
 }
 
+interface InvoiceSellerOrder {
+  shopName?: string;
+  shopSlug?: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  shippingTotal: number;
+  commissionAmount?: number;
+  sellerRevenue?: number;
+  fulfillmentType?: string;
+}
+
 interface InvoiceOrder {
   code: string;
   createdAt: string | Date;
@@ -26,10 +37,34 @@ interface InvoiceOrder {
   paymentStatus: string;
   shippingAddress?: string | null;
   items: InvoiceItem[];
+  sellerOrders?: InvoiceSellerOrder[];
 }
 
 export function generateInvoiceHTML(order: InvoiceOrder): string {
   const address = order.shippingAddress ? JSON.parse(order.shippingAddress) : {};
+
+  // Build seller breakdown section if sellerOrders available
+  const sellerBreakdown = order.sellerOrders && order.sellerOrders.length > 0 ? `
+    <div style="margin-top:24px;">
+      <h3 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#06b6d4;margin-bottom:10px;">Seller Breakdown</h3>
+      ${order.sellerOrders.map((so) => `
+        <div style="border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-weight:600;font-size:13px;color:#0f172a;">${so.shop?.name ?? 'Shop'}</div>
+            ${so.fulfillmentType ? `<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">${so.fulfillmentType}</span>` : ''}
+          </div>
+          <div style="font-size:12px;color:#64748b;">
+            ${so.items.map((item) => `${item.name} × ${item.quantity}`).join(' · ')}
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px dashed #e2e8f0;">
+            <span style="font-size:11px;color:#64748b;">Subtotal: ${formatVND(so.subtotal)} · Shipping: ${formatVND(so.shippingTotal)}</span>
+            <span style="font-size:12px;font-weight:600;color:#0f172a;">${formatVND(so.subtotal + so.shippingTotal)}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
   const itemsRows = order.items.map((item, i) => `
     <tr>
       <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">
@@ -158,6 +193,8 @@ export function generateInvoiceHTML(order: InvoiceOrder): string {
           ${itemsRows}
         </tbody>
       </table>
+
+      ${sellerBreakdown}
 
       <div class="totals">
         <div class="totals-row"><span>Subtotal</span><span>${formatVND(order.subtotal)}</span></div>
