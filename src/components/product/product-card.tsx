@@ -32,8 +32,11 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
       className="group relative flex flex-col bg-card border border-border/70 rounded-xl overflow-hidden hover:border-cyan-400/50 hover:shadow-[0_10px_40px_-12px_rgba(6,182,212,0.25)] transition-all duration-300"
     >
       {/* Image */}
-      <button
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => goProduct(product.slug)}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goProduct(product.slug); } }}
         className="relative block aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-50 to-cyan-50/40 cursor-pointer"
         aria-label={product.name}
       >
@@ -76,7 +79,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
         <div className="absolute bottom-2 left-2">
           <ProductTypeBadge type={product.productType} />
         </div>
-      </button>
+      </div>
 
       {/* Body */}
       <div className="flex flex-col gap-2 p-3 flex-1">

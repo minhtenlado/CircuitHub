@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { ok, fail } from '../route';
+
+function ok<T>(data: T, message = 'Success') {
+  return NextResponse.json({ success: true, data, message });
+}
+function fail(message: string, code = 'ERROR', status = 400) {
+  return NextResponse.json({ success: false, message, code }, { status });
+}
 
 /** POST /api/v1/orders — create order from cart payload.
  * Frontend sends only the items + address + payment/shipping method.

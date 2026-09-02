@@ -1,0 +1,2002 @@
+     1→'use client';
+     2→
+     3→/* ============================================================
+     4→   CircuitHub — BuyerDashboard
+     5→   Single-file buyer account center with 8 internal tabs:
+     6→   Overview · Orders · Downloads · Wishlist · Licenses ·
+     7→   Addresses · Profile · Reviews.
+     8→
+     9→   Layout:
+    10→   - Sticky left sidebar (vertical TabsList) on lg+
+    11→   - Horizontal scrollable pill TabsList on mobile
+    12→   - AnimatePresence (mode="wait") for tab transitions
+    13→   - Container: max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8
+    14→   - Welcome header with avatar + last login info
+    15→
+    16→   Data:
+    17→   - useOrders('demo-buyer') for live orders (fallback to
+    18→     DEMO_ORDERS when API returns empty so the dashboard is
+    19→     populated for demo accounts).
+    20→   - useNotifications('demo-buyer') for recent notifications.
+    21→   - useWishlistStore for wishlist items.
+    22→   - Mock licenses, reviews, address used for demo state.
+    23→   ============================================================ */
+    24→
+    25→import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+    26→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+    27→import { Button } from '@/components/ui/button';
+    28→import { Badge } from '@/components/ui/badge';
+    29→import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+    30→import { Separator } from '@/components/ui/separator';
+    31→import { Input } from '@/components/ui/input';
+    32→import { Label } from '@/components/ui/label';
+    33→import { Textarea } from '@/components/ui/textarea';
+    34→import { useOrders, useNotifications } from '@/lib/api/hooks';
+    35→import { useWishlistStore } from '@/stores/wishlist-store';
+    36→import { useNavStore } from '@/stores/nav-store';
+    37→import { useAuthStore } from '@/stores/auth-store';
+    38→import { useToast } from '@/hooks/use-toast';
+    39→import { formatVND, formatDate, timeAgo, formatFileSize, initials } from '@/lib/format';
+    40→import { Rating } from '@/components/common/rating';
+    41→import { ProductTypeBadge, VerifiedBadge, TechBadge } from '@/components/common/badges';
+    42→import { motion, AnimatePresence } from 'framer-motion';
+    43→import {
+    44→  Package,
+    45→  Download,
+    46→  Heart,
+    47→  MapPin,
+    48→  User,
+    49→  Star,
+    50→  Clock,
+    51→  ShoppingBag,
+    52→  Wallet,
+    53→  FileText,
+    54→  Bell,
+    55→  CheckCircle2,
+    56→  ChevronRight,
+    57→  ArrowRight,
+    58→  Trash2,
+    59→  Plus,
+    60→  Lock,
+    61→  ShieldCheck,
+    62→  Key,
+    63→  Activity,
+    64→  Mail,
+    65→  Phone,
+    66→  ChevronDown,
+    67→  Truck,
+    68→  FileArchive,
+    69→  Edit2,
+    70→  X,
+    71→  Sparkles,
+    72→  ClipboardList,
+    73→  PackageSearch,
+    74→  RefreshCw,
+    75→  Image as ImageIcon,
+    76→} from 'lucide-react';
+    77→import Image from 'next/image';
+    78→import { useState } from 'react';
+    79→import { cn } from '@/lib/utils';
+    80→
+    81→/* ---------------- Types ---------------- */
+    82→
+    83→type TabId =
+    84→  | 'overview'
+    85→  | 'orders'
+    86→  | 'downloads'
+    87→  | 'wishlist'
+    88→  | 'licenses'
+    89→  | 'addresses'
+    90→  | 'profile'
+    91→  | 'reviews';
+    92→
+    93→interface DemoOrderItem {
+    94→  id: string;
+    95→  name: string;
+    96→  productType: string;
+    97→  unitPrice: number;
+    98→  quantity: number;
+    99→  lineTotal: number;
+   100→  imageUrl?: string;
+   101→  fulfillmentType: string;
+   102→}
+   103→
+   104→interface DemoShipment {
+   105→  id: string;
+   106→  trackingNumber: string;
+   107→  provider: string;
+   108→  status: string;
+   109→  estimatedDays: number;
+   110→}
+   111→
+   112→interface DemoPayment {
+   113→  id: string;
+   114→  provider: string;
+   115→  amount: number;
+   116→  status: string;
+   117→  paidAt: string;
+   118→}
+   119→
+   120→interface DemoSellerOrder {
+   121→  id: string;
+   122→  code: string;
+   123→  shop: { id: string; name: string; slug: string; verified: boolean };
+   124→  status: string;
+   125→  fulfillmentType: string;
+   126→}
+   127→
+   128→interface DemoOrder {
+   129→  id: string;
+   130→  code: string;
+   131→  createdAt: string;
+   132→  status: string;
+   133→  paymentStatus: string;
+   134→  paymentMethod: string;
+   135→  subtotal: number;
+   136→  shippingTotal: number;
+   137→  grandTotal: number;
+   138→  itemsCount: number;
+   139→  shippingAddress: { fullName: string; phone: string; line1: string; city: string; district?: string };
+   140→  items: DemoOrderItem[];
+   141→  sellerOrders: DemoSellerOrder[];
+   142→  shipments: DemoShipment[];
+   143→  payments: DemoPayment[];
+   144→}
+   145→
+   146→interface DemoDownload {
+   147→  id: string;
+   148→  productId: string;
+   149→  slug: string;
+   150→  name: string;
+   151→  image: string;
+   152→  version: string;
+   153→  fileSize: number;
+   154→  licenseType: string;
+   155→  licenseKey: string;
+   156→  lastDownloadedAt: string;
+   157→  purchaseDate: string;
+   158→  software: string;
+   159→}
+   160→
+   161→interface DemoLicense {
+   162→  id: string;
+   163→  productId: string;
+   164→  productName: string;
+   165→  productSlug: string;
+   166→  licenseType: string;
+   167→  licenseKey: string;
+   168→  purchaseDate: string;
+   169→  status: string;
+   170→  seats: number;
+   171→  usedSeats: number;
+   172→  terms: string;
+   173→}
+   174→
+   175→interface DemoReview {
+   176→  id: string;
+   177→  productId: string;
+   178→  productName: string;
+   179→  productSlug: string;
+   180→  rating: number;
+   181→  comment: string;
+   182→  createdAt: string;
+   183→  verifiedPurchase: boolean;
+   184→  sellerReply?: string;
+   185→  sellerReplyAt?: string;
+   186→}
+   187→
+   188→interface DemoAddress {
+   189→  id: string;
+   190→  fullName: string;
+   191→  phone: string;
+   192→  line1: string;
+   193→  line2?: string;
+   194→  city: string;
+   195→  district: string;
+   196→  ward?: string;
+   197→  zipCode?: string;
+   198→  country: string;
+   199→  isDefault: boolean;
+   200→}
+   201→
+   202→/* ---------------- Status config ---------------- */
+   203→
+   204→const ORDER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
+   205→  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
+   206→  PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
+   207→  PAID: { label: 'Paid', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
+   208→  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
+   209→  SHIPPED: { label: 'Shipped', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
+   210→  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 text-teal-700 border-teal-200', dot: 'bg-teal-500' },
+   211→  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
+   212→  CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
+   213→};
+   214→
+   215→const PAYMENT_STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
+   216→  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
+   217→  SUCCESS: { label: 'Paid', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+   218→  FAILED: { label: 'Failed', cls: 'bg-red-50 text-red-700 border-red-200' },
+   219→  REFUNDED: { label: 'Refunded', cls: 'bg-slate-50 text-slate-700 border-slate-200' },
+   220→};
+   221→
+   222→const LICENSE_TYPE_CONFIG: Record<string, { label: string; cls: string }> = {
+   223→  PERSONAL: { label: 'Personal', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
+   224→  COMMERCIAL: { label: 'Commercial', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+   225→  ENTERPRISE: { label: 'Enterprise', cls: 'bg-violet-50 text-violet-700 border-violet-200' },
+   226→  EXTENDED: { label: 'Extended', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
+   227→  EDUCATION: { label: 'Education', cls: 'bg-teal-50 text-teal-700 border-teal-200' },
+   228→  UNLIMITED: { label: 'Unlimited', cls: 'bg-gradient-to-r from-cyan-500 to-teal-400 text-white border-0' },
+   229→};
+   230→
+   231→const TIMELINE_STEPS = [
+   232→  { id: 'placed', label: 'Order Placed' },
+   233→  { id: 'paid', label: 'Paid' },
+   234→  { id: 'confirmed', label: 'Confirmed' },
+   235→  { id: 'shipped', label: 'Shipped' },
+   236→  { id: 'delivered', label: 'Delivered' },
+   237→  { id: 'completed', label: 'Completed' },
+   238→] as const;
+   239→
+   240→const STATUS_TO_STEPS: Record<string, number> = {
+   241→  PENDING: 1,
+   242→  PENDING_PAYMENT: 1,
+   243→  PAID: 2,
+   244→  CONFIRMED: 3,
+   245→  SHIPPED: 4,
+   246→  DELIVERED: 5,
+   247→  COMPLETED: 6,
+   248→  CANCELLED: 1,
+   249→};
+   250→
+   251→/* ---------------- Tabs config ---------------- */
+   252→
+   253→const TABS: { id: TabId; label: string; icon: typeof Package; description: string }[] = [
+   254→  { id: 'overview', label: 'Overview', icon: Activity, description: 'Quick stats & recent activity' },
+   255→  { id: 'orders', label: 'My Orders', icon: Package, description: 'All purchases with tracking' },
+   256→  { id: 'downloads', label: 'My Downloads', icon: Download, description: 'Digital products & files' },
+   257→  { id: 'wishlist', label: 'My Wishlist', icon: Heart, description: 'Saved products' },
+   258→  { id: 'licenses', label: 'My Licenses', icon: Key, description: 'Digital product licenses' },
+   259→  { id: 'addresses', label: 'My Addresses', icon: MapPin, description: 'Saved shipping addresses' },
+   260→  { id: 'profile', label: 'My Profile', icon: User, description: 'Account settings' },
+   261→  { id: 'reviews', label: 'My Reviews', icon: Star, description: 'Reviews you have written' },
+   262→];
+   263→
+   264→/* ---------------- Demo data ---------------- */
+   265→
+   266→const DAY = 86400000;
+   267→const now = Date.now();
+   268→
+   269→const DEMO_ORDERS: DemoOrder[] = [
+   270→  {
+   271→    id: 'demo-ord-1',
+   272→    code: 'CH-100005',
+   273→    createdAt: new Date(now - 7 * DAY).toISOString(),
+   274→    status: 'COMPLETED',
+   275→    paymentStatus: 'SUCCESS',
+   276→    paymentMethod: 'MOCK',
+   277→    subtotal: 394000,
+   278→    shippingTotal: 30000,
+   279→    grandTotal: 424000,
+   280→    itemsCount: 2,
+   281→    shippingAddress: { fullName: 'Buyer 1', phone: '0901234567', line1: '12 Nguyen Hue', city: 'Ho Chi Minh', district: 'District 1' },
+   282→    items: [
+   283→      { id: 'i1', name: 'ESP32-WROOM-32 DevKit v1.2', productType: 'PHYSICAL', unitPrice: 95000, quantity: 2, lineTotal: 190000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=esp32&backgroundColor=06b6d4', fulfillmentType: 'PHYSICAL' },
+   284→      { id: 'i2', name: 'BME280 Sensor Module', productType: 'PHYSICAL', unitPrice: 68000, quantity: 3, lineTotal: 204000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=bme280&backgroundColor=22d3ee', fulfillmentType: 'PHYSICAL' },
+   285→    ],
+   286→    sellerOrders: [
+   287→      { id: 'so1', code: 'CH-100005-1', shop: { id: 'shop-a', name: 'BoardForge Studio', slug: 'boardforge-studio', verified: true }, status: 'COMPLETED', fulfillmentType: 'PHYSICAL' },
+   288→    ],
+   289→    shipments: [
+   290→      { id: 'sh1', trackingNumber: 'GHN1234567890', provider: 'GHN', status: 'DELIVERED', estimatedDays: 3 },
+   291→    ],
+   292→    payments: [
+   293→      { id: 'p1', provider: 'MOCK', amount: 424000, status: 'SUCCESS', paidAt: new Date(now - 7 * DAY + 60000).toISOString() },
+   294→    ],
+   295→  },
+   296→  {
+   297→    id: 'demo-ord-2',
+   298→    code: 'CH-100006',
+   299→    createdAt: new Date(now - 3 * DAY).toISOString(),
+   300→    status: 'SHIPPED',
+   301→    paymentStatus: 'SUCCESS',
+   302→    paymentMethod: 'VNPAY',
+   303→    subtotal: 2450000,
+   304→    shippingTotal: 60000,
+   305→    grandTotal: 2510000,
+   306→    itemsCount: 1,
+   307→    shippingAddress: { fullName: 'Buyer 1', phone: '0901234567', line1: '12 Nguyen Hue', city: 'Ho Chi Minh', district: 'District 1' },
+   308→    items: [
+   309→      { id: 'i3', name: '4-Layer PCB Stack — STM32 Reference Design', productType: 'PHYSICAL', unitPrice: 2450000, quantity: 1, lineTotal: 2450000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=pcb&backgroundColor=2dd4bf', fulfillmentType: 'PHYSICAL' },
+   310→    ],
+   311→    sellerOrders: [
+   312→      { id: 'so2', code: 'CH-100006-1', shop: { id: 'shop-b', name: 'KiCad Craft Lab', slug: 'kicad-craft-lab', verified: true }, status: 'SHIPPING', fulfillmentType: 'PHYSICAL' },
+   313→    ],
+   314→    shipments: [
+   315→      { id: 'sh2', trackingNumber: 'GHTK9876543210', provider: 'GHTK', status: 'IN_TRANSIT', estimatedDays: 2 },
+   316→    ],
+   317→    payments: [
+   318→      { id: 'p2', provider: 'VNPAY', amount: 2510000, status: 'SUCCESS', paidAt: new Date(now - 3 * DAY + 60000).toISOString() },
+   319→    ],
+   320→  },
+   321→  {
+   322→    id: 'demo-ord-3',
+   323→    code: 'CH-100007',
+   324→    createdAt: new Date(now - 1 * DAY).toISOString(),
+   325→    status: 'DELIVERED',
+   326→    paymentStatus: 'SUCCESS',
+   327→    paymentMethod: 'MOCK',
+   328→    subtotal: 1290000,
+   329→    shippingTotal: 30000,
+   330→    grandTotal: 1320000,
+   331→    itemsCount: 3,
+   332→    shippingAddress: { fullName: 'Buyer 1', phone: '0901234567', line1: '12 Nguyen Hue', city: 'Ho Chi Minh', district: 'District 1' },
+   333→    items: [
+   334→      { id: 'i4', name: 'STM32F4 Discovery Kit', productType: 'PHYSICAL', unitPrice: 590000, quantity: 1, lineTotal: 590000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=stm32&backgroundColor=06b6d4', fulfillmentType: 'PHYSICAL' },
+   335→      { id: 'i5', name: '0.96" OLED Display Module', productType: 'PHYSICAL', unitPrice: 75000, quantity: 4, lineTotal: 300000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=oled&backgroundColor=22d3ee', fulfillmentType: 'PHYSICAL' },
+   336→      { id: 'i6', name: '40-pin GPIO Ribbon Cable', productType: 'PHYSICAL', unitPrice: 400000, quantity: 1, lineTotal: 400000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=gpio&backgroundColor=2dd4bf', fulfillmentType: 'PHYSICAL' },
+   337→    ],
+   338→    sellerOrders: [
+   339→      { id: 'so3', code: 'CH-100007-1', shop: { id: 'shop-a', name: 'BoardForge Studio', slug: 'boardforge-studio', verified: true }, status: 'DELIVERED', fulfillmentType: 'PHYSICAL' },
+   340→    ],
+   341→    shipments: [
+   342→      { id: 'sh3', trackingNumber: 'VTP5551212345', provider: 'VIETTEL_POST', status: 'DELIVERED', estimatedDays: 2 },
+   343→    ],
+   344→    payments: [
+   345→      { id: 'p3', provider: 'MOCK', amount: 1320000, status: 'SUCCESS', paidAt: new Date(now - 1 * DAY + 60000).toISOString() },
+   346→    ],
+   347→  },
+   348→  {
+   349→    id: 'demo-ord-4',
+   350→    code: 'CH-100008',
+   351→    createdAt: new Date(now - 2 * 3600000).toISOString(),
+   352→    status: 'PAID',
+   353→    paymentStatus: 'SUCCESS',
+   354→    paymentMethod: 'MOMO',
+   355→    subtotal: 1890000,
+   356→    shippingTotal: 0,
+   357→    grandTotal: 1890000,
+   358→    itemsCount: 2,
+   359→    shippingAddress: { fullName: 'Buyer 1', phone: '0901234567', line1: '12 Nguyen Hue', city: 'Ho Chi Minh', district: 'District 1' },
+   360→    items: [
+   361→      { id: 'i7', name: 'KiCad 9 — IoT Sensor Hub Project', productType: 'DIGITAL', unitPrice: 1290000, quantity: 1, lineTotal: 1290000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=kicad9&backgroundColor=06b6d4', fulfillmentType: 'DIGITAL' },
+   362→      { id: 'i8', name: 'ESP32 Firmware Bundle (BLE + Wi-Fi)', productType: 'DIGITAL', unitPrice: 600000, quantity: 1, lineTotal: 600000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=fw&backgroundColor=22d3ee', fulfillmentType: 'DIGITAL' },
+   363→    ],
+   364→    sellerOrders: [
+   365→      { id: 'so4', code: 'CH-100008-1', shop: { id: 'shop-b', name: 'KiCad Craft Lab', slug: 'kicad-craft-lab', verified: true }, status: 'CONFIRMED', fulfillmentType: 'DIGITAL' },
+   366→    ],
+   367→    shipments: [],
+   368→    payments: [
+   369→      { id: 'p4', provider: 'MOMO', amount: 1890000, status: 'SUCCESS', paidAt: new Date(now - 2 * 3600000 + 60000).toISOString() },
+   370→    ],
+   371→  },
+   372→  {
+   373→    id: 'demo-ord-5',
+   374→    code: 'CH-100009',
+   375→    createdAt: new Date(now - 14 * DAY).toISOString(),
+   376→    status: 'COMPLETED',
+   377→    paymentStatus: 'SUCCESS',
+   378→    paymentMethod: 'ZALOPAY',
+   379→    subtotal: 3200000,
+   380→    shippingTotal: 0,
+   381→    grandTotal: 3200000,
+   382→    itemsCount: 1,
+   383→    shippingAddress: { fullName: 'Buyer 1', phone: '0901234567', line1: '12 Nguyen Hue', city: 'Ho Chi Minh', district: 'District 1' },
+   384→    items: [
+   385→      { id: 'i9', name: 'Custom PCB Design Service — 4-Layer Board', productType: 'SERVICE', unitPrice: 3200000, quantity: 1, lineTotal: 3200000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=service&backgroundColor=2dd4bf', fulfillmentType: 'SERVICE' },
+   386→    ],
+   387→    sellerOrders: [
+   388→      { id: 'so5', code: 'CH-100009-1', shop: { id: 'shop-c', name: 'Hardware Workshop', slug: 'hardware-workshop', verified: true }, status: 'COMPLETED', fulfillmentType: 'SERVICE' },
+   389→    ],
+   390→    shipments: [],
+   391→    payments: [
+   392→      { id: 'p5', provider: 'ZALOPAY', amount: 3200000, status: 'SUCCESS', paidAt: new Date(now - 14 * DAY + 60000).toISOString() },
+   393→    ],
+   394→  },
+   395→  {
+   396→    id: 'demo-ord-6',
+   397→    code: 'CH-100010',
+   398→    createdAt: new Date(now - 5 * 3600000).toISOString(),
+   399→    status: 'PENDING',
+   400→    paymentStatus: 'PENDING',
+   401→    paymentMethod: 'COD',
+   402→    subtotal: 540000,
+   403→    shippingTotal: 30000,
+   404→    grandTotal: 570000,
+   405→    itemsCount: 2,
+   406→    shippingAddress: { fullName: 'Buyer 1', phone: '0901234567', line1: '12 Nguyen Hue', city: 'Ho Chi Minh', district: 'District 1' },
+   407→    items: [
+   408→      { id: 'i10', name: 'Raspberry Pi Pico W', productType: 'PHYSICAL', unitPrice: 145000, quantity: 2, lineTotal: 290000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=pico&backgroundColor=06b6d4', fulfillmentType: 'PHYSICAL' },
+   409→      { id: 'i11', name: 'Breadboard 830-point + Jumper Kit', productType: 'PHYSICAL', unitPrice: 250000, quantity: 1, lineTotal: 250000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=bb&backgroundColor=22d3ee', fulfillmentType: 'PHYSICAL' },
+   410→    ],
+   411→    sellerOrders: [
+   412→      { id: 'so6', code: 'CH-100010-1', shop: { id: 'shop-a', name: 'BoardForge Studio', slug: 'boardforge-studio', verified: true }, status: 'PENDING', fulfillmentType: 'PHYSICAL' },
+   413→    ],
+   414→    shipments: [],
+   415→    payments: [
+   416→      { id: 'p6', provider: 'COD', amount: 570000, status: 'PENDING', paidAt: new Date(now - 5 * 3600000).toISOString() },
+   417→    ],
+   418→  },
+   419→];
+   420→
+   421→const DEMO_DOWNLOADS: DemoDownload[] = [
+   422→  {
+   423→    id: 'dl1',
+   424→    productId: 'p1',
+   425→    slug: 'kicad-9-iot-sensor-hub',
+   426→    name: 'KiCad 9 — IoT Sensor Hub Project',
+   427→    image: 'https://api.dicebear.com/7.x/shapes/svg?seed=kicad9&backgroundColor=06b6d4',
+   428→    version: 'v9.0.2',
+   429→    fileSize: 48230000,
+   430→    licenseType: 'COMMERCIAL',
+   431→    licenseKey: 'KCH-CM-9X7K2-A3D8F',
+   432→    lastDownloadedAt: new Date(now - 2 * DAY).toISOString(),
+   433→    purchaseDate: new Date(now - 1 * DAY).toISOString(),
+   434→    software: 'KiCad',
+   435→  },
+   436→  {
+   437→    id: 'dl2',
+   438→    productId: 'p2',
+   439→    slug: 'esp32-firmware-bundle-ble-wifi',
+   440→    name: 'ESP32 Firmware Bundle (BLE + Wi-Fi)',
+   441→    image: 'https://api.dicebear.com/7.x/shapes/svg?seed=fw&backgroundColor=22d3ee',
+   442→    version: 'v2.4.1',
+   443→    fileSize: 12400000,
+   444→    licenseType: 'PERSONAL',
+   445→    licenseKey: 'ESP-PS-2K4M8-B9N1Q',
+   446→    lastDownloadedAt: new Date(now - 6 * 3600000).toISOString(),
+   447→    purchaseDate: new Date(now - 1 * DAY).toISOString(),
+   448→    software: 'ESP-IDF',
+   449→  },
+   450→  {
+   451→    id: 'dl3',
+   452→    productId: 'p3',
+   453→    slug: 'altium-stm32-reference-design',
+   454→    name: 'Altium STM32 Reference Design',
+   455→    image: 'https://api.dicebear.com/7.x/shapes/svg?seed=altium&backgroundColor=2dd4bf',
+   456→    version: 'v1.0.0',
+   457→    fileSize: 89500000,
+   458→    licenseType: 'EXTENDED',
+   459→    licenseKey: 'ALT-EX-STM32-9XK2M',
+   460→    lastDownloadedAt: new Date(now - 21 * DAY).toISOString(),
+   461→    purchaseDate: new Date(now - 28 * DAY).toISOString(),
+   462→    software: 'Altium',
+   463→  },
+   464→  {
+   465→    id: 'dl4',
+   466→    productId: 'p4',
+   467→    slug: 'gerber-4layer-board-package',
+   468→    name: 'Gerber 4-Layer Board Package',
+   469→    image: 'https://api.dicebear.com/7.x/shapes/svg?seed=gerber&backgroundColor=06b6d4',
+   470→    version: 'rev-2',
+   471→    fileSize: 2400000,
+   472→    licenseType: 'COMMERCIAL',
+   473→    licenseKey: 'GBR-CM-4L2R-Z8M5P',
+   474→    lastDownloadedAt: new Date(now - 30 * DAY).toISOString(),
+   475→    purchaseDate: new Date(now - 35 * DAY).toISOString(),
+   476→    software: 'Gerber',
+   477→  },
+   478→];
+   479→
+   480→const DEMO_LICENSES: DemoLicense[] = [
+   481→  {
+   482→    id: 'lc1',
+   483→    productId: 'p1',
+   484→    productName: 'KiCad 9 — IoT Sensor Hub Project',
+   485→    productSlug: 'kicad-9-iot-sensor-hub',
+   486→    licenseType: 'COMMERCIAL',
+   487→    licenseKey: 'KCH-CM-9X7K2-A3D8F',
+   488→    purchaseDate: new Date(now - 1 * DAY).toISOString(),
+   489→    status: 'ACTIVE',
+   490→    seats: 5,
+   491→    usedSeats: 2,
+   492→    terms:
+   493→      'This Commercial License grants the purchaser, their team members, and direct contractors the right to use, modify, and distribute the included design files in commercial products. Sub-licensing or resale of the design files themselves is prohibited. Attribution to the original designer is required in any derivative documentation. License is perpetual and tied to the purchasing entity.',
+   494→  },
+   495→  {
+   496→    id: 'lc2',
+   497→    productId: 'p2',
+   498→    productName: 'ESP32 Firmware Bundle (BLE + Wi-Fi)',
+   499→    productSlug: 'esp32-firmware-bundle-ble-wifi',
+   500→    licenseType: 'PERSONAL',
+   501→    licenseKey: 'ESP-PS-2K4M8-B9N1Q',
+   502→    purchaseDate: new Date(now - 1 * DAY).toISOString(),
+   503→    status: 'ACTIVE',
+   504→    seats: 1,
+   505→    usedSeats: 1,
+   506→    terms:
+   507→      'This Personal License grants the purchaser the right to use, modify, and compile the firmware for personal, non-commercial projects. Commercial deployment requires upgrade to a Commercial License. Redistribution of source code is not permitted. License is perpetual for the purchasing individual.',
+   508→  },
+   509→  {
+   510→    id: 'lc3',
+   511→    productId: 'p3',
+   512→    productName: 'Altium STM32 Reference Design',
+   513→    productSlug: 'altium-stm32-reference-design',
+   514→    licenseType: 'EXTENDED',
+   515→    licenseKey: 'ALT-EX-STM32-9XK2M',
+   516→    purchaseDate: new Date(now - 28 * DAY).toISOString(),
+   517→    status: 'ACTIVE',
+   518→    seats: 10,
+   519→    usedSeats: 4,
+   520→    terms:
+   521→      'This Extended License grants up to 10 named users the right to use, modify, and manufacture products based on the included design files for both personal and commercial use. Sub-licensing is prohibited. Perpetual license with one year of priority support and free updates.',
+   522→  },
+   523→  {
+   524→    id: 'lc4',
+   525→    productId: 'p4',
+   526→    productName: 'Gerber 4-Layer Board Package',
+   527→    productSlug: 'gerber-4layer-board-package',
+   528→    licenseType: 'COMMERCIAL',
+   529→    licenseKey: 'GBR-CM-4L2R-Z8M5P',
+   530→    purchaseDate: new Date(now - 35 * DAY).toISOString(),
+   531→    status: 'ACTIVE',
+   532→    seats: 3,
+   533→    usedSeats: 1,
+   534→    terms:
+   535→      'This Commercial License grants the purchaser the right to manufacture, sell, and distribute PCB products based on the included Gerber files. Resale of the Gerber files themselves is prohibited. Perpetual license with no attribution requirement.',
+   536→  },
+   537→];
+   538→
+   539→const DEMO_REVIEWS: DemoReview[] = [
+   540→  {
+   541→    id: 'rv1',
+   542→    productId: 'p1',
+   543→    productName: 'KiCad 9 — IoT Sensor Hub Project',
+   544→    productSlug: 'kicad-9-iot-sensor-hub',
+   545→    rating: 5,
+   546→    comment:
+   547→      'Excellent project — opened cleanly in KiCad 9 with no library errors. Schematic hierarchy is well-organized and the BOM is complete. Saved me at least a week of work.',
+   548→    createdAt: new Date(now - 6 * 3600000).toISOString(),
+   549→    verifiedPurchase: true,
+   550→    sellerReply: 'Thank you for the kind words! Let us know if you need any customizations — happy to help with revisions.',
+   551→    sellerReplyAt: new Date(now - 4 * 3600000).toISOString(),
+   552→  },
+   553→  {
+   554→    id: 'rv2',
+   555→    productId: 'p2',
+   556→    productName: 'ESP32 Firmware Bundle (BLE + Wi-Fi)',
+   557→    productSlug: 'esp32-firmware-bundle-ble-wifi',
+   558→    rating: 4,
+   559→    comment:
+   560→      'Solid firmware bundle. BLE pairing works out of the box. Documentation could be a bit more detailed around the Wi-Fi reconnect logic, but overall a great value.',
+   561→    createdAt: new Date(now - 3 * DAY).toISOString(),
+   562→    verifiedPurchase: true,
+   563→  },
+   564→  {
+   565→    id: 'rv3',
+   566→    productId: 'p3',
+   567→    productName: 'Altium STM32 Reference Design',
+   568→    productSlug: 'altium-stm32-reference-design',
+   569→    rating: 5,
+   570→    comment:
+   571→      'Professional-grade design. Power integrity analysis was already done, DRC passed on first try. The included test points and debug header layout are very thoughtful.',
+   572→    createdAt: new Date(now - 25 * DAY).toISOString(),
+   573→    verifiedPurchase: true,
+   574→    sellerReply: 'Appreciate the detailed feedback — we spent extra cycles on PI analysis and test access.',
+   575→    sellerReplyAt: new Date(now - 24 * DAY).toISOString(),
+   576→  },
+   577→];
+   578→
+   579→const DEMO_ADDRESS: DemoAddress = {
+   580→  id: 'addr-1',
+   581→  fullName: 'Buyer 1',
+   582→  phone: '0901234567',
+   583→  line1: '12 Nguyen Hue',
+   584→  line2: 'Floor 8, Master Building',
+   585→  city: 'Ho Chi Minh',
+   586→  district: 'District 1',
+   587→  ward: 'Ben Nghe',
+   588→  zipCode: '700000',
+   589→  country: 'Vietnam',
+   590→  isDefault: true,
+   591→};
+   592→
+   593→const DEMO_NOTIFICATIONS: Array<{
+   594→  id: string;
+   595→  type: string;
+   596→  title: string;
+   597→  body: string;
+   598→  read: boolean;
+   599→  createdAt: string;
+   600→}> = [
+   601→  { id: 'n1', type: 'ORDER_SHIPPED', title: 'Your order has shipped', body: 'Order CH-100006 is on its way via GHTK. Tracking: GHTK9876543210.', read: false, createdAt: new Date(now - 6 * 3600000).toISOString() },
+   602→  { id: 'n2', type: 'ORDER_DELIVERED', title: 'Order delivered', body: 'Order CH-100007 was delivered. Enjoy your new gear!', read: false, createdAt: new Date(now - 18 * 3600000).toISOString() },
+   603→  { id: 'n3', type: 'PROMOTION', title: '15% off BoardForge', body: 'Use code FORGE15 at checkout for 15% off all BoardForge products this week.', read: true, createdAt: new Date(now - 2 * DAY).toISOString() },
+   604→  { id: 'n4', type: 'DOWNLOAD_READY', title: 'Your download is ready', body: 'KiCad 9 — IoT Sensor Hub Project is ready. Visit My Downloads to grab the files.', read: true, createdAt: new Date(now - 1 * DAY).toISOString() },
+   605→  { id: 'n5', type: 'LICENSE_ISSUED', title: 'License issued', body: 'Commercial license KCH-CM-9X7K2-A3D8F has been issued for KiCad 9 — IoT Sensor Hub Project.', read: true, createdAt: new Date(now - 1 * DAY).toISOString() },
+   606→];
+   607→
+   608→/* ============================================================
+   609→   Helper components — module scope to satisfy React Compiler
+   610→   "static-components" rule.
+   611→   ============================================================ */
+   612→
+   613→function TabIcon({ id, className }: { id: TabId; className?: string }) {
+   614→  const tab = TABS.find((t) => t.id === id);
+   615→  const Icon: typeof Package = tab?.icon ?? Package;
+   616→  return <Icon className={className} />;
+   617→}
+   618→
+   619→function OrderStatusBadge({ status }: { status: string }) {
+   620→  const cfg = ORDER_STATUS_CONFIG[status] ?? ORDER_STATUS_CONFIG.PENDING;
+   621→  return (
+   622→    <Badge variant="outline" className={cn('gap-1.5 font-medium', cfg.cls)}>
+   623→      <span className={cn('h-1.5 w-1.5 rounded-full', cfg.dot)} />
+   624→      {cfg.label}
+   625→    </Badge>
+   626→  );
+   627→}
+   628→
+   629→function PaymentStatusBadge({ status }: { status: string }) {
+   630→  const cfg = PAYMENT_STATUS_CONFIG[status] ?? PAYMENT_STATUS_CONFIG.PENDING;
+   631→  return <Badge variant="outline" className={cn('font-medium', cfg.cls)}>{cfg.label}</Badge>;
+   632→}
+   633→
+   634→function LicenseTypeBadge({ type }: { type: string }) {
+   635→  const cfg = LICENSE_TYPE_CONFIG[type] ?? LICENSE_TYPE_CONFIG.PERSONAL;
+   636→  return <Badge variant="outline" className={cn('font-medium', cfg.cls)}>{cfg.label}</Badge>;
+   637→}
+   638→
+   639→function EmptyState({
+   640→  icon: Icon,
+   641→  title,
+   642→  description,
+   643→  cta,
+   644→  onCta,
+   645→}: {
+   646→  icon: typeof Package;
+   647→  title: string;
+   648→  description: string;
+   649→  cta?: string;
+   650→  onCta?: () => void;
+   651→}) {
+   652→  return (
+   653→    <div className="flex flex-col items-center justify-center text-center py-16 px-4">
+   654→      <div className="flex h-20 w-20 mb-5 items-center justify-center rounded-3xl bg-cyan-50 border border-cyan-100 text-cyan-500">
+   655→        <Icon className="h-10 w-10" />
+   656→      </div>
+   657→      <h3 className="text-xl font-semibold text-foreground mb-1.5">{title}</h3>
+   658→      <p className="text-sm text-muted-foreground max-w-md mb-6">{description}</p>
+   659→      {cta && onCta && (
+   660→        <Button onClick={onCta} className="bg-cyan-500 hover:bg-cyan-600 text-white">
+   661→          {cta}
+   662→          <ArrowRight className="h-4 w-4" />
+   663→        </Button>
+   664→      )}
+   665→    </div>
+   666→  );
+   667→}
+   668→
+   669→/* ---------------- Stat card (Overview) ---------------- */
+   670→
+   671→function StatCard({
+   672→  icon: Icon,
+   673→  label,
+   674→  value,
+   675→  hint,
+   676→  accent,
+   677→}: {
+   678→  icon: typeof Package;
+   679→  label: string;
+   680→  value: string;
+   681→  hint?: string;
+   682→  accent: 'cyan' | 'aqua' | 'rose' | 'amber';
+   683→}) {
+   684→  const accentCls: Record<typeof accent, string> = {
+   685→    cyan: 'from-cyan-500 to-cyan-400',
+   686→    aqua: 'from-teal-500 to-cyan-400',
+   687→    rose: 'from-rose-500 to-pink-400',
+   688→    amber: 'from-amber-500 to-orange-400',
+   689→  };
+   690→  return (
+   691→    <Card className="relative overflow-hidden border-border/60 bg-white/80 backdrop-blur-sm hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)] transition-shadow">
+   692→      <CardContent className="p-5">
+   693→        <div className="flex items-start justify-between gap-3">
+   694→          <div className="min-w-0">
+   695→            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</p>
+   696→            <p className="mt-2 text-2xl sm:text-3xl font-bold text-foreground tabular-nums truncate">{value}</p>
+   697→            {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+   698→          </div>
+   699→          <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]', accentCls[accent])}>
+   700→            <Icon className="h-5 w-5" />
+   701→          </div>
+   702→        </div>
+   703→      </CardContent>
+   704→    </Card>
+   705→  );
+   706→}
+   707→
+   708→/* ---------------- Order timeline ---------------- */
+   709→
+   710→function OrderTimeline({ status, createdAt }: { status: string; createdAt: string }) {
+   711→  const completedSteps = STATUS_TO_STEPS[status] ?? 1;
+   712→  const base = new Date(createdAt).getTime();
+   713→  const isCancelled = status === 'CANCELLED';
+   714→  const steps = TIMELINE_STEPS.map((s, idx) => {
+   715→    const isComplete = idx < completedSteps;
+   716→    const ts = new Date(base + idx * 6 * 3600000).toISOString();
+   717→    return { ...s, isComplete, ts };
+   718→  });
+   719→
+   720→  return (
+   721→    <ol className="relative space-y-4 pl-6">
+   722→      {steps.map((s, idx) => {
+   723→        const isLast = idx === steps.length - 1;
+   724→        return (
+   725→          <li key={s.id} className="relative">
+   726→            {/* Connector */}
+   727→            {!isLast && (
+   728→              <span
+   729→                aria-hidden
+   730→                className={cn(
+   731→                  'absolute left-[7px] top-5 bottom-[-1rem] w-px',
+   732→                  s.isComplete ? 'bg-cyan-300' : 'bg-border',
+   733→                )}
+   734→              />
+   735→            )}
+   736→            {/* Dot */}
+   737→            <span
+   738→              className={cn(
+   739→                'absolute -left-6 top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2',
+   740→                isCancelled && idx === 0 ? 'border-red-400 bg-red-500' : s.isComplete ? 'border-cyan-500 bg-cyan-500' : 'border-border bg-background',
+   741→              )}
+   742→            >
+   743→              {s.isComplete && !isCancelled && <CheckCircle2 className="h-2.5 w-2.5 text-white" />}
+   744→            </span>
+   745→            {/* Label + time */}
+   746→            <div className="flex items-baseline justify-between gap-3">
+   747→              <p className={cn('text-sm font-medium', s.isComplete ? 'text-foreground' : 'text-muted-foreground')}>
+   748→                {s.label}
+   749→                {isCancelled && idx === 0 && <span className="ml-1.5 text-red-600">· cancelled</span>}
+   750→              </p>
+   751→              <time className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
+   752→                {s.isComplete ? formatDate(s.ts, { hour: '2-digit', minute: '2-digit' }) : '—'}
+   753→              </time>
+   754→            </div>
+   755→          </li>
+   756→        );
+   757→      })}
+   758→    </ol>
+   759→  );
+   760→}
+   761→
+   762→/* ---------------- Order card (My Orders) ---------------- */
+   763→
+   764→function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void }) {
+   765→  const [expanded, setExpanded] = useState(false);
+   766→  const cfg = ORDER_STATUS_CONFIG[order.status] ?? ORDER_STATUS_CONFIG.PENDING;
+   767→
+   768→  return (
+   769→    <Card className={cn('overflow-hidden border-border/60 transition-all', expanded ? 'shadow-[0_12px_32px_-12px_rgba(6,182,212,0.35)]' : 'hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)]')}>
+   770→      <button
+   771→        type="button"
+   772→        onClick={() => setExpanded((v) => !v)}
+   773→        className="w-full text-left p-5 hover:bg-cyan-50/40 transition-colors"
+   774→        aria-expanded={expanded}
+   775→      >
+   776→        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+   777→          {/* Code */}
+   778→          <div className="flex items-center gap-2 min-w-[8rem]">
+   779→            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-50 border border-cyan-100 text-cyan-600">
+   780→              <Package className="h-4 w-4" />
+   781→            </div>
+   782→            <div>
+   783→              <p className="font-mono text-sm font-semibold text-foreground">{order.code}</p>
+   784→              <p className="text-xs text-muted-foreground">{formatDate(order.createdAt)}</p>
+   785→            </div>
+   786→          </div>
+   787→
+   788→          {/* Items count */}
+   789→          <div className="flex flex-col">
+   790→            <p className="text-xs text-muted-foreground">Items</p>
+   791→            <p className="text-sm font-semibold text-foreground">{order.itemsCount}</p>
+   792→          </div>
+   793→
+   794→          {/* Total */}
+   795→          <div className="flex flex-col">
+   796→            <p className="text-xs text-muted-foreground">Total</p>
+   797→            <p className="text-sm font-semibold text-cyan-700 tabular-nums">{formatVND(order.grandTotal)}</p>
+   798→          </div>
+   799→
+   800→          {/* Status */}
+   801→          <div className="flex flex-col gap-1">
+   802→            <p className="text-xs text-muted-foreground">Order status</p>
+   803→            <OrderStatusBadge status={order.status} />
+   804→          </div>
+   805→
+   806→          {/* Payment */}
+   807→          <div className="flex flex-col gap-1">
+   808→            <p className="text-xs text-muted-foreground">Payment</p>
+   809→            <div className="flex items-center gap-2">
+   810→              <PaymentStatusBadge status={order.paymentStatus} />
+   811→              <span className="text-xs text-muted-foreground font-mono">{order.paymentMethod}</span>
+   812→            </div>
+   813→          </div>
+   814→
+   815→          {/* Expand icon */}
+   816→          <div className="ml-auto flex items-center gap-1 text-cyan-600">
+   817→            <span className="text-xs font-medium">{expanded ? 'Hide' : 'View'}</span>
+   818→            <ChevronDown className={cn('h-4 w-4 transition-transform', expanded ? 'rotate-180' : '')} />
+   819→          </div>
+   820→        </div>
+   821→      </button>
+   822→
+   823→      {/* Expanded details */}
+   824→      <AnimatePresence initial={false}>
+   825→        {expanded && (
+   826→          <motion.div
+   827→            initial={{ height: 0, opacity: 0 }}
+   828→            animate={{ height: 'auto', opacity: 1 }}
+   829→            exit={{ height: 0, opacity: 0 }}
+   830→            transition={{ duration: 0.2 }}
+   831→            className="border-t border-border/60 bg-slate-50/40 overflow-hidden"
+   832→          >
+   833→            <div className="p-5 grid lg:grid-cols-[1.4fr_1fr] gap-6">
+   834→              {/* Left: items + timeline */}
+   835→              <div className="space-y-5">
+   836→                <div>
+   837→                  <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3 flex items-center gap-1.5">
+   838→                    <ClipboardList className="h-3.5 w-3.5" />
+   839→                    Items in this order
+   840→                  </h4>
+   841→                  <div className="space-y-2">
+   842→                    {order.items.map((it) => (
+   843→                      <div key={it.id} className="flex items-center gap-3 rounded-lg border border-border/60 bg-white p-3">
+   844→                        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-cyan-50">
+   845→                          {it.imageUrl && (
+   846→                            <Image src={it.imageUrl} alt={it.name} fill sizes="48px" className="object-cover" unoptimized />
+   847→                          )}
+   848→                        </div>
+   849→                        <div className="flex-1 min-w-0">
+   850→                          <p className="text-sm font-medium text-foreground truncate">{it.name}</p>
+   851→                          <div className="flex items-center gap-2 mt-0.5">
+   852→                            <ProductTypeBadge type={it.productType} />
+   853→                            <span className="text-xs text-muted-foreground">×{it.quantity}</span>
+   854→                          </div>
+   855→                        </div>
+   856→                        <div className="text-right">
+   857→                          <p className="text-sm font-semibold text-foreground tabular-nums">{formatVND(it.lineTotal)}</p>
+   858→                          <p className="text-xs text-muted-foreground tabular-nums">{formatVND(it.unitPrice)} ea</p>
+   859→                        </div>
+   860→                      </div>
+   861→                    ))}
+   862→                  </div>
+   863→                </div>
+   864→
+   865→                <div>
+   866→                  <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3 flex items-center gap-1.5">
+   867→                    <Activity className="h-3.5 w-3.5" />
+   868→                    Order timeline
+   869→                  </h4>
+   870→                  <OrderTimeline status={order.status} createdAt={order.createdAt} />
+   871→                </div>
+   872→              </div>
+   873→
+   874→              {/* Right: address + tracking + actions */}
+   875→              <div className="space-y-5">
+   876→                <div>
+   877→                  <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3 flex items-center gap-1.5">
+   878→                    <MapPin className="h-3.5 w-3.5" />
+   879→                    Shipping address
+   880→                  </h4>
+   881→                  <div className="rounded-lg border border-border/60 bg-white p-3 text-sm">
+   882→                    <p className="font-medium text-foreground">{order.shippingAddress.fullName}</p>
+   883→                    <p className="text-muted-foreground">{order.shippingAddress.phone}</p>
+   884→                    <p className="text-muted-foreground mt-1.5">
+   885→                      {order.shippingAddress.line1}
+   886→                      {order.shippingAddress.district ? `, ${order.shippingAddress.district}` : ''}
+   887→                    </p>
+   888→                    <p className="text-muted-foreground">{order.shippingAddress.city}</p>
+   889→                  </div>
+   890→                </div>
+   891→
+   892→                {order.shipments.length > 0 && (
+   893→                  <div>
+   894→                    <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3 flex items-center gap-1.5">
+   895→                      <Truck className="h-3.5 w-3.5" />
+   896→                      Tracking
+   897→                    </h4>
+   898→                    <div className="rounded-lg border border-border/60 bg-white p-3 text-sm space-y-1.5">
+   899→                      {order.shipments.map((sh) => (
+   900→                        <div key={sh.id} className="flex items-center justify-between">
+   901→                          <div>
+   902→                            <p className="font-medium text-foreground">{sh.provider}</p>
+   903→                            <p className="text-xs text-muted-foreground font-mono">{sh.trackingNumber}</p>
+   904→                          </div>
+   905→                          <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200">
+   906→                            {sh.status}
+   907→                          </Badge>
+   908→                        </div>
+   909→                      ))}
+   910→                    </div>
+   911→                  </div>
+   912→                )}
+   913→
+   914→                <div className="flex gap-2 pt-1">
+   915→                  <Button
+   916→                    size="sm"
+   917→                    variant="outline"
+   918→                    onClick={() => toast({ title: 'Invoice download', description: `Invoice for ${order.code} is being prepared.` })}
+   919→                  >
+   920→                    <FileText className="h-3.5 w-3.5" />
+   921→                    Invoice
+   922→                  </Button>
+   923→                  {order.status === 'COMPLETED' && (
+   924→                    <Button
+   925→                      size="sm"
+   926→                      variant="outline"
+   927→                      onClick={() => toast({ title: 'Re-order started', description: `${order.code} items added to cart.` })}
+   928→                    >
+   929→                      <RefreshCw className="h-3.5 w-3.5" />
+   930→                      Re-order
+   931→                    </Button>
+   932→                  )}
+   933→                  {order.status === 'PENDING' && (
+   934→                    <Button
+   935→                      size="sm"
+   936→                      variant="outline"
+   937→                      className="text-red-600 hover:text-red-700"
+   938→                      onClick={() => toast({ title: 'Cancel requested', description: `Order ${order.code} cancellation requested.`, variant: 'destructive' })}
+   939→                    >
+   940→                      <X className="h-3.5 w-3.5" />
+   941→                      Cancel
+   942→                    </Button>
+   943→                  )}
+   944→                </div>
+   945→              </div>
+   946→            </div>
+   947→          </motion.div>
+   948→        )}
+   949→      </AnimatePresence>
+   950→    </Card>
+   951→  );
+   952→}
+   953→
+   954→/* ---------------- Download card ---------------- */
+   955→
+   956→function DownloadCard({ download, toast }: { download: DemoDownload; toast: (t: any) => void }) {
+   957→  return (
+   958→    <Card className="overflow-hidden border-border/60 hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)] transition-shadow">
+   959→      <CardContent className="p-4 flex flex-col sm:flex-row gap-4">
+   960→        {/* Image */}
+   961→        <div className="relative h-20 w-full sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-lg bg-cyan-50 border border-cyan-100">
+   962→          <Image src={download.image} alt={download.name} fill sizes="80px" className="object-cover" unoptimized />
+   963→        </div>
+   964→        {/* Body */}
+   965→        <div className="flex-1 min-w-0">
+   966→          <div className="flex flex-wrap items-start gap-x-3 gap-y-1.5">
+   967→            <h3 className="text-sm font-semibold text-foreground">{download.name}</h3>
+   968→            <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 gap-1">
+   969→              <Download className="h-3 w-3" />
+   970→              Digital
+   971→            </Badge>
+   972→          </div>
+   973→          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+   974→            <TechBadge label={download.version} />
+   975→            <TechBadge label={download.software} />
+   976→            <span className="flex items-center gap-1">
+   977→              <FileArchive className="h-3 w-3" />
+   978→              {formatFileSize(download.fileSize)}
+   979→            </span>
+   980→            <span className="flex items-center gap-1">
+   981→              <Key className="h-3 w-3" />
+   982→              {download.licenseType}
+   983→            </span>
+   984→          </div>
+   985→          <p className="mt-2 text-xs text-muted-foreground">
+   986→            Purchased {formatDate(download.purchaseDate)} · Last downloaded {download.lastDownloadedAt ? timeAgo(download.lastDownloadedAt) : 'never'}
+   987→          </p>
+   988→          <div className="mt-3 flex flex-wrap gap-2">
+   989→            <Button
+   990→              size="sm"
+   991→              className="bg-cyan-500 hover:bg-cyan-600 text-white"
+   992→              onClick={() => toast({ title: 'Secure download link generated', description: `${download.name} (${download.version}) — link valid for 24h.` })}
+   993→            >
+   994→              <Download className="h-3.5 w-3.5" />
+   995→              Download
+   996→            </Button>
+   997→            <Button
+   998→              size="sm"
+   999→              variant="outline"
+  1000→              onClick={() => toast({ title: 'License copied', description: `License key ${download.licenseKey} copied to clipboard.` })}
+  1001→            >
+  1002→              <Key className="h-3.5 w-3.5" />
+  1003→              Copy license
+  1004→            </Button>
+  1005→          </div>
+  1006→        </div>
+  1007→      </CardContent>
+  1008→    </Card>
+  1009→  );
+  1010→}
+  1011→
+  1012→/* ---------------- Wishlist card ---------------- */
+  1013→
+  1014→function WishlistCard({
+  1015→  item,
+  1016→  onAddCart,
+  1017→  onRemove,
+  1018→}: {
+  1019→  item: { productId: string; slug: string; name: string; imageUrl?: string; price: number };
+  1020→  onAddCart: (item: { productId: string; slug: string; name: string; imageUrl?: string; price: number }) => void;
+  1021→  onRemove: (productId: string) => void;
+  1022→}) {
+  1023→  return (
+  1024→    <Card className="overflow-hidden border-border/60 hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)] transition-shadow flex flex-col">
+  1025→      <div className="relative aspect-[4/3] w-full bg-cyan-50">
+  1026→        {item.imageUrl ? (
+  1027→          <Image src={item.imageUrl} alt={item.name} fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover" unoptimized />
+  1028→        ) : (
+  1029→          <div className="flex h-full w-full items-center justify-center text-cyan-300">
+  1030→            <Package className="h-10 w-10" />
+  1031→          </div>
+  1032→        )}
+  1033→        <button
+  1034→          type="button"
+  1035→          onClick={() => onRemove(item.productId)}
+  1036→          aria-label="Remove from wishlist"
+  1037→          className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 hover:bg-white shadow border border-border/60 text-rose-500 hover:text-rose-600 transition-colors"
+  1038→        >
+  1039→          <Trash2 className="h-3.5 w-3.5" />
+  1040→        </button>
+  1041→      </div>
+  1042→      <CardContent className="p-4 flex flex-col gap-3 flex-1">
+  1043→        <div className="flex-1">
+  1044→          <h3 className="text-sm font-semibold text-foreground line-clamp-2">{item.name}</h3>
+  1045→          <p className="mt-1.5 text-lg font-bold text-cyan-700 tabular-nums">{formatVND(item.price)}</p>
+  1046→        </div>
+  1047→        <div className="flex gap-2">
+  1048→          <Button size="sm" className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white" onClick={() => onAddCart(item)}>
+  1049→            <ShoppingBag className="h-3.5 w-3.5" />
+  1050→            Add to cart
+  1051→          </Button>
+  1052→          <Button size="sm" variant="outline" onClick={() => onRemove(item.productId)} className="text-rose-500 hover:text-rose-600 hover:bg-rose-50">
+  1053→            <Trash2 className="h-3.5 w-3.5" />
+  1054→          </Button>
+  1055→        </div>
+  1056→      </CardContent>
+  1057→    </Card>
+  1058→  );
+  1059→}
+  1060→
+  1061→/* ---------------- License card ---------------- */
+  1062→
+  1063→function LicenseCard({ license }: { license: DemoLicense }) {
+  1064→  const [showTerms, setShowTerms] = useState(false);
+  1065→  return (
+  1066→    <Card className="overflow-hidden border-border/60">
+  1067→      <CardContent className="p-5">
+  1068→        <div className="flex flex-wrap items-start justify-between gap-3">
+  1069→          <div className="flex items-start gap-3 min-w-0">
+  1070→            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+  1071→              <Key className="h-5 w-5" />
+  1072→            </div>
+  1073→            <div className="min-w-0">
+  1074→              <h3 className="text-sm font-semibold text-foreground truncate">{license.productName}</h3>
+  1075→              <p className="text-xs text-muted-foreground mt-0.5">Purchased {formatDate(license.purchaseDate)}</p>
+  1076→            </div>
+  1077→          </div>
+  1078→          <div className="flex items-center gap-2">
+  1079→            <LicenseTypeBadge type={license.licenseType} />
+  1080→            <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1">
+  1081→              <CheckCircle2 className="h-3 w-3" />
+  1082→              Active
+  1083→            </Badge>
+  1084→          </div>
+  1085→        </div>
+  1086→
+  1087→        <div className="mt-4 grid sm:grid-cols-2 gap-3">
+  1088→          <div className="rounded-lg border border-border/60 bg-slate-50/60 p-3">
+  1089→            <p className="text-xs text-muted-foreground mb-1">License key</p>
+  1090→            <p className="font-mono text-sm font-semibold text-foreground break-all">{license.licenseKey}</p>
+  1091→          </div>
+  1092→          <div className="rounded-lg border border-border/60 bg-slate-50/60 p-3">
+  1093→            <p className="text-xs text-muted-foreground mb-1">Seats</p>
+  1094→            <p className="text-sm font-semibold text-foreground tabular-nums">
+  1095→              {license.usedSeats} / {license.seats} <span className="text-muted-foreground font-normal">used</span>
+  1096→            </p>
+  1097→          </div>
+  1098→        </div>
+  1099→
+  1100→        <button
+  1101→          type="button"
+  1102→          onClick={() => setShowTerms((v) => !v)}
+  1103→          className="mt-4 flex items-center gap-1.5 text-sm font-medium text-cyan-700 hover:text-cyan-800"
+  1104→        >
+  1105→          <FileText className="h-4 w-4" />
+  1106→          {showTerms ? 'Hide' : 'View'} license terms
+  1107→          <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', showTerms ? 'rotate-180' : '')} />
+  1108→        </button>
+  1109→        <AnimatePresence initial={false}>
+  1110→          {showTerms && (
+  1111→            <motion.div
+  1112→              initial={{ height: 0, opacity: 0 }}
+  1113→              animate={{ height: 'auto', opacity: 1 }}
+  1114→              exit={{ height: 0, opacity: 0 }}
+  1115→              transition={{ duration: 0.2 }}
+  1116→              className="overflow-hidden"
+  1117→            >
+  1118→              <p className="mt-3 text-sm text-muted-foreground leading-relaxed border-l-2 border-cyan-200 pl-3">
+  1119→                {license.terms}
+  1120→              </p>
+  1121→            </motion.div>
+  1122→          )}
+  1123→        </AnimatePresence>
+  1124→      </CardContent>
+  1125→    </Card>
+  1126→  );
+  1127→}
+  1128→
+  1129→/* ---------------- Address card ---------------- */
+  1130→
+  1131→function AddressCard({
+  1132→  address,
+  1133→  onEdit,
+  1134→  onDelete,
+  1135→}: {
+  1136→  address: DemoAddress;
+  1137→  onEdit: () => void;
+  1138→  onDelete: () => void;
+  1139→}) {
+  1140→  return (
+  1141→    <Card className="overflow-hidden border-border/60">
+  1142→      <CardContent className="p-5">
+  1143→        <div className="flex items-start justify-between gap-3">
+  1144→          <div className="flex items-start gap-3 min-w-0">
+  1145→            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+  1146→              <MapPin className="h-5 w-5" />
+  1147→            </div>
+  1148→            <div className="min-w-0">
+  1149→              <div className="flex items-center gap-2 flex-wrap">
+  1150→                <h3 className="text-sm font-semibold text-foreground">{address.fullName}</h3>
+  1151→                {address.isDefault && (
+  1152→                  <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1">
+  1153→                    <CheckCircle2 className="h-3 w-3" />
+  1154→                    Default
+  1155→                  </Badge>
+  1156→                )}
+  1157→              </div>
+  1158→              <p className="text-xs text-muted-foreground mt-0.5">{address.phone}</p>
+  1159→            </div>
+  1160→          </div>
+  1161→          <div className="flex items-center gap-1">
+  1162→            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-cyan-700 hover:bg-cyan-50" onClick={onEdit} aria-label="Edit address">
+  1163→              <Edit2 className="h-3.5 w-3.5" />
+  1164→            </Button>
+  1165→            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-rose-600 hover:bg-rose-50" onClick={onDelete} aria-label="Delete address">
+  1166→              <Trash2 className="h-3.5 w-3.5" />
+  1167→            </Button>
+  1168→          </div>
+  1169→        </div>
+  1170→        <Separator className="my-4" />
+  1171→        <div className="text-sm text-muted-foreground space-y-0.5">
+  1172→          <p>{address.line1}</p>
+  1173→          {address.line2 && <p>{address.line2}</p>}
+  1174→          <p>
+  1175→            {address.ward ? `${address.ward}, ` : ''}{address.district}
+  1176→          </p>
+  1177→          <p>
+  1178→            {address.city}{address.zipCode ? ` ${address.zipCode}` : ''}, {address.country}
+  1179→          </p>
+  1180→        </div>
+  1181→      </CardContent>
+  1182→    </Card>
+  1183→  );
+  1184→}
+  1185→
+  1186→/* ---------------- Review card ---------------- */
+  1187→
+  1188→function ReviewCard({ review, onGoProduct }: { review: DemoReview; onGoProduct: (slug: string) => void }) {
+  1189→  return (
+  1190→    <Card className="overflow-hidden border-border/60">
+  1191→      <CardContent className="p-5">
+  1192→        <div className="flex flex-wrap items-start justify-between gap-3">
+  1193→          <button type="button" onClick={() => onGoProduct(review.productSlug)} className="text-left min-w-0">
+  1194→            <p className="text-xs font-medium text-cyan-700 uppercase tracking-wide">Reviewed product</p>
+  1195→            <h3 className="text-sm font-semibold text-foreground hover:text-cyan-700 transition-colors">{review.productName}</h3>
+  1196→          </button>
+  1197→          <div className="flex items-center gap-2">
+  1198→            <Rating value={review.rating} showCount={false} size="sm" />
+  1199→            {review.verifiedPurchase && <VerifiedBadge />}
+  1200→          </div>
+  1201→        </div>
+  1202→        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
+  1203→        <p className="mt-3 text-xs text-muted-foreground">
+  1204→          Written {formatDate(review.createdAt)} · {timeAgo(review.createdAt)}
+  1205→        </p>
+  1206→        {review.sellerReply && (
+  1207→          <div className="mt-4 rounded-lg border-l-2 border-cyan-300 bg-cyan-50/40 p-3">
+  1208→            <p className="text-xs font-semibold text-cyan-700 mb-1 flex items-center gap-1.5">
+  1209→              <ShieldCheck className="h-3.5 w-3.5" />
+  1210→              Seller reply
+  1211→            </p>
+  1212→            <p className="text-sm text-foreground/90 leading-relaxed">{review.sellerReply}</p>
+  1213→            {review.sellerReplyAt && (
+  1214→              <p className="mt-2 text-xs text-muted-foreground">{timeAgo(review.sellerReplyAt)}</p>
+  1215→            )}
+  1216→          </div>
+  1217→        )}
+  1218→      </CardContent>
+  1219→    </Card>
+  1220→  );
+  1221→}
+  1222→
+  1223→/* ---------------- Notification item ---------------- */
+  1224→
+  1225→function NotificationItem({ n }: { n: { id: string; type: string; title: string; body: string; read: boolean; createdAt: string } }) {
+  1226→  const Icon =
+  1227→    n.type === 'ORDER_SHIPPED' ? Truck
+  1228→    : n.type === 'ORDER_DELIVERED' ? CheckCircle2
+  1229→    : n.type === 'PROMOTION' ? Sparkles
+  1230→    : n.type === 'DOWNLOAD_READY' ? Download
+  1231→    : n.type === 'LICENSE_ISSUED' ? Key
+  1232→    : Bell;
+  1233→  const accentCls =
+  1234→    n.type === 'ORDER_SHIPPED' ? 'bg-blue-50 text-blue-600'
+  1235→    : n.type === 'ORDER_DELIVERED' ? 'bg-emerald-50 text-emerald-600'
+  1236→    : n.type === 'PROMOTION' ? 'bg-amber-50 text-amber-600'
+  1237→    : n.type === 'DOWNLOAD_READY' ? 'bg-teal-50 text-teal-600'
+  1238→    : n.type === 'LICENSE_ISSUED' ? 'bg-cyan-50 text-cyan-600'
+  1239→    : 'bg-slate-50 text-slate-600';
+  1240→
+  1241→  return (
+  1242→    <div className="flex gap-3 rounded-lg border border-border/60 bg-white p-3">
+  1243→      <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg', accentCls)}>
+  1244→        <Icon className="h-4 w-4" />
+  1245→      </div>
+  1246→      <div className="flex-1 min-w-0">
+  1247→        <div className="flex items-start justify-between gap-2">
+  1248→          <p className="text-sm font-medium text-foreground">{n.title}</p>
+  1249→          {!n.read && <span className="h-2 w-2 shrink-0 rounded-full bg-cyan-500 mt-1.5" aria-label="unread" />}
+  1250→        </div>
+  1251→        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.body}</p>
+  1252→        <p className="text-xs text-muted-foreground mt-1.5">{timeAgo(n.createdAt)}</p>
+  1253→      </div>
+  1254→    </div>
+  1255→  );
+  1256→}
+  1257→
+  1258→/* ---------------- Tab content components ---------------- */
+  1259→
+  1260→function OverviewTab({
+  1261→  orders,
+  1262→  wishlistCount,
+  1263→  downloads,
+  1264→  notifications,
+  1265→  onGoProducts,
+  1266→  onGoTab,
+  1267→}: {
+  1268→  orders: DemoOrder[];
+  1269→  wishlistCount: number;
+  1270→  downloads: DemoDownload[];
+  1271→  notifications: Array<{ id: string; type: string; title: string; body: string; read: boolean; createdAt: string }>;
+  1272→  onGoProducts: () => void;
+  1273→  onGoTab: (t: TabId) => void;
+  1274→}) {
+  1275→  const totalSpent = orders.reduce((s, o) => s + o.grandTotal, 0);
+  1276→  const recentOrders = orders.slice(0, 3);
+  1277→
+  1278→  return (
+  1279→    <div className="space-y-6">
+  1280→      {/* Stat cards */}
+  1281→      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+  1282→        <StatCard icon={Package} label="Total Orders" value={String(orders.length)} hint={`${orders.filter((o) => o.status === 'COMPLETED').length} completed`} accent="cyan" />
+  1283→        <StatCard icon={Wallet} label="Total Spent" value={formatVND(totalSpent)} hint="All-time spending" accent="aqua" />
+  1284→        <StatCard icon={Heart} label="Wishlist" value={String(wishlistCount)} hint={wishlistCount === 0 ? 'Add favorites' : 'Saved products'} accent="rose" />
+  1285→        <StatCard icon={Download} label="Downloads" value={String(downloads.length)} hint="Digital purchases" accent="amber" />
+  1286→      </div>
+  1287→
+  1288→      <div className="grid lg:grid-cols-3 gap-6">
+  1289→        {/* Recent orders (2 cols) */}
+  1290→        <div className="lg:col-span-2 space-y-4">
+  1291→          <div className="flex items-center justify-between">
+  1292→            <div>
+  1293→              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+  1294→                <Clock className="h-4 w-4 text-cyan-600" />
+  1295→                Recent orders
+  1296→              </h2>
+  1297→              <p className="text-xs text-muted-foreground">Your latest 3 purchases</p>
+  1298→            </div>
+  1299→            <Button size="sm" variant="outline" onClick={() => onGoTab('orders')}>
+  1300→              View all
+  1301→              <ChevronRight className="h-3.5 w-3.5" />
+  1302→            </Button>
+  1303→          </div>
+  1304→          {recentOrders.length === 0 ? (
+  1305→            <Card className="border-border/60">
+  1306→              <CardContent className="p-6 text-center text-sm text-muted-foreground">
+  1307→                No orders yet — <button className="text-cyan-700 font-medium hover:underline" onClick={onGoProducts}>browse products</button> to place your first order.
+  1308→              </CardContent>
+  1309→            </Card>
+  1310→          ) : (
+  1311→            <div className="space-y-3">
+  1312→              {recentOrders.map((o) => (
+  1313→                <Card key={o.id} className="border-border/60 hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)] transition-shadow">
+  1314→                  <CardContent className="p-4 flex items-center gap-4">
+  1315→                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan-50 border border-cyan-100 text-cyan-600">
+  1316→                      <Package className="h-4 w-4" />
+  1317→                    </div>
+  1318→                    <div className="flex-1 min-w-0">
+  1319→                      <p className="font-mono text-sm font-semibold text-foreground">{o.code}</p>
+  1320→                      <p className="text-xs text-muted-foreground">{formatDate(o.createdAt)} · {o.itemsCount} items</p>
+  1321→                    </div>
+  1322→                    <div className="text-right">
+  1323→                      <p className="text-sm font-semibold text-cyan-700 tabular-nums">{formatVND(o.grandTotal)}</p>
+  1324→                      <OrderStatusBadge status={o.status} />
+  1325→                    </div>
+  1326→                  </CardContent>
+  1327→                </Card>
+  1328→              ))}
+  1329→            </div>
+  1330→          )}
+  1331→        </div>
+  1332→
+  1333→        {/* Right column: notifications */}
+  1334→        <div className="space-y-4">
+  1335→          <div className="flex items-center justify-between">
+  1336→            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+  1337→              <Bell className="h-4 w-4 text-cyan-600" />
+  1338→              Notifications
+  1339→            </h2>
+  1340→            <Button size="sm" variant="ghost" className="text-xs text-muted-foreground">
+  1341→              Mark all read
+  1342→            </Button>
+  1343→          </div>
+  1344→          <div className="space-y-2 max-h-[440px] overflow-y-auto pr-1">
+  1345→            {notifications.length === 0 ? (
+  1346→              <Card className="border-border/60">
+  1347→                <CardContent className="p-6 text-center text-sm text-muted-foreground">
+  1348→                  No notifications yet.
+  1349→                </CardContent>
+  1350→              </Card>
+  1351→            ) : (
+  1352→              notifications.slice(0, 6).map((n) => <NotificationItem key={n.id} n={n} />)
+  1353→            )}
+  1354→          </div>
+  1355→        </div>
+  1356→      </div>
+  1357→    </div>
+  1358→  );
+  1359→}
+  1360→
+  1361→function OrdersTab({
+  1362→  orders,
+  1363→  toast,
+  1364→  onGoProducts,
+  1365→}: {
+  1366→  orders: DemoOrder[];
+  1367→  toast: (t: any) => void;
+  1368→  onGoProducts: () => void;
+  1369→}) {
+  1370→  const [filter, setFilter] = useState<string>('ALL');
+  1371→  const filtered = filter === 'ALL' ? orders : orders.filter((o) => o.status === filter);
+  1372→
+  1373→  const FILTERS: { id: string; label: string }[] = [
+  1374→    { id: 'ALL', label: 'All' },
+  1375→    { id: 'PENDING', label: 'Pending' },
+  1376→    { id: 'PAID', label: 'Paid' },
+  1377→    { id: 'SHIPPED', label: 'Shipped' },
+  1378→    { id: 'DELIVERED', label: 'Delivered' },
+  1379→    { id: 'COMPLETED', label: 'Completed' },
+  1380→  ];
+  1381→
+  1382→  return (
+  1383→    <div className="space-y-5">
+  1384→      <div className="flex flex-wrap items-center justify-between gap-3">
+  1385→        <div>
+  1386→          <h2 className="text-xl font-semibold text-foreground">My Orders</h2>
+  1387→          <p className="text-sm text-muted-foreground">{orders.length} total orders · Click any order to expand details</p>
+  1388→        </div>
+  1389→        <Button variant="outline" size="sm" onClick={onGoProducts}>
+  1390→          <ShoppingBag className="h-3.5 w-3.5" />
+  1391→          Continue shopping
+  1392→        </Button>
+  1393→      </div>
+  1394→
+  1395→      {/* Filter pills */}
+  1396→      <div className="flex flex-wrap gap-1.5">
+  1397→        {FILTERS.map((f) => (
+  1398→          <button
+  1399→            key={f.id}
+  1400→            type="button"
+  1401→            onClick={() => setFilter(f.id)}
+  1402→            className={cn(
+  1403→              'px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
+  1404→              filter === f.id
+  1405→                ? 'bg-cyan-500 text-white border-cyan-500'
+  1406→                : 'bg-white text-muted-foreground border-border/60 hover:border-cyan-300 hover:text-cyan-700',
+  1407→            )}
+  1408→          >
+  1409→            {f.label}
+  1410→            <span className="ml-1.5 tabular-nums opacity-70">
+  1411→              {f.id === 'ALL' ? orders.length : orders.filter((o) => o.status === f.id).length}
+  1412→            </span>
+  1413→          </button>
+  1414→        ))}
+  1415→      </div>
+  1416→
+  1417→      {/* Orders list */}
+  1418→      {filtered.length === 0 ? (
+  1419→        <EmptyState
+  1420→          icon={PackageSearch}
+  1421→          title="No orders found"
+  1422→          description="Try a different filter, or place your first order from the marketplace."
+  1423→          cta="Browse products"
+  1424→          onCta={onGoProducts}
+  1425→        />
+  1426→      ) : (
+  1427→        <div className="space-y-3">
+  1428→          {filtered.map((o) => (
+  1429→            <OrderCard key={o.id} order={o} toast={toast} />
+  1430→          ))}
+  1431→        </div>
+  1432→      )}
+  1433→    </div>
+  1434→  );
+  1435→}
+  1436→
+  1437→function DownloadsTab({
+  1438→  downloads,
+  1439→  toast,
+  1440→  onGoProducts,
+  1441→}: {
+  1442→  downloads: DemoDownload[];
+  1443→  toast: (t: any) => void;
+  1444→  onGoProducts: () => void;
+  1445→}) {
+  1446→  return (
+  1447→    <div className="space-y-5">
+  1448→      <div className="flex items-center gap-2">
+  1449→        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+  1450→          <Download className="h-5 w-5" />
+  1451→        </div>
+  1452→        <div>
+  1453→          <h2 className="text-xl font-semibold text-foreground">My Downloads</h2>
+  1454→          <p className="text-sm text-muted-foreground">{downloads.length} digital products · Secure download links valid for 24h</p>
+  1455→        </div>
+  1456→      </div>
+  1457→
+  1458→      {downloads.length === 0 ? (
+  1459→        <EmptyState
+  1460→          icon={Download}
+  1461→          title="No digital purchases yet"
+  1462→          description="When you buy a digital product (KiCad project, Altium design, firmware bundle, Gerber package), it will appear here for instant download."
+  1463→          cta="Browse digital products"
+  1464→          onCta={onGoProducts}
+  1465→        />
+  1466→      ) : (
+  1467→        <div className="grid sm:grid-cols-2 gap-4">
+  1468→          {downloads.map((d) => (
+  1469→            <DownloadCard key={d.id} download={d} toast={toast} />
+  1470→          ))}
+  1471→        </div>
+  1472→      )}
+  1473→    </div>
+  1474→  );
+  1475→}
+  1476→
+  1477→function WishlistTab({
+  1478→  items,
+  1479→  onAddCart,
+  1480→  onRemove,
+  1481→  onClear,
+  1482→  onGoProducts,
+  1483→}: {
+  1484→  items: Array<{ productId: string; slug: string; name: string; imageUrl?: string; price: number }>;
+  1485→  onAddCart: (item: { productId: string; slug: string; name: string; imageUrl?: string; price: number }) => void;
+  1486→  onRemove: (productId: string) => void;
+  1487→  onClear: () => void;
+  1488→  onGoProducts: () => void;
+  1489→}) {
+  1490→  return (
+  1491→    <div className="space-y-5">
+  1492→      <div className="flex flex-wrap items-center justify-between gap-3">
+  1493→        <div className="flex items-center gap-2">
+  1494→          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-pink-400 text-white shadow-[0_8px_18px_-8px_rgba(244,63,94,0.5)]">
+  1495→            <Heart className="h-5 w-5" />
+  1496→          </div>
+  1497→          <div>
+  1498→            <h2 className="text-xl font-semibold text-foreground">My Wishlist</h2>
+  1499→            <p className="text-sm text-muted-foreground">{items.length} saved products</p>
+  1500→          </div>
+  1501→        </div>
+  1502→        {items.length > 0 && (
+  1503→          <Button variant="outline" size="sm" onClick={onClear} className="text-rose-600 hover:text-rose-700 hover:bg-rose-50">
+  1504→            <Trash2 className="h-3.5 w-3.5" />
+  1505→            Clear all
+  1506→          </Button>
+  1507→        )}
+  1508→      </div>
+  1509→
+  1510→      {items.length === 0 ? (
+  1511→        <EmptyState
+  1512→          icon={Heart}
+  1513→          title="Your wishlist is empty"
+  1514→          description="Tap the heart icon on any product to save it here. We'll let you know when prices drop or stock changes."
+  1515→          cta="Browse products"
+  1516→          onCta={onGoProducts}
+  1517→        />
+  1518→      ) : (
+  1519→        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+  1520→          {items.map((it) => (
+  1521→            <WishlistCard key={it.productId} item={it} onAddCart={onAddCart} onRemove={onRemove} />
+  1522→          ))}
+  1523→        </div>
+  1524→      )}
+  1525→    </div>
+  1526→  );
+  1527→}
+  1528→
+  1529→function LicensesTab({ licenses, onGoProducts }: { licenses: DemoLicense[]; onGoProducts: () => void }) {
+  1530→  return (
+  1531→    <div className="space-y-5">
+  1532→      <div className="flex items-center gap-2">
+  1533→        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+  1534→          <Key className="h-5 w-5" />
+  1535→        </div>
+  1536→        <div>
+  1537→          <h2 className="text-xl font-semibold text-foreground">My Licenses</h2>
+  1538→          <p className="text-sm text-muted-foreground">{licenses.length} active licenses for digital products</p>
+  1539→        </div>
+  1540→      </div>
+  1541→
+  1542→      {licenses.length === 0 ? (
+  1543→        <EmptyState
+  1544→          icon={Key}
+  1545→          title="No licenses yet"
+  1546→          description="When you purchase a digital product, a license is automatically issued and listed here. Each license includes terms, seats, and a unique license key."
+  1547→          cta="Browse digital products"
+  1548→          onCta={onGoProducts}
+  1549→        />
+  1550→      ) : (
+  1551→        <div className="space-y-3">
+  1552→          {licenses.map((l) => (
+  1553→            <LicenseCard key={l.id} license={l} />
+  1554→          ))}
+  1555→        </div>
+  1556→      )}
+  1557→    </div>
+  1558→  );
+  1559→}
+  1560→
+  1561→function AddressesTab({ toast }: { toast: (t: any) => void }) {
+  1562→  return (
+  1563→    <div className="space-y-5">
+  1564→      <div className="flex items-center justify-between gap-3">
+  1565→        <div className="flex items-center gap-2">
+  1566→          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+  1567→            <MapPin className="h-5 w-5" />
+  1568→          </div>
+  1569→          <div>
+  1570→            <h2 className="text-xl font-semibold text-foreground">My Addresses</h2>
+  1571→            <p className="text-sm text-muted-foreground">1 saved address · used at checkout</p>
+  1572→          </div>
+  1573→        </div>
+  1574→        <Button variant="outline" size="sm" onClick={() => toast({ title: 'Add address', description: 'Address form would open here.' })}>
+  1575→          <Plus className="h-3.5 w-3.5" />
+  1576→          Add new address
+  1577→        </Button>
+  1578→      </div>
+  1579→
+  1580→      <div className="grid sm:grid-cols-2 gap-4">
+  1581→        <AddressCard
+  1582→          address={DEMO_ADDRESS}
+  1583→          onEdit={() => toast({ title: 'Edit address', description: 'Edit form would open for the default address.' })}
+  1584→          onDelete={() => toast({ title: 'Cannot delete default', description: 'You must have at least one address.', variant: 'destructive' })}
+  1585→        />
+  1586→      </div>
+  1587→    </div>
+  1588→  );
+  1589→}
+  1590→
+  1591→function ProfileTab({
+  1592→  name,
+  1593→  email,
+  1594→  phone,
+  1595→  avatarUrl,
+  1596→  toast,
+  1597→}: {
+  1598→  name: string;
+  1599→  email: string;
+  1600→  phone: string;
+  1601→  avatarUrl?: string;
+  1602→  toast: (t: any) => void;
+  1603→}) {
+  1604→  const [form, setForm] = useState({
+  1605→    name,
+  1606→    email,
+  1607→    phone,
+  1608→    avatarUrl: avatarUrl ?? '',
+  1609→  });
+  1610→  const [pwd, setPwd] = useState({ current: '', next: '', confirm: '' });
+  1611→
+  1612→  return (
+  1613→    <div className="space-y-6">
+  1614→      <div className="flex items-center gap-2">
+  1615→        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+  1616→          <User className="h-5 w-5" />
+  1617→        </div>
+  1618→        <div>
+  1619→          <h2 className="text-xl font-semibold text-foreground">My Profile</h2>
+  1620→          <p className="text-sm text-muted-foreground">Manage your account information and security</p>
+  1621→        </div>
+  1622→      </div>
+  1623→
+  1624→      <div className="grid lg:grid-cols-3 gap-6">
+  1625→        {/* Avatar + summary */}
+  1626→        <Card className="border-border/60 lg:col-span-1">
+  1627→          <CardContent className="p-6 flex flex-col items-center text-center">
+  1628→            <Avatar className="h-24 w-24 border-4 border-cyan-100">
+  1629→              {form.avatarUrl && <AvatarImage src={form.avatarUrl} alt={form.name} />}
+  1630→              <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-teal-400 text-white text-2xl font-bold">
+  1631→                {initials(form.name || 'Buyer')}
+  1632→              </AvatarFallback>
+  1633→            </Avatar>
+  1634→            <h3 className="mt-4 text-lg font-semibold text-foreground">{form.name}</h3>
+  1635→            <p className="text-sm text-muted-foreground">{form.email}</p>
+  1636→            <Badge variant="outline" className="mt-3 bg-cyan-50 text-cyan-700 border-cyan-200 gap-1">
+  1637→              <ShieldCheck className="h-3 w-3" />
+  1638→              Verified buyer
+  1639→            </Badge>
+  1640→            <Separator className="my-4" />
+  1641→            <div className="w-full space-y-2 text-left text-sm">
+  1642→              <div className="flex items-center justify-between">
+  1643→                <span className="text-muted-foreground">Member since</span>
+  1644→                <span className="font-medium text-foreground">{formatDate(new Date(now - 90 * DAY).toISOString())}</span>
+  1645→              </div>
+  1646→              <div className="flex items-center justify-between">
+  1647→                <span className="text-muted-foreground">Last login</span>
+  1648→                <span className="font-medium text-foreground">{timeAgo(new Date(now - 2 * 3600000).toISOString())}</span>
+  1649→              </div>
+  1650→            </div>
+  1651→          </CardContent>
+  1652→        </Card>
+  1653→
+  1654→        {/* Forms */}
+  1655→        <div className="lg:col-span-2 space-y-6">
+  1656→          {/* Profile info */}
+  1657→          <Card className="border-border/60">
+  1658→            <CardHeader>
+  1659→              <CardTitle className="text-base flex items-center gap-2">
+  1660→                <User className="h-4 w-4 text-cyan-600" />
+  1661→                Profile information
+  1662→              </CardTitle>
+  1663→            </CardHeader>
+  1664→            <CardContent className="space-y-4">
+  1665→              <div className="grid sm:grid-cols-2 gap-4">
+  1666→                <div className="space-y-1.5">
+  1667→                  <Label htmlFor="pf-name">Full name</Label>
+  1668→                  <Input id="pf-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+  1669→                </div>
+  1670→                <div className="space-y-1.5">
+  1671→                  <Label htmlFor="pf-phone">Phone</Label>
+  1672→                  <div className="relative">
+  1673→                    <Phone className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+  1674→                    <Input id="pf-phone" className="pl-8" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+  1675→                  </div>
+  1676→                </div>
+  1677→                <div className="space-y-1.5 sm:col-span-2">
+  1678→                  <Label htmlFor="pf-email">Email address</Label>
+  1679→                  <div className="relative">
+  1680→                    <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+  1681→                    <Input id="pf-email" type="email" className="pl-8" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+  1682→                  </div>
+  1683→                </div>
+  1684→                <div className="space-y-1.5 sm:col-span-2">
+  1685→                  <Label htmlFor="pf-avatar">Avatar URL</Label>
+  1686→                  <div className="relative">
+  1687→                    <ImageIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+  1688→                    <Input id="pf-avatar" className="pl-8" value={form.avatarUrl} placeholder="https://…" onChange={(e) => setForm({ ...form, avatarUrl: e.target.value })} />
+  1689→                  </div>
+  1690→                </div>
+  1691→              </div>
+  1692→              <div className="flex justify-end">
+  1693→                <Button className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={() => toast({ title: 'Profile saved', description: 'Your profile information has been updated.' })}>
+  1694→                  <CheckCircle2 className="h-4 w-4" />
+  1695→                  Save changes
+  1696→                </Button>
+  1697→              </div>
+  1698→            </CardContent>
+  1699→          </Card>
+  1700→
+  1701→          {/* Change password */}
+  1702→          <Card className="border-border/60">
+  1703→            <CardHeader>
+  1704→              <CardTitle className="text-base flex items-center gap-2">
+  1705→                <Lock className="h-4 w-4 text-cyan-600" />
+  1706→                Change password
+  1707→              </CardTitle>
+  1708→            </CardHeader>
+  1709→            <CardContent className="space-y-4">
+  1710→              <div className="grid sm:grid-cols-2 gap-4">
+  1711→                <div className="space-y-1.5 sm:col-span-2">
+  1712→                  <Label htmlFor="pf-cpwd">Current password</Label>
+  1713→                  <Input id="pf-cpwd" type="password" value={pwd.current} onChange={(e) => setPwd({ ...pwd, current: e.target.value })} placeholder="••••••••" />
+  1714→                </div>
+  1715→                <div className="space-y-1.5">
+  1716→                  <Label htmlFor="pf-npwd">New password</Label>
+  1717→                  <Input id="pf-npwd" type="password" value={pwd.next} onChange={(e) => setPwd({ ...pwd, next: e.target.value })} placeholder="At least 8 characters" />
+  1718→                </div>
+  1719→                <div className="space-y-1.5">
+  1720→                  <Label htmlFor="pf-cnpwd">Confirm new password</Label>
+  1721→                  <Input id="pf-cnpwd" type="password" value={pwd.confirm} onChange={(e) => setPwd({ ...pwd, confirm: e.target.value })} placeholder="Re-type new password" />
+  1722→                </div>
+  1723→              </div>
+  1724→              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+  1725→                <ShieldCheck className="h-3.5 w-3.5 text-cyan-500" />
+  1726→                Passwords are hashed with bcrypt — we never store them in plain text.
+  1727→              </div>
+  1728→              <div className="flex justify-end">
+  1729→                <Button variant="outline" onClick={() => toast({ title: 'Password updated', description: 'You will be signed out on other devices.' })}>
+  1730→                  <Lock className="h-4 w-4" />
+  1731→                  Update password
+  1732→                </Button>
+  1733→              </div>
+  1734→            </CardContent>
+  1735→          </Card>
+  1736→        </div>
+  1737→      </div>
+  1738→    </div>
+  1739→  );
+  1740→}
+  1741→
+  1742→function ReviewsTab({
+  1743→  reviews,
+  1744→  onGoProduct,
+  1745→  onGoProducts,
+  1746→}: {
+  1747→  reviews: DemoReview[];
+  1748→  onGoProduct: (slug: string) => void;
+  1749→  onGoProducts: () => void;
+  1750→}) {
+  1751→  return (
+  1752→    <div className="space-y-5">
+  1753→      <div className="flex flex-wrap items-center justify-between gap-3">
+  1754→        <div className="flex items-center gap-2">
+  1755→          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-400 text-white shadow-[0_8px_18px_-8px_rgba(245,158,11,0.5)]">
+  1756→            <Star className="h-5 w-5" />
+  1757→          </div>
+  1758→          <div>
+  1759→            <h2 className="text-xl font-semibold text-foreground">My Reviews</h2>
+  1760→            <p className="text-sm text-muted-foreground">{reviews.length} reviews written</p>
+  1761→          </div>
+  1762→        </div>
+  1763→        <Button variant="outline" size="sm" onClick={onGoProducts}>
+  1764→          <Plus className="h-3.5 w-3.5" />
+  1765→          Write a review
+  1766→        </Button>
+  1767→      </div>
+  1768→
+  1769→      {reviews.length === 0 ? (
+  1770→        <EmptyState
+  1771→          icon={Star}
+  1772→          title="No reviews yet"
+  1773→          description="Share your experience with the community. After receiving an order, write a review to help other engineers choose the right products."
+  1774→          cta="Browse products to review"
+  1775→          onCta={onGoProducts}
+  1776→        />
+  1777→      ) : (
+  1778→        <div className="space-y-3">
+  1779→          {reviews.map((r) => (
+  1780→            <ReviewCard key={r.id} review={r} onGoProduct={onGoProduct} />
+  1781→          ))}
+  1782→        </div>
+  1783→      )}
+  1784→    </div>
+  1785→  );
+  1786→}
+  1787→
+  1788→/* ---------------- Sidebar / mobile pill trigger ---------------- */
+  1789→
+  1790→function SidebarTabTrigger({ tab }: { tab: { id: TabId; label: string; icon: typeof Package; description: string } }) {
+  1791→  return (
+  1792→    <TabsTrigger
+  1793→      value={tab.id}
+  1794→      className="justify-start w-full h-auto py-2.5 px-3 gap-3 rounded-lg data-[state=active]:bg-cyan-50 data-[state=active]:text-cyan-700 data-[state=active]:border-cyan-200 data-[state=active]:shadow-sm text-muted-foreground hover:text-cyan-700 hover:bg-cyan-50/50 font-medium text-sm"
+  1795→    >
+  1796→      <TabIcon id={tab.id} className="h-4 w-4 shrink-0" />
+  1797→      <span className="truncate text-left">{tab.label}</span>
+  1798→    </TabsTrigger>
+  1799→  );
+  1800→}
+  1801→
+  1802→function MobileTabTrigger({ tab }: { tab: { id: TabId; label: string; icon: typeof Package; description: string } }) {
+  1803→  return (
+  1804→    <TabsTrigger
+  1805→      value={tab.id}
+  1806→      className="flex-none gap-1.5 rounded-full px-3 py-1.5 text-xs data-[state=active]:bg-cyan-500 data-[state=active]:text-white data-[state=active]:border-cyan-500 text-muted-foreground border-border/60 bg-white"
+  1807→    >
+  1808→      <TabIcon id={tab.id} className="h-3.5 w-3.5" />
+  1809→      <span className="whitespace-nowrap">{tab.label}</span>
+  1810→    </TabsTrigger>
+  1811→  );
+  1812→}
+  1813→
+  1814→/* ============================================================
+  1815→   BuyerDashboard — main exported component
+  1816→   ============================================================ */
+  1817→
+  1818→export function BuyerDashboard() {
+  1819→  const { toast } = useToast();
+  1820→  const user = useAuthStore((s) => s.user);
+  1821→  const goProducts = useNavStore((s) => s.goProducts);
+  1822→  const goProduct = useNavStore((s) => s.goProduct);
+  1823→  const goCart = useNavStore((s) => s.goCart);
+  1824→
+  1825→  const { items: wishlistItems, remove: removeFromWishlist, clear: clearWishlist } = useWishlistStore();
+  1826→
+  1827→  // Live data hooks (per task spec use 'demo-buyer')
+  1828→  const { data: liveOrders } = useOrders('demo-buyer');
+  1829→  const { data: liveNotifications } = useNotifications('demo-buyer');
+  1830→
+  1831→  // Fall back to DEMO_ORDERS when API returns empty (demo-buyer not seeded)
+  1832→  const orders: DemoOrder[] = (Array.isArray(liveOrders) && liveOrders.length > 0 ? liveOrders : DEMO_ORDERS) as DemoOrder[];
+  1833→  const notifications = (Array.isArray(liveNotifications) && liveNotifications.length > 0 ? liveNotifications : DEMO_NOTIFICATIONS) as Array<{ id: string; type: string; title: string; body: string; read: boolean; createdAt: string }>;
+  1834→
+  1835→  const displayName = user?.name ?? 'Buyer';
+  1836→  const displayEmail = user?.email ?? 'buyer1@example.com';
+  1837→  const displayPhone = '0901234567';
+  1838→  const displayAvatar = user?.avatarUrl;
+  1839→
+  1840→  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  1841→
+  1842→  function handleAddToCart(item: { productId: string; slug: string; name: string; imageUrl?: string; price: number }) {
+  1843→    toast({
+  1844→      title: 'Added to cart',
+  1845→      description: `${item.name} · ${formatVND(item.price)}`,
+  1846→    });
+  1847→    goCart();
+  1848→  }
+  1849→
+  1850→  function handleRemoveWishlist(productId: string) {
+  1851→    removeFromWishlist(productId);
+  1852→    toast({ title: 'Removed from wishlist', description: 'Product removed from your wishlist.' });
+  1853→  }
+  1854→
+  1855→  function handleClearWishlist() {
+  1856→    clearWishlist();
+  1857→    toast({ title: 'Wishlist cleared', description: 'All saved products removed.' });
+  1858→  }
+  1859→
+  1860→  return (
+  1861→    <div className="min-h-screen bg-gradient-to-b from-white via-cyan-50/20 to-white">
+  1862→      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  1863→        {/* Welcome header */}
+  1864→        <motion.div
+  1865→          initial={{ opacity: 0, y: -8 }}
+  1866→          animate={{ opacity: 1, y: 0 }}
+  1867→          transition={{ duration: 0.3 }}
+  1868→          className="relative overflow-hidden rounded-2xl border border-cyan-100 bg-gradient-to-r from-cyan-50 via-white to-teal-50 p-5 sm:p-6 mb-6"
+  1869→        >
+  1870→          <div
+  1871→            aria-hidden
+  1872→            className="absolute inset-0 pointer-events-none opacity-[0.05]"
+  1873→            style={{
+  1874→              backgroundImage:
+  1875→                'linear-gradient(to right, #06b6d4 1px, transparent 1px), linear-gradient(to bottom, #06b6d4 1px, transparent 1px)',
+  1876→              backgroundSize: '24px 24px',
+  1877→            }}
+  1878→          />
+  1879→          <div className="relative flex flex-wrap items-center gap-4">
+  1880→            <Avatar className="h-14 w-14 sm:h-16 sm:w-16 border-4 border-white shadow-md">
+  1881→              {displayAvatar && <AvatarImage src={displayAvatar} alt={displayName} />}
+  1882→              <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-teal-400 text-white text-xl font-bold">
+  1883→                {initials(displayName)}
+  1884→              </AvatarFallback>
+  1885→            </Avatar>
+  1886→            <div className="flex-1 min-w-0">
+  1887→              <p className="text-xs font-medium text-cyan-600 uppercase tracking-wide flex items-center gap-1.5">
+  1888→                <Sparkles className="h-3 w-3" />
+  1889→                Buyer Dashboard
+  1890→              </p>
+  1891→              <h1 className="text-2xl sm:text-3xl font-bold text-foreground mt-0.5">
+  1892→                Welcome back, <span className="text-cyan-700">{displayName}</span>!
+  1893→              </h1>
+  1894→              <p className="text-sm text-muted-foreground mt-1 flex flex-wrap items-center gap-2">
+  1895→                <span className="flex items-center gap-1">
+  1896→                  <Mail className="h-3.5 w-3.5" />
+  1897→                  {displayEmail}
+  1898→                </span>
+  1899→                <span className="text-border">·</span>
+  1900→                <span className="flex items-center gap-1">
+  1901→                  <Clock className="h-3.5 w-3.5" />
+  1902→                  Last login {timeAgo(new Date(now - 2 * 3600000).toISOString())}
+  1903→                </span>
+  1904→              </p>
+  1905→            </div>
+  1906→            <Button className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={() => goProducts()}>
+  1907→              <ShoppingBag className="h-4 w-4" />
+  1908→              Continue shopping
+  1909→            </Button>
+  1910→          </div>
+  1911→        </motion.div>
+  1912→
+  1913→        {/* Tabs (controlled) */}
+  1914→        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabId)} className="flex flex-col gap-4">
+  1915→          {/* Mobile: horizontal scroll pills */}
+  1916→          <TabsList className="lg:hidden flex w-full overflow-x-auto justify-start gap-1.5 bg-transparent border-0 p-0 h-auto">
+  1917→            {TABS.map((tab) => (
+  1918→              <MobileTabTrigger key={tab.id} tab={tab} />
+  1919→            ))}
+  1920→          </TabsList>
+  1921→
+  1922→          {/* Desktop: sticky sidebar + content */}
+  1923→          <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-8">
+  1924→            <aside className="hidden lg:block">
+  1925→              <div className="sticky top-4 space-y-1.5">
+  1926→                <TabsList className="flex-col h-auto w-full bg-transparent border-0 p-0 gap-1">
+  1927→                  {TABS.map((tab) => (
+  1928→                    <SidebarTabTrigger key={tab.id} tab={tab} />
+  1929→                  ))}
+  1930→                </TabsList>
+  1931→                <div className="mt-4 rounded-xl border border-cyan-100 bg-cyan-50/60 p-4">
+  1932→                  <p className="text-xs font-semibold text-cyan-700 flex items-center gap-1.5">
+  1933→                    <ShieldCheck className="h-3.5 w-3.5" />
+  1934→                    Buyer protection
+  1935→                  </p>
+  1936→                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+  1937→                    All purchases are covered by our 30-day return policy and secure-escrow settlement.
+  1938→                  </p>
+  1939→                </div>
+  1940→              </div>
+  1941→            </aside>
+  1942→
+  1943→            {/* Content */}
+  1944→            <div className="min-w-0">
+  1945→              <AnimatePresence mode="wait">
+  1946→                {activeTab === 'overview' && (
+  1947→                  <motion.div key="overview" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1948→                    <OverviewTab
+  1949→                      orders={orders}
+  1950→                      wishlistCount={wishlistItems.length}
+  1951→                      downloads={DEMO_DOWNLOADS}
+  1952→                      notifications={notifications}
+  1953→                      onGoProducts={() => goProducts()}
+  1954→                      onGoTab={(t) => setActiveTab(t)}
+  1955→                    />
+  1956→                  </motion.div>
+  1957→                )}
+  1958→                {activeTab === 'orders' && (
+  1959→                  <motion.div key="orders" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1960→                    <OrdersTab orders={orders} toast={toast} onGoProducts={() => goProducts()} />
+  1961→                  </motion.div>
+  1962→                )}
+  1963→                {activeTab === 'downloads' && (
+  1964→                  <motion.div key="downloads" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1965→                    <DownloadsTab downloads={DEMO_DOWNLOADS} toast={toast} onGoProducts={() => goProducts()} />
+  1966→                  </motion.div>
+  1967→                )}
+  1968→                {activeTab === 'wishlist' && (
+  1969→                  <motion.div key="wishlist" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1970→                    <WishlistTab
+  1971→                      items={wishlistItems}
+  1972→                      onAddCart={handleAddToCart}
+  1973→                      onRemove={handleRemoveWishlist}
+  1974→                      onClear={handleClearWishlist}
+  1975→                      onGoProducts={() => goProducts()}
+  1976→                    />
+  1977→                  </motion.div>
+  1978→                )}
+  1979→                {activeTab === 'licenses' && (
+  1980→                  <motion.div key="licenses" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1981→                    <LicensesTab licenses={DEMO_LICENSES} onGoProducts={() => goProducts()} />
+  1982→                  </motion.div>
+  1983→                )}
+  1984→                {activeTab === 'addresses' && (
+  1985→                  <motion.div key="addresses" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1986→                    <AddressesTab toast={toast} />
+  1987→                  </motion.div>
+  1988→                )}
+  1989→                {activeTab === 'profile' && (
+  1990→                  <motion.div key="profile" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1991→                    <ProfileTab name={displayName} email={displayEmail} phone={displayPhone} avatarUrl={displayAvatar} toast={toast} />
+  1992→                  </motion.div>
+  1993→                )}
+  1994→                {activeTab === 'reviews' && (
+  1995→                  <motion.div key="reviews" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+  1996→                    <ReviewsTab reviews={DEMO_REVIEWS} onGoProduct={(slug) => goProduct(slug)} onGoProducts={() => goProducts()} />
+  1997→                  </motion.div>
+  1998→                )}
+  1999→              </AnimatePresence>
+  2000→            </div>
+
+[showing lines 1-2000 of 2009; use offset=2001 with limit to continue reading]

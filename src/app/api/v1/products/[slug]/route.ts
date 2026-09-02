@@ -1,6 +1,12 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { ok, fail } from '../route';
+
+function ok<T>(data: T, message = 'Success') {
+  return NextResponse.json({ success: true, data, message });
+}
+function fail(message: string, code = 'ERROR', status = 400) {
+  return NextResponse.json({ success: false, message, code }, { status });
+}
 
 /** GET /api/v1/products/[slug] — single product with full details */
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ slug: string }> }) {
