@@ -45,6 +45,7 @@ import {
   Cpu,
   Zap,
   Store,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
@@ -93,6 +94,12 @@ function NavPills({ onNavigate }: { onNavigate?: () => void }) {
       icon: <Zap className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'category' && p.slug === 'services',
       go: () => goCategory('services'),
+    },
+    {
+      label: 'BOM Tool',
+      icon: <FileSpreadsheet className="h-3.5 w-3.5" />,
+      active: (v) => v === 'bom',
+      go: () => useNavStore.getState().setView('bom', {}),
     },
   ];
 

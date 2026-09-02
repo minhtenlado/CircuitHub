@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { resolveDemoUserId } from '@/lib/api/auth-resolver';
 
 export function ok<T>(data: T, message = 'Success') {
   return NextResponse.json({ success: true, data, message });
@@ -8,7 +9,11 @@ export function ok<T>(data: T, message = 'Success') {
 /** GET /api/v1/analytics/seller?sellerId=... — seller dashboard metrics */
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const sellerId = url.searchParams.get('sellerId') ?? 'demo-seller';
+  const rawSellerId = url.searchParams.get('sellerId') ?? 'demo-seller';
+  const sellerId = await resolveDemoUserId(rawSellerId);
+
+  // Look up the seller's shop so we can query reviews by shopId
+  const shop = await db.shop.findUnique({ where: { sellerId }, select: { id: true } });
 
   const [wallet, products, orders, withdrawals, reviews] = await Promise.all([
     db.wallet.findUnique({ where: { sellerId } }),
@@ -25,7 +30,14 @@ export async function GET(req: NextRequest) {
       take: 10,
     }),
     db.withdrawal.findMany({ where: { sellerId }, orderBy: { createdAt: 'desc' }, take: 5 }),
-    db.review.findMany({ where: { shop: { sellerId } }, orderBy: { createdAt: 'desc' }, take: 5, include: { user: { select: { name: true, avatarUrl: true } } } }),
+    shop
+      ? db.review.findMany({
+          where: { shopId: shop.id },
+          orderBy: { createdAt: 'desc' },
+          take: 5,
+          include: { user: { select: { name: true, avatarUrl: true } } },
+        })
+      : Promise.resolve([]),
   ]);
 
   // Compute metrics from orders

@@ -10,6 +10,7 @@ export type AppView =
   | 'shop'
   | 'cart'
   | 'checkout'
+  | 'bom'
   | 'buyer-orders'
   | 'buyer-downloads'
   | 'buyer-wishlist'

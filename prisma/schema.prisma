@@ -161,7 +161,7 @@ model Product {
   shopId          String
   categoryId      String
   name            String
-  slug            String
+  slug            String   @unique
   productType     String   // PHYSICAL | DIGITAL | SERVICE | BUNDLE
   shortDescription String?
   description     String?

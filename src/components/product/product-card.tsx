@@ -1,12 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Heart, ShoppingBag, Eye } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, GitCompare } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useNavStore } from '@/stores/nav-store';
 import { useWishlistStore } from '@/stores/wishlist-store';
 import { useCartStore } from '@/stores/cart-store';
+import { useCompareStore } from '@/stores/compare-store';
+import { useRecentlyViewedStore } from '@/stores/recently-viewed-store';
 import { useToast } from '@/hooks/use-toast';
 import { formatVND, discountPct as calcPct } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
@@ -18,11 +20,72 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
   const goShop = useNavStore((s) => s.goShop);
   const wishlist = useWishlistStore();
   const cart = useCartStore();
+  const compare = useCompareStore();
+  const recentlyViewed = useRecentlyViewedStore();
   const { toast } = useToast();
 
   const inWishlist = wishlist.has(product.id);
+  const inCompare = compare.has(product.id);
   const pct = product.compareAtPrice ? calcPct(product.price, product.compareAtPrice) : 0;
   const image = product.images?.[0]?.url ?? '/logo.svg';
+
+  function handleOpenProduct() {
+    // Track recently viewed
+    recentlyViewed.add({
+      productId: product.id,
+      slug: product.slug,
+      name: product.name,
+      imageUrl: image,
+      price: product.price,
+      productType: product.productType,
+      shopName: product.shop?.name ?? '',
+      shopSlug: product.shop?.slug ?? '',
+    });
+    goProduct(product.slug);
+  }
+
+  function handleToggleCompare(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (compare.items.length >= 4 && !inCompare) {
+      toast({ title: 'Compare list full', description: 'Max 4 products', variant: 'destructive' });
+      return;
+    }
+    compare.toggle({
+      productId: product.id,
+      slug: product.slug,
+      name: product.name,
+      imageUrl: image,
+      price: product.price,
+      productType: product.productType,
+      brand: product.brand,
+      rating: product.rating,
+      ratingCount: product.ratingCount,
+      shopName: product.shop?.name ?? '',
+      shopSlug: product.shop?.slug ?? '',
+      shopVerified: product.shop?.verified ?? false,
+      pcbLayers: product.pcbLayers,
+      pcbThickness: product.pcbThickness,
+      pcbMaterial: product.pcbMaterial,
+      pcbSurfaceFinish: product.pcbSurfaceFinish,
+      pcbColor: product.pcbColor,
+      pcbDimensions: product.pcbDimensions,
+      software: product.software,
+      softwareVersion: product.softwareVersion,
+      currentVersion: product.currentVersion,
+      licenseType: product.licenseType,
+      fileFormat: product.fileFormat,
+      serviceDurationDays: product.serviceDurationDays,
+      serviceRevisions: product.serviceRevisions,
+      stockAvailable: product.stockAvailable,
+      unlimited: product.unlimited,
+      soldCount: product.soldCount,
+    });
+    toast({
+      title: inCompare ? 'Removed from comparison' : 'Added to comparison',
+      description: `${product.name} (${compare.items.length + (inCompare ? -1 : 1)}/4)`,
+    });
+  }
 
   return (
     <motion.article
@@ -35,8 +98,8 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
       <div
         role="button"
         tabIndex={0}
-        onClick={() => goProduct(product.slug)}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goProduct(product.slug); } }}
+        onClick={handleOpenProduct}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleOpenProduct(); } }}
         className="relative block aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-50 to-cyan-50/40 cursor-pointer"
         aria-label={product.name}
       >
@@ -53,28 +116,37 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
           {product.isNew && <NewBadge />}
           {product.isTrending && <TrendingBadge />}
         </div>
-        {/* Top-right wishlist */}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            wishlist.toggle({
-              productId: product.id,
-              slug: product.slug,
-              name: product.name,
-              imageUrl: image,
-              price: product.price,
-            });
-            toast({
-              title: inWishlist ? 'Removed from wishlist' : 'Added to wishlist',
-              description: product.name,
-            });
-          }}
-          className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur rounded-full text-slate-600 hover:text-rose-500 transition-colors"
-          aria-label="Toggle wishlist"
-        >
-          <Heart className={inWishlist ? 'h-4 w-4 fill-rose-500 text-rose-500' : 'h-4 w-4'} />
-        </button>
+        {/* Top-right action buttons */}
+        <div className="absolute top-2 right-2 flex flex-col gap-1.5">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              wishlist.toggle({
+                productId: product.id,
+                slug: product.slug,
+                name: product.name,
+                imageUrl: image,
+                price: product.price,
+              });
+              toast({
+                title: inWishlist ? 'Removed from wishlist' : 'Added to wishlist',
+                description: product.name,
+              });
+            }}
+            className="p-1.5 bg-white/80 backdrop-blur rounded-full text-slate-600 hover:text-rose-500 transition-colors"
+            aria-label="Toggle wishlist"
+          >
+            <Heart className={inWishlist ? 'h-4 w-4 fill-rose-500 text-rose-500' : 'h-4 w-4'} />
+          </button>
+          <button
+            onClick={handleToggleCompare}
+            className={`p-1.5 backdrop-blur rounded-full transition-colors ${inCompare ? 'bg-cyan-500 text-white' : 'bg-white/80 text-slate-600 hover:text-cyan-600'}`}
+            aria-label="Toggle compare"
+          >
+            <GitCompare className="h-4 w-4" />
+          </button>
+        </div>
         {/* Bottom-left product type */}
         <div className="absolute bottom-2 left-2">
           <ProductTypeBadge type={product.productType} />
@@ -102,7 +174,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
 
         {/* Name */}
         <button
-          onClick={() => goProduct(product.slug)}
+          onClick={handleOpenProduct}
           className="text-sm font-semibold leading-snug text-foreground text-left line-clamp-2 hover:text-cyan-700 transition-colors"
         >
           {product.name}

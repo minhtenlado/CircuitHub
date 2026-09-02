@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { resolveDemoUserId } from '@/lib/api/auth-resolver';
 
 export function ok<T>(data: T, message = 'Success') {
   return NextResponse.json({ success: true, data, message });
@@ -11,8 +12,9 @@ export function fail(message: string, code = 'ERROR', status = 400) {
 /** GET /api/v1/seller/products?sellerId=... */
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const sellerId = url.searchParams.get('sellerId');
-  if (!sellerId) return ok({ items: [] });
+  const rawSellerId = url.searchParams.get('sellerId');
+  if (!rawSellerId) return ok({ items: [] });
+  const sellerId = await resolveDemoUserId(rawSellerId);
   const items = await db.product.findMany({
     where: { sellerId },
     orderBy: { createdAt: 'desc' },

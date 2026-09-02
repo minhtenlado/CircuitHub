@@ -608,3 +608,99 @@ Final Status:
 - 📋 20+ products seeded (physical PCB, KiCad/Altium/Gerber digital, services)
 - 📋 3 verified sellers, 12 buyers, 8 demo orders, 16 reviews, 3 vouchers
 - 📋 8 KPI cards in admin, 12-month revenue chart, withdrawal approval flow, audit logs
+
+---
+Task ID: Round-2 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: QA testing via agent-browser, fix critical bugs, add new features (BOM tool, Product Comparison, Recently Viewed)
+
+## Current Project Status Assessment
+
+CircuitHub marketplace was in MVP-complete state from Round 1. Initial QA via agent-browser revealed **3 critical bugs** blocking core user flows:
+
+1. **Product Detail API 500** — `Product.slug` was not marked `@unique` in Prisma schema, causing `findUnique({ where: { slug } })` to fail with "needs at least one of `id` arguments" error. Affected all product detail page loads.
+2. **Order Creation 500** — `POST /api/v1/orders` failed with foreign key constraint violation (P2003) because `userId: 'demo-buyer'` from the frontend auth store doesn't exist in the User table.
+3. **Broken Unsplash Images** — 3 photo IDs (`photo-1581092160562-40aa08e78832`, `photo-1518770660439-4636190af434`, `photo-1451187580459-4348727d0d4d`) consistently returned 404, causing broken product images across the site.
+
+Additionally found: Seller Analytics API 500 due to `db.review.findMany({ where: { shop: { sellerId } } })` — Review model has `shopId` field but no `shop` relation defined.
+
+## Completed Modifications
+
+### Bug Fixes (Critical)
+
+1. **Prisma schema fix** — Added `@unique` constraint to `Product.slug` field. Ran `bun run db:push` to sync. Product detail API now returns 200.
+
+2. **Demo user ID resolver** — Created `/src/lib/api/auth-resolver.ts` with `resolveDemoUserId()` helper that maps `demo-buyer`/`demo-seller`/`demo-admin` to the first real DB user with that role. Applied to all affected API routes:
+   - `/api/v1/orders` (POST + GET)
+   - `/api/v1/analytics/seller`
+   - `/api/v1/wallet`
+   - `/api/v1/seller/products`
+   - `/api/v1/withdrawals` (GET + POST)
+   - `/api/v1/notifications`
+
+3. **Seller analytics review query fix** — Changed `where: { shop: { sellerId } }` to first look up the shop by sellerId, then query reviews by `shopId`. Seller analytics API now returns 200.
+
+4. **Broken image URLs fix** — Created `/prisma/fix-images.ts` script that updated 15 ProductImage records, 3 Shop.bannerUrl records, and 5 OrderItem.imageUrl records. Also updated `prisma/seed.ts` with working Unsplash photo IDs to prevent future re-seed issues.
+
+### New Features
+
+1. **BOM Upload & Cost Estimator** (`/src/features/bom/bom-view.tsx`)
+   - Full BOM upload page accessible via "BOM Tool" nav link in header
+   - CSV file upload with drag-and-drop support
+   - "Try Sample BOM" button loads a 10-line sample (ESP32, STM32, AMS1117, resistors, capacitors, etc.)
+   - Auto-matches each part number against marketplace products via `/api/v1/products?q=` API
+   - Shows match status (matched/unmatched/searching) per line item
+   - Summary cards: Line Items, Matched count, Unmatched count, Estimated Total Cost
+   - Full BOM table with Reference, Part Number, Description, Qty, Matched Product, Unit Price, Line Total
+   - "Export CSV" and "Add All Matched to Cart" actions
+   - Framer Motion animations for row transitions
+
+2. **Product Comparison** (`/src/stores/compare-store.ts` + `/src/components/product/compare-drawer.tsx` + `/src/components/product/compare-bar.tsx`)
+   - Zustand store with persist (max 4 products)
+   - Compare toggle button on every product card (GitCompare icon, cyan when active)
+   - Floating compare bar at bottom of page showing thumbnails + count + "Compare Now" button
+   - Full comparison drawer (Sheet) with side-by-side spec table
+   - Sections: General (price, type, brand, rating, seller, stock, sold), PCB Specs (layers, thickness, material, finish, color, dimensions), Digital (software, version, license, format), Service (duration, revisions)
+   - "Add to Cart" per product in the comparison drawer
+
+3. **Recently Viewed Products** (`/src/stores/recently-viewed-store.ts` + `/src/features/home/recently-viewed-section.tsx`)
+   - Zustand store with persist (max 12 items)
+   - Auto-tracks when user clicks a product card (via `handleOpenProduct` in product-card.tsx)
+   - Horizontal scroll carousel on homepage between Featured Products and Top Sellers
+   - Shows product image, name, shop, price, and time-ago badge
+   - "Clear" button to reset history
+
+### Styling Improvements
+
+- Product card image area now has stacked action buttons (wishlist + compare) in top-right corner
+- Compare button changes to cyan-filled when product is in comparison
+- Floating compare bar uses glass-card style with cyan glow shadow
+- BOM tool uses cyan-themed upload zone with dashed border, info banner, and gradient summary cards
+- Recently Viewed section has matching icon tile + horizontal scroll with snap
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200: products, product detail, categories, shops, orders (buyer/seller/admin), wallet, withdrawals, notifications, seller analytics, admin analytics
+- End-to-end checkout flow verified: add to cart → checkout → 4 steps → place order → success screen with order code → cart cleared → notification received
+- BOM Tool: sample BOM loaded → 10 items parsed → 3+ parts auto-matched (ESP32, STM32, AMS1117) → total cost calculated
+- Compare feature: 2 products added → floating bar appears → compare drawer opens → side-by-side spec table renders
+- Recently Viewed: visited a product → returned to homepage → section appears with product thumbnail
+- No console errors or hydration warnings
+
+## Unresolved Issues / Risks
+
+1. **Image hosting dependency** — Unsplash images may still occasionally 404 if specific photo IDs are removed by Unsplash. Consider migrating to a more stable image source or self-hosting product images in production.
+2. **Demo user resolution** — The `resolveDemoUserId` helper picks the first user by role. If multiple buyers exist, all demo sessions map to the same buyer. This is fine for demo but production needs real auth.
+3. **BOM matching accuracy** — Current matching uses simple text search (`q=partNumber`). Production should implement fuzzy matching, part number normalization, and manufacturer-aware matching.
+4. **Compare store persistence** — Compare items persist in localStorage. If a product is deleted from the DB, stale compare items may cause issues. Should add a cleanup mechanism.
+
+## Priority Recommendations for Next Phase
+
+1. **Product detail page enhancement** — Add "Frequently Bought Together" section, 3D PCB preview placeholder, and gerber viewer integration architecture
+2. **Seller Center: Product creation form** — Full product creation flow with image upload, PCB spec form, digital file upload, license configuration
+3. **Admin Center: Real-time dashboard** — WebSocket-based live order/payment notifications, auto-refresh charts
+4. **Search enhancement** — Add autocomplete suggestions, recent searches, category-aware search results
+5. **Notification system** — Real-time notification dropdown with WebSocket, mark-all-as-read, notification preferences
+6. **Mobile app PWA** — Service worker, offline cart, push notifications
+

@@ -4,12 +4,15 @@ import { useNavStore } from '@/stores/nav-store';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { CartDrawer } from '@/components/checkout/cart-drawer';
+import { CompareDrawer } from '@/components/product/compare-drawer';
+import { CompareBar } from '@/components/product/compare-bar';
 import { HomeView } from '@/features/home/home-view';
 import { ProductsView } from '@/features/products/products-view';
 import { ProductDetailView } from '@/features/products/product-detail-view';
 import { CategoryView } from '@/features/products/category-view';
 import { CartView } from '@/features/checkout/cart-view';
 import { CheckoutView } from '@/features/checkout/checkout-view';
+import { BomView } from '@/features/bom/bom-view';
 import { BuyerDashboard } from '@/features/buyer/buyer-dashboard';
 import { SellerCenter } from '@/features/seller/seller-center';
 import { AdminCenter } from '@/features/admin/admin-center';
@@ -227,6 +230,9 @@ function PageRouter() {
     case 'checkout':
       content = <CheckoutView />;
       break;
+    case 'bom':
+      content = <BomView />;
+      break;
     case 'buyer-orders':
     case 'buyer-downloads':
     case 'buyer-wishlist':
@@ -288,6 +294,8 @@ export default function Home() {
       <PageRouter />
       <Footer />
       <CartDrawer />
+      <CompareDrawer />
+      <CompareBar />
     </div>
   );
 }

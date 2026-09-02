@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { resolveDemoUserId } from '@/lib/api/auth-resolver';
 
 export function ok<T>(data: T, message = 'Success') {
   return NextResponse.json({ success: true, data, message });
@@ -8,8 +9,9 @@ export function ok<T>(data: T, message = 'Success') {
 /** GET /api/v1/notifications?userId=... */
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const userId = url.searchParams.get('userId');
-  if (!userId) return ok({ items: [] });
+  const rawUserId = url.searchParams.get('userId');
+  if (!rawUserId) return ok({ items: [] });
+  const userId = await resolveDemoUserId(rawUserId);
   const items = await db.notification.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },

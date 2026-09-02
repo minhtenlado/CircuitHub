@@ -17,10 +17,22 @@ export async function POST(req: NextRequest) {
   if (!body?.items || !Array.isArray(body.items) || body.items.length === 0)
     return fail('Cart is empty', 'CART_EMPTY', 422);
 
-  const userId = body.userId ?? 'demo-buyer'; // demo
+  const rawUserId = body.userId ?? 'demo-buyer';
   const voucherCode: string | undefined = body.voucherCode;
   const paymentMethod = body.paymentMethod ?? 'MOCK';
   const shippingMethod = body.shippingMethod ?? 'STANDARD';
+
+  // Resolve demo-* user IDs to a real DB user (foreign key constraint)
+  let userId = rawUserId;
+  if (rawUserId.startsWith('demo-')) {
+    const role = rawUserId.replace('demo-', '').toUpperCase();
+    const realUser = await db.user.findFirst({
+      where: { role: role === 'BUYER' ? 'BUYER' : role },
+      orderBy: { createdAt: 'asc' },
+    });
+    if (!realUser) return fail('No buyer account available', 'USER_NOT_FOUND', 404);
+    userId = realUser.id;
+  }
 
   // Resolve products from DB (server-side source of truth)
   const productIds = body.items.map((i: any) => i.productId);
@@ -199,13 +211,30 @@ export async function POST(req: NextRequest) {
 /** GET /api/v1/orders?userId=... — list user's orders */
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const userId = url.searchParams.get('userId') ?? 'demo-buyer';
+  const rawUserId = url.searchParams.get('userId') ?? 'demo-buyer';
   const role = url.searchParams.get('role'); // 'seller' or 'admin'
+
+  // Resolve demo-* user IDs to a real DB user
+  let userId = rawUserId;
+  if (rawUserId.startsWith('demo-')) {
+    const demoRole = rawUserId.replace('demo-', '').toUpperCase();
+    const realUser = await db.user.findFirst({
+      where: { role: demoRole === 'BUYER' ? 'BUYER' : demoRole },
+      orderBy: { createdAt: 'asc' },
+    });
+    userId = realUser?.id ?? rawUserId;
+  }
+
   let orders: any[] = [];
   if (role === 'seller') {
-    // Seller orders
+    // Seller orders — resolve seller shop
+    const sellerUser = await db.user.findFirst({
+      where: { role: 'SELLER' },
+      orderBy: { createdAt: 'asc' },
+    });
+    const sellerId = sellerUser?.id ?? userId;
     orders = await db.sellerOrder.findMany({
-      where: { sellerId: userId },
+      where: { sellerId },
       orderBy: { createdAt: 'desc' },
       take: 50,
       include: { shop: true, items: { include: { product: { include: { images: true } } } }, order: true },
