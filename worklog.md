@@ -1301,3 +1301,97 @@ Project was stable after Round 8 with admin products API. QA via agent-browser c
 6. **Admin pagination** — Add proper pagination UI for admin product list when catalog grows large
 7. **Notification pulse animation** — Add a subtle pulse animation on the notification bell when unread count increases
 
+
+---
+Task ID: Round-10 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: Enhance notification bell with pulse + mark-all-read + type icons, add animated stat counters, quick-view hover overlay, and back-to-top button
+
+## Current Project Status Assessment
+
+Project was stable after Round 9 with admin search debounce and invoice seller breakdown. QA confirmed all features working. Identified visual improvement opportunities from the Round 9 recommendations:
+
+1. **Notification bell lacked visual polish** — No pulse animation, no "Mark all read", no type-specific icons
+2. **Hero stats were static strings** — "2.8K+", "850+", "120K+" didn't animate
+3. **Product cards lacked hover preview** — No quick-view overlay
+4. **No back-to-top button** — Users had to scroll manually on long pages
+
+## Completed Modifications
+
+### New Features
+
+1. **Enhanced Notification Bell** (`/src/components/layout/header.tsx`)
+   - **Pulse animation**: Added `animate-ping` ring behind the unread badge (amber, 2s duration)
+   - **"Mark all read" button**: In the dropdown header, sends PATCH requests for all unread notifications, invalidates query cache
+   - **Type-specific icons**: 14 notification types mapped to Lucide icons with color-coded backgrounds:
+     - ORDER_CREATED → Package (cyan)
+     - ORDER_SHIPPED → Truck (blue)
+     - PAYMENT_SUCCESS → DollarSign (emerald)
+     - PAYMENT_FAILED → AlertCircle (red)
+     - SELLER_APPROVED/PRODUCT_APPROVED → CheckCircle2 (emerald)
+     - SELLER_REJECTED/PRODUCT_REJECTED → XCircle (red)
+     - WITHDRAWAL_REQUEST → Wallet (amber)
+     - WITHDRAWAL_COMPLETED → CheckCircle2 (emerald)
+     - PROMOTION → Sparkles (violet)
+     - NEW_SELLER → Store (cyan)
+   - **Improved dropdown UI**: Each notification has a 28×28px icon circle, border separators, unread dot, and footer with "N unread · M total"
+   - **Empty state**: Bell icon + "No notifications yet" message
+   - **QueryClient integration**: `useQueryClient` for cache invalidation after marking all read
+   - Verified: "Mark all read" button works — 3 PATCH calls returned 200, notification count dropped from 3 to 0
+
+2. **Animated Hero Stat Counters** (`/src/hooks/use-count-up.ts` + `/src/features/home/hero.tsx`)
+   - **`useCountUp` hook**: Animates from 0 to target value using `requestAnimationFrame` with ease-out cubic
+   - Configurable duration (1500ms default) and start delay (300ms)
+   - Formats large numbers: ≥100K → "120K", ≥1K → "2.8K", <1K → "850"
+   - **StatCounter component**: Uses the hook + Framer Motion fade-up animation
+   - Applied to hero stats: Products (0→2.8K+), Sellers (0→850+), Engineers (0→120K+)
+   - Verified: Stats show "2.8K+", "850+", "120K+" after animation completes
+
+3. **Product Card Quick View Hover** (`/src/components/product/product-card.tsx`)
+   - Added hover overlay on the product image: dark gradient from bottom + "Quick View" pill button
+   - "Quick View" text with Eye icon in a white glass pill, translate-y animation on hover
+   - Appears smoothly with opacity + translateY transition (300ms)
+
+4. **Back-to-Top Button** (`/src/components/common/back-to-top.tsx`)
+   - Floating button appears after scrolling 400px down
+   - Cyan-to-teal gradient circle with ArrowUp icon
+   - Framer Motion spring entrance/exit animation
+   - Hover scale-110 effect with enhanced shadow
+   - Positioned bottom-right, above the compare bar
+
+### Styling Improvements
+
+- Notification badge: amber-500 with `animate-ping` ring (2s duration)
+- Notification icons: 28×28px rounded circles with type-specific background colors
+- Unread dot: cyan-500, 6×6px, positioned top-right of notification title
+- "Mark all read" link: cyan-600 text, hover cyan-700
+- Hero stats: bold tabular-nums with cyan icon labels
+- Quick view pill: white/90 backdrop-blur, cyan-700 text, shadow-lg
+- Back-to-top: cyan-to-teal gradient, 44×44px circle, spring animation
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200
+- Notification bell: pulse animation visible, "Mark all read" works (3→0 unread), type icons render
+- Hero stats: animated from 0 to "2.8K+", "850+", "120K+" after 300ms delay
+- Product card quick view: hover overlay appears with "Quick View" pill
+- Back-to-top: button appears after scrolling 400px, scroll-to-top works
+- No console errors
+
+## Unresolved Issues / Risks
+
+1. **IntersectionObserver removed** — The `useCountUp` hook originally used `IntersectionObserver` but it didn't trigger reliably in the headless browser. Replaced with a simple `setTimeout` approach which is more predictable but doesn't pause when off-screen.
+2. **Notification "mark all read" doesn't show loading state on individual items** — The button shows "Marking..." but individual notification items don't show a loading indicator.
+3. **Quick view hover doesn't work on touch devices** — The hover overlay is CSS-based and won't appear on mobile. Could add a tap-to-preview in the future.
+
+## Priority Recommendations for Next Phase
+
+1. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
+2. **Order detail full page** — Dedicated full-page order detail view (not just expandable card)
+3. **Product image upload** — Real file upload in Add Product dialog with preview and progress
+4. **Bulk product moderation** — Select multiple products and approve/reject in bulk
+5. **Admin pagination** — Add proper pagination UI for admin product list
+6. **Notification click navigation** — Clicking a notification should navigate to the linked page
+7. **Product card tap-to-preview on mobile** — Replace hover overlay with tap-to-open quick view on mobile
+

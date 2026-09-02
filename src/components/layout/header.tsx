@@ -49,8 +49,16 @@ import {
   FileSpreadsheet,
   Clock,
   X,
+  Truck,
+  DollarSign,
+  Wallet,
+  Sparkles,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { initials, timeAgo } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -628,9 +636,30 @@ function ActionCart() {
 }
 
 /* ---------- Notifications Bell + dropdown ---------- */
+/* ---------- Notifications Bell with pulse + mark-all-as-read ---------- */
+const NOTIF_ICON_MAP: Record<string, { icon: any; color: string; bg: string }> = {
+  ORDER_CREATED: { icon: Package, color: 'text-cyan-600', bg: 'bg-cyan-50' },
+  ORDER_SHIPPED: { icon: Truck, color: 'text-blue-600', bg: 'bg-blue-50' },
+  PAYMENT_SUCCESS: { icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  PAYMENT_FAILED: { icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50' },
+  SELLER_APPROVED: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  SELLER_REJECTED: { icon: XCircle, color: 'text-red-600', bg: 'bg-red-50' },
+  PRODUCT_APPROVED: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  PRODUCT_REJECTED: { icon: XCircle, color: 'text-red-600', bg: 'bg-red-50' },
+  WITHDRAWAL_REQUEST: { icon: Wallet, color: 'text-amber-600', bg: 'bg-amber-50' },
+  WITHDRAWAL_COMPLETED: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  WITHDRAWAL_REJECTED: { icon: XCircle, color: 'text-red-600', bg: 'bg-red-50' },
+  PROMOTION: { icon: Sparkles, color: 'text-violet-600', bg: 'bg-violet-50' },
+  NEW_SELLER: { icon: Store, color: 'text-cyan-600', bg: 'bg-cyan-50' },
+  NEW_ORDER: { icon: Package, color: 'text-cyan-600', bg: 'bg-cyan-50' },
+  DEFAULT: { icon: Bell, color: 'text-slate-600', bg: 'bg-slate-50' },
+};
+
 function NotificationsBell() {
   const user = useAuthStore((s) => s.user);
+  const queryClient = useQueryClient();
   const { data, isLoading } = useNotifications(user?.id ?? 'demo-buyer');
+  const [markingRead, setMarkingRead] = useState(false);
   const items: Array<{
     id: string;
     type: string;
@@ -643,6 +672,26 @@ function NotificationsBell() {
 
   const unread = items.filter((n) => !n.read).length;
 
+  async function markAllRead() {
+    setMarkingRead(true);
+    try {
+      const unreadItems = items.filter((n) => !n.read);
+      await Promise.all(
+        unreadItems.map((n) =>
+          fetch('/api/v1/notifications', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: n.id }),
+          }),
+        ),
+      );
+      // Invalidate queries to refetch notifications
+      queryClient.invalidateQueries({ queryKey: ['notifications', user?.id ?? 'demo-buyer'] });
+    } finally {
+      setMarkingRead(false);
+    }
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -654,51 +703,78 @@ function NotificationsBell() {
         >
           <Bell className="h-4 w-4" />
           {unread > 0 && (
-            <Badge className="absolute -right-0.5 -top-0.5 h-4 min-w-4 justify-center rounded-full bg-amber-500 px-1 text-[10px] font-semibold leading-none text-white">
-              {unread > 99 ? '99+' : unread}
-            </Badge>
+            <>
+              {/* Pulse ring */}
+              <span className="absolute -right-0.5 -top-0.5 h-4 w-4 rounded-full bg-amber-400 animate-ping opacity-75" style={{ animationDuration: '2s' }} />
+              {/* Badge */}
+              <Badge className="absolute -right-0.5 -top-0.5 h-4 min-w-4 justify-center rounded-full bg-amber-500 px-1 text-[10px] font-semibold leading-none text-white border border-background">
+                {unread > 99 ? '99+' : unread}
+              </Badge>
+            </>
           )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80 p-0">
         <DropdownMenuLabel className="flex items-center justify-between px-3 py-2 text-sm">
-          <span>Notifications</span>
+          <span className="flex items-center gap-1.5">
+            <Bell className="h-3.5 w-3.5 text-cyan-600" />
+            Notifications
+          </span>
           {unread > 0 && (
-            <Badge variant="secondary" className="bg-cyan-50 text-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-300">
-              {unread} new
-            </Badge>
+            <button
+              onClick={markAllRead}
+              disabled={markingRead}
+              className="text-[11px] font-medium text-cyan-600 hover:text-cyan-700 transition-colors disabled:opacity-50"
+            >
+              {markingRead ? 'Marking...' : 'Mark all read'}
+            </button>
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <div className="max-h-72 overflow-y-auto">
+        <div className="max-h-80 overflow-y-auto">
           {isLoading ? (
             <div className="px-3 py-6 text-center text-sm text-muted-foreground">Loading…</div>
           ) : items.length === 0 ? (
-            <div className="px-3 py-6 text-center text-sm text-muted-foreground">No notifications yet.</div>
+            <div className="px-3 py-8 text-center">
+              <Bell className="h-8 w-8 text-slate-300 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">No notifications yet.</p>
+            </div>
           ) : (
-            items.slice(0, 8).map((n) => (
-              <div
-                key={n.id}
-                className={cn(
-                  'flex gap-3 px-3 py-2.5 text-sm transition-colors hover:bg-accent',
-                  !n.read && 'bg-cyan-50/40 dark:bg-cyan-950/15',
-                )}
-              >
-                <span
+            items.slice(0, 10).map((n) => {
+              const cfg = NOTIF_ICON_MAP[n.type] ?? NOTIF_ICON_MAP.DEFAULT;
+              const Icon = cfg.icon;
+              return (
+                <div
+                  key={n.id}
                   className={cn(
-                    'mt-1.5 h-2 w-2 shrink-0 rounded-full',
-                    n.read ? 'bg-transparent ring-1 ring-border' : 'bg-primary',
+                    'flex gap-3 px-3 py-2.5 text-sm transition-colors hover:bg-accent border-b border-border/30 last:border-0',
+                    !n.read && 'bg-cyan-50/40 dark:bg-cyan-950/15',
                   )}
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="truncate font-medium text-foreground">{n.title}</div>
-                  <div className="line-clamp-2 text-xs text-muted-foreground">{n.body}</div>
-                  <div className="mt-0.5 text-[11px] text-muted-foreground/70">{timeAgo(n.createdAt)}</div>
+                >
+                  <div className={cn('mt-0.5 h-7 w-7 shrink-0 rounded-full flex items-center justify-center', cfg.bg)}>
+                    <Icon className={cn('h-3.5 w-3.5', cfg.color)} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="truncate font-medium text-foreground text-xs">{n.title}</span>
+                      {!n.read && <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500" />}
+                    </div>
+                    <div className="line-clamp-2 text-[11px] text-muted-foreground mt-0.5">{n.body}</div>
+                    <div className="mt-0.5 text-[10px] text-muted-foreground/70">{timeAgo(n.createdAt)}</div>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
+        {items.length > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            <div className="px-3 py-2 text-center">
+              <span className="text-[11px] text-muted-foreground">{unread} unread · {items.length} total</span>
+            </div>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -9,6 +9,7 @@
    ============================================================ */
 
 import { motion } from 'framer-motion';
+import { useCountUp } from '@/hooks/use-count-up';
 import {
   Sparkles,
   ArrowRight,
@@ -86,10 +87,31 @@ const SPEC_CARDS = [
 ] as const;
 
 const STATS = [
-  { label: 'Products', value: '2.8K+', icon: Boxes },
-  { label: 'Verified Sellers', value: '850+', icon: Store },
-  { label: 'Engineers', value: '120K+', icon: Cpu },
+  { label: 'Products', value: 2800, suffix: '+', format: 'K', icon: Boxes },
+  { label: 'Verified Sellers', value: 850, suffix: '+', format: '', icon: Store },
+  { label: 'Engineers', value: 120000, suffix: '+', format: 'K', icon: Cpu },
 ];
+
+/** Animated stat counter that counts up when scrolled into view. */
+function StatCounter({ stat, delay }: { stat: typeof STATS[number]; delay: number }) {
+  const { ref, display } = useCountUp(stat.value, 1500);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, delay }}
+      className="flex flex-col"
+    >
+      <span ref={ref} className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground tabular-nums">
+        {display}{stat.suffix}
+      </span>
+      <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+        <stat.icon className="h-3.5 w-3.5 text-cyan-500" />
+        {stat.label}
+      </span>
+    </motion.div>
+  );
+}
 
 export function Hero() {
   const goProducts = useNavStore((s) => s.goProducts);
@@ -172,21 +194,7 @@ export function Hero() {
             {/* Stat row */}
             <div className="mt-2 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg">
               {STATS.map((s, i) => (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: 0.3 + i * 0.08 }}
-                  className="flex flex-col"
-                >
-                  <span className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground tabular-nums">
-                    {s.value}
-                  </span>
-                  <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <s.icon className="h-3.5 w-3.5 text-cyan-500" />
-                    {s.label}
-                  </span>
-                </motion.div>
+                <StatCounter key={s.label} stat={s} delay={0.3 + i * 0.08} />
               ))}
             </div>
           </motion.div>

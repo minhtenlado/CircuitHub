@@ -8,6 +8,7 @@ import { CartDrawer } from '@/components/checkout/cart-drawer';
 import { CompareDrawer } from '@/components/product/compare-drawer';
 import { CompareBar } from '@/components/product/compare-bar';
 import { WishlistImportDialog } from '@/components/buyer/wishlist-import-dialog';
+import { BackToTop } from '@/components/common/back-to-top';
 import { HomeView } from '@/features/home/home-view';
 import { ProductsView } from '@/features/products/products-view';
 import { ProductDetailView } from '@/features/products/product-detail-view';
@@ -302,6 +303,7 @@ export default function Home() {
       <CartDrawer />
       <CompareDrawer />
       <CompareBar />
+      <BackToTop />
       <WishlistImportListener />
     </div>
   );
