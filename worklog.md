@@ -1395,3 +1395,80 @@ Project was stable after Round 9 with admin search debounce and invoice seller b
 6. **Notification click navigation** — Clicking a notification should navigate to the linked page
 7. **Product card tap-to-preview on mobile** — Replace hover overlay with tap-to-open quick view on mobile
 
+
+---
+Task ID: Round-11 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: Implement notification click navigation + product Quick View modal dialog
+
+## Current Project Status Assessment
+
+Project was stable after Round 10 with enhanced notification bell, animated stat counters, quick view hover overlay, and back-to-top button. QA confirmed all features working. Identified two improvements from Round 10 recommendations:
+
+1. **Notification items not clickable** — Notifications were rendered as plain `<div>` elements without click handlers. Users couldn't click a notification to navigate to the linked page (e.g. order details, seller center, admin withdrawals).
+2. **No Quick View modal** — The "Quick View" hover overlay on product cards was decorative only — clicking it navigated to the full product detail page. A proper Quick View modal that shows key product info without leaving the listing page was needed.
+
+## Completed Modifications
+
+### New Features
+
+1. **Notification Click Navigation** (`/src/components/layout/header.tsx`)
+   - Added `handleNotificationClick(n)` function that:
+     - Marks the notification as read (PATCH API call + query cache invalidation)
+     - Parses the notification's `link` field (e.g. `#/orders` → `buyer-orders`)
+     - Maps link hashes to app views: `orders` → `buyer-orders`, `seller/orders` → `seller-orders`, `admin/withdrawals` → `admin-withdrawals`, etc.
+     - Calls `setView()` to navigate to the target page
+   - Changed notification items from `<div>` to `<button>` elements with `onClick` handler
+   - Added `ChevronRight` icon on notifications with links to indicate clickability
+   - Added `text-left` to prevent button text centering
+   - Added `w-full` to make the entire row clickable
+   - Verified: Clicking "Order CH-226347 placed" notification navigated to `#/buyer-orders` (buyer dashboard with My Orders tab)
+
+2. **Quick View Modal Dialog** (`/src/components/product/quick-view-dialog.tsx` + `/src/stores/quick-view-store.tsx` + product card + page.tsx integration)
+   - **`useQuickViewStore` Zustand store**: `product`, `isOpen`, `open(product)`, `close()`
+   - **QuickViewDialog component**:
+     - Two-column layout (image left, details right) with responsive grid
+     - Left: product image with badges (discount %, NEW, TRENDING), product type badge
+     - Right: shop name with verified badge + rating, product name (H2), short description (line-clamp-3), tech specs grid (2 columns with icon + label + value), price block (compare-at strikethrough + current + discount %), stock badge + sold count
+     - Actions: "Add to Cart" (cyan primary), wishlist toggle (outline heart), "View full product details" link with Eye icon
+     - Type-specific tech specs: PCB (layers, thickness, material, finish, color), Digital (software, version, license), Service (duration, revisions)
+     - "View full product details" closes dialog and navigates to product detail page
+     - "Add to Cart" adds to cart store, shows toast, closes dialog
+   - **Product card integration**: Quick View hover overlay now calls `quickView.open(product)` on click
+   - **Page.tsx integration**: `QuickViewListener` component reads from the store and renders `QuickViewDialog`
+   - Verified: Clicking Quick View on ESP32-WROOM-32 DevKit V1 opens dialog with image, shop, rating, name, description, price (89.000₫ with -26% discount), stock (238), sold (3.200), Add to Cart + wishlist + View full details buttons. "View full product details" navigates to `#/product-detail?slug=esp32-wroom-32-devkit-v1`.
+
+### Styling Improvements
+
+- Notification items: button elements with `w-full text-left`, hover bg-accent, border-b separator
+- ChevronRight icon (3px, muted) on notifications with links
+- Quick View dialog: 2-column grid (sm:grid-cols-2), max-w-3xl, max-h-90vh overflow
+- Tech spec chips: slate-50 background, cyan icon, 10px font, rounded-md, border
+- Price block: 2xl bold cyan-700, strikethrough compare-at, rose-to-orange discount badge
+- Quick View overlay on product card is now a proper `<button>` with `cursor-pointer` and `aria-label`
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200
+- Notification click: "Order CH-226347 placed" → navigates to `#/buyer-orders` ✓
+- Quick View: ESP32-WROOM-32 → dialog opens with image, shop, rating, price, stock, specs ✓
+- Quick View "View full details" → navigates to `#/product-detail?slug=esp32-wroom-32-devkit-v1` ✓
+- No console errors
+
+## Unresolved Issues / Risks
+
+1. **DropdownMenu doesn't auto-close on notification click** — Radix DropdownMenu doesn't close when a child button is clicked. The navigation happens but the dropdown stays open until Escape or outside-click. Could add manual close via `setOpen(false)` state.
+2. **Quick View tech specs limited to 6** — `specs.slice(0, 6)` limits the visible specs. For products with many specs, the full detail page is still needed.
+3. **Quick View doesn't show related products** — The dialog shows the product but not related/frequently bought together items. Could add a "You may also like" mini-carousel.
+
+## Priority Recommendations for Next Phase
+
+1. **Auto-close notification dropdown on click** — Use controlled DropdownMenu state to close on navigation
+2. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile
+3. **Order detail full page** — Dedicated full-page order detail view
+4. **Product image upload** — Real file upload in Add Product dialog with preview and progress
+5. **Bulk product moderation** — Select multiple products and approve/reject in bulk
+6. **Admin pagination** — Add proper pagination UI for admin product list
+7. **Quick View "You may also like"** — Add related products carousel in the Quick View dialog
+

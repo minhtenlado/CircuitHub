@@ -43,6 +43,7 @@ import {
   Download,
   LogOut,
   ChevronDown,
+  ChevronRight,
   Cpu,
   Zap,
   Store,
@@ -658,6 +659,11 @@ const NOTIF_ICON_MAP: Record<string, { icon: any; color: string; bg: string }> =
 function NotificationsBell() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
+  const goBuyer = useNavStore((s) => s.goBuyer);
+  const goSeller = useNavStore((s) => s.goSeller);
+  const goAdmin = useNavStore((s) => s.goAdmin);
+  const goProducts = useNavStore((s) => s.goProducts);
+  const setView = useNavStore((s) => s.setView);
   const { data, isLoading } = useNotifications(user?.id ?? 'demo-buyer');
   const [markingRead, setMarkingRead] = useState(false);
   const items: Array<{
@@ -689,6 +695,40 @@ function NotificationsBell() {
       queryClient.invalidateQueries({ queryKey: ['notifications', user?.id ?? 'demo-buyer'] });
     } finally {
       setMarkingRead(false);
+    }
+  }
+
+  async function handleNotificationClick(n: any) {
+    // Mark as read
+    if (!n.read) {
+      fetch('/api/v1/notifications', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: n.id }),
+      }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ['notifications', user?.id ?? 'demo-buyer'] });
+      });
+    }
+    // Navigate to the linked page
+    if (n.link) {
+      // Parse the link hash (e.g. "#/orders" → view "buyer-orders")
+      const hash = n.link.replace(/^#\/?/, '');
+      const [viewPart] = hash.split('?');
+      const viewMap: Record<string, string> = {
+        'orders': 'buyer-orders',
+        'seller': 'seller',
+        'seller/orders': 'seller-orders',
+        'admin': 'admin',
+        'admin/withdrawals': 'admin-withdrawals',
+        'admin/sellers': 'admin-sellers',
+        'products': 'products',
+      };
+      const targetView = viewMap[viewPart] ?? viewPart;
+      try {
+        setView(targetView as any);
+      } catch {
+        // Fallback: just close the dropdown
+      }
     }
   }
 
@@ -744,10 +784,11 @@ function NotificationsBell() {
               const cfg = NOTIF_ICON_MAP[n.type] ?? NOTIF_ICON_MAP.DEFAULT;
               const Icon = cfg.icon;
               return (
-                <div
+                <button
                   key={n.id}
+                  onClick={() => handleNotificationClick(n)}
                   className={cn(
-                    'flex gap-3 px-3 py-2.5 text-sm transition-colors hover:bg-accent border-b border-border/30 last:border-0',
+                    'w-full flex gap-3 px-3 py-2.5 text-sm text-left transition-colors hover:bg-accent border-b border-border/30 last:border-0',
                     !n.read && 'bg-cyan-50/40 dark:bg-cyan-950/15',
                   )}
                 >
@@ -760,9 +801,12 @@ function NotificationsBell() {
                       {!n.read && <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500" />}
                     </div>
                     <div className="line-clamp-2 text-[11px] text-muted-foreground mt-0.5">{n.body}</div>
-                    <div className="mt-0.5 text-[10px] text-muted-foreground/70">{timeAgo(n.createdAt)}</div>
+                    <div className="mt-0.5 flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground/70">{timeAgo(n.createdAt)}</span>
+                      {n.link && <ChevronRight className="h-3 w-3 text-muted-foreground/50" />}
+                    </div>
                   </div>
-                </div>
+                </button>
               );
             })
           )}

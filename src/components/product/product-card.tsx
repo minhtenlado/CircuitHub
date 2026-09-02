@@ -9,6 +9,7 @@ import { useWishlistStore } from '@/stores/wishlist-store';
 import { useCartStore } from '@/stores/cart-store';
 import { useCompareStore } from '@/stores/compare-store';
 import { useRecentlyViewedStore } from '@/stores/recently-viewed-store';
+import { useQuickViewStore } from '@/stores/quick-view-store';
 import { useToast } from '@/hooks/use-toast';
 import { formatVND, discountPct as calcPct } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
@@ -22,6 +23,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
   const cart = useCartStore();
   const compare = useCompareStore();
   const recentlyViewed = useRecentlyViewedStore();
+  const quickView = useQuickViewStore();
   const { toast } = useToast();
 
   const inWishlist = wishlist.has(product.id);
@@ -152,12 +154,20 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
           <ProductTypeBadge type={product.productType} />
         </div>
         {/* Quick View hover overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            quickView.open(product);
+          }}
+          className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3 cursor-pointer"
+          aria-label="Quick view"
+        >
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cyan-700 shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
             <Eye className="h-3.5 w-3.5" />
             Quick View
           </span>
-        </div>
+        </button>
       </div>
 
       {/* Body */}

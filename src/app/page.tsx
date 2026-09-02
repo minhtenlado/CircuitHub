@@ -9,6 +9,8 @@ import { CompareDrawer } from '@/components/product/compare-drawer';
 import { CompareBar } from '@/components/product/compare-bar';
 import { WishlistImportDialog } from '@/components/buyer/wishlist-import-dialog';
 import { BackToTop } from '@/components/common/back-to-top';
+import { QuickViewDialog } from '@/components/product/quick-view-dialog';
+import { useQuickViewStore } from '@/stores/quick-view-store';
 import { HomeView } from '@/features/home/home-view';
 import { ProductsView } from '@/features/products/products-view';
 import { ProductDetailView } from '@/features/products/product-detail-view';
@@ -304,8 +306,21 @@ export default function Home() {
       <CompareDrawer />
       <CompareBar />
       <BackToTop />
+      <QuickViewListener />
       <WishlistImportListener />
     </div>
+  );
+}
+
+/** Quick View dialog listener — renders the QuickViewDialog when a product is selected. */
+function QuickViewListener() {
+  const { product, isOpen, close } = useQuickViewStore();
+  return (
+    <QuickViewDialog
+      open={isOpen}
+      onOpenChange={(o) => { if (!o) close(); }}
+      product={product}
+    />
   );
 }
 
