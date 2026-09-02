@@ -48,6 +48,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ slug: stri
 
   return ok({
     ...product,
+    versions: sortVersions(product.versions ?? [], product.currentVersion),
     discountPct: product.compareAtPrice
       ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
       : 0,
@@ -57,5 +58,29 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ slug: stri
         ? Math.round(((p.compareAtPrice - p.price) / p.compareAtPrice) * 100)
         : 0,
     })),
+  });
+}
+
+/** Sort versions by semantic version (descending), with current version first. */
+function sortVersions(versions: any[], currentVersion?: string | null) {
+  const parseVer = (v: string): number[] => {
+    const m = v.replace(/^v/i, '').match(/(\d+)/g);
+    return m ? m.map(Number) : [0];
+  };
+  const cmp = (a: string, b: string): number => {
+    const pa = parseVer(a);
+    const pb = parseVer(b);
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+      const da = pa[i] ?? 0;
+      const db = pb[i] ?? 0;
+      if (da !== db) return db - da;
+    }
+    return 0;
+  };
+  return [...versions].sort((a, b) => {
+    // Current version always first
+    if (currentVersion && a.version === currentVersion) return -1;
+    if (currentVersion && b.version === currentVersion) return 1;
+    return cmp(a.version, b.version);
   });
 }

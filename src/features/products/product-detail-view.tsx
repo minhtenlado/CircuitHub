@@ -919,7 +919,7 @@ function ProductTabs({
       </TabsContent>
       {isDigital && (
         <TabsContent value="versions" className="mt-6">
-          <VersionsTab versions={product.versions ?? []} />
+          <VersionsTab versions={product.versions ?? []} currentVersion={product.currentVersion} />
         </TabsContent>
       )}
       <TabsContent value="reviews" className="mt-6">
@@ -1140,7 +1140,7 @@ function SpecificationsTab({ product }: { product: any }) {
 /* ============================================================
    Versions tab — for digital products
    ============================================================ */
-function VersionsTab({ versions }: { versions: any[] }) {
+function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVersion?: string | null }) {
   if (!versions || versions.length === 0) {
     return (
       <Card className="p-6 text-sm text-muted-foreground">
@@ -1154,55 +1154,64 @@ function VersionsTab({ versions }: { versions: any[] }) {
         <RefreshCw className="h-4 w-4 mt-0.5" />
         <p>
           <span className="font-semibold">Update policy:</span> All future updates for this product
-          are free for lifetime. You'll be notified by email when a new version is released.
+          are free for lifetime. You&apos;ll be notified by email when a new version is released.
         </p>
       </div>
-      {versions.map((v: any, i: number) => (
-        <Card key={v.id ?? i} className="p-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white">
-                <Download className="h-5 w-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-foreground">Version {v.version}</h3>
-                  {i === 0 && (
-                    <Badge className="bg-gradient-to-r from-cyan-500 to-teal-400 text-white border-0 text-[10px]">
-                      LATEST
-                    </Badge>
-                  )}
+      {versions.map((v: any, i: number) => {
+        const isCurrent = currentVersion && v.version === currentVersion;
+        return (
+          <Card key={v.id ?? i} className={`p-5 ${isCurrent ? 'border-cyan-400 ring-2 ring-cyan-100' : ''}`}>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl text-white ${isCurrent ? 'bg-gradient-to-br from-cyan-500 to-teal-400' : 'bg-slate-400'}`}>
+                  <Download className="h-5 w-5" />
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Released {formatDate(v.releaseDate)}
-                </p>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-semibold text-foreground">Version {v.version}</h3>
+                    {isCurrent && (
+                      <Badge className="bg-gradient-to-r from-cyan-500 to-teal-400 text-white border-0 text-[10px]">
+                        <CheckCircle2 className="h-2.5 w-2.5 mr-0.5" />
+                        CURRENT
+                      </Badge>
+                    )}
+                    {!isCurrent && i === 0 && (
+                      <Badge variant="outline" className="text-[10px] bg-slate-50 text-slate-600 border-slate-200">
+                        LATEST
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Released {formatDate(v.releaseDate)}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground">
-              {v.fileSizeBytes && (
+              <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground">
+                {v.fileSizeBytes && (
+                  <span className="flex items-center gap-1">
+                    <FileArchive className="h-3 w-3" />
+                    {formatFileSize(v.fileSizeBytes)}
+                  </span>
+                )}
                 <span className="flex items-center gap-1">
-                  <FileArchive className="h-3 w-3" />
-                  {formatFileSize(v.fileSizeBytes)}
+                  <Download className="h-3 w-3" />
+                  {(v.downloadCount ?? 0).toLocaleString('vi-VN')} downloads
                 </span>
-              )}
-              <span className="flex items-center gap-1">
-                <Download className="h-3 w-3" />
-                {(v.downloadCount ?? 0).toLocaleString('vi-VN')} downloads
-              </span>
-            </div>
-          </div>
-          {v.changelog && (
-            <div className="mt-4 pt-4 border-t border-border/60">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Changelog
-              </p>
-              <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
-                {v.changelog}
               </div>
             </div>
-          )}
-        </Card>
-      ))}
+            {v.changelog && (
+              <div className="mt-4 pt-4 border-t border-border/60">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  Changelog
+                </p>
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+                  {v.changelog}
+                </div>
+              </div>
+            )}
+          </Card>
+        );
+      })}
     </div>
   );
 }

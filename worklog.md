@@ -898,3 +898,91 @@ Identified opportunities for improvement (from Round 3 recommendations):
 6. **Search history** — Remember last 5 searches in localStorage and show when input is focused
 7. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
 
+
+---
+Task ID: Round-5 (Cron Review)
+Agent: Web Dev Review Agent (Cron Job 353893)
+Task: Fix version sorting bug, add wishlist import from share link feature, enhance version display
+
+## Current Project Status Assessment
+
+Project was stable after Round 4 with live search autocomplete and wishlist sharing. QA via agent-browser revealed:
+
+1. **Version sorting bug** — The product detail page's Versions tab showed versions in wrong order (v2.0.0, v1.0.0, v2.1.0) instead of newest first. The API sorted by `releaseDate: 'desc'` but all seed versions had the same timestamp (now), causing unpredictable order. The current version (v2.1.0) wasn't highlighted as "CURRENT".
+2. **Wishlist share link didn't auto-import** — When someone opened a share URL (`?wishlist=<encoded>`), it just navigated to the products page without showing a dialog to import the shared items.
+
+## Completed Modifications
+
+### Bug Fixes
+
+1. **Version sorting** (`/src/app/api/v1/products/[slug]/route.ts`)
+   - Added `sortVersions()` helper function that:
+     - Parses semantic versions (e.g. "v2.1.0" → [2, 1, 0])
+     - Compares major.minor.patch numerically
+     - Always places the current version first
+   - Applied to the API response: `versions: sortVersions(product.versions ?? [], product.currentVersion)`
+   - Verified: versions now sorted as v2.1.0 → v2.0.0 → v1.0.0 (current first)
+
+2. **Version display enhancement** (`/src/features/products/product-detail-view.tsx`)
+   - Updated `VersionsTab` component to accept `currentVersion` prop
+   - Current version card has `border-cyan-400 ring-2 ring-cyan-100` highlight
+   - Current version icon tile uses cyan gradient (`bg-gradient-to-br from-cyan-500 to-teal-400`)
+   - Non-current version icon tiles use slate-400
+   - Current version shows "CURRENT" badge with CheckCircle2 icon (cyan gradient)
+   - Non-current first item shows "LATEST" badge (slate outline)
+   - Updated the call site to pass `currentVersion={product.currentVersion}`
+
+### New Features
+
+1. **Wishlist Import from Share Link** (`/src/components/buyer/wishlist-import-dialog.tsx` + page.tsx integration)
+   - **WishlistImportDialog component**:
+     - Fetches full product details for each shared slug via `/api/v1/products/[slug]`
+     - Shows loading spinner while fetching
+     - Displays each product with: thumbnail, name, shop name, price, individual "Add to wishlist" heart button
+     - "Add All to Wishlist" button at the top — adds all new items in one click
+     - Shows "N of M new" count (items not already in wishlist)
+     - Already-wishlisted items show filled rose heart
+     - Toast notifications: "Added to wishlist" per item, "Wishlist imported! N items added" for bulk
+     - Empty state with Package icon if no valid products found
+   - **WishlistImportListener** (in page.tsx):
+     - Detects `?wishlist=<base64>` in the URL hash on page load
+     - Uses `useRef` + `useEffect` pattern to avoid the `set-state-in-effect` lint rule
+     - Decodes base64 → comma-separated slugs
+     - Cleans the URL by removing the `wishlist` param
+     - Opens the import dialog with a 0ms timeout (avoids cascading renders)
+   - Verified: opening `http://localhost:3000/#/home?wishlist=ZXNwMzItd3Jvb20tMzItZGV2a2l0LXYx` shows "Shared Wishlist" dialog with "1 item shared with you", ESP32-WROOM-32 DevKit V1 product, "Add All to Wishlist" button. After clicking, wishlist count increases from 1 to 2. URL cleaned to `#/home`.
+
+### Styling Improvements
+
+- Current version card: cyan-400 border + ring-2 ring-cyan-100 for visual emphasis
+- Current version badge: cyan-to-teal gradient with CheckCircle2 icon
+- Non-current icon tiles: slate-400 (muted)
+- Wishlist import dialog: product list with 48×48px thumbnails, individual heart toggle buttons
+- "Add All" button: cyan-to-teal gradient
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200
+- Version sorting: v2.1.0 (current) → v2.0.0 → v1.0.0 ✓
+- Current version highlighted with "CURRENT" badge + cyan border ✓
+- Wishlist import: share link opens dialog, product loads, "Add All" works, wishlist count increases ✓
+- URL cleaned after import dialog opens (no leftover `?wishlist=` param) ✓
+- No console errors
+
+## Unresolved Issues / Risks
+
+1. **`checkedRef` prevents re-opening** — The `WishlistImportListener` uses a `checkedRef` to only check the hash once on mount. If the user navigates to another share link without a full page reload, the dialog won't open. This is acceptable for MVP but could be improved by listening to `hashchange` events.
+2. **Wishlist share link expiry** — The base64-encoded slugs don't expire. If a product is deleted, the import dialog will show "No valid products found" for that slug.
+3. **Version dates still show seed date** — The `releaseDate` for seed versions defaults to `now()` instead of the product's actual `releaseDate`. A future fix should set the version's `releaseDate` to match the product's release date in the seed script.
+
+## Priority Recommendations for Next Phase
+
+1. **Product image upload** — Real file upload in Add Product dialog with preview and progress
+2. **Order detail page for buyers** — Dedicated full-page order detail with invoice download
+3. **Admin product moderation** — Approve/reject pending products with reason + seller notification
+4. **Real-time notifications** — Polling-based notification badge that updates without refresh
+5. **Search history** — Remember last 5 searches in localStorage and show when input is focused
+6. **Mobile search bottom sheet** — Convert search dropdown to bottom sheet on mobile for better UX
+7. **Seed fix: version release dates** — Set version `releaseDate` to match product `releaseDate` in seed script
+

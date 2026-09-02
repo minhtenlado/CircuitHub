@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavStore, setupHashListener } from '@/stores/nav-store';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { CartDrawer } from '@/components/checkout/cart-drawer';
 import { CompareDrawer } from '@/components/product/compare-drawer';
 import { CompareBar } from '@/components/product/compare-bar';
+import { WishlistImportDialog } from '@/components/buyer/wishlist-import-dialog';
 import { HomeView } from '@/features/home/home-view';
 import { ProductsView } from '@/features/products/products-view';
 import { ProductDetailView } from '@/features/products/product-detail-view';
@@ -200,7 +201,6 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
 
 // Quick alias to avoid import name clash
 import { useToast as useToastHook } from '@/hooks/use-toast';
-import { useState } from 'react';
 
 function PageRouter() {
   const view = useNavStore((s) => s.view);
@@ -302,6 +302,48 @@ export default function Home() {
       <CartDrawer />
       <CompareDrawer />
       <CompareBar />
+      <WishlistImportListener />
     </div>
+  );
+}
+
+/** Detects ?wishlist=<encoded> in the URL hash and shows the import dialog. */
+function WishlistImportListener() {
+  const [state, setState] = useState<{ slugs: string[]; open: boolean }>({ slugs: [], open: false });
+  const checkedRef = useRef(false);
+
+  useEffect(() => {
+    if (checkedRef.current) return;
+    checkedRef.current = true;
+    if (typeof window === 'undefined') return;
+    const hash = window.location.hash;
+    const match = hash.match(/wishlist=([^&]+)/);
+    if (!match) return;
+    try {
+      const decoded = atob(match[1].replace(/-/g, '+').replace(/_/g, '/'));
+      const slugs = decoded.split(',').filter(Boolean);
+      if (slugs.length > 0) {
+        // Clean the URL - remove the wishlist param from the hash
+        const cleanPath = hash
+          .replace(/^#/, '')
+          .replace(/[?&]wishlist=[^&]+/, '')
+          .replace(/\?$/, '')
+          .replace(/\?&/, '?')
+          .replace(/&$/, '');
+        window.history.replaceState(null, '', `#${cleanPath}`);
+        // Open the dialog (via external state update, not synchronous)
+        setTimeout(() => setState({ slugs, open: true }), 0);
+      }
+    } catch {
+      // invalid base64
+    }
+  }, []);
+
+  return (
+    <WishlistImportDialog
+      open={state.open}
+      onOpenChange={(open) => setState((s) => ({ ...s, open }))}
+      slugs={state.slugs}
+    />
   );
 }
