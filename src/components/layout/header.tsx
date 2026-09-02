@@ -140,13 +140,46 @@ function NavPills({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 /* ---------- Search Bar ---------- */
+/* ---------- Search Bar with Live Autocomplete ---------- */
+interface SearchResult {
+  products: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    price: number;
+    productType: string;
+    brand: string | null;
+    rating: number;
+    imageUrl?: string;
+    shopName?: string;
+    shopVerified?: boolean;
+  }>;
+  categories: Array<{ id: string; name: string; slug: string; icon?: string | null }>;
+  shops: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    logoUrl?: string | null;
+    verified: boolean;
+    rating: number;
+  }>;
+  brands: string[];
+}
+
 function SearchBar({ compact = false }: { compact?: boolean }) {
   const goProducts = useNavStore((s) => s.goProducts);
+  const goProduct = useNavStore((s) => s.goProduct);
+  const goCategory = useNavStore((s) => s.goCategory);
+  const goShop = useNavStore((s) => s.goShop);
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
+  const [results, setResults] = useState<SearchResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Close popular-searches dropdown on outside click
+  // Close dropdown on outside click
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (!wrapperRef.current?.contains(e.target as Node)) setFocused(false);
@@ -155,11 +188,84 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
     return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
+  // Debounced search
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    const q = query.trim();
+    if (q.length < 2) {
+      setResults(null);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/v1/search?q=${encodeURIComponent(q)}`);
+        const json = await res.json();
+        if (json.success) {
+          setResults(json.data);
+        }
+      } catch {
+        // silently fail
+      } finally {
+        setLoading(false);
+      }
+    }, 250);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [query]);
+
   const submit = (q?: string) => {
     const term = (q ?? query).trim();
     goProducts(term ? { q: term } : {});
     setFocused(false);
   };
+
+  const hasResults = results && (
+    results.products.length > 0 ||
+    results.categories.length > 0 ||
+    results.shops.length > 0 ||
+    results.brands.length > 0
+  );
+
+  // Flatten all items for keyboard navigation
+  const flatItems: Array<{ type: 'product' | 'category' | 'shop' | 'brand'; data: any; label: string }> = [];
+  if (results) {
+    results.products.forEach((p) => flatItems.push({ type: 'product', data: p, label: p.name }));
+    results.categories.forEach((c) => flatItems.push({ type: 'category', data: c, label: c.name }));
+    results.shops.forEach((s) => flatItems.push({ type: 'shop', data: s, label: s.name }));
+    results.brands.forEach((b) => flatItems.push({ type: 'brand', data: b, label: b }));
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter') {
+      if (activeIndex >= 0 && activeIndex < flatItems.length) {
+        const item = flatItems[activeIndex];
+        handleSelect(item.type, item.data);
+      } else {
+        submit();
+      }
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, flatItems.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, -1));
+    } else if (e.key === 'Escape') {
+      setFocused(false);
+    }
+  }
+
+  function handleSelect(type: string, data: any) {
+    setFocused(false);
+    if (type === 'product') goProduct(data.slug);
+    else if (type === 'category') goCategory(data.slug);
+    else if (type === 'shop') goShop(data.slug);
+    else if (type === 'brand') goProducts({ q: data });
+  }
 
   return (
     <div ref={wrapperRef} className="relative w-full">
@@ -167,22 +273,39 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setFocused(true)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') submit();
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setActiveIndex(-1);
           }}
+          onFocus={() => setFocused(true)}
+          onKeyDown={handleKeyDown}
           placeholder="Search by product, MPN, KiCad project, component, service..."
           aria-label="Search CircuitHub"
           className={cn(
-            'h-10 rounded-full border-border/70 bg-background/70 pl-9 pr-3 text-sm shadow-xs transition-all',
+            'h-10 rounded-full border-border/70 bg-background/70 pl-9 pr-9 text-sm shadow-xs transition-all',
             'focus-visible:border-primary focus-visible:ring-primary/30 focus-visible:ring-[3px]',
             compact && 'h-9',
           )}
         />
+        {loading && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-cyan-300 border-t-cyan-600" />
+          </div>
+        )}
+        {!loading && query && (
+          <button
+            onClick={() => { setQuery(''); setResults(null); }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            aria-label="Clear search"
+          >
+            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
 
-      {/* Popular searches dropdown */}
+      {/* Autocomplete dropdown */}
       <AnimatePresence>
         {focused && (
           <motion.div
@@ -190,25 +313,200 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 rounded-xl border border-border/70 bg-popover/95 p-2 shadow-lg backdrop-blur-md"
+            className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 rounded-xl border border-border/70 bg-popover/95 shadow-lg backdrop-blur-md max-h-[70vh] overflow-y-auto"
           >
-            <div className="px-2 pb-1.5 pt-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              Popular searches
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {POPULAR_SEARCHES.map((s) => (
+            {/* No query: show popular searches */}
+            {!query.trim() && (
+              <div className="p-3">
+                <div className="px-1 pb-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Popular searches
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {POPULAR_SEARCHES.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => { setQuery(s); submit(s); }}
+                      className="rounded-full border border-cyan-200/60 bg-cyan-50/60 px-2.5 py-1 text-xs font-medium text-cyan-800 transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Query too short */}
+            {query.trim().length > 0 && query.trim().length < 2 && (
+              <div className="p-4 text-center text-sm text-muted-foreground">
+                Keep typing... (min 2 characters)
+              </div>
+            )}
+
+            {/* Loading */}
+            {query.trim().length >= 2 && loading && (
+              <div className="p-4 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
+                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-cyan-300 border-t-cyan-600" />
+                Searching...
+              </div>
+            )}
+
+            {/* Results */}
+            {query.trim().length >= 2 && !loading && hasResults && (
+              <div className="p-2">
+                {/* Products */}
+                {results!.products.length > 0 && (
+                  <div className="mb-2">
+                    <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                      Products ({results!.products.length})
+                    </div>
+                    {results!.products.map((p, i) => {
+                      const idx = flatItems.findIndex((it) => it.type === 'product' && it.data.id === p.id);
+                      return (
+                        <button
+                          key={p.id}
+                          onClick={() => handleSelect('product', p)}
+                          onMouseEnter={() => setActiveIndex(idx)}
+                          className={cn(
+                            'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
+                            activeIndex === idx ? 'bg-cyan-50' : 'hover:bg-slate-50',
+                          )}
+                        >
+                          <div className="h-9 w-9 flex-shrink-0 overflow-hidden rounded-md bg-muted border border-border/40">
+                            {p.imageUrl && (
+                              <img src={p.imageUrl} alt={p.name} className="h-full w-full object-cover" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{p.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {p.brand ? `${p.brand} · ` : ''}{p.shopName ?? 'Shop'}
+                            </p>
+                          </div>
+                          <span className="text-xs font-bold text-cyan-700 tabular-nums flex-shrink-0">
+                            {new Intl.NumberFormat('vi-VN').format(p.price)}₫
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Categories */}
+                {results!.categories.length > 0 && (
+                  <div className="mb-2">
+                    <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                      Categories
+                    </div>
+                    {results!.categories.map((c) => {
+                      const idx = flatItems.findIndex((it) => it.type === 'category' && it.data.id === c.id);
+                      return (
+                        <button
+                          key={c.id}
+                          onClick={() => handleSelect('category', c)}
+                          onMouseEnter={() => setActiveIndex(idx)}
+                          className={cn(
+                            'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
+                            activeIndex === idx ? 'bg-cyan-50' : 'hover:bg-slate-50',
+                          )}
+                        >
+                          <div className="h-8 w-8 flex-shrink-0 rounded-md bg-cyan-50 border border-cyan-100 flex items-center justify-center">
+                            <Package className="h-3.5 w-3.5 text-cyan-600" />
+                          </div>
+                          <span className="text-sm font-medium flex-1">{c.name}</span>
+                          <span className="text-[10px] text-muted-foreground">Category</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Shops */}
+                {results!.shops.length > 0 && (
+                  <div className="mb-2">
+                    <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                      Shops
+                    </div>
+                    {results!.shops.map((s) => {
+                      const idx = flatItems.findIndex((it) => it.type === 'shop' && it.data.id === s.id);
+                      return (
+                        <button
+                          key={s.id}
+                          onClick={() => handleSelect('shop', s)}
+                          onMouseEnter={() => setActiveIndex(idx)}
+                          className={cn(
+                            'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
+                            activeIndex === idx ? 'bg-cyan-50' : 'hover:bg-slate-50',
+                          )}
+                        >
+                          <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full bg-muted border border-border/40">
+                            {s.logoUrl && (
+                              <img src={s.logoUrl} alt={s.name} className="h-full w-full object-cover" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate flex items-center gap-1">
+                              {s.name}
+                              {s.verified && <span className="text-cyan-500 text-xs">✓</span>}
+                            </p>
+                            <p className="text-xs text-muted-foreground">★ {s.rating.toFixed(1)}</p>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground">Shop</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Brands */}
+                {results!.brands.length > 0 && (
+                  <div className="mb-1">
+                    <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                      Brands
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 px-2 pb-1">
+                      {results!.brands.map((b) => {
+                        const idx = flatItems.findIndex((it) => it.type === 'brand' && it.data === b);
+                        return (
+                          <button
+                            key={b}
+                            onClick={() => handleSelect('brand', b)}
+                            onMouseEnter={() => setActiveIndex(idx)}
+                            className={cn(
+                              'rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
+                              activeIndex === idx
+                                ? 'border-primary bg-primary text-primary-foreground'
+                                : 'border-cyan-200/60 bg-cyan-50/60 text-cyan-800 hover:border-primary',
+                            )}
+                          >
+                            {b}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* View all results */}
                 <button
-                  key={s}
-                  onClick={() => {
-                    setQuery(s);
-                    submit(s);
-                  }}
-                  className="rounded-full border border-cyan-200/60 bg-cyan-50/60 px-2.5 py-1 text-xs font-medium text-cyan-800 transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground dark:border-cyan-900/40 dark:bg-cyan-950/30 dark:text-cyan-200"
+                  onClick={() => submit()}
+                  className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50/40 p-2 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-100/50"
                 >
-                  {s}
+                  <Search className="h-3.5 w-3.5" />
+                  View all results for &quot;{query}&quot;
                 </button>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {/* No results */}
+            {query.trim().length >= 2 && !loading && !hasResults && (
+              <div className="p-6 text-center">
+                <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
+                  <Search className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium">No results for &quot;{query}&quot;</p>
+                <p className="text-xs text-muted-foreground mt-1">Try a different keyword or browse categories</p>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

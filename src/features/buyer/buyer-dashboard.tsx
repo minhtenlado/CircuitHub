@@ -39,6 +39,7 @@ import { useToast } from '@/hooks/use-toast';
 import { formatVND, formatDate, timeAgo, formatFileSize, initials } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
 import { ProductTypeBadge, VerifiedBadge, TechBadge } from '@/components/common/badges';
+import { WishlistShareDialog } from '@/components/buyer/wishlist-share-dialog';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Package,
@@ -67,6 +68,7 @@ import {
   Truck,
   FileArchive,
   Edit2,
+  Share2,
   X,
   Sparkles,
   ClipboardList,
@@ -1487,6 +1489,7 @@ function WishlistTab({
   onClear: () => void;
   onGoProducts: () => void;
 }) {
+  const [shareOpen, setShareOpen] = useState(false);
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -1500,12 +1503,20 @@ function WishlistTab({
           </div>
         </div>
         {items.length > 0 && (
-          <Button variant="outline" size="sm" onClick={onClear} className="text-rose-600 hover:text-rose-700 hover:bg-rose-50">
-            <Trash2 className="h-3.5 w-3.5" />
-            Clear all
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => setShareOpen(true)} className="border-cyan-200 text-cyan-700 hover:bg-cyan-50">
+              <Share2 className="h-3.5 w-3.5" />
+              Share
+            </Button>
+            <Button variant="outline" size="sm" onClick={onClear} className="text-rose-600 hover:text-rose-700 hover:bg-rose-50">
+              <Trash2 className="h-3.5 w-3.5" />
+              Clear all
+            </Button>
+          </div>
         )}
       </div>
+
+      <WishlistShareDialog open={shareOpen} onOpenChange={setShareOpen} />
 
       {items.length === 0 ? (
         <EmptyState
