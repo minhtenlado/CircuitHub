@@ -131,7 +131,10 @@ import {
   Globe,
   Percent,
   CalendarClock,
+  LogOut,
 } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth-store';
+import { useNavStore } from '@/stores/nav-store';
 import {
   AreaChart,
   Area,
@@ -2827,6 +2830,8 @@ function MobilePill({
    ============================================================ */
 
 export function AdminCenter() {
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<TabId>('overview');
@@ -2892,14 +2897,16 @@ export function AdminCenter() {
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-1.5">
                 <Avatar className="h-7 w-7 border border-slate-600">
-                  <AvatarImage src={ADMIN_INFO.avatarUrl} alt={ADMIN_INFO.name} />
-                  <AvatarFallback className="bg-cyan-500 text-white text-[10px] font-bold">SA</AvatarFallback>
+                  <AvatarImage src={user?.avatarUrl} alt={user?.name ?? 'Admin'} />
+                  <AvatarFallback className="bg-cyan-500 text-white text-[10px] font-bold">
+                    {initials(user?.name ?? 'AD')}
+                  </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-xs font-semibold text-white">{ADMIN_INFO.name}</p>
+                  <p className="text-xs font-semibold text-white">{user?.name ?? 'System Administrator'}</p>
                   <Badge variant="outline" className="bg-rose-500/20 text-rose-300 border-rose-500/40 text-[10px] gap-1">
                     <ShieldCheck className="h-2.5 w-2.5" />
-                    ADMIN
+                    {user?.role ?? 'ADMIN'}
                   </Badge>
                 </div>
               </div>
@@ -2912,6 +2919,18 @@ export function AdminCenter() {
               >
                 <RefreshCw className={cn('h-3.5 w-3.5', isAnalyticsFetching && 'animate-spin')} />
                 Refresh
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 border-rose-800/60 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 hover:text-white"
+                onClick={() => {
+                  logout();
+                  useNavStore.getState().setView('admin-login', {});
+                }}
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                Đăng xuất
               </Button>
             </div>
           </div>

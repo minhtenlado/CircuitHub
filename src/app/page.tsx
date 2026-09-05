@@ -279,16 +279,29 @@ function PageRouter() {
     case 'buyer-downloads':
     case 'buyer-wishlist':
     case 'buyer-profile':
-      content = <BuyerDashboard />;
-      key = 'buyer-dashboard';
+      if (!user) {
+        content = <AuthView mode="login" />;
+        key = 'auth-login';
+      } else {
+        content = <BuyerDashboard />;
+        key = 'buyer-dashboard';
+      }
       break;
     case 'seller':
     case 'seller-products':
     case 'seller-orders':
     case 'seller-wallet':
     case 'seller-analytics':
-      content = <SellerCenter />;
-      key = 'seller-center';
+      if (!user) {
+        content = <AuthView mode="login" />;
+        key = 'auth-login';
+      } else if (user.role !== 'SELLER' && user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
+        content = <SellerOnboardingView />;
+        key = 'seller-onboarding';
+      } else {
+        content = <SellerCenter />;
+        key = 'seller-center';
+      }
       break;
     case 'admin':
     case 'admin-users':
@@ -298,8 +311,13 @@ function PageRouter() {
     case 'admin-withdrawals':
     case 'admin-analytics':
     case 'admin-audit-logs':
-      content = <AdminCenter />;
-      key = 'admin-center';
+      if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+        content = <AdminLoginView />;
+        key = 'admin-login';
+      } else {
+        content = <AdminCenter />;
+        key = 'admin-center';
+      }
       break;
     case 'login':
       content = <AuthView mode="login" />;
@@ -344,7 +362,15 @@ export default function Home() {
   }, []);
 
   const view = useNavStore((s) => s.view);
-  const isStandaloneView = view === 'admin-login' || view === 'seller-onboarding';
+  const user = useAuthStore((s) => s.user);
+
+  const isAdminView = view === 'admin-login' || view.startsWith('admin');
+  const isAdminAuthenticated = user && (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN');
+
+  const isStandaloneView =
+    view === 'admin-login' ||
+    view === 'seller-onboarding' ||
+    (isAdminView && !isAdminAuthenticated);
 
   if (isStandaloneView) {
     return (
