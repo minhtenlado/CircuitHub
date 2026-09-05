@@ -5,7 +5,6 @@
    - Full-width with subtle PCB grid background
    - Left: tagline pill, gradient headline, CTAs, stats row
    - Right: floating engineering spec cards (Framer Motion)
-   - Decorative: animated circuit-trace + cyan glow
    ============================================================ */
 
 import { motion } from 'framer-motion';
@@ -120,7 +119,7 @@ export function Hero() {
   return (
     <section
       aria-label="Hero"
-      className="relative overflow-hidden pcb-grid-bg border-b border-border/60"
+      className="relative overflow-hidden border-b border-border/60"
     >
       {/* Decorative cyan glow (top-right) */}
       <div
@@ -130,12 +129,6 @@ export function Hero() {
       <div
         aria-hidden
         className="pointer-events-none absolute top-40 -left-32 h-[320px] w-[320px] rounded-full bg-teal-300/20 blur-[120px]"
-      />
-
-      {/* Decorative animated circuit trace */}
-      <div
-        aria-hidden
-        className="circuit-trace absolute top-0 left-0 right-0 opacity-80"
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24">
@@ -262,12 +255,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-
-      {/* Decorative bottom trace */}
-      <div
-        aria-hidden
-        className="circuit-trace absolute bottom-0 left-0 right-0 opacity-60"
-      />
     </section>
   );
 }

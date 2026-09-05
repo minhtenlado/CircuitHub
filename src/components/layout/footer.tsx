@@ -110,11 +110,9 @@ export function Footer() {
 
   return (
     <footer className="mt-auto relative border-t border-border/60 bg-slate-50/40 backdrop-blur-sm">
-      {/* Decorative circuit-trace animation line at the very top */}
-      <div className="circuit-trace absolute top-0 left-0 right-0" aria-hidden />
 
-      {/* PCB-grid soft background wrapper */}
-      <div className="pcb-grid-bg-soft">
+      {/* Content wrapper */}
+      <div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
           {/* ---------- Trust section (above the columns) ---------- */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-12">

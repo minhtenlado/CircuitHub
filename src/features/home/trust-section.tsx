@@ -54,8 +54,6 @@ const PILLARS = [
 export function TrustSection() {
   return (
     <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
-      {/* PCB grid background */}
-      <div aria-hidden className="absolute inset-0 pcb-grid-bg opacity-60" />
       {/* Cyan glow */}
       <div
         aria-hidden
@@ -71,10 +69,6 @@ export function TrustSection() {
           transition={{ duration: 0.45 }}
           className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-500 via-cyan-500 to-teal-400 text-white shadow-[0_24px_70px_-24px_rgba(6,182,212,0.65)]"
         >
-          {/* Decorative trace */}
-          <div aria-hidden className="circuit-trace absolute top-0 left-0 right-0 opacity-80" />
-          <div aria-hidden className="circuit-trace absolute bottom-0 left-0 right-0 opacity-60" />
-
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-px">
             {STATS.map((s, i) => {
               const Icon = s.icon;

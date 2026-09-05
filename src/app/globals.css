@@ -205,30 +205,6 @@
 }
 
 @layer components {
-  /* Subtle PCB / circuit grid background */
-  .pcb-grid-bg {
-    background-color: #ffffff;
-    background-image:
-      linear-gradient(rgba(6, 182, 212, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6, 182, 212, 0.07) 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
-  .pcb-grid-bg-soft {
-    background-color: #f8fafc;
-    background-image:
-      linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
-    background-size: 22px 22px;
-  }
-  .dark .pcb-grid-bg,
-  .dark .pcb-grid-bg-soft {
-    background-color: #0b1220;
-    background-image:
-      linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(34, 211, 238, 0.08) 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
-
   /* Soft cyan glow */
   .glow-cyan {
     box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.15), 0 8px 32px -8px rgba(6, 182, 212, 0.35);
@@ -272,25 +248,6 @@
     font-feature-settings: "tnum", "zero";
   }
 
-  /* Animated circuit trace (decorative) */
-  .circuit-trace {
-    background: linear-gradient(90deg, transparent 0%, #06b6d4 50%, transparent 100%);
-    height: 1px;
-    position: relative;
-    overflow: hidden;
-  }
-  .circuit-trace::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, #2dd4bf, transparent);
-    animation: trace-flow 3s linear infinite;
-  }
-  @keyframes trace-flow {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-
   /* Shimmer skeleton */
   .shimmer {
     position: relative;
@@ -309,7 +266,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .circuit-trace::after,
     .shimmer::after {
       animation: none;
     }
