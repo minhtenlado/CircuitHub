@@ -164,7 +164,8 @@ export async function GET(req: NextRequest) {
       path: '/',
       maxAge: 60 * 60 * 24 * 30,
     });
-    response.cookies.set('circuithub_user', JSON.stringify(userPayload), {
+    // Lỗi có thể do Unicode trong tên người dùng (Văn Đỗ) làm crash khi set cookie header
+    response.cookies.set('circuithub_user', encodeURIComponent(JSON.stringify(userPayload)), {
       httpOnly: false,
       secure: true,
       sameSite: 'lax',
