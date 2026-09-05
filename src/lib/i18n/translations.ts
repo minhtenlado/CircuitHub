@@ -23,7 +23,7 @@ export const translations = {
       pcbBoards: 'Mạch PCB',
       openSource: 'Mã nguồn mở',
       services: 'Dịch vụ',
-      bomTool: 'Công cụ BOM',
+      bomTool: 'Gia công PCB',
       browse: 'Duyệt',
     },
     hero: {
@@ -225,7 +225,7 @@ export const translations = {
       pcbBoards: 'PCB Boards',
       openSource: 'Open Source',
       services: 'Services',
-      bomTool: 'BOM Tool',
+      bomTool: 'PCB Upload',
       browse: 'Browse',
     },
     hero: {
@@ -427,7 +427,7 @@ export const translations = {
       pcbBoards: 'PCB板',
       openSource: '开源',
       services: '服务',
-      bomTool: 'BOM工具',
+      bomTool: 'PCB上传',
       browse: '浏览',
     },
     hero: {
@@ -626,7 +626,7 @@ export const translations = {
       pcbBoards: 'PCB基板',
       openSource: 'オープンソース',
       services: 'サービス',
-      bomTool: 'BOMツール',
+      bomTool: 'PCBアップロード',
       browse: 'ブラウズ',
     },
     hero: {

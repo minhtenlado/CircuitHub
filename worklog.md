@@ -1797,3 +1797,34 @@ Task: Remove role switcher, add Google login, admin separate login, seller onboa
 - Seller onboarding: `#/seller-onboarding` shows 6-step wizard with "Start Selling on CircuitHub" ✓
 - Buyer login: "Continue with Google" button visible, sign-in form below ✓
 - No console errors
+
+---
+Task ID: pcb-upload-1
+Agent: Main (Z.ai Code)
+Task: Replace BOM Tool with PCB Manufacturing Upload (JLCPCB Gerber zip + 3D + schematic viewer)
+
+## Completed Modifications
+
+### Replaced BOM Tool → PCB Manufacturing Upload
+- Removed old BOM CSV upload + auto-match functionality
+- New feature: Upload zip file containing Gerber files + schematic + PCB layout for JLCPCB manufacturing
+
+### New PCB Upload Page Features
+1. **ZIP file upload** — Drag-and-drop or click to browse, accepts .zip only
+2. **JLCPCB-compatible format** — Info banner with link to JLCPCB Gerber requirements
+3. **Auto-parse** — Simulated extraction of Gerber layers, schematic, and PCB layout (1.8s)
+4. **Summary cards** — Gerber Layers count, Schematic ✓, PCB Layout ✓, JLCPCB Ready ✓
+5. **Three viewer tabs:**
+   - **3D Preview** — Simulated 3D PCB board with SVG-rendered traces, components, silkscreen; rotation (±15°), zoom (50%-200%), reset controls
+   - **Schematic** — SVG-rendered schematic with power rails, ESP32 block, decoupling cap, LED indicator, labels; analysis summary
+   - **Gerber Layers** — Layer-by-layer view with toggleable layers (Top Copper, Top Silkscreen, Solder Mask, Bottom Copper, Board Outline); each layer has color coding
+6. **File list** — All files in the zip with category badges (gerber/schematic/pcb), file type, monospace filename
+7. **PCB Specs Summary** — Auto-detected specs: Layers (4), Board Size (50×80mm), Min Track (0.2mm), Drill Size, Solder Mask, Surface Finish, Thickness
+8. **JLCPCB ordering** — "Order on JLCPCB" button opens https://cart.jlcpcb.com/quote; estimated cost ($2.00 for 5 pcs)
+
+### Header Nav Update
+- "BOM Tool" → "PCB Upload" (EN), "Gia công PCB" (VI), "PCB上传" (ZH), "PCBアップロード" (JA)
+
+## Verification
+- Lint: 0 errors, 0 warnings
+- Page loads at #/bom with "PCB Manufacturing Upload" heading, JLCPCB info banner, upload zone with "Choose ZIP File" + "Export JLCPCB Format" buttons
