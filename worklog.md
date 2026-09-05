@@ -1742,3 +1742,58 @@ Stage Summary:
 - i18n system: 4 languages (Vietnamese default), language switcher in header, persisted via localStorage
 - Translations applied to nav, hero, footer, categories; product/cart/checkout translations exist but not yet wired to all components
 - Next: wire product card, quick view, cart, checkout, buyer/seller/admin dashboards
+
+---
+Task ID: auth-flow-1
+Agent: Main (Z.ai Code)
+Task: Remove role switcher, add Google login, admin separate login, seller onboarding with biometric
+
+## Completed Modifications
+
+### 1. Removed Role Switcher (Buyer/Seller/Admin tabs)
+- Removed `RoleSwitcher` from header (both desktop and mobile menu)
+- Removed demo login buttons for seller/admin
+- User menu now only shows buyer options: Profile, Orders, Downloads, Settings, Logout
+- Only buyer demo login button remains
+
+### 2. Google Sign-In for Buyers
+- Added "Continue with Google" / "Sign up with Google" button on login/register page
+- Mock implementation (simulates OAuth flow with 1.2s delay)
+- After Google login, user defaults to buyer role → buyer dashboard
+
+### 3. Separate Admin Login Page (`#/admin-login`)
+- Standalone page with dark slate-900 background (no header/footer)
+- Shield icon + "Admin Control Panel" heading
+- Email + password form (no Google login for admins)
+- On submit: verifies role is ADMIN/SUPER_ADMIN → redirects to `#/admin`
+- "Back to marketplace" link at bottom
+- Accessible only via URL hash `#/admin-login` (not in UI navigation)
+
+### 4. Seller Onboarding Flow (`#/seller-onboarding`)
+6-step wizard with step indicator:
+1. **Welcome** — Benefits of selling on CircuitHub, "Get Started"
+2. **ID Verification** — Upload CCCD front/back photos, verify with 2s animation
+3. **Biometric Verification** — Camera-based liveness detection:
+   - "Enable Camera" → requests `navigator.mediaDevices.getUserMedia({ video: true })`
+   - Live video preview in circular container with cyan border
+   - "Start Biometric Scan" → 5-second progress bar (simulating facial recognition)
+   - Instructions: blink slowly, turn head left/right
+   - Camera auto-stops when leaving the step
+   - Graceful handling if camera denied
+4. **Shop Information** — Shop name, description, category, specializations
+5. **Pickup Address** — Full name, phone, address, city, district, ward + map placeholder
+   - Note: "Shipping partners will pick up your products from this address"
+6. **Review & Submit** — Summary of all entered data, "Submit Application" → toast + redirect home
+
+### 5. Standalone View Rendering
+- Admin login and seller onboarding render WITHOUT header/footer
+- Uses `isStandaloneView` check in the main `Home` component
+- Other views (login/register/buyer/seller/admin) still render within the full layout
+
+## Verification Results
+- `bun run lint` → 0 errors, 0 warnings
+- Homepage: No role switcher tabs visible ✓
+- Admin login: `#/admin-login` shows standalone dark page with "Admin Control Panel" ✓
+- Seller onboarding: `#/seller-onboarding` shows 6-step wizard with "Start Selling on CircuitHub" ✓
+- Buyer login: "Continue with Google" button visible, sign-in form below ✓
+- No console errors

@@ -940,23 +940,18 @@ function UserMenu() {
   const logout = useAuthStore((s) => s.logout);
   const demoLogin = useAuthStore((s) => s.demoLogin);
   const goBuyer = useNavStore((s) => s.goBuyer);
-  const goSeller = useNavStore((s) => s.goSeller);
-  const goAdmin = useNavStore((s) => s.goAdmin);
   const goShop = useNavStore((s) => s.goShop);
   const goAuth = useNavStore((s) => s.goAuth);
   const { toast } = useToast();
   const { t } = useI18n();
 
-  const handleDemoLogin = (r: 'buyer' | 'seller' | 'admin') => {
-    demoLogin(r);
-    const label = r.charAt(0).toUpperCase() + r.slice(1);
+  const handleDemoLogin = () => {
+    demoLogin('buyer');
     toast({
-      title: `${t('auth.welcomeBack')} — ${label}`,
+      title: t('auth.welcomeBack'),
       description: 'Demo mode active — explore the full experience.',
     });
-    if (r === 'buyer') goBuyer('buyer-orders');
-    else if (r === 'seller') goSeller();
-    else goAdmin();
+    goBuyer('buyer-orders');
   };
 
   const handleLogout = () => {
@@ -1019,6 +1014,10 @@ function UserMenu() {
                 </DropdownMenuItem>
               </>
             )}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" /> {t('common.logout')}
+            </DropdownMenuItem>
           </>
         ) : (
           <>
@@ -1027,31 +1026,8 @@ function UserMenu() {
             <DropdownMenuItem onClick={() => goAuth('login')}>
               <User className="h-4 w-4" /> {t('auth.signIn')}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => goAuth('register')}>
-              <Package className="h-4 w-4" /> {t('auth.createAccount')}
-            </DropdownMenuItem>
-          </>
-        )}
-
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-[11px] uppercase tracking-wider text-muted-foreground">
-          {t('common.demoLogins')}
-        </DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => handleDemoLogin('buyer')}>
-          <User className="h-4 w-4" /> {t('common.demoBuyer')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleDemoLogin('seller')}>
-          <Store className="h-4 w-4" /> {t('common.demoSeller')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleDemoLogin('admin')}>
-          <Settings className="h-4 w-4" /> {t('common.demoAdmin')}
-        </DropdownMenuItem>
-
-        {user && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" onClick={handleLogout}>
-              <LogOut className="h-4 w-4" /> {t('common.logout')}
+            <DropdownMenuItem onClick={handleDemoLogin}>
+              <User className="h-4 w-4" /> {t('common.demoBuyer')}
             </DropdownMenuItem>
           </>
         )}
@@ -1122,36 +1098,6 @@ function MobileMenu() {
         {/* Mobile search */}
         <div className="px-4 py-3">
           <SearchBar compact />
-        </div>
-
-        {/* Role switcher */}
-        <div className="px-4 pb-2">
-          <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            {t('roles.viewAs')}
-          </div>
-          <div className="grid grid-cols-3 gap-1 rounded-full border border-border/70 bg-background/60 p-0.5">
-            {roleTabs.map((tab) => {
-              const active = role === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => {
-                    setRole(tab.key);
-                    tab.onPick();
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    'rounded-full px-2 py-1 text-xs font-semibold transition-all',
-                    active
-                      ? 'bg-gradient-to-r from-cyan-500 to-teal-400 text-white shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)]'
-                      : 'text-muted-foreground hover:text-foreground',
-                  )}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
         </div>
 
         {/* Nav links */}
@@ -1396,9 +1342,6 @@ export function Header() {
           </div>
           <ThemeToggle />
           <LanguageSwitcher />
-          <div className="hidden lg:block">
-            <RoleSwitcher />
-          </div>
           <UserMenu />
         </div>
       </div>

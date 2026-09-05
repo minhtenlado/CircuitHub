@@ -30,6 +30,7 @@ export type AppView =
   | 'admin-audit-logs'
   | 'login'
   | 'register'
+  | 'admin-login'
   | 'about'
   | 'seller-onboarding';
 
