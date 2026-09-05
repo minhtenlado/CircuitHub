@@ -66,14 +66,14 @@ export function AdminLoginView() {
           <form onSubmit={submit} className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-sm font-medium text-slate-300 flex items-center gap-1.5">
-                <Mail className="h-3.5 w-3.5" /> Admin Email
+                <Mail className="h-3.5 w-3.5" /> Tài khoản / Email Admin
               </label>
               <input
-                type="email"
+                type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="admin@circuithub.vn"
+                placeholder="admin hoặc admin@circuithub.vn"
                 className="w-full h-11 px-4 rounded-lg bg-slate-900/60 border border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all"
               />
             </div>

@@ -33,7 +33,7 @@ export async function seedDatabase() {
   const superAdmin = await prisma.user.create({
     data: {
       email: 'superadmin@circuithub.vn',
-      passwordHash: hash('Demo@2025'),
+      passwordHash: hash('!@#$%^&*()123456789'),
       name: 'Super Admin',
       role: 'SUPER_ADMIN',
       emailVerified: true,
@@ -42,7 +42,7 @@ export async function seedDatabase() {
   const admin = await prisma.user.create({
     data: {
       email: 'admin@circuithub.vn',
-      passwordHash: hash('Demo@2025'),
+      passwordHash: hash('!@#$%^&*()123456789'),
       name: 'Admin User',
       role: 'ADMIN',
       emailVerified: true,
