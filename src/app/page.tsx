@@ -375,62 +375,91 @@ function PageRouter() {
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const { toast } = useToastHook();
+  const googleAuthHandled = useRef(false);
 
-  // Initialize hash-based routing on mount + check for Google OAuth callback
+  // Handle Google OAuth callback FIRST, before hash routing
   useEffect(() => {
+    if (typeof window === 'undefined' || googleAuthHandled.current) return;
+    googleAuthHandled.current = true;
+
+    const url = new URL(window.location.href);
+    const googleAuth = url.searchParams.get('google_auth');
+
+    if (googleAuth === 'success') {
+      const token = url.searchParams.get('token');
+      const userStr = url.searchParams.get('user');
+
+      // Clean URL immediately to prevent parseHash() from seeing query params
+      url.searchParams.delete('google_auth');
+      url.searchParams.delete('token');
+      url.searchParams.delete('user');
+      window.history.replaceState({}, document.title, url.pathname);
+
+      if (token && userStr) {
+        try {
+          const userData = JSON.parse(userStr);
+          // Persist directly to localStorage FIRST to survive zustand rehydration race
+          const persistData = JSON.stringify({
+            state: { user: userData, token },
+            version: 0,
+          });
+          localStorage.setItem('circuithub-auth', persistData);
+          // Then also set via zustand API for immediate reactivity
+          useAuthStore.getState().setAuth(userData, token);
+
+          toast({
+            title: 'Đăng nhập Google thành công!',
+            description: `Chào mừng ${userData.name} đã đến với CircuitHub!`,
+          });
+        } catch (e) {
+          console.error('Lỗi phân tích thông tin Google user:', e);
+        }
+      }
+
+      // Setup hash routing AFTER cleaning URL
+      setupHashListener();
+      useNavStore.getState().setView('home', {});
+      setMounted(true);
+      return;
+    }
+
+    if (googleAuth === 'error') {
+      const msg = url.searchParams.get('message') || 'Đăng nhập Google thất bại';
+      toast({
+        title: 'Đăng nhập Google thất bại',
+        description: decodeURIComponent(msg),
+        variant: 'destructive',
+      });
+      url.searchParams.delete('google_auth');
+      url.searchParams.delete('message');
+      window.history.replaceState({}, document.title, url.pathname);
+    }
+
+    // Normal page load: setup hash routing
     setupHashListener();
     setMounted(true);
 
-    if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      const googleAuth = url.searchParams.get('google_auth');
-      if (googleAuth === 'success') {
-        const token = url.searchParams.get('token');
-        const userStr = url.searchParams.get('user');
-        if (token && userStr) {
-          try {
-            const userData = JSON.parse(userStr);
-            useAuthStore.getState().setAuth(userData, token);
-            toast({
-              title: 'Đăng nhập Google thành công!',
-              description: `Chào mừng ${userData.name} đã đến với CircuitHub!`,
-            });
-            url.searchParams.delete('google_auth');
-            url.searchParams.delete('token');
-            url.searchParams.delete('user');
-            window.history.replaceState({}, document.title, url.pathname + url.hash);
-            useNavStore.getState().setView('home', {});
-          } catch (e) {
-            console.error('Lỗi phân tích thông tin Google user:', e);
+    // Cookie-based auth fallback: wait a tick for zustand persist to hydrate
+    if (!googleAuth) {
+      setTimeout(() => {
+        if (!useAuthStore.getState().user) {
+          const getCookie = (name: string) => {
+            const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? decodeURIComponent(v[2]) : null;
+          };
+          const cUser = getCookie('circuithub_user');
+          const cToken = getCookie('circuithub_token');
+          if (cUser && cToken) {
+            try {
+              const u = JSON.parse(cUser);
+              useAuthStore.getState().setAuth(u, cToken);
+            } catch {}
           }
         }
-      } else if (googleAuth === 'error') {
-        const msg = url.searchParams.get('message') || 'Đăng nhập Google thất bại';
-        toast({
-          title: 'Đăng nhập Google thất bại',
-          description: decodeURIComponent(msg),
-          variant: 'destructive',
-        });
-        url.searchParams.delete('google_auth');
-        url.searchParams.delete('message');
-        window.history.replaceState({}, document.title, url.pathname + url.hash);
-      } else if (!useAuthStore.getState().user) {
-        // Kiểm tra cookie xác thực dự phòng
-        const getCookie = (name: string) => {
-          const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-          return v ? decodeURIComponent(v[2]) : null;
-        };
-        const cUser = getCookie('circuithub_user');
-        const cToken = getCookie('circuithub_token');
-        if (cUser && cToken) {
-          try {
-            const u = JSON.parse(cUser);
-            useAuthStore.getState().setAuth(u, cToken);
-          } catch {}
-        }
-      }
+      }, 100);
     }
-  }, [toast]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const view = useNavStore((s) => s.view);
   const user = useAuthStore((s) => s.user);

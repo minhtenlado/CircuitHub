@@ -75,10 +75,13 @@ function parseHash(): { view: AppView; params: Record<string, string> } {
 
   // 2. Check query string (e.g. ?_vercel_share=.../admin or ?admin or ?view=admin)
   const search = window.location.search;
-  if (search.includes('/admin') || search.includes('view=admin') || search.includes('?admin') || search.includes('&admin')) {
+  const sp = new URLSearchParams(search);
+  const viewParam = sp.get('view');
+  const vercelShare = sp.get('_vercel_share') || '';
+  if (viewParam === 'admin' || sp.has('admin') || vercelShare.includes('/admin')) {
     return { view: 'admin', params: {} };
   }
-  if (search.includes('/seller') || search.includes('view=seller')) {
+  if (viewParam === 'seller' || sp.has('seller') || vercelShare.includes('/seller')) {
     return { view: 'seller', params: {} };
   }
 
@@ -140,10 +143,13 @@ export const useNavStore = create<NavState>((set, get) => ({
 
 /** Setup hash-change listener for browser back/forward navigation.
  *  Call this once in the root layout (client-side). */
+let hashListenerSetup = false;
 export function setupHashListener() {
   if (typeof window === 'undefined') return;
   // Restore on initial load
   useNavStore.getState().restoreFromHash();
+  if (hashListenerSetup) return;
+  hashListenerSetup = true;
   // Listen for back/forward
   window.addEventListener('popstate', () => {
     useNavStore.getState().restoreFromHash();
