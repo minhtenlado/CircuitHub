@@ -153,7 +153,7 @@ export function Hero() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50/80 px-3.5 py-1.5 text-xs font-semibold tracking-wider text-cyan-700 backdrop-blur"
+              className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50/80 px-3.5 py-1.5 text-xs font-semibold tracking-wider text-cyan-700 backdrop-blur dark:border-cyan-800/50 dark:bg-cyan-950/40 dark:text-cyan-400"
             >
               <Sparkles className="h-3.5 w-3.5" />
               {t('hero.tagline')}
@@ -184,7 +184,7 @@ export function Hero() {
                 onClick={() => goAuth('register')}
                 size="lg"
                 variant="outline"
-                className="border-cyan-300 text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800"
+                className="border-cyan-300 text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800 dark:border-cyan-700/50 dark:text-cyan-400 dark:hover:bg-cyan-950/40 dark:hover:text-cyan-300"
               >
                 {t('hero.becomeSeller')}
               </Button>
@@ -263,7 +263,7 @@ function SpecCard({
         },
       }}
       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-      className="relative z-10 rounded-2xl bg-white/95 hairline shadow-sm backdrop-blur-sm transition-shadow duration-200 hover:shadow-[0_14px_40px_-16px_rgba(6,182,212,0.35)]"
+      className="relative z-10 rounded-2xl bg-white/95 dark:bg-slate-900/90 hairline shadow-sm backdrop-blur-sm transition-shadow duration-200 hover:shadow-[0_14px_40px_-16px_rgba(6,182,212,0.35)]"
     >
       <div className="p-4">
         {/* Header row */}
@@ -290,7 +290,7 @@ function SpecCard({
           {card.rows.map((r) => (
             <div
               key={r.label}
-              className="flex items-center justify-between text-[11px] font-mono technical-data text-slate-700"
+              className="flex items-center justify-between text-[11px] font-mono technical-data text-slate-700 dark:text-slate-300"
             >
               <span className="text-muted-foreground">{r.label}</span>
               <span className="font-semibold text-foreground tabular-nums">

@@ -68,7 +68,7 @@ function ProductCarousel({
                   type="button"
                   onClick={() => scrollByCards(-1)}
                   aria-label="Scroll left"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white text-muted-foreground hover:text-cyan-600 hover:border-cyan-300 transition-colors"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white dark:bg-slate-900 text-muted-foreground hover:text-cyan-600 hover:border-cyan-300 transition-colors"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -76,7 +76,7 @@ function ProductCarousel({
                   type="button"
                   onClick={() => scrollByCards(1)}
                   aria-label="Scroll right"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white text-muted-foreground hover:text-cyan-600 hover:border-cyan-300 transition-colors"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white dark:bg-slate-900 text-muted-foreground hover:text-cyan-600 hover:border-cyan-300 transition-colors"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>

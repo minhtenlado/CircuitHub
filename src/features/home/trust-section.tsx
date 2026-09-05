@@ -111,7 +111,7 @@ export function TrustSection() {
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
-                className="group relative flex flex-col gap-4 rounded-2xl border border-border/70 bg-white p-6 transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.35)]"
+                className="group relative flex flex-col gap-4 rounded-2xl border border-border/70 bg-white dark:bg-slate-900 p-6 transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.35)]"
               >
                 {/* Icon */}
                 <div

@@ -84,7 +84,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.06, 0.4) }}
       whileHover={{ y: -4 }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-white shadow-sm transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.45)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-white dark:bg-slate-900 shadow-sm transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.45)]"
     >
       {/* Banner */}
       <div className="relative h-24 w-full overflow-hidden bg-gradient-to-br from-cyan-100 via-cyan-50 to-teal-50">
@@ -102,13 +102,13 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
         )}
         {/* Verified badge (top-right) */}
         {shop.verified && (
-          <span className="absolute top-2 right-2 inline-flex items-center gap-1 rounded-full bg-white/90 backdrop-blur px-2 py-0.5 text-[10px] font-semibold text-emerald-700 border border-emerald-200">
+          <span className="absolute top-2 right-2 inline-flex items-center gap-1 rounded-full bg-white dark:bg-slate-900/90 backdrop-blur px-2 py-0.5 text-[10px] font-semibold text-emerald-700 border border-emerald-200">
             <CheckCircle2 className="h-3 w-3" />
             Verified
           </span>
         )}
         {/* Logo (overlap bottom-left) */}
-        <div className="absolute -bottom-5 left-4 h-12 w-12 rounded-xl bg-white border border-border shadow-md overflow-hidden flex items-center justify-center">
+        <div className="absolute -bottom-5 left-4 h-12 w-12 rounded-xl bg-white dark:bg-slate-900 border border-border shadow-md overflow-hidden flex items-center justify-center">
           {shop.logoUrl ? (
             <img
               src={shop.logoUrl}
@@ -220,7 +220,7 @@ function Stat({
    ---------------------------------------------------------------- */
 function ShopCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border/70 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-border/70 bg-white dark:bg-slate-900">
       <div className="h-24 w-full bg-muted shimmer" />
       <div className="p-4 pt-7 space-y-3">
         <div className="h-4 w-3/4 bg-muted rounded shimmer" />

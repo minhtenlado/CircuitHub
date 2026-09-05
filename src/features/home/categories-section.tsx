@@ -95,7 +95,7 @@ export function CategoriesSection() {
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.35, delay: Math.min(i * 0.04, 0.4) }}
                 whileHover={{ y: -4 }}
-                className="group relative flex flex-col items-start gap-3 rounded-2xl border border-border/70 bg-white p-4 sm:p-5 text-left transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_14px_40px_-16px_rgba(6,182,212,0.4)]"
+                className="group relative flex flex-col items-start gap-3 rounded-2xl border border-border/70 bg-white dark:bg-slate-900 dark:bg-slate-900 p-4 sm:p-5 text-left transition-all duration-300 hover:border-cyan-300 dark:hover:border-cyan-600 hover:shadow-[0_14px_40px_-16px_rgba(6,182,212,0.4)]"
               >
                 {/* Icon tile */}
                 <div
@@ -115,7 +115,7 @@ export function CategoriesSection() {
                 </div>
 
                 {/* Hover arrow */}
-                <span className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                <span className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 dark:bg-cyan-950/50 dark:text-cyan-400 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
                   <ArrowUpRight className="h-4 w-4" />
                 </span>
               </motion.button>
