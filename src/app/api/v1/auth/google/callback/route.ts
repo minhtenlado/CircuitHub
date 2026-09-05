@@ -121,7 +121,23 @@ export async function GET(req: NextRequest) {
     redirectTarget.searchParams.set('token', secureToken);
     redirectTarget.searchParams.set('user', JSON.stringify(userPayload));
 
-    return NextResponse.redirect(redirectTarget.toString());
+    const response = NextResponse.redirect(redirectTarget.toString());
+    response.cookies.set('circuithub_token', secureToken, {
+      httpOnly: false,
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    response.cookies.set('circuithub_user', JSON.stringify(userPayload), {
+      httpOnly: false,
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+    });
+
+    return response;
   } catch (err: any) {
     console.error('Google Callback Error:', err);
     return NextResponse.redirect(

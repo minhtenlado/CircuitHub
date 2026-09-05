@@ -414,6 +414,20 @@ export default function Home() {
         url.searchParams.delete('google_auth');
         url.searchParams.delete('message');
         window.history.replaceState({}, document.title, url.pathname + url.hash);
+      } else if (!useAuthStore.getState().user) {
+        // Kiểm tra cookie xác thực dự phòng
+        const getCookie = (name: string) => {
+          const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+          return v ? decodeURIComponent(v[2]) : null;
+        };
+        const cUser = getCookie('circuithub_user');
+        const cToken = getCookie('circuithub_token');
+        if (cUser && cToken) {
+          try {
+            const u = JSON.parse(cUser);
+            useAuthStore.getState().setAuth(u, cToken);
+          } catch {}
+        }
       }
     }
   }, [toast]);

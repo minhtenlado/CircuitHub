@@ -955,9 +955,22 @@ function UserMenu() {
     toast({ title: t('common.logout'), description: '' });
   };
 
-  const trigger = user ? (
+  if (!user) {
+    return (
+      <Button
+        size="sm"
+        className="bg-gradient-to-r from-cyan-500 to-teal-400 text-white shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)] hover:from-cyan-600 hover:to-teal-500 cursor-pointer"
+        onClick={() => goAuth('login')}
+      >
+        <User className="h-4 w-4" />
+        {t('auth.signIn')}
+      </Button>
+    );
+  }
+
+  const trigger = (
     <button
-      className="flex items-center gap-1.5 rounded-full border border-border/70 bg-background/60 py-1 pl-1 pr-2 shadow-xs transition-colors hover:border-primary/40 hover:bg-accent"
+      className="flex items-center gap-1.5 rounded-full border border-border/70 bg-background/60 py-1 pl-1 pr-2 shadow-xs transition-colors hover:border-primary/40 hover:bg-accent cursor-pointer"
       aria-label={t('common.account')}
     >
       <Avatar className="h-7 w-7 ring-1 ring-primary/30">
@@ -968,73 +981,49 @@ function UserMenu() {
       </Avatar>
       <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
     </button>
-  ) : (
-    <Button
-      size="sm"
-      className="bg-gradient-to-r from-cyan-500 to-teal-400 text-white shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)] hover:from-cyan-600 hover:to-teal-500"
-      onClick={() => goAuth('login')}
-    >
-      <User className="h-4 w-4" />
-      {t('auth.signIn')}
-    </Button>
   );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
-        {user ? (
+        <DropdownMenuLabel className="flex flex-col gap-0.5">
+          <span className="text-sm font-semibold">{user.name}</span>
+          <span className="text-xs font-normal text-muted-foreground">{user.email}</span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
+          <User className="h-4 w-4" /> {t('common.profile')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => goBuyer('buyer-orders')}>
+          <Package className="h-4 w-4" /> {t('common.myOrders')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => goBuyer('buyer-downloads')}>
+          <Download className="h-4 w-4" /> {t('common.downloads')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
+          <Settings className="h-4 w-4" /> {t('common.settings')}
+        </DropdownMenuItem>
+        {user.shopSlug && (
           <>
-            <DropdownMenuLabel className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold">{user.name}</span>
-              <span className="text-xs font-normal text-muted-foreground">{user.email}</span>
-            </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
-              <User className="h-4 w-4" /> {t('common.profile')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => goBuyer('buyer-orders')}>
-              <Package className="h-4 w-4" /> {t('common.myOrders')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => goBuyer('buyer-downloads')}>
-              <Download className="h-4 w-4" /> {t('common.downloads')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
-              <Settings className="h-4 w-4" /> {t('common.settings')}
-            </DropdownMenuItem>
-            {user.shopSlug && (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => goShop(user.shopSlug!)}>
-                  <Store className="h-4 w-4" /> {t('common.myShop')}
-                </DropdownMenuItem>
-              </>
-            )}
-            {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => goAdmin()} className="text-cyan-600 font-medium">
-                  <Shield className="h-4 w-4" /> Cổng Quản trị (Admin)
-                </DropdownMenuItem>
-              </>
-            ) : null}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" onClick={handleLogout}>
-              <LogOut className="h-4 w-4" /> {t('common.logout')}
-            </DropdownMenuItem>
-          </>
-        ) : (
-          <>
-            <DropdownMenuLabel>{t('common.guest')}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => goAuth('login')}>
-              <User className="h-4 w-4" /> {t('auth.signIn')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => goAuth('register')}>
-              <UserPlus className="h-4 w-4" /> {t('auth.createAccount')}
+            <DropdownMenuItem onClick={() => goShop(user.shopSlug!)}>
+              <Store className="h-4 w-4" /> {t('common.myShop')}
             </DropdownMenuItem>
           </>
         )}
+        {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => goAdmin()} className="text-cyan-600 font-medium">
+              <Shield className="h-4 w-4" /> Cổng Quản trị (Admin)
+            </DropdownMenuItem>
+          </>
+        ) : null}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+          <LogOut className="h-4 w-4" /> {t('common.logout')}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
