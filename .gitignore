@@ -24,31 +24,45 @@ node_modules
 .DS_Store
 *.pem
 
-# debug
+# debug & logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
+dev.log
+dev.out.log
+server.log
+test
+prompt
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+.env.*
+.env.local
+.env*.local
+!.env.example
 
 # vercel
 .vercel
 
+# database & binaries
+db/*.db
+db/*.db-journal
+*.sqlite
+*.sqlite3
+
+# development artifacts & temporary files
+tool-results/
+.zscripts/*.pid
+*.pid
+local-*
+.claude
+.z-ai-config
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-local-*
-.claude
-.z-ai-config
-*.log
-dev.log
-dev.out.log
-test
-prompt
 
-server.log
 # Skills directory
 /skills/
