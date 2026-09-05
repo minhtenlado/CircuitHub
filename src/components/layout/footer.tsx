@@ -8,6 +8,7 @@ import { Logo } from '@/components/logo';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/lib/i18n';
 import {
   Github,
   Twitter,
@@ -30,12 +31,13 @@ import { motion } from 'framer-motion';
 
 type FooterLinkItem = { readonly label: string; readonly view: string; readonly params?: Readonly<Record<string, string>> };
 
-const TRUST_ITEMS = [
-  { icon: Lock, title: 'Secure payments', subtitle: '256-bit SSL checkout' },
-  { icon: ShieldCheck, title: 'Verified sellers', subtitle: 'Vetted engineering vendors' },
-  { icon: Cpu, title: 'Engineering-grade quality', subtitle: 'Spec-sheet verified' },
-  { icon: RefreshCw, title: '30-day returns', subtitle: 'Hassle-free refunds' },
-] as const;
+/** Maps a footerLinks group key (English heading) to an i18n key. */
+const FOOTER_GROUP_KEYS: Record<string, string> = {
+  Marketplace: 'footer.marketplace',
+  'For Sellers': 'footer.forSellers',
+  Company: 'footer.company',
+  Legal: 'footer.legal',
+};
 
 const SOCIALS = [
   { key: 'github', icon: Github, href: brand.socials.github, label: 'CircuitHub on GitHub' },
@@ -68,8 +70,16 @@ function FooterBadge({
 export function Footer() {
   const { toast } = useToast();
   const setView = useNavStore((s) => s.setView);
+  const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const TRUST_ITEMS = [
+    { icon: Lock, title: t('footer.securePayments'), subtitle: t('footer.securePaymentsSub') },
+    { icon: ShieldCheck, title: t('footer.verifiedSellers'), subtitle: t('footer.verifiedSellersSub') },
+    { icon: Cpu, title: t('footer.engineeringQuality'), subtitle: t('footer.engineeringQualitySub') },
+    { icon: RefreshCw, title: t('footer.returns'), subtitle: t('footer.returnsSub') },
+  ];
 
   const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -180,7 +190,7 @@ export function Footer() {
                   htmlFor="footer-newsletter"
                   className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
-                  Stay in the loop
+                  {t('footer.newsletter')}
                 </label>
                 <div className="mt-2 flex gap-2">
                   <Input
@@ -199,53 +209,57 @@ export function Footer() {
                     disabled={submitting}
                     className="shrink-0 bg-gradient-to-r from-cyan-500 to-teal-400 text-white shadow-[0_4px_18px_-6px_rgba(6,182,212,0.5)] transition-all hover:from-cyan-600 hover:to-teal-500 hover:shadow-[0_6px_22px_-8px_rgba(6,182,212,0.55)]"
                   >
-                    <span className="hidden sm:inline">Subscribe</span>
+                    <span className="hidden sm:inline">{t('footer.subscribe')}</span>
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </div>
                 <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground/80">
-                  Engineering updates, new PCB drops, and seller tips. No spam — unsubscribe anytime.
+                  {t('footer.newsletterDesc')}
                 </p>
               </form>
             </div>
 
             {/* Columns 2–5 — Link groups from footerLinks */}
-            {Object.entries(footerLinks).map(([group, links]) => (
-              <div key={group}>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700">
-                  {group}
-                </h3>
-                <ul className="mt-4 space-y-2.5">
-                  {links.map((link) => {
-                    const item = link as FooterLinkItem;
-                    return (
-                      <li key={item.label}>
-                        <button
-                          type="button"
-                          onClick={() => handleNav(item)}
-                          className="group inline-flex items-center gap-1 text-left text-sm text-muted-foreground transition-colors hover:text-cyan-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 rounded"
-                        >
-                          <span className="transition-transform group-hover:translate-x-0.5">
-                            {item.label}
-                          </span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
+            {Object.entries(footerLinks).map(([group, links]) => {
+              const headingKey = FOOTER_GROUP_KEYS[group] ?? '';
+              const heading = headingKey ? t(headingKey) : group;
+              return (
+                <div key={group}>
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700">
+                    {heading}
+                  </h3>
+                  <ul className="mt-4 space-y-2.5">
+                    {links.map((link) => {
+                      const item = link as FooterLinkItem;
+                      return (
+                        <li key={item.label}>
+                          <button
+                            type="button"
+                            onClick={() => handleNav(item)}
+                            className="group inline-flex items-center gap-1 text-left text-sm text-muted-foreground transition-colors hover:text-cyan-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 rounded"
+                          >
+                            <span className="transition-transform group-hover:translate-x-0.5">
+                              {item.label}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
 
           {/* ---------- Bottom bar ---------- */}
           <div className="mt-12 flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-muted-foreground">
-              © 2025 {brand.name}. All rights reserved.
+              © 2025 {brand.name}. {t('footer.rights')}
             </p>
             <div className="flex flex-wrap items-center gap-2">
               <FooterBadge label={`VND ${brand.currencySymbol}`} />
               <FooterBadge label={brand.timezone} />
-              <FooterBadge label="Made in Vietnam" highlight />
+              <FooterBadge label={t('footer.madeIn')} highlight />
             </div>
           </div>
         </div>

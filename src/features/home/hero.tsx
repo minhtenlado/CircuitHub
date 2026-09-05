@@ -4,7 +4,7 @@
    CircuitHub — Hero section
    - Full-width with subtle PCB grid background
    - Left: tagline pill, gradient headline, CTAs, stats row
-   - Right: floating engineering spec cards (Framer Motion)
+   - Right: 2×2 grid of engineering spec cards (Framer Motion)
    ============================================================ */
 
 import { motion } from 'framer-motion';
@@ -15,22 +15,21 @@ import {
   Cpu,
   Wifi,
   Layers,
-  CircuitBoard,
   Radar,
   Wrench,
   Store,
   Boxes,
-  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavStore } from '@/stores/nav-store';
+import { useI18n } from '@/lib/i18n';
 
 /* Floating specification cards — engineering catalog imagery */
 const SPEC_CARDS = [
   {
     id: 'esp32',
     name: 'ESP32-WROOM-32',
-    tag: 'Dev Board',
+    tagKey: 'hero.specCard.devBoard',
     icon: Wifi,
     rows: [
       { label: 'Flash', value: '4 MB' },
@@ -38,27 +37,25 @@ const SPEC_CARDS = [
       { label: 'Radio', value: 'WiFi+BLE' },
     ],
     accent: 'from-cyan-500 to-cyan-400',
-    rotation: -4,
     delay: 0,
   },
   {
     id: 'kicad',
     name: 'KiCad 9 Project',
-    tag: 'Digital Design',
+    tagKey: 'hero.specCard.digitalDesign',
     icon: Layers,
     rows: [
       { label: 'Layers', value: '4-layer' },
       { label: 'Finish', value: 'ENIG' },
       { label: 'Version', value: 'v2.1.0' },
     ],
-    accent: 'from-teal-500 to-aqua-400',
-    rotation: 3,
+    accent: 'from-teal-500 to-cyan-400',
     delay: 0.4,
   },
   {
     id: 'bme280',
     name: 'BME280 Sensor',
-    tag: 'Component',
+    tagKey: 'hero.specCard.component',
     icon: Radar,
     rows: [
       { label: 'Accuracy', value: '±1 °C' },
@@ -66,13 +63,12 @@ const SPEC_CARDS = [
       { label: 'Package', value: 'LGA-8' },
     ],
     accent: 'from-sky-500 to-cyan-400',
-    rotation: -2,
     delay: 0.8,
   },
   {
     id: 'pcb-service',
     name: 'PCB Design Service',
-    tag: 'Engineering',
+    tagKey: 'hero.specCard.engineering',
     icon: Wrench,
     rows: [
       { label: 'Lead time', value: '14 days' },
@@ -80,20 +76,25 @@ const SPEC_CARDS = [
       { label: 'Quote', value: 'On request' },
     ],
     accent: 'from-cyan-500 to-teal-400',
-    rotation: 4,
     delay: 1.2,
   },
 ] as const;
 
-const STATS = [
-  { label: 'Products', value: 2800, suffix: '+', format: 'K', icon: Boxes },
-  { label: 'Verified Sellers', value: 850, suffix: '+', format: '', icon: Store },
-  { label: 'Engineers', value: 120000, suffix: '+', format: 'K', icon: Cpu },
-];
-
 /** Animated stat counter that counts up when scrolled into view. */
-function StatCounter({ stat, delay }: { stat: typeof STATS[number]; delay: number }) {
-  const { ref, display } = useCountUp(stat.value, 1500);
+function StatCounter({
+  value,
+  suffix,
+  icon: Icon,
+  label,
+  delay,
+}: {
+  value: number;
+  suffix: string;
+  icon: typeof Cpu;
+  label: string;
+  delay: number;
+}) {
+  const { ref, display } = useCountUp(value, 1500);
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -102,11 +103,11 @@ function StatCounter({ stat, delay }: { stat: typeof STATS[number]; delay: numbe
       className="flex flex-col"
     >
       <span ref={ref} className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground tabular-nums">
-        {display}{stat.suffix}
+        {display}{suffix}
       </span>
       <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-        <stat.icon className="h-3.5 w-3.5 text-cyan-500" />
-        {stat.label}
+        <Icon className="h-3.5 w-3.5 text-cyan-500" />
+        {label}
       </span>
     </motion.div>
   );
@@ -115,6 +116,13 @@ function StatCounter({ stat, delay }: { stat: typeof STATS[number]; delay: numbe
 export function Hero() {
   const goProducts = useNavStore((s) => s.goProducts);
   const goAuth = useNavStore((s) => s.goAuth);
+  const { t } = useI18n();
+
+  const stats = [
+    { label: t('hero.stats.products'), value: 2800, suffix: '+', icon: Boxes },
+    { label: t('hero.stats.sellers'), value: 850, suffix: '+', icon: Store },
+    { label: t('hero.stats.engineers'), value: 120000, suffix: '+', icon: Cpu },
+  ];
 
   return (
     <section
@@ -148,20 +156,18 @@ export function Hero() {
               className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50/80 px-3.5 py-1.5 text-xs font-semibold tracking-wider text-cyan-700 backdrop-blur"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              FOR HARDWARE CREATORS
+              {t('hero.tagline')}
             </motion.span>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-foreground">
-              Buy electronics.{' '}
-              <span className="text-gradient-cyan">Build anything.</span>
+              {t('hero.title1')}{' '}
+              <span className="text-gradient-cyan">{t('hero.title2')}</span>
             </h1>
 
             {/* Subtitle */}
             <p className="max-w-xl text-base sm:text-lg leading-relaxed text-muted-foreground">
-              The modern electronics marketplace for PCB boards, dev boards,
-              components, sensors, modules, and tools — plus free open source
-              KiCad projects, Gerber files, and firmware for the community.
+              {t('hero.subtitle')}
             </p>
 
             {/* CTAs */}
@@ -171,7 +177,7 @@ export function Hero() {
                 size="lg"
                 className="bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white shadow-[0_10px_32px_-10px_rgba(6,182,212,0.65)]"
               >
-                Explore Marketplace
+                {t('hero.explore')}
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <Button
@@ -180,25 +186,32 @@ export function Hero() {
                 variant="outline"
                 className="border-cyan-300 text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800"
               >
-                Become a Seller
+                {t('hero.becomeSeller')}
               </Button>
             </div>
 
             {/* Stat row */}
             <div className="mt-2 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg">
-              {STATS.map((s, i) => (
-                <StatCounter key={s.label} stat={s} delay={0.3 + i * 0.08} />
+              {stats.map((s, i) => (
+                <StatCounter
+                  key={s.label}
+                  value={s.value}
+                  suffix={s.suffix}
+                  icon={s.icon}
+                  label={s.label}
+                  delay={0.3 + i * 0.08}
+                />
               ))}
             </div>
           </motion.div>
 
-          {/* ---------- Right column: floating spec cards ---------- */}
-          <div className="lg:col-span-6 relative min-h-[420px] sm:min-h-[480px]">
+          {/* ---------- Right column: 2×2 grid of spec cards ---------- */}
+          <div className="lg:col-span-6 relative">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative h-full w-full"
+              className="relative"
             >
               {/* Glow behind cards */}
               <div
@@ -206,51 +219,12 @@ export function Hero() {
                 className="absolute inset-0 m-auto h-[280px] w-[280px] rounded-full bg-cyan-400/15 blur-[100px]"
               />
 
-              {/* Card 1: ESP32 (top-left) */}
-              <FloatingCard
-                card={SPEC_CARDS[0]}
-                className="top-2 left-0 sm:left-4 lg:left-0 w-[280px] sm:w-[300px]"
-              />
-
-              {/* Card 2: KiCad (top-right, slight overlap) */}
-              <FloatingCard
-                card={SPEC_CARDS[1]}
-                className="top-12 right-0 sm:right-2 lg:right-0 w-[260px] sm:w-[290px]"
-              />
-
-              {/* Card 3: BME280 (bottom-left) */}
-              <FloatingCard
-                card={SPEC_CARDS[2]}
-                className="bottom-6 left-4 sm:left-12 w-[260px] sm:w-[280px]"
-              />
-
-              {/* Card 4: PCB Service (bottom-right) */}
-              <FloatingCard
-                card={SPEC_CARDS[3]}
-                className="bottom-0 right-4 sm:right-10 w-[270px] sm:w-[290px]"
-              />
-
-              {/* Center chip ornament */}
-              <motion.div
-                aria-hidden
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden sm:flex h-16 w-16 rounded-2xl bg-gradient-to-br from-cyan-500 via-cyan-400 to-teal-400 items-center justify-center shadow-[0_10px_30px_-8px_rgba(6,182,212,0.7)] glow-cyan"
-              >
-                <CircuitBoard className="h-8 w-8 text-white" />
-              </motion.div>
-
-              {/* Small trust chip bottom-center */}
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.9 }}
-                className="absolute -bottom-1 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50/90 px-3 py-1 text-[11px] font-semibold text-emerald-700 backdrop-blur"
-              >
-                <ShieldCheck className="h-3.5 w-3.5" />
-                Spec-sheet verified · Secure download
-              </motion.div>
+              {/* 2×2 grid of spec cards (single column on mobile, 2 cols sm+) */}
+              <div className="relative grid grid-cols-2 gap-3 sm:gap-4">
+                {SPEC_CARDS.map((card, i) => (
+                  <SpecCard key={card.id} card={card} index={i} />
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
@@ -260,24 +234,24 @@ export function Hero() {
 }
 
 /* ----------------------------------------------------------------
-   FloatingCard — a single "engineering specification" card with
-   subtle Y oscillation and slight rotation, infinite loop.
+   SpecCard — a single engineering specification card with subtle
+   Y oscillation (4px amplitude) and a gentle hover lift. No rotation.
    ---------------------------------------------------------------- */
-function FloatingCard({
+function SpecCard({
   card,
-  className,
+  index,
 }: {
   card: (typeof SPEC_CARDS)[number];
-  className?: string;
+  index: number;
 }) {
   const Icon = card.icon;
+  const { t } = useI18n();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12, rotate: card.rotation }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{
         opacity: 1,
-        y: [0, -8, 0],
-        rotate: card.rotation,
+        y: [0, -4, 0],
       }}
       transition={{
         opacity: { duration: 0.4, delay: card.delay },
@@ -287,10 +261,9 @@ function FloatingCard({
           ease: 'easeInOut',
           delay: card.delay,
         },
-        rotate: { duration: 0.4, delay: card.delay },
       }}
-      whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
-      className={`absolute z-10 rounded-2xl bg-white/95 hairline shadow-[0_14px_40px_-16px_rgba(6,182,212,0.35)] backdrop-blur-sm ${className ?? ''}`}
+      whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+      className="relative z-10 rounded-2xl bg-white/95 hairline shadow-sm backdrop-blur-sm transition-shadow duration-200 hover:shadow-[0_14px_40px_-16px_rgba(6,182,212,0.35)]"
     >
       <div className="p-4">
         {/* Header row */}
@@ -306,13 +279,10 @@ function FloatingCard({
                 {card.name}
               </div>
               <div className="text-[10px] uppercase tracking-wider text-cyan-600 font-medium">
-                {card.tag}
+                {t(card.tagKey)}
               </div>
             </div>
           </div>
-          <span className="text-[10px] font-mono text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">
-            ● live
-          </span>
         </div>
 
         {/* Spec rows */}

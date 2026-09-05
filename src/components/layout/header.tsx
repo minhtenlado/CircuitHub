@@ -57,12 +57,15 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
+  Globe,
+  Check,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { initials, timeAgo } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { useI18n, LANGS, type Lang } from '@/lib/i18n';
 
 /* ============================================================
    CircuitHub Header
@@ -85,30 +88,31 @@ function NavPills({ onNavigate }: { onNavigate?: () => void }) {
   const goHome = useNavStore((s) => s.goHome);
   const goProducts = useNavStore((s) => s.goProducts);
   const goCategory = useNavStore((s) => s.goCategory);
+  const { t } = useI18n();
 
   const links: NavLinkDef[] = [
-    { label: 'Marketplace', icon: <Cpu className="h-3.5 w-3.5" />, active: (v) => v === 'home', go: goHome },
-    { label: 'Products', icon: <Package className="h-3.5 w-3.5" />, active: (v) => v === 'products', go: goProducts },
+    { label: t('nav.marketplace'), icon: <Cpu className="h-3.5 w-3.5" />, active: (v) => v === 'home', go: goHome },
+    { label: t('nav.products'), icon: <Package className="h-3.5 w-3.5" />, active: (v) => v === 'products', go: goProducts },
     {
-      label: 'PCB Boards',
+      label: t('nav.pcbBoards'),
       icon: <Cpu className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'category' && p.slug === 'pcb-boards',
       go: () => goCategory('pcb-boards'),
     },
     {
-      label: 'Open Source',
+      label: t('nav.openSource'),
       icon: <Cpu className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'category' && p.slug === 'open-source',
       go: () => goCategory('open-source'),
     },
     {
-      label: 'Services',
+      label: t('nav.services'),
       icon: <Zap className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'category' && p.slug === 'services',
       go: () => goCategory('services'),
     },
     {
-      label: 'BOM Tool',
+      label: t('nav.bomTool'),
       icon: <FileSpreadsheet className="h-3.5 w-3.5" />,
       active: (v) => v === 'bom',
       go: () => useNavStore.getState().setView('bom', {}),
@@ -184,6 +188,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
   const goCategory = useNavStore((s) => s.goCategory);
   const goShop = useNavStore((s) => s.goShop);
   const searchHistory = useSearchHistoryStore();
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
   const [results, setResults] = useState<SearchResult | null>(null);
@@ -293,7 +298,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
           }}
           onFocus={() => setFocused(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Search by product, MPN, KiCad project, component, service..."
+          placeholder={t('common.searchPlaceholder')}
           aria-label="Search CircuitHub"
           className={cn(
             'h-10 rounded-full border-border/70 bg-background/70 pl-9 pr-9 text-sm shadow-xs transition-all',
@@ -336,13 +341,13 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                   <div>
                     <div className="flex items-center justify-between px-1 pb-1.5">
                       <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                        Recent searches
+                        {t('common.recentSearches')}
                       </span>
                       <button
                         onClick={() => searchHistory.clear()}
                         className="text-[10px] text-muted-foreground hover:text-rose-500 transition-colors"
                       >
-                        Clear
+                        {t('common.clear')}
                       </button>
                     </div>
                     <div className="space-y-0.5">
@@ -367,7 +372,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 )}
                 <div>
                   <div className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                    Popular searches
+                    {t('common.popularSearches')}
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {POPULAR_SEARCHES.map((s) => (
@@ -387,7 +392,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
             {/* Query too short */}
             {query.trim().length > 0 && query.trim().length < 2 && (
               <div className="p-4 text-center text-sm text-muted-foreground">
-                Keep typing... (min 2 characters)
+                {t('common.keepTyping')}
               </div>
             )}
 
@@ -395,7 +400,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
             {query.trim().length >= 2 && loading && (
               <div className="p-4 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
                 <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-cyan-300 border-t-cyan-600" />
-                Searching...
+                {t('common.searching')}
               </div>
             )}
 
@@ -406,7 +411,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 {results!.products.length > 0 && (
                   <div className="mb-2">
                     <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                      Products ({results!.products.length})
+                      {t('nav.products')} ({results!.products.length})
                     </div>
                     {results!.products.map((p, i) => {
                       const idx = flatItems.findIndex((it) => it.type === 'product' && it.data.id === p.id);
@@ -444,7 +449,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 {results!.categories.length > 0 && (
                   <div className="mb-2">
                     <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                      Categories
+                      {t('common.categories')}
                     </div>
                     {results!.categories.map((c) => {
                       const idx = flatItems.findIndex((it) => it.type === 'category' && it.data.id === c.id);
@@ -462,7 +467,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                             <Package className="h-3.5 w-3.5 text-cyan-600" />
                           </div>
                           <span className="text-sm font-medium flex-1">{c.name}</span>
-                          <span className="text-[10px] text-muted-foreground">Category</span>
+                          <span className="text-[10px] text-muted-foreground">{t('common.categories')}</span>
                         </button>
                       );
                     })}
@@ -473,7 +478,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 {results!.shops.length > 0 && (
                   <div className="mb-2">
                     <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                      Shops
+                      {t('common.shops')}
                     </div>
                     {results!.shops.map((s) => {
                       const idx = flatItems.findIndex((it) => it.type === 'shop' && it.data.id === s.id);
@@ -499,7 +504,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                             </p>
                             <p className="text-xs text-muted-foreground">★ {s.rating.toFixed(1)}</p>
                           </div>
-                          <span className="text-[10px] text-muted-foreground">Shop</span>
+                          <span className="text-[10px] text-muted-foreground">{t('common.shops')}</span>
                         </button>
                       );
                     })}
@@ -510,7 +515,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 {results!.brands.length > 0 && (
                   <div className="mb-1">
                     <div className="px-2 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                      Brands
+                      {t('common.brands')}
                     </div>
                     <div className="flex flex-wrap gap-1.5 px-2 pb-1">
                       {results!.brands.map((b) => {
@@ -541,7 +546,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                   className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50/40 p-2 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-100/50"
                 >
                   <Search className="h-3.5 w-3.5" />
-                  View all results for &quot;{query}&quot;
+                  {t('common.viewAllResults').replace('{query}', query)}
                 </button>
               </div>
             )}
@@ -552,8 +557,8 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
                   <Search className="h-5 w-5 text-muted-foreground" />
                 </div>
-                <p className="text-sm font-medium">No results for &quot;{query}&quot;</p>
-                <p className="text-xs text-muted-foreground mt-1">Try a different keyword or browse categories</p>
+                <p className="text-sm font-medium">{t('common.noResults').replace('{query}', query)}</p>
+                <p className="text-xs text-muted-foreground mt-1">{t('common.noResultsHint')}</p>
               </div>
             )}
           </motion.div>
@@ -589,6 +594,54 @@ function ThemeToggle() {
     >
       {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </Button>
+  );
+}
+
+/* ---------- Language Switcher ---------- */
+function LanguageSwitcher() {
+  const { lang, setLang } = useI18n();
+  const current = LANGS.find((l) => l.code === lang) ?? LANGS[0];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label={current.label}
+          className="gap-1.5 px-2 text-muted-foreground hover:text-foreground hover:bg-accent"
+        >
+          <Globe className="h-4 w-4" />
+          <span className="text-xs font-semibold tabular-nums">{current.short}</span>
+          <ChevronDown className="h-3 w-3 opacity-70" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-44">
+        <DropdownMenuLabel className="text-[11px] uppercase tracking-wider text-muted-foreground">
+          Language
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {LANGS.map((l) => {
+          const isActive = l.code === lang;
+          return (
+            <DropdownMenuItem
+              key={l.code}
+              onClick={() => setLang(l.code as Lang)}
+              className={cn(
+                'flex items-center justify-between gap-2 cursor-pointer',
+                isActive && 'bg-cyan-50/60',
+              )}
+            >
+              <span className="flex items-center gap-2">
+                <span className="text-base leading-none">{l.flag}</span>
+                <span className="text-sm">{l.label}</span>
+              </span>
+              {isActive && <Check className="h-3.5 w-3.5 text-cyan-600" />}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -664,6 +717,7 @@ function NotificationsBell() {
   const goAdmin = useNavStore((s) => s.goAdmin);
   const goProducts = useNavStore((s) => s.goProducts);
   const setView = useNavStore((s) => s.setView);
+  const { t } = useI18n();
   const { data, isLoading } = useNotifications(user?.id ?? 'demo-buyer');
   const [markingRead, setMarkingRead] = useState(false);
   const items: Array<{
@@ -758,7 +812,7 @@ function NotificationsBell() {
         <DropdownMenuLabel className="flex items-center justify-between px-3 py-2 text-sm">
           <span className="flex items-center gap-1.5">
             <Bell className="h-3.5 w-3.5 text-cyan-600" />
-            Notifications
+            {t('common.notifications')}
           </span>
           {unread > 0 && (
             <button
@@ -766,18 +820,18 @@ function NotificationsBell() {
               disabled={markingRead}
               className="text-[11px] font-medium text-cyan-600 hover:text-cyan-700 transition-colors disabled:opacity-50"
             >
-              {markingRead ? 'Marking...' : 'Mark all read'}
+              {markingRead ? t('common.loading') : t('common.markAllRead')}
             </button>
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <div className="max-h-80 overflow-y-auto">
           {isLoading ? (
-            <div className="px-3 py-6 text-center text-sm text-muted-foreground">Loading…</div>
+            <div className="px-3 py-6 text-center text-sm text-muted-foreground">{t('common.loading')}</div>
           ) : items.length === 0 ? (
             <div className="px-3 py-8 text-center">
               <Bell className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">No notifications yet.</p>
+              <p className="text-sm text-muted-foreground">{t('common.noNotifications')}</p>
             </div>
           ) : (
             items.slice(0, 10).map((n) => {
@@ -815,7 +869,11 @@ function NotificationsBell() {
           <>
             <DropdownMenuSeparator />
             <div className="px-3 py-2 text-center">
-              <span className="text-[11px] text-muted-foreground">{unread} unread · {items.length} total</span>
+              <span className="text-[11px] text-muted-foreground">
+                {t('common.unreadTotal')
+                  .replace('{unread}', String(unread))
+                  .replace('{total}', String(items.length))}
+              </span>
             </div>
           </>
         )}
@@ -831,29 +889,30 @@ function RoleSwitcher() {
   const goBuyer = useNavStore((s) => s.goBuyer);
   const goSeller = useNavStore((s) => s.goSeller);
   const goAdmin = useNavStore((s) => s.goAdmin);
+  const { t } = useI18n();
 
   const tabs: { key: ViewRole; label: string; onPick: () => void }[] = [
-    { key: 'buyer', label: 'Buyer', onPick: () => goBuyer('buyer-orders') },
-    { key: 'seller', label: 'Seller', onPick: () => goSeller() },
-    { key: 'admin', label: 'Admin', onPick: () => goAdmin() },
+    { key: 'buyer', label: t('roles.buyer'), onPick: () => goBuyer('buyer-orders') },
+    { key: 'seller', label: t('roles.seller'), onPick: () => goSeller() },
+    { key: 'admin', label: t('roles.admin'), onPick: () => goAdmin() },
   ];
 
   return (
     <div
       role="tablist"
-      aria-label="Switch role"
+      aria-label={t('roles.viewAs')}
       className="inline-flex items-center rounded-full border border-border/70 bg-background/60 p-0.5 shadow-xs"
     >
-      {tabs.map((t) => {
-        const active = role === t.key;
+      {tabs.map((tab) => {
+        const active = role === tab.key;
         return (
           <button
-            key={t.key}
+            key={tab.key}
             role="tab"
             aria-selected={active}
             onClick={() => {
-              setRole(t.key);
-              t.onPick();
+              setRole(tab.key);
+              tab.onPick();
             }}
             className={cn(
               'relative rounded-full px-3 py-1 text-xs font-semibold transition-all',
@@ -867,7 +926,7 @@ function RoleSwitcher() {
                 transition={{ type: 'spring', stiffness: 320, damping: 28 }}
               />
             )}
-            {t.label}
+            {tab.label}
           </button>
         );
       })}
@@ -886,12 +945,13 @@ function UserMenu() {
   const goShop = useNavStore((s) => s.goShop);
   const goAuth = useNavStore((s) => s.goAuth);
   const { toast } = useToast();
+  const { t } = useI18n();
 
   const handleDemoLogin = (r: 'buyer' | 'seller' | 'admin') => {
     demoLogin(r);
     const label = r.charAt(0).toUpperCase() + r.slice(1);
     toast({
-      title: `Signed in as ${label}`,
+      title: `${t('auth.welcomeBack')} — ${label}`,
       description: 'Demo mode active — explore the full experience.',
     });
     if (r === 'buyer') goBuyer('buyer-orders');
@@ -901,13 +961,13 @@ function UserMenu() {
 
   const handleLogout = () => {
     logout();
-    toast({ title: 'Signed out', description: 'You have been logged out.' });
+    toast({ title: t('common.logout'), description: '' });
   };
 
   const trigger = user ? (
     <button
       className="flex items-center gap-1.5 rounded-full border border-border/70 bg-background/60 py-1 pl-1 pr-2 shadow-xs transition-colors hover:border-primary/40 hover:bg-accent"
-      aria-label="Account menu"
+      aria-label={t('common.account')}
     >
       <Avatar className="h-7 w-7 ring-1 ring-primary/30">
         {user.avatarUrl ? <AvatarImage src={user.avatarUrl} alt={user.name} /> : null}
@@ -924,7 +984,7 @@ function UserMenu() {
       onClick={() => goAuth('login')}
     >
       <User className="h-4 w-4" />
-      Sign In
+      {t('auth.signIn')}
     </Button>
   );
 
@@ -940,58 +1000,58 @@ function UserMenu() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
-              <User className="h-4 w-4" /> Profile
+              <User className="h-4 w-4" /> {t('common.profile')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => goBuyer('buyer-orders')}>
-              <Package className="h-4 w-4" /> My Orders
+              <Package className="h-4 w-4" /> {t('common.myOrders')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => goBuyer('buyer-downloads')}>
-              <Download className="h-4 w-4" /> Downloads
+              <Download className="h-4 w-4" /> {t('common.downloads')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
-              <Settings className="h-4 w-4" /> Settings
+              <Settings className="h-4 w-4" /> {t('common.settings')}
             </DropdownMenuItem>
             {user.shopSlug && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => goShop(user.shopSlug!)}>
-                  <Store className="h-4 w-4" /> My Shop
+                  <Store className="h-4 w-4" /> {t('common.myShop')}
                 </DropdownMenuItem>
               </>
             )}
           </>
         ) : (
           <>
-            <DropdownMenuLabel>Guest account</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('common.guest')}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => goAuth('login')}>
-              <User className="h-4 w-4" /> Sign In
+              <User className="h-4 w-4" /> {t('auth.signIn')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => goAuth('register')}>
-              <Package className="h-4 w-4" /> Create Account
+              <Package className="h-4 w-4" /> {t('auth.createAccount')}
             </DropdownMenuItem>
           </>
         )}
 
         <DropdownMenuSeparator />
         <DropdownMenuLabel className="text-[11px] uppercase tracking-wider text-muted-foreground">
-          Demo logins
+          {t('common.demoLogins')}
         </DropdownMenuLabel>
         <DropdownMenuItem onClick={() => handleDemoLogin('buyer')}>
-          <User className="h-4 w-4" /> Demo Login as Buyer
+          <User className="h-4 w-4" /> {t('common.demoBuyer')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleDemoLogin('seller')}>
-          <Store className="h-4 w-4" /> Demo Login as Seller
+          <Store className="h-4 w-4" /> {t('common.demoSeller')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleDemoLogin('admin')}>
-          <Settings className="h-4 w-4" /> Demo Login as Admin
+          <Settings className="h-4 w-4" /> {t('common.demoAdmin')}
         </DropdownMenuItem>
 
         {user && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onClick={handleLogout}>
-              <LogOut className="h-4 w-4" /> Logout
+              <LogOut className="h-4 w-4" /> {t('common.logout')}
             </DropdownMenuItem>
           </>
         )}
@@ -1015,10 +1075,11 @@ function MobileMenu() {
   const goAuth = useNavStore((s) => s.goAuth);
   const wishlistCount = useWishlistStore((s) => s.items.length);
   const { toast } = useToast();
+  const { t } = useI18n();
 
   const handleDemoLogin = (r: 'buyer' | 'seller' | 'admin') => {
     demoLogin(r);
-    toast({ title: `Signed in as ${r.charAt(0).toUpperCase() + r.slice(1)}`, description: 'Demo mode active.' });
+    toast({ title: `${t('auth.welcomeBack')} — ${r.charAt(0).toUpperCase() + r.slice(1)}`, description: 'Demo mode active.' });
     setOpen(false);
     if (r === 'buyer') goBuyer('buyer-orders');
     else if (r === 'seller') goSeller();
@@ -1027,14 +1088,14 @@ function MobileMenu() {
 
   const handleLogout = () => {
     logout();
-    toast({ title: 'Signed out' });
+    toast({ title: t('common.logout') });
     setOpen(false);
   };
 
   const roleTabs: { key: ViewRole; label: string; onPick: () => void }[] = [
-    { key: 'buyer', label: 'Buyer', onPick: () => goBuyer('buyer-orders') },
-    { key: 'seller', label: 'Seller', onPick: () => goSeller() },
-    { key: 'admin', label: 'Admin', onPick: () => goAdmin() },
+    { key: 'buyer', label: t('roles.buyer'), onPick: () => goBuyer('buyer-orders') },
+    { key: 'seller', label: t('roles.seller'), onPick: () => goSeller() },
+    { key: 'admin', label: t('roles.admin'), onPick: () => goAdmin() },
   ];
 
   return (
@@ -1066,17 +1127,17 @@ function MobileMenu() {
         {/* Role switcher */}
         <div className="px-4 pb-2">
           <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            View as
+            {t('roles.viewAs')}
           </div>
           <div className="grid grid-cols-3 gap-1 rounded-full border border-border/70 bg-background/60 p-0.5">
-            {roleTabs.map((t) => {
-              const active = role === t.key;
+            {roleTabs.map((tab) => {
+              const active = role === tab.key;
               return (
                 <button
-                  key={t.key}
+                  key={tab.key}
                   onClick={() => {
-                    setRole(t.key);
-                    t.onPick();
+                    setRole(tab.key);
+                    tab.onPick();
                     setOpen(false);
                   }}
                   className={cn(
@@ -1086,7 +1147,7 @@ function MobileMenu() {
                       : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  {t.label}
+                  {tab.label}
                 </button>
               );
             })}
@@ -1096,7 +1157,7 @@ function MobileMenu() {
         {/* Nav links */}
         <nav className="flex-1 overflow-y-auto px-2 pb-3">
           <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Browse
+            {t('common.browse')}
           </div>
           <MobileNavList onNavigate={() => setOpen(false)} />
           <div className="my-2 h-px bg-border/60" />
@@ -1104,11 +1165,11 @@ function MobileMenu() {
           {user ? (
             <div className="px-2">
               <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Account
+                {t('common.account')}
               </div>
               <MobileLink
                 icon={<User className="h-4 w-4" />}
-                label="Profile"
+                label={t('common.profile')}
                 onClick={() => {
                   goBuyer('buyer-profile');
                   setOpen(false);
@@ -1116,7 +1177,7 @@ function MobileMenu() {
               />
               <MobileLink
                 icon={<Package className="h-4 w-4" />}
-                label="My Orders"
+                label={t('common.myOrders')}
                 onClick={() => {
                   goBuyer('buyer-orders');
                   setOpen(false);
@@ -1124,7 +1185,7 @@ function MobileMenu() {
               />
               <MobileLink
                 icon={<Download className="h-4 w-4" />}
-                label="Downloads"
+                label={t('common.downloads')}
                 onClick={() => {
                   goBuyer('buyer-downloads');
                   setOpen(false);
@@ -1132,7 +1193,7 @@ function MobileMenu() {
               />
               <MobileLink
                 icon={<Heart className="h-4 w-4" />}
-                label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount})` : ''}`}
+                label={`${t('common.wishlist')}${wishlistCount > 0 ? ` (${wishlistCount})` : ''}`}
                 onClick={() => {
                   goBuyer('buyer-wishlist');
                   setOpen(false);
@@ -1141,7 +1202,7 @@ function MobileMenu() {
               {user.shopSlug && (
                 <MobileLink
                   icon={<Store className="h-4 w-4" />}
-                  label="My Shop"
+                  label={t('common.myShop')}
                   onClick={() => {
                     goShop(user.shopSlug!);
                     setOpen(false);
@@ -1153,7 +1214,7 @@ function MobileMenu() {
             <div className="px-2">
               <MobileLink
                 icon={<User className="h-4 w-4" />}
-                label="Sign In"
+                label={t('auth.signIn')}
                 onClick={() => {
                   goAuth('login');
                   setOpen(false);
@@ -1161,7 +1222,7 @@ function MobileMenu() {
               />
               <MobileLink
                 icon={<Package className="h-4 w-4" />}
-                label="Create Account"
+                label={t('auth.createAccount')}
                 onClick={() => {
                   goAuth('register');
                   setOpen(false);
@@ -1173,11 +1234,11 @@ function MobileMenu() {
           <div className="my-2 h-px bg-border/60" />
           <div className="px-2">
             <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Demo logins
+              {t('common.demoLogins')}
             </div>
-            <MobileLink icon={<User className="h-4 w-4" />} label="Demo Login as Buyer" onClick={() => handleDemoLogin('buyer')} />
-            <MobileLink icon={<Store className="h-4 w-4" />} label="Demo Login as Seller" onClick={() => handleDemoLogin('seller')} />
-            <MobileLink icon={<Settings className="h-4 w-4" />} label="Demo Login as Admin" onClick={() => handleDemoLogin('admin')} />
+            <MobileLink icon={<User className="h-4 w-4" />} label={t('common.demoBuyer')} onClick={() => handleDemoLogin('buyer')} />
+            <MobileLink icon={<Store className="h-4 w-4" />} label={t('common.demoSeller')} onClick={() => handleDemoLogin('seller')} />
+            <MobileLink icon={<Settings className="h-4 w-4" />} label={t('common.demoAdmin')} onClick={() => handleDemoLogin('admin')} />
           </div>
 
           {user && (
@@ -1186,7 +1247,7 @@ function MobileMenu() {
               <div className="px-2">
                 <MobileLink
                   icon={<LogOut className="h-4 w-4" />}
-                  label="Logout"
+                  label={t('common.logout')}
                   danger
                   onClick={handleLogout}
                 />
@@ -1205,24 +1266,25 @@ function MobileNavList({ onNavigate }: { onNavigate: () => void }) {
   const goHome = useNavStore((s) => s.goHome);
   const goProducts = useNavStore((s) => s.goProducts);
   const goCategory = useNavStore((s) => s.goCategory);
+  const { t } = useI18n();
 
   const links: NavLinkDef[] = [
-    { label: 'Marketplace', icon: <Cpu className="h-4 w-4" />, active: (v) => v === 'home', go: goHome },
-    { label: 'Products', icon: <Package className="h-4 w-4" />, active: (v) => v === 'products', go: goProducts },
+    { label: t('nav.marketplace'), icon: <Cpu className="h-4 w-4" />, active: (v) => v === 'home', go: goHome },
+    { label: t('nav.products'), icon: <Package className="h-4 w-4" />, active: (v) => v === 'products', go: goProducts },
     {
-      label: 'PCB Boards',
+      label: t('nav.pcbBoards'),
       icon: <Cpu className="h-4 w-4" />,
       active: (v, p) => v === 'category' && p.slug === 'pcb-boards',
       go: () => goCategory('pcb-boards'),
     },
     {
-      label: 'Open Source',
+      label: t('nav.openSource'),
       icon: <Cpu className="h-4 w-4" />,
       active: (v, p) => v === 'category' && p.slug === 'open-source',
       go: () => goCategory('open-source'),
     },
     {
-      label: 'Services',
+      label: t('nav.services'),
       icon: <Zap className="h-4 w-4" />,
       active: (v, p) => v === 'category' && p.slug === 'services',
       go: () => goCategory('services'),
@@ -1287,6 +1349,7 @@ function MobileLink({
 /* ---------- Main Header ---------- */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useI18n();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
@@ -1332,6 +1395,7 @@ export function Header() {
             <NotificationsBell />
           </div>
           <ThemeToggle />
+          <LanguageSwitcher />
           <div className="hidden lg:block">
             <RoleSwitcher />
           </div>
@@ -1348,7 +1412,7 @@ export function Header() {
       <div className="hidden border-t border-border/40 bg-background/40 lg:block">
         <div className="mx-auto flex h-11 max-w-screen-2xl items-center justify-center gap-2 px-6">
           <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            Browse
+            {t('common.browse')}
           </span>
           <NavPills />
         </div>

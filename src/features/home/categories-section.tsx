@@ -23,32 +23,34 @@ import {
 } from 'lucide-react';
 import { useCategories } from '@/lib/api/hooks';
 import { useNavStore } from '@/stores/nav-store';
+import { useI18n } from '@/lib/i18n';
 
-/* Static manifest — slug, name, Lucide icon, gradient accent */
+/* Static manifest — slug, i18n key, Lucide icon, gradient accent */
 type CatEntry = {
   slug: string;
-  name: string;
+  /** i18n key under `categories.*` */
+  labelKey: string;
   icon: typeof CircuitBoard;
   accent: string;
 };
 
 const CATEGORIES: CatEntry[] = [
-  { slug: 'dev-boards', name: 'Dev Boards', icon: CircuitBoard, accent: 'from-cyan-500 to-cyan-400' },
-  { slug: 'pcb-boards', name: 'PCB Boards', icon: Layers, accent: 'from-teal-500 to-cyan-400' },
-  { slug: 'components', name: 'Components', icon: Cpu, accent: 'from-cyan-500 to-teal-400' },
-  { slug: 'sensors', name: 'Sensors', icon: Radar, accent: 'from-sky-500 to-cyan-400' },
-  { slug: 'modules', name: 'Modules', icon: Box, accent: 'from-cyan-500 to-aqua-400' },
-  { slug: 'tools', name: 'Tools', icon: Wrench, accent: 'from-teal-500 to-aqua-400' },
-  { slug: 'kicad-projects', name: 'KiCad Projects', icon: FileCode, accent: 'from-cyan-500 to-teal-400' },
-  { slug: 'altium-projects', name: 'Altium Projects', icon: FileCode, accent: 'from-sky-500 to-teal-400' },
-  { slug: 'gerber-packages', name: 'Gerber Packages', icon: FileArchive, accent: 'from-teal-500 to-cyan-400' },
-  { slug: 'firmware', name: 'Firmware', icon: Binary, accent: 'from-cyan-500 to-cyan-400' },
-  { slug: 'services', name: 'Services', icon: Cog, accent: 'from-teal-500 to-aqua-400' },
+  { slug: 'dev-boards', labelKey: 'categories.devBoards', icon: CircuitBoard, accent: 'from-cyan-500 to-cyan-400' },
+  { slug: 'pcb-boards', labelKey: 'categories.pcbBoards', icon: Layers, accent: 'from-teal-500 to-cyan-400' },
+  { slug: 'components', labelKey: 'categories.components', icon: Cpu, accent: 'from-cyan-500 to-teal-400' },
+  { slug: 'sensors', labelKey: 'categories.sensors', icon: Radar, accent: 'from-sky-500 to-cyan-400' },
+  { slug: 'modules', labelKey: 'categories.modules', icon: Box, accent: 'from-cyan-500 to-aqua-400' },
+  { slug: 'tools', labelKey: 'categories.tools', icon: Wrench, accent: 'from-teal-500 to-aqua-400' },
+  { slug: 'open-source', labelKey: 'categories.openSource', icon: FileCode, accent: 'from-cyan-500 to-teal-400' },
+  { slug: 'gerber-files', labelKey: 'categories.gerberFiles', icon: FileArchive, accent: 'from-teal-500 to-cyan-400' },
+  { slug: 'firmware', labelKey: 'categories.firmware', icon: Binary, accent: 'from-cyan-500 to-cyan-400' },
+  { slug: 'services', labelKey: 'categories.services', icon: Cog, accent: 'from-teal-500 to-aqua-400' },
 ];
 
 export function CategoriesSection() {
   const goCategory = useNavStore((s) => s.goCategory);
   const { data, isLoading } = useCategories();
+  const { t } = useI18n();
 
   /* Build count map: slug -> product count (from API tree, includes children count) */
   const countMap = new Map<string, number>();
@@ -67,9 +69,9 @@ export function CategoriesSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <SectionHeader
-          eyebrow="Browse"
-          title="Explore Categories"
-          subtitle="From ready-to-ship dev boards to digital design packages — find exactly what your next build needs."
+          eyebrow={t('categories.eyebrow')}
+          title={t('categories.title')}
+          subtitle={t('categories.subtitle')}
         />
 
         {/* Grid */}
@@ -77,12 +79,13 @@ export function CategoriesSection() {
           {CATEGORIES.map((cat, i) => {
             const Icon = cat.icon;
             const count = countMap.get(cat.slug);
+            const productsLabel = t('categories.countProducts');
             const countLabel =
               isLoading
-                ? '— products'
+                ? `— ${productsLabel}`
                 : count !== undefined
-                  ? `${count.toLocaleString('vi-VN')} products`
-                  : `${count ?? 0} products`;
+                  ? `${count.toLocaleString('vi-VN')} ${productsLabel}`
+                  : `${count ?? 0} ${productsLabel}`;
 
             return (
               <motion.button
@@ -105,7 +108,7 @@ export function CategoriesSection() {
                 {/* Name + count */}
                 <div className="flex flex-col gap-0.5 min-w-0">
                   <span className="font-semibold text-foreground text-sm sm:text-base leading-tight truncate">
-                    {cat.name}
+                    {t(cat.labelKey)}
                   </span>
                   <span className="text-[11px] text-muted-foreground tabular-nums">
                     {countLabel}

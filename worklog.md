@@ -1569,3 +1569,176 @@ This was a major business model change affecting: database seed data, categories
 3. **Search filter for "Free only"** — Add a filter in the products page to show only free/open source items
 4. **Open Source category landing page** — Dedicated page with featured open source projects, download stats, community contribution info
 
+
+---
+Task ID: i18n-1
+Agent: Web Dev Agent (general-purpose)
+Task: Fix hero floating cards layout + build i18n system with 4 languages (vi/en/zh/ja)
+
+## Current Project Status Assessment
+
+Two-part task: (1) hero's floating spec cards were overlapping on real screens due to fixed-pixel absolute positioning + rotation; (2) the project had no internationalization — every UI string was hard-coded English. User wanted a clean responsive hero grid + a complete i18n system across Vietnamese, English, Chinese, Japanese wired into the most-visible UI (header, hero, footer, categories).
+
+## Completed Modifications
+
+### Part 1 — Hero floating cards → 2×2 responsive grid (`src/features/home/hero.tsx`)
+
+Rewrote the right column of the hero:
+
+- **Removed** 4 absolute-positioned `FloatingCard`s with `top/left/right/bottom` pixel offsets and ±4° rotation, the center chip ornament (CircuitBoard), and the bottom "Spec-sheet verified · Secure download" trust chip (clutter).
+- **Added** a single `<div className="grid grid-cols-2 gap-3 sm:gap-4">` containing 4 `SpecCard` components mapped from `SPEC_CARDS` (clean 2×2 grid on desktop, 2 cols on mobile, 1 column would also flow naturally on very small screens via the same grid).
+- **Kept** the cyan glow behind the cards (`absolute inset-0 m-auto h-[280px] w-[280px] rounded-full bg-cyan-400/15 blur-[100px]`).
+- **New `SpecCard`** replaces `FloatingCard`:
+  - Clean white bg (`bg-white/95`), hairline border, subtle shadow-sm at rest.
+  - Hover: `scale: 1.02` (was 1.03) + shadow-[0_14px_40px_-16px_rgba(6,182,212,0.35)] via transition-shadow.
+  - Gentle Y oscillation: `y: [0, -4, 0]` (4px amplitude, was 8px) over `4 + card.delay` seconds, `easeInOut`, infinite loop.
+  - **No rotation** (removed `rotate: card.rotation`).
+  - Removed the "● live" green chip from the header row (kept just the icon + name + tag).
+  - Tag now uses i18n: `t(card.tagKey)` instead of `card.tag`.
+- Verified via agent-browser eval: 4 cards laid out at (736,274), (1040,273), (736,448), (1040,446) — clean 2×2 grid with 288×159.5px cards, no overlap.
+
+### Part 2.1 — Translation files (`src/lib/i18n/translations.ts`)
+
+- New file with `Lang = 'vi' | 'en' | 'zh' | 'ja'`, `LANGS` array (code/label/short/flag), `DEFAULT_LANG = 'vi'`.
+- `translations` object with 4 languages (vi, en, zh, ja) covering ~140 keys each:
+  - **nav** — marketplace, products, pcbBoards, openSource, services, bomTool, browse
+  - **hero** — tagline, title1, title2, subtitle, explore, becomeSeller, stats{products,sellers,engineers}, specCard{devBoard,digitalDesign,component,engineering}
+  - **categories** — title, subtitle, eyebrow, devBoards, pcbBoards, components, sensors, modules, tools, services, openSource, firmware, gerberFiles, kicadProjects, altiumProjects, gerberPackages, countProducts
+  - **product** — addToCart, buyNow, downloadFree, get, free, openSource, viewDetails, quickView, reviews, related, specs, versions, description, shipping, inStock, outOfStock, sold, downloads
+  - **cart** — title, empty, browseProducts, subtotal, checkout, continueShopping, clear, removeItem
+  - **checkout** — title, address, shipping, payment, review, placeOrder, orderPlaced, back, next, continue
+  - **buyer** — welcome, orders, downloads, wishlist, licenses, addresses, profile, reviews, overview, invoice
+  - **seller** — title, products, orders, wallet, withdrawals, analytics, revenue, addProduct
+  - **admin** — title, users, sellers, auditLogs, system
+  - **footer** — marketplace, forSellers, company, legal, rights, madeIn, newsletter, newsletterDesc, subscribe, securePayments(+Sub), verifiedSellers(+Sub), engineeringQuality(+Sub), returns(+Sub)
+  - **auth** — signIn, signUp, welcomeBack, createAccount, email, password, fullName, demoAccounts
+  - **common** — search, searchPlaceholder, popularSearches, recentSearches, clear, cancel, close, save, loading, viewAll, locale, browse, account, guest, demoLogins, myShop, demoBuyer, demoSeller, demoAdmin, logout, profile, settings, myOrders, downloads, wishlist, signIn, createAccount, noResults (with `{query}` placeholder), noResultsHint, keepTyping, searching, viewAllResults, results, categories, shops, brands, notifications, markAllRead, noNotifications, unreadTotal (with `{unread}`/`{total}` placeholders)
+  - **roles** — buyer, seller, admin, viewAs
+- All translations are native-quality (not Google Translate): proper diacritics in Vietnamese (Mạch PCB, Đăng nhập, Mã nguồn mở), natural Japanese phrasing (電子部品を購入, 出品者, カテゴリー), natural Chinese (购买电子元件, 创造一切, 探索分类).
+- Some translation strings support placeholders: `noResults` → `"{query}"`, `unreadTotal` → `"{unread}" + "{total}"`. Components use `.replace('{query}', query)` to fill them in.
+
+### Part 2.2 — i18n hook (`src/lib/i18n/index.ts`)
+
+- Exports `useI18n()` hook returning `{ lang, setLang, t }`.
+- Uses `useI18nStore` internally and wraps `t` in `useCallback` for stable identity.
+- Helper exports: `langLabel(code)`, `langShort(code)`, `langFlag(code)`.
+- Re-exports `translations`, `LANGS`, `DEFAULT_LANG`, `Lang`.
+
+### Part 2.3 — Zustand i18n store (`src/stores/i18n-store.ts`)
+
+- `useI18nStore` created with `zustand` + `persist` middleware.
+- Storage key: `circuithub-i18n` in localStorage.
+- State: `{ lang: Lang, setLang, t }`.
+- `t(key)` traverses `translations[lang]` by dot-separated path; if not found, falls back to `translations.en`, then returns the key string itself.
+- `partialize` only persists `lang` (not the `t` function or `setLang`), avoiding serialization issues.
+
+### Part 2.4 — Language switcher in header (`src/components/layout/header.tsx`)
+
+- New `LanguageSwitcher` component:
+  - Trigger: ghost button with Globe icon + current language short code (VI/EN/ZH/JA) + ChevronDown.
+  - Dropdown: Globe icon header "Language", then 4 menu items (🇻🇳 Tiếng Việt / 🇬🇧 English / 🇨🇳 中文 / 🇯🇵 日本語) with Check icon for the active one.
+- Inserted between `ThemeToggle` and `RoleSwitcher` in the right-side action group.
+- Added `Globe` and `Check` to Lucide imports. Imported `useI18n`, `LANGS`, `Lang` from `@/lib/i18n`.
+
+### Part 2.5 — Wired translations into key components
+
+**`src/components/layout/header.tsx`** — wired t() across:
+- `NavPills` links (Marketplace → `nav.marketplace`, Products, PCB Boards, Open Source, Services, BOM Tool) — labels now use `t(...)`.
+- `MobileNavList` links — same set of nav keys.
+- `SearchBar` placeholder (`common.searchPlaceholder`), "Recent searches" / "Clear" (`common.recentSearches` / `common.clear`), "Popular searches" (`common.popularSearches`), "Keep typing..." (`common.keepTyping`), "Searching..." (`common.searching`), "Products (N)" (`nav.products`), "Categories" / "Shops" / "Brands" section headers + trailing labels (`common.categories` / `common.shops` / `common.brands`), "View all results for ..." (`common.viewAllResults`), "No results for ..." (`common.noResults`), "Try a different keyword..." (`common.noResultsHint`).
+- `NotificationsBell` — "Notifications" (`common.notifications`), "Mark all read" (`common.markAllRead`), "Loading…" (`common.loading`), "No notifications yet." (`common.noNotifications`), "{unread} unread · {total} total" (`common.unreadTotal`).
+- `RoleSwitcher` — Buyer/Seller/Admin (`roles.buyer/seller/admin`), aria-label "View as" (`roles.viewAs`). Renamed inner `tabs.map((t) =>` to `tabs.map((tab) =>` to avoid shadowing the i18n `t`.
+- `UserMenu` — Sign In trigger (`auth.signIn`), Profile/My Orders/Downloads/Settings (`common.profile/myOrders/downloads/settings`), My Shop (`common.myShop`), "Guest account" (`common.guest`), Sign In/Create Account (`auth.signIn/createAccount`), "Demo logins" header (`common.demoLogins`), Demo Login as Buyer/Seller/Admin (`common.demoBuyer/demoSeller/demoAdmin`), Logout (`common.logout`).
+- `MobileMenu` — "View as" eyebrow (`roles.viewAs`), roleTabs labels (`roles.*`), "Browse" eyebrow (`common.browse`), "Account" eyebrow (`common.account`), Profile/My Orders/Downloads/Wishlist labels, Sign In/Create Account, "Demo logins" + demo items, Logout. Renamed `roleTabs.map((t) =>` → `roleTabs.map((tab) =>` to avoid shadowing.
+- Main `Header` — "Browse" eyebrow above NavPills (`common.browse`).
+
+**`src/features/home/hero.tsx`** — wired t() across:
+- Tagline pill: `hero.tagline`.
+- Headline: `hero.title1` + `hero.title2` (gradient span).
+- Subtitle: `hero.subtitle`.
+- CTA buttons: `hero.explore`, `hero.becomeSeller`.
+- Stats row labels: `hero.stats.products`, `hero.stats.sellers`, `hero.stats.engineers`.
+- SpecCard tag: `t(card.tagKey)` (where tagKey ∈ `hero.specCard.devBoard/digitalDesign/component/engineering`).
+- Refactored `StatCounter` to take `value/suffix/icon/label` props instead of the static `STATS` entry so the label can be translated.
+
+**`src/components/layout/footer.tsx`** — wired t() across:
+- New `FOOTER_GROUP_KEYS` map: `Marketplace → footer.marketplace`, `For Sellers → footer.forSellers`, `Company → footer.company`, `Legal → footer.legal`.
+- Column headings now use `t(FOOTER_GROUP_KEYS[group])` (falls back to the English group name if unmapped).
+- `TRUST_ITEMS` moved inside the component (was a static const) so titles/subtitles can use `t('footer.securePayments')`, `t('footer.securePaymentsSub')`, `t('footer.verifiedSellers')`, `t('footer.verifiedSellersSub')`, `t('footer.engineeringQuality')`, `t('footer.engineeringQualitySub')`, `t('footer.returns')`, `t('footer.returnsSub')`.
+- Newsletter label: `footer.newsletter`. Subscribe button: `footer.subscribe`. Description: `footer.newsletterDesc`.
+- Bottom bar copyright: `© 2025 {brand.name}. {t('footer.rights')}`. "Made in Vietnam" badge: `t('footer.madeIn')`.
+- Inner link labels (Browse Products, Become a Seller, About Us, Terms of Service, etc.) intentionally kept in English per task instructions ("focus on the most visible UI strings… internal/admin pages can stay in English for now").
+
+**`src/features/home/categories-section.tsx`** — wired t() across:
+- `CATEGORIES` array: replaced `name` field with `labelKey` (e.g. `'categories.devBoards'`). Removed stale entries for `kicad-projects`, `altium-projects`, `gerber-packages` (slugs that no longer exist post-Business-Pivot-1). Added `open-source`, `gerber-files` instead.
+- `SectionHeader` eyebrow/title/subtitle: `t('categories.eyebrow')`, `t('categories.title')`, `t('categories.subtitle')`.
+- Card name: `t(cat.labelKey)`.
+- "N products" suffix: `t('categories.countProducts')`.
+
+## Verification Results
+
+- **Lint**: `bun run lint` → **0 errors, 0 warnings** (clean) after all edits.
+- **Dev server**: GET `/` returns 200, no console errors.
+- **agent-browser** verified live language switching:
+  - **VI (default)**: tagline "DÀNH CHO KỸ SƯ HARDWARE", hero "Mua linh kiện điện tử. Tạo mọi thứ.", CTAs "Khám phá" / "Trở thành người bán", nav "Chợ điện tử / Sản phẩm / Mạch PCB / Mã nguồn mở / Dịch vụ / Công cụ BOM", roles "Người mua / Người bán / Quản trị", categories "Khám phá danh mục" with "Bo mạch phát triển / Mạch PCB / Linh kiện / Cảm biến / Module / Dụng cụ / Dự án mã nguồn mở / File Gerber miễn phí / Firmware mã nguồn mở / Dịch vụ kỹ thuật", each showing "N sản phẩm". Language button shows "Tiếng Việt".
+  - **EN**: hero "Buy electronics. Build anything.", CTAs "Explore Marketplace" / "Become a Seller", nav "Marketplace / Products / PCB Boards / Open Source / Services / BOM Tool", roles "Buyer / Seller / Admin", categories "Explore Categories" with "Development Boards / PCB Boards / Components / Sensors / Modules / Tools / Open Source Projects / Open Gerber Files / Open Source Firmware / Engineering Services". Language button shows "English".
+  - **ZH**: hero "购买电子元件. 创造一切.", CTAs "探索商城" / "成为卖家", nav "商城 / 产品 / PCB板 / 开源 / 服务 / BOM工具", roles "买家 / 卖家 / 管理员", categories "探索分类" with "开发板 / PCB板 / 元件 / 传感器 / 模块 / 工具 / 开源项目 / 开源Gerber文件 / 开源固件 / 工程服务". Language button shows "中文".
+  - **JA**: hero "電子部品を購入. なんでも作ろう.", CTAs "探索する" / "出品者になる", nav "マーケットプレイス / 製品 / PCB基板 / オープンソース / サービス / BOMツール", roles "バイヤー / 出品者 / 管理者", categories "カテゴリーを見る" with "開発ボード / PCB基板 / 部品 / センサー / モジュール / ツール / オープンソースプロジェクト / オープンGerberファイル / オープンソースファームウェア / エンジニアリングサービス". Language button shows "日本語".
+- **Hero grid verified**: agent-browser eval confirmed 4 SpecCards in a clean 2×2 grid (top-left, top-right, bottom-left, bottom-right) with no overlap; 288×159.5px each.
+- **Persistence**: Zustand `persist` middleware stores `lang` in `localStorage` under key `circuithub-i18n`, so reloads preserve the user's choice.
+- Screenshots saved: `upload/hero-i18n-default-vi.png`, `hero-i18n-en.png`, `hero-i18n-zh.png`, `hero-i18n-ja.png`, `hero-i18n-en-viewport.png`.
+
+## Files Changed / Created
+
+- New: `src/lib/i18n/translations.ts` (4-language translation dictionary, ~820 lines)
+- New: `src/lib/i18n/index.ts` (useI18n hook + helpers)
+- New: `src/stores/i18n-store.ts` (Zustand store with persist)
+- Modified: `src/features/home/hero.tsx` (replaced floating cards with 2×2 grid + wired t())
+- Modified: `src/components/layout/header.tsx` (added LanguageSwitcher, wired t() across nav/search/notifications/role/user/mobile)
+- Modified: `src/components/layout/footer.tsx` (wired t() for headings, trust items, newsletter, bottom bar)
+- Modified: `src/features/home/categories-section.tsx` (replaced hardcoded names with i18n keys, dropped stale slugs)
+
+## Unresolved Issues / Risks
+
+1. **Product cards / product detail / cart drawer not yet wired** — the task brief lists "cart, product card, product detail" as visible strings, but the focus here was the four explicitly-named files (header/hero/footer/categories). The translation keys for `product.*`, `cart.*`, `checkout.*`, `buyer.*`, `seller.*`, `admin.*` already exist in `translations.ts`, ready to be wired in a follow-up pass.
+2. **Footer inner link labels still English** — "Browse Products", "Become a Seller", "About Us", "Terms of Service", etc. were intentionally left English per task scope. Could be wired with `footer.link.*` keys in a follow-up.
+3. **Featured-products / recently-viewed / services / top-sellers sections still English** — their `SectionHeader` is already i18n-aware (it just takes string props), but the calling code still passes English literals like "Featured engineering products", "Featured PCB Projects", "Popular Development Boards", "Open Source Projects". Could be wired in a follow-up.
+4. **Admin / Seller / Buyer dashboard pages still English** — per task scope, internal/admin pages can stay English for now. Translation keys for `buyer.*`, `seller.*`, `admin.*` already exist.
+5. **Hydration SSR mismatch risk** — Zustand persist hydrates on client; first paint may flash English default before persist rehydrates. The store's `DEFAULT_LANG = 'vi'` should match the vi default in the UI tree, so the flash is only an issue when a user has explicitly chosen a non-vi language. Not blocking.
+6. **No RTL support** — added languages (vi, en, zh, ja) are all LTR, so no RTL handling needed.
+7. **Currency/date locale not yet localized** — `Intl.NumberFormat('vi-VN')` for prices is still hardcoded; could be switched to use `lang` for proper locale (`en-US` → `$`, `zh-CN` → `¥`, `ja-JP` → `¥`, `vi-VN` → `₫`).
+
+## Priority Recommendations for Next Phase
+
+1. **Wire product card + quick view + product detail** — `product.addToCart`, `product.buyNow`, `product.downloadFree`, `product.get`, `product.free`, `product.openSource`, `product.viewDetails`, `product.quickView`, `product.reviews`, `product.sold`, `product.downloads`, `product.inStock` / `outOfStock` keys already exist.
+2. **Wire cart drawer + checkout view** — `cart.*` and `checkout.*` keys already exist. Add `${t('cart.subtotal')}`, `${t('cart.checkout')}`, `${t('cart.continueShopping')}`, etc.
+3. **Wire buyer / seller / admin dashboards** — `buyer.*`, `seller.*`, `admin.*` keys already exist for sidebar items.
+4. **Wire featured/recently-viewed/services sections** — add new translation keys like `home.featured.title`, `home.openSource.title`, `home.popularBoards.title` and pass `t(...)` to the existing `SectionHeader`.
+5. **Footer link labels** — add `footer.link.browseProducts`, `footer.link.becomeSeller`, etc. and map `footerLinks[*].label` through a lookup in `Footer`.
+6. **Localize Intl.NumberFormat / Date** — create a `useLocale()` helper that returns the right BCP-47 tag based on `lang`.
+7. **Add language switcher to mobile menu** — currently only visible on desktop (between theme + role switcher). Could also be added inside the MobileMenu sheet for parity.
+8. **Pluralization** — Vietnamese, Chinese, and Japanese don't typically distinguish singular/plural, but the English "N products" should ideally become "1 product" vs "N products". A small `t('common.productCount', { count })` helper with `{count, plural, ...}` ICU syntax would be ideal.
+
+---
+Task ID: i18n-1
+Agent: i18n Builder
+Task: Fix hero floating cards + build 4-language i18n system (VN/EN/ZH/JA)
+
+Work Log:
+- Fixed hero floating cards: replaced absolute-positioned overlapping cards with clean 2×2 responsive grid
+- Created i18n system: translations.ts (4 languages, ~140 keys each), i18n-store.ts (Zustand + persist), useI18n hook
+- Added language switcher in header (Globe icon, VI/EN/ZH/JA dropdown with flags)
+- Applied translations to: header (nav, search, role tabs, user menu), hero (tagline, title, subtitle, CTAs, stats), footer (columns, copyright), categories section
+- Verified all 4 languages switch correctly:
+  - VI: "Chợ điện tử", "Sản phẩm", "Mua linh kiện điện tử. Tạo mọi thứ."
+  - EN: "Marketplace", "Products", "Buy electronics. Build anything."
+  - ZH: "商城", "产品", "购买电子元件. 创造一切."
+  - JA: "マーケットプレイス", "製品", "電子部品を購入. なんでも作ろう."
+- Hero cards verified: 2×2 grid at (656,256), (960,257), (656,436), (960,432) — no overlap, 304px spacing
+- Lint: 0 errors, 0 warnings
+
+Stage Summary:
+- Hero layout fixed: 2×2 grid of spec cards, gentle 4px Y oscillation, no rotation, no center chip
+- i18n system: 4 languages (Vietnamese default), language switcher in header, persisted via localStorage
+- Translations applied to nav, hero, footer, categories; product/cart/checkout translations exist but not yet wired to all components
+- Next: wire product card, quick view, cart, checkout, buyer/seller/admin dashboards
