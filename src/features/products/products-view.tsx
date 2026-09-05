@@ -78,10 +78,9 @@ const SORT_OPTIONS: { value: string; label: string }[] = [
 ];
 
 const PRODUCT_TYPES: { value: string; label: string; icon: typeof Package }[] = [
-  { value: 'PHYSICAL', label: 'Physical', icon: Package },
-  { value: 'DIGITAL', label: 'Digital', icon: FileCode },
-  { value: 'SERVICE', label: 'Service', icon: Wrench },
-  { value: 'BUNDLE', label: 'Bundle', icon: Box },
+  { value: 'PHYSICAL', label: 'Sản phẩm vật lý', icon: Package },
+  { value: 'DIGITAL', label: 'Mã nguồn mở / Thiết kế số', icon: FileCode },
+  { value: 'BUNDLE', label: 'Combo / Kit', icon: Box },
 ];
 
 const SOFTWARE_OPTIONS = ['KiCad', 'Altium', 'Proteus', 'Gerber', 'ESP-IDF'];
@@ -94,11 +93,11 @@ const CATEGORY_ICONS: Record<string, typeof CircuitBoard> = {
   sensors: Radar,
   modules: Box,
   tools: Wrench,
+  'open-source': FileCode,
   'kicad-projects': FileCode,
   'altium-projects': FileCode,
   'gerber-packages': FileArchive,
   firmware: Binary,
-  services: Cog,
 };
 
 /* ---------------- Helpers ---------------- */

@@ -57,10 +57,13 @@ import {
   Sparkles,
   CheckCircle2,
   XCircle,
-  AlertCircle,
   Globe,
   Check,
   Shield,
+  CircuitBoard,
+  FileCode,
+  AlertCircle,
+  Layers as LayersIcon,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQueryClient } from '@tanstack/react-query';
@@ -97,27 +100,27 @@ function NavPills({ onNavigate }: { onNavigate?: () => void }) {
     { label: t('nav.products'), icon: <Package className="h-3.5 w-3.5" />, active: (v) => v === 'products', go: goProducts },
     {
       label: t('nav.pcbBoards'),
-      icon: <Cpu className="h-3.5 w-3.5" />,
+      icon: <LayersIcon className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'category' && p.slug === 'pcb-boards',
       go: () => goCategory('pcb-boards'),
     },
     {
-      label: t('nav.openSource'),
+      label: t('nav.devBoards'),
+      icon: <CircuitBoard className="h-3.5 w-3.5" />,
+      active: (v, p) => v === 'category' && p.slug === 'dev-boards',
+      go: () => goCategory('dev-boards'),
+    },
+    {
+      label: t('nav.components'),
       icon: <Cpu className="h-3.5 w-3.5" />,
+      active: (v, p) => v === 'category' && p.slug === 'components',
+      go: () => goCategory('components'),
+    },
+    {
+      label: t('nav.openSource'),
+      icon: <FileCode className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'category' && p.slug === 'open-source',
       go: () => goCategory('open-source'),
-    },
-    {
-      label: t('nav.services'),
-      icon: <Zap className="h-3.5 w-3.5" />,
-      active: (v, p) => v === 'category' && p.slug === 'services',
-      go: () => goCategory('services'),
-    },
-    {
-      label: t('nav.bomTool'),
-      icon: <FileSpreadsheet className="h-3.5 w-3.5" />,
-      active: (v) => v === 'bom',
-      go: () => useNavStore.getState().setView('bom', {}),
     },
   ];
 
@@ -1214,21 +1217,27 @@ function MobileNavList({ onNavigate }: { onNavigate: () => void }) {
     { label: t('nav.products'), icon: <Package className="h-4 w-4" />, active: (v) => v === 'products', go: goProducts },
     {
       label: t('nav.pcbBoards'),
-      icon: <Cpu className="h-4 w-4" />,
+      icon: <LayersIcon className="h-4 w-4" />,
       active: (v, p) => v === 'category' && p.slug === 'pcb-boards',
       go: () => goCategory('pcb-boards'),
     },
     {
-      label: t('nav.openSource'),
-      icon: <Cpu className="h-4 w-4" />,
-      active: (v, p) => v === 'category' && p.slug === 'open-source',
-      go: () => goCategory('open-source'),
+      label: t('nav.devBoards'),
+      icon: <CircuitBoard className="h-4 w-4" />,
+      active: (v, p) => v === 'category' && p.slug === 'dev-boards',
+      go: () => goCategory('dev-boards'),
     },
     {
-      label: t('nav.services'),
-      icon: <Zap className="h-4 w-4" />,
-      active: (v, p) => v === 'category' && p.slug === 'services',
-      go: () => goCategory('services'),
+      label: t('nav.components'),
+      icon: <Cpu className="h-4 w-4" />,
+      active: (v, p) => v === 'category' && p.slug === 'components',
+      go: () => goCategory('components'),
+    },
+    {
+      label: t('nav.openSource'),
+      icon: <FileCode className="h-4 w-4" />,
+      active: (v, p) => v === 'category' && p.slug === 'open-source',
+      go: () => goCategory('open-source'),
     },
   ];
 

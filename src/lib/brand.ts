@@ -25,7 +25,7 @@ export const navLinks = [
   { label: 'Products', view: 'products', icon: 'Package' },
   { label: 'PCB Boards', view: 'category', params: { slug: 'pcb-boards' }, icon: 'Layers' },
   { label: 'KiCad Projects', view: 'category', params: { slug: 'kicad-projects' }, icon: 'FileCode' },
-  { label: 'Services', view: 'category', params: { slug: 'services' }, icon: 'Cog' },
+  { label: 'Open Source', view: 'category', params: { slug: 'open-source' }, icon: 'FileCode' },
 ] as const;
 
 export const footerLinks = {
@@ -34,7 +34,7 @@ export const footerLinks = {
     { label: 'Dev Boards', view: 'category', params: { slug: 'dev-boards' } },
     { label: 'PCB Boards', view: 'category', params: { slug: 'pcb-boards' } },
     { label: 'Components', view: 'category', params: { slug: 'components' } },
-    { label: 'Services', view: 'category', params: { slug: 'services' } },
+    { label: 'Open Source Projects', view: 'category', params: { slug: 'open-source' } },
   ],
   'For Sellers': [
     { label: 'Become a Seller', view: 'seller-onboarding' },

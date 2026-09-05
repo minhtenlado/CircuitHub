@@ -22,8 +22,8 @@ export const translations = {
       products: 'Sản phẩm',
       pcbBoards: 'Mạch PCB',
       openSource: 'Mã nguồn mở',
-      services: 'Dịch vụ',
-      bomTool: 'Gia công PCB',
+      devBoards: 'Bo phát triển',
+      components: 'Linh kiện',
       browse: 'Duyệt',
     },
     hero: {
@@ -43,7 +43,7 @@ export const translations = {
         devBoard: 'Bo phát triển',
         digitalDesign: 'Thiết kế số',
         component: 'Linh kiện',
-        engineering: 'Kỹ thuật',
+        openSource: 'Mã nguồn mở',
       },
     },
     categories: {
@@ -170,7 +170,7 @@ export const translations = {
     common: {
       search: 'Tìm kiếm',
       searchPlaceholder:
-        'Tìm theo sản phẩm, MPN, dự án KiCad, linh kiện, dịch vụ...',
+        'Tìm theo sản phẩm, bo mạch, dự án KiCad, mã nguồn mở, linh kiện...',
       popularSearches: 'Tìm kiếm phổ biến',
       recentSearches: 'Tìm kiếm gần đây',
       clear: 'Xóa',
@@ -224,8 +224,8 @@ export const translations = {
       products: 'Products',
       pcbBoards: 'PCB Boards',
       openSource: 'Open Source',
-      services: 'Services',
-      bomTool: 'PCB Upload',
+      devBoards: 'Dev Boards',
+      components: 'Components',
       browse: 'Browse',
     },
     hero: {
@@ -245,7 +245,7 @@ export const translations = {
         devBoard: 'Dev Board',
         digitalDesign: 'Digital Design',
         component: 'Component',
-        engineering: 'Engineering',
+        openSource: 'Open Source',
       },
     },
     categories: {
@@ -372,7 +372,7 @@ export const translations = {
     common: {
       search: 'Search',
       searchPlaceholder:
-        'Search by product, MPN, KiCad project, component, service...',
+        'Search products, dev boards, KiCad projects, open source, components...',
       popularSearches: 'Popular searches',
       recentSearches: 'Recent searches',
       clear: 'Clear',
@@ -426,8 +426,8 @@ export const translations = {
       products: '产品',
       pcbBoards: 'PCB板',
       openSource: '开源',
-      services: '服务',
-      bomTool: 'PCB上传',
+      devBoards: '开发板',
+      components: '元器件',
       browse: '浏览',
     },
     hero: {
@@ -447,7 +447,7 @@ export const translations = {
         devBoard: '开发板',
         digitalDesign: '数字设计',
         component: '元件',
-        engineering: '工程',
+        openSource: '开源项目',
       },
     },
     categories: {
@@ -625,8 +625,8 @@ export const translations = {
       products: '製品',
       pcbBoards: 'PCB基板',
       openSource: 'オープンソース',
-      services: 'サービス',
-      bomTool: 'PCBアップロード',
+      devBoards: '開発ボード',
+      components: '電子部品',
       browse: 'ブラウズ',
     },
     hero: {
@@ -646,7 +646,7 @@ export const translations = {
         devBoard: '開発ボード',
         digitalDesign: 'デジタル設計',
         component: '部品',
-        engineering: 'エンジニアリング',
+        openSource: 'オープンソース',
       },
     },
     categories: {

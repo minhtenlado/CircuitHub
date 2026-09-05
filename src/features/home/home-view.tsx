@@ -11,7 +11,7 @@ import { CategoriesSection } from './categories-section';
 import { FeaturedProducts } from './featured-products';
 import { RecentlyViewedSection } from './recently-viewed-section';
 import { TopSellers } from './top-sellers';
-import { ServicesSection } from './services-section';
+import { OpenSourceSection } from './open-source-section';
 import { TrustSection } from './trust-section';
 
 export function HomeView() {
@@ -22,7 +22,7 @@ export function HomeView() {
       <FeaturedProducts />
       <RecentlyViewedSection />
       <TopSellers />
-      <ServicesSection />
+      <OpenSourceSection />
       <TrustSection />
     </main>
   );

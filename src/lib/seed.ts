@@ -210,10 +210,9 @@ export async function seedDatabase() {
   const catSensor = await prisma.category.create({ data: { name: 'Sensors', slug: 'sensors', order: 4, icon: 'Radar' } });
   const catModule = await prisma.category.create({ data: { name: 'Modules', slug: 'modules', order: 5, icon: 'Box' } });
   const catTool = await prisma.category.create({ data: { name: 'Tools', slug: 'tools', order: 6, icon: 'Wrench' } });
-  const catService = await prisma.category.create({ data: { name: 'Engineering Services', slug: 'services', order: 7, icon: 'Cog' } });
-  const catOpenSource = await prisma.category.create({ data: { name: 'Open Source Projects', slug: 'open-source', order: 8, icon: 'FileCode' } });
-  const catFirmware = await prisma.category.create({ data: { name: 'Open Source Firmware', slug: 'firmware', order: 9, icon: 'Binary' } });
-  const catGerber = await prisma.category.create({ data: { name: 'Open Gerber Files', slug: 'gerber-files', order: 10, icon: 'FileArchive' } });
+  const catOpenSource = await prisma.category.create({ data: { name: 'Open Source Projects', slug: 'open-source', order: 7, icon: 'FileCode' } });
+  const catFirmware = await prisma.category.create({ data: { name: 'Open Source Firmware', slug: 'firmware', order: 8, icon: 'Binary' } });
+  const catGerber = await prisma.category.create({ data: { name: 'Open Gerber Files', slug: 'gerber-files', order: 9, icon: 'FileArchive' } });
 
   // Sub-categories
   await prisma.category.create({ data: { name: 'ESP32', slug: 'esp32', parentId: catDev.id, order: 1, icon: 'Wifi' } });
@@ -231,10 +230,11 @@ export async function seedDatabase() {
     shortDescription?: string; description?: string;
     image: string; images?: string[]; category: string;
     shop: string; seller: string;
-    stock?: number; weight?: number;
+    stock?: number; weight?: number; unlimited?: boolean;
     isFeatured?: boolean; isTrending?: boolean; isNew?: boolean;
     software?: string; softwareVersion?: string; currentVersion?: string;
     fileFormat?: string; fileSizeBytes?: number; licenseType?: string; compatibility?: string; changelog?: string;
+    releaseDate?: Date; downloadCount?: number;
     pcbLayers?: number; pcbThickness?: number; pcbMaterial?: string; pcbSurfaceFinish?: string;
     pcbCopperWeight?: string; pcbColor?: string; pcbDimensions?: string; pcbRevision?: string; pcbMoq?: number; pcbLeadTimeDays?: number;
     serviceScope?: string; serviceDeliverables?: string; serviceDurationDays?: number; serviceRevisions?: number;
@@ -640,79 +640,67 @@ export async function seedDatabase() {
       releaseDate: new Date('2025-07-08'),
       rating: 4.8, ratingCount: 36, soldCount: 220, downloadCount: 890,
     },
-    // === SERVICES ===
+    // === OPEN SOURCE PROJECTS & DESIGNS ===
     {
-      name: 'Custom PCB Design Service — 4 Layer',
-      slug: 'custom-pcb-design-service-4-layer',
-      productType: 'SERVICE',
-      price: VND(2500000),
-      brand: 'EmbedPro', mpn: 'SVC-PCB-4L',
-      sku: 'SVC-PCB-4L',
-      shortDescription: 'From schematic to Gerber — 4-layer custom PCB design',
-      description: 'End-to-end custom PCB design service. You provide requirements, we deliver: schematic, 4-layer PCB layout, Gerbers, BOM, 3D model, and design review documentation.',
+      name: 'ESP32-S3 AI Camera KiCad 9 Open Hardware',
+      slug: 'esp32-s3-ai-camera-kicad-open',
+      productType: 'DIGITAL',
+      price: 0,
+      brand: 'OpenCircuit', mpn: 'OS-ESP32-CAM',
+      sku: 'OS-ESP32-CAM',
+      shortDescription: 'Complete 4-layer KiCad 9 open hardware project with Gerbers and BOM',
+      description: 'Fully open-source ESP32-S3 camera & microphone development board. Includes complete KiCad 9 schematic and PCB layout, fabrication Gerbers, interactive BOM, and 3D STEP enclosure files.',
       image: img('photo-1551033406-611cf9a28f67'),
       images: [img('photo-1551033406-611cf9a28f67'), img('photo-1498050108023-c5249f4df085')],
-      category: catService.id, shop: shopC.id, seller: sellerC.id,
-      unlimited: true,
+      category: catOpenSource.id, shop: shopC.id, seller: sellerC.id,
+      software: 'KiCad', softwareVersion: '9.0', fileFormat: 'ZIP', licenseType: 'CERN-OHL-P',
       isFeatured: true,
-      serviceScope: 'Schematic capture, PCB layout, Gerber generation, BOM, design review.',
-      serviceDeliverables: 'Schematic (PDF + source), PCB layout, Gerbers, drill files, BOM, 3D STEP, design review document.',
-      serviceDurationDays: 14, serviceRevisions: 3,
       rating: 4.95, ratingCount: 48, soldCount: 95,
     },
     {
-      name: 'PCB Design Review Service',
-      slug: 'pcb-design-review-service',
-      productType: 'SERVICE',
-      price: VND(800000),
-      brand: 'EmbedPro', mpn: 'SVC-PCB-REVIEW',
-      sku: 'SVC-PCB-REVIEW',
-      shortDescription: 'Professional review of your existing PCB design',
-      description: 'Comprehensive PCB design review — signal integrity, power integrity, DFM, DFT, thermal, EMI/EMC. Get a detailed report with actionable recommendations.',
+      name: 'STM32 Quadcopter Flight Controller KiCad Project',
+      slug: 'stm32-quadcopter-flight-controller-kicad',
+      productType: 'DIGITAL',
+      price: 0,
+      brand: 'OpenCircuit', mpn: 'OS-STM32-FC',
+      sku: 'OS-STM32-FC',
+      shortDescription: 'Open source 6-layer mini flight controller design',
+      description: 'Open source 20x20mm drone flight controller based on STM32F405 with dual BMI270 gyroscopes, OSD chip, and Betaflight configuration guide.',
       image: img('photo-1498050108023-c5249f4df085'),
       images: [img('photo-1498050108023-c5249f4df085')],
-      category: catService.id, shop: shopC.id, seller: sellerC.id,
-      unlimited: true,
-      serviceScope: 'Schematic + PCB review, SI/PI, DFM, thermal, EMI/EMC.',
-      serviceDeliverables: 'Detailed review report (PDF), annotated screenshots, prioritized action list.',
-      serviceDurationDays: 5, serviceRevisions: 1,
+      category: catOpenSource.id, shop: shopC.id, seller: sellerC.id,
+      software: 'KiCad', softwareVersion: '9.0', fileFormat: 'ZIP', licenseType: 'MIT',
       rating: 4.9, ratingCount: 32, soldCount: 67,
     },
     {
-      name: 'Embedded Firmware Development',
-      slug: 'embedded-firmware-development',
-      productType: 'SERVICE',
-      price: VND(4500000),
-      brand: 'EmbedPro', mpn: 'SVC-FW-DEV',
-      sku: 'SVC-FW-DEV',
-      shortDescription: 'Custom embedded firmware for ESP32/STM32',
-      description: 'Custom embedded firmware development — bare-metal or RTOS-based. Includes driver development, communication stacks, OTA, and documentation.',
+      name: 'USB-C PD 100W Programmable Trigger Board Gerbers',
+      slug: 'usbc-pd-100w-trigger-board-gerber',
+      productType: 'DIGITAL',
+      price: 0,
+      brand: 'OpenCircuit', mpn: 'OS-USBC-PD100',
+      sku: 'OS-USBC-PD100',
+      shortDescription: 'Open hardware USB-C Power Delivery sink module with OLED',
+      description: 'Programmable USB-C Power Delivery sink controller supporting 5V to 20V 5A negotiation with 0.91-inch OLED telemetry display and hardware pushbuttons.',
       image: img('photo-1551033406-611cf9a28f67'),
       images: [img('photo-1551033406-611cf9a28f67'), img('photo-1542831371-29b0f74f9713')],
-      category: catService.id, shop: shopC.id, seller: sellerC.id,
-      unlimited: true,
+      category: catGerber.id, shop: shopC.id, seller: sellerC.id,
+      software: 'KiCad', softwareVersion: '9.0', fileFormat: 'ZIP', licenseType: 'Apache-2.0',
       isFeatured: true,
-      serviceScope: 'Driver development, RTOS integration, communication, OTA, unit tests.',
-      serviceDeliverables: 'Source code, build system, unit tests, API documentation, user guide.',
-      serviceDurationDays: 30, serviceRevisions: 3,
       rating: 4.95, ratingCount: 21, soldCount: 38,
     },
     {
-      name: 'Gerber Verification & DFM Check',
-      slug: 'gerber-verification-dfm-check',
-      productType: 'SERVICE',
-      price: VND(350000),
-      brand: 'EmbedPro', mpn: 'SVC-GERBER-DFM',
-      sku: 'SVC-GERBER-DFM',
-      shortDescription: 'Verify Gerbers for manufacturability',
-      description: 'Quick DFM check on your Gerber files — trace width, spacing, drill, impedance, panelization. Get a pass/fail report and fix recommendations.',
+      name: 'RP2040 Dual-Core Macro Keyboard Firmware & PCB',
+      slug: 'rp2040-dual-core-macropad-project',
+      productType: 'DIGITAL',
+      price: 0,
+      brand: 'OpenCircuit', mpn: 'OS-RP2040-PAD',
+      sku: 'OS-RP2040-PAD',
+      shortDescription: '9-key mechanical keypad with rotary encoder and open source firmware',
+      description: 'Complete mechanical macropad design with per-key RGB, rotary dial, USB-C, and open-source QMK/KMK/CircuitPython firmware packages.',
       image: img('photo-1542831371-29b0f74f9713'),
       images: [img('photo-1542831371-29b0f74f9713')],
-      category: catService.id, shop: shopC.id, seller: sellerC.id,
-      unlimited: true,
-      serviceScope: 'Gerber + drill + BOM check against fab capabilities.',
-      serviceDeliverables: 'Pass/fail report, annotated layers, fix recommendations.',
-      serviceDurationDays: 2, serviceRevisions: 1,
+      category: catFirmware.id, shop: shopC.id, seller: sellerC.id,
+      software: 'C / MicroPython', softwareVersion: '1.20', fileFormat: 'ZIP', licenseType: 'MIT',
       rating: 4.8, ratingCount: 18, soldCount: 120,
     },
   ];

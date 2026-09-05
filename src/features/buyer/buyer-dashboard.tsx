@@ -385,10 +385,10 @@ const DEMO_ORDERS: DemoOrder[] = [
     itemsCount: 1,
     shippingAddress: { fullName: 'Buyer 1', phone: '0901234567', line1: '12 Nguyen Hue', city: 'Ho Chi Minh', district: 'District 1' },
     items: [
-      { id: 'i9', name: 'Custom PCB Design Service — 4-Layer Board', productType: 'SERVICE', unitPrice: 3200000, quantity: 1, lineTotal: 3200000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=service&backgroundColor=2dd4bf', fulfillmentType: 'SERVICE' },
+      { id: 'i9', name: 'ESP32-S3 AI Camera KiCad 9 Package', productType: 'DIGITAL', unitPrice: 320000, quantity: 1, lineTotal: 320000, imageUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=kicad&backgroundColor=2dd4bf', fulfillmentType: 'DIGITAL' },
     ],
     sellerOrders: [
-      { id: 'so5', code: 'CH-100009-1', shop: { id: 'shop-c', name: 'Hardware Workshop', slug: 'hardware-workshop', verified: true }, status: 'COMPLETED', fulfillmentType: 'SERVICE' },
+      { id: 'so5', code: 'CH-100009-1', shop: { id: 'shop-c', name: 'Hardware Workshop', slug: 'hardware-workshop', verified: true }, status: 'COMPLETED', fulfillmentType: 'DIGITAL' },
     ],
     shipments: [],
     payments: [

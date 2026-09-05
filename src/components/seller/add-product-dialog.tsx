@@ -20,7 +20,6 @@ import {
   Loader2,
   Package,
   FileCode,
-  Wrench,
   Layers,
   Cpu,
   Tag,
@@ -42,13 +41,12 @@ interface AddProductDialogProps {
   categories: { id: string; name: string; slug: string }[];
 }
 
-type ProductType = 'PHYSICAL' | 'DIGITAL' | 'SERVICE';
+type ProductType = 'PHYSICAL' | 'DIGITAL';
 type Step = 'type' | 'basic' | 'specs' | 'review';
 
 const PRODUCT_TYPES: { id: ProductType; label: string; desc: string; icon: any; color: string }[] = [
-  { id: 'PHYSICAL', label: 'Physical Product', desc: 'PCB boards, components, dev boards, sensors, tools', icon: Package, color: 'from-cyan-500 to-teal-400' },
-  { id: 'DIGITAL', label: 'Digital Product', desc: 'KiCad/Altium projects, Gerber files, firmware, 3D models', icon: FileCode, color: 'from-teal-500 to-emerald-400' },
-  { id: 'SERVICE', label: 'Engineering Service', desc: 'PCB design, review, firmware dev, consultation', icon: Wrench, color: 'from-amber-500 to-orange-400' },
+  { id: 'PHYSICAL', label: 'Sản phẩm phần cứng (Bán hàng)', desc: 'Bo mạch phát triển, linh kiện, cảm biến, module, mạch PCB hoàn thiện', icon: Package, color: 'from-cyan-500 to-teal-400' },
+  { id: 'DIGITAL', label: 'Mã nguồn mở / Thiết kế số', desc: 'Dự án KiCad/Altium, file Gerber, mã nguồn firmware mở cho cộng đồng', icon: FileCode, color: 'from-teal-500 to-emerald-400' },
 ];
 
 export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categories }: AddProductDialogProps) {
@@ -67,11 +65,11 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
   const [mpn, setMpn] = useState('');
   const [price, setPrice] = useState('');
   const [compareAtPrice, setCompareAtPrice] = useState('');
-  const [stock, setStock] = useState('');
+  const [stock, setStock] = useState('10');
   const [unlimited, setUnlimited] = useState(false);
   const [categoryId, setCategoryId] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  // PCB
+  // Physical specs
   const [pcbLayers, setPcbLayers] = useState('');
   const [pcbThickness, setPcbThickness] = useState('');
   const [pcbMaterial, setPcbMaterial] = useState('FR4');
@@ -84,11 +82,6 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
   const [currentVersion, setCurrentVersion] = useState('v1.0.0');
   const [fileFormat, setFileFormat] = useState('');
   const [licenseType, setLicenseType] = useState('PERSONAL');
-  // Service
-  const [serviceScope, setServiceScope] = useState('');
-  const [serviceDeliverables, setServiceDeliverables] = useState('');
-  const [serviceDurationDays, setServiceDurationDays] = useState('');
-  const [serviceRevisions, setServiceRevisions] = useState('3');
 
   function reset() {
     setStep('type');
@@ -101,7 +94,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
     setMpn('');
     setPrice('');
     setCompareAtPrice('');
-    setStock('');
+    setStock('10');
     setUnlimited(false);
     setCategoryId('');
     setImageUrl('');
@@ -116,10 +109,6 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
     setCurrentVersion('v1.0.0');
     setFileFormat('');
     setLicenseType('PERSONAL');
-    setServiceScope('');
-    setServiceDeliverables('');
-    setServiceDurationDays('');
-    setServiceRevisions('3');
   }
 
   function close() {
@@ -141,7 +130,6 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
     if (step === 'specs') {
       if (productType === 'PHYSICAL') return true;
       if (productType === 'DIGITAL') return !!software && !!currentVersion;
-      if (productType === 'SERVICE') return !!serviceScope && !!serviceDurationDays;
     }
     return true;
   }
@@ -180,12 +168,6 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
         body.currentVersion = currentVersion;
         body.fileFormat = fileFormat || undefined;
         body.licenseType = licenseType;
-      }
-      if (productType === 'SERVICE') {
-        body.serviceScope = serviceScope;
-        body.serviceDeliverables = serviceDeliverables || undefined;
-        body.serviceDurationDays = parseInt(serviceDurationDays, 10);
-        body.serviceRevisions = parseInt(serviceRevisions, 10);
       }
 
       const res = await fetch('/api/v1/seller/products', {
@@ -468,34 +450,6 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 </>
               )}
 
-              {productType === 'SERVICE' && (
-                <>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-amber-700">
-                    <Wrench className="h-4 w-4" /> Service Details
-                  </div>
-                  <div className="space-y-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="scope">Service Scope <span className="text-red-500">*</span></Label>
-                      <Textarea id="scope" value={serviceScope} onChange={(e) => setServiceScope(e.target.value)} placeholder="e.g. End-to-end custom PCB design: schematic, layout, gerbers, BOM" rows={2} />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="deliverables">Deliverables</Label>
-                      <Textarea id="deliverables" value={serviceDeliverables} onChange={(e) => setServiceDeliverables(e.target.value)} placeholder="e.g. Schematic (PDF+source), PCB layout, Gerbers, BOM, 3D model" rows={2} />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-1.5">
-                        <Label htmlFor="duration">Duration (days) <span className="text-red-500">*</span></Label>
-                        <Input id="duration" type="number" value={serviceDurationDays} onChange={(e) => setServiceDurationDays(e.target.value)} placeholder="14" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="revisions">Revisions Included</Label>
-                        <Input id="revisions" type="number" value={serviceRevisions} onChange={(e) => setServiceRevisions(e.target.value)} placeholder="3" />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-
               <div className="space-y-1.5">
                 <Label htmlFor="description">Full Description</Label>
                 <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Detailed product description..." rows={4} />
@@ -519,7 +473,6 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 {productType !== 'DIGITAL' && <ReviewRow label="Stock" value={unlimited ? 'Unlimited' : (stock || '0')} />}
                 {productType === 'PHYSICAL' && pcbLayers && <ReviewRow label="PCB Layers" value={`${pcbLayers} layers`} />}
                 {productType === 'DIGITAL' && <ReviewRow label="Software" value={`${software} ${softwareVersion}`} />}
-                {productType === 'SERVICE' && <ReviewRow label="Duration" value={`${serviceDurationDays} days`} />}
               </div>
               <p className="text-xs text-muted-foreground">By clicking &quot;Create Product&quot;, your product will be published immediately. Admin may moderate it later.</p>
             </div>

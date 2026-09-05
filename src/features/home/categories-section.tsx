@@ -44,7 +44,6 @@ const CATEGORIES: CatEntry[] = [
   { slug: 'open-source', labelKey: 'categories.openSource', icon: FileCode, accent: 'from-cyan-500 to-teal-400' },
   { slug: 'gerber-files', labelKey: 'categories.gerberFiles', icon: FileArchive, accent: 'from-teal-500 to-cyan-400' },
   { slug: 'firmware', labelKey: 'categories.firmware', icon: Binary, accent: 'from-cyan-500 to-cyan-400' },
-  { slug: 'services', labelKey: 'categories.services', icon: Cog, accent: 'from-teal-500 to-aqua-400' },
 ];
 
 export function CategoriesSection() {

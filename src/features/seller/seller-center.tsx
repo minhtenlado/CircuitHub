@@ -938,7 +938,7 @@ function OverviewTab({
    ============================================================ */
 
 function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories }: { products: any[]; toast: any; goProduct: (slug: string) => void; sellerId: string; shopId: string; categories: { id: string; name: string; slug: string }[] }) {
-  const [type, setType] = useState<'ALL' | 'PHYSICAL' | 'DIGITAL' | 'SERVICE'>('ALL');
+  const [type, setType] = useState<'ALL' | 'PHYSICAL' | 'DIGITAL'>('ALL');
   const [query, setQuery] = useState('');
   const [showAddProduct, setShowAddProduct] = useState(false);
 
@@ -950,11 +950,10 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
     });
   }, [products, type, query]);
 
-  const typeFilters: { id: 'ALL' | 'PHYSICAL' | 'DIGITAL' | 'SERVICE'; label: string }[] = [
-    { id: 'ALL', label: 'All' },
-    { id: 'PHYSICAL', label: 'Physical' },
-    { id: 'DIGITAL', label: 'Digital' },
-    { id: 'SERVICE', label: 'Service' },
+  const typeFilters: { id: 'ALL' | 'PHYSICAL' | 'DIGITAL'; label: string }[] = [
+    { id: 'ALL', label: 'Tất cả' },
+    { id: 'PHYSICAL', label: 'Sản phẩm vật lý' },
+    { id: 'DIGITAL', label: 'Mã nguồn mở' },
   ];
 
   return (

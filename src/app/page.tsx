@@ -18,7 +18,6 @@ import { ProductDetailView } from '@/features/products/product-detail-view';
 import { CategoryView } from '@/features/products/category-view';
 import { CartView } from '@/features/checkout/cart-view';
 import { CheckoutView } from '@/features/checkout/checkout-view';
-import { BomView } from '@/features/bom/bom-view';
 import { BuyerDashboard } from '@/features/buyer/buyer-dashboard';
 import { SellerCenter } from '@/features/seller/seller-center';
 import { AdminCenter } from '@/features/admin/admin-center';
@@ -279,7 +278,7 @@ function PageRouter() {
       content = <CheckoutView />;
       break;
     case 'bom':
-      content = <BomView />;
+      content = <ProductsView />;
       break;
     case 'buyer-orders':
     case 'buyer-downloads':
