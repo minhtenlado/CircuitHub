@@ -132,7 +132,7 @@ export function CheckoutView() {
           voucherCode: appliedVoucher?.code,
           paymentMethod,
           shippingMethod: 'STANDARD',
-          userId: 'demo-buyer',
+          userId: useAuthStore.getState().user?.id ?? 'demo-buyer',
         }),
       });
       const json = await res.json();

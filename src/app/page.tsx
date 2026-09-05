@@ -124,10 +124,9 @@ function ShopView() {
 function AuthView({ mode }: { mode: 'login' | 'register' }) {
   const setView = useNavStore((s) => s.setView);
   const { toast } = useToastHook();
-  const { demoLogin } = useAuthStore.getState();
-  const [email, setEmail] = useState('buyer1@example.com');
-  const [password, setPassword] = useState('Demo@2025');
-  const [name, setName] = useState('New User');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -141,16 +140,15 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
         body: JSON.stringify(mode === 'login' ? { email, password } : { email, password, name }),
       });
       const json = await res.json();
-      if (json.success) {
-        toast({ title: mode === 'login' ? 'Welcome back!' : 'Account created!', description: json.data.user.name });
-        // Default: go to buyer dashboard
-        demoLogin('buyer');
+      if (json.success && json.data?.user) {
+        toast({ title: mode === 'login' ? 'Đăng nhập thành công!' : 'Tạo tài khoản thành công!', description: `Xin chào ${json.data.user.name}` });
+        useAuthStore.getState().setAuth(json.data.user, json.data.token);
         setView('home', {});
       } else {
-        toast({ title: 'Authentication failed', description: json.message, variant: 'destructive' });
+        toast({ title: 'Đăng nhập thất bại', description: json.message || 'Vui lòng kiểm tra lại thông tin', variant: 'destructive' });
       }
     } catch {
-      toast({ title: 'Network error', variant: 'destructive' });
+      toast({ title: 'Lỗi kết nối mạng', variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -158,13 +156,13 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
 
   async function googleLogin() {
     setGoogleLoading(true);
-    // Mock Google OAuth — in production, redirect to Google consent screen
     setTimeout(() => {
-      demoLogin('buyer');
-      toast({ title: 'Google sign-in successful', description: 'Welcome to CircuitHub!' });
-      setView('home', {});
+      toast({
+        title: 'Google Sign-In',
+        description: 'Tính năng Google OAuth đang được liên kết. Vui lòng sử dụng Email và Mật khẩu để đăng nhập.',
+      });
       setGoogleLoading(false);
-    }, 1200);
+    }, 600);
   }
 
   return (

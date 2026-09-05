@@ -43,6 +43,7 @@ import {
   Download,
   LogOut,
   ChevronDown,
+  UserPlus,
   ChevronRight,
   Cpu,
   Zap,
@@ -938,21 +939,11 @@ function RoleSwitcher() {
 function UserMenu() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
-  const demoLogin = useAuthStore((s) => s.demoLogin);
   const goBuyer = useNavStore((s) => s.goBuyer);
   const goShop = useNavStore((s) => s.goShop);
   const goAuth = useNavStore((s) => s.goAuth);
   const { toast } = useToast();
   const { t } = useI18n();
-
-  const handleDemoLogin = () => {
-    demoLogin('buyer');
-    toast({
-      title: t('auth.welcomeBack'),
-      description: 'Demo mode active — explore the full experience.',
-    });
-    goBuyer('buyer-orders');
-  };
 
   const handleLogout = () => {
     logout();
@@ -1026,8 +1017,8 @@ function UserMenu() {
             <DropdownMenuItem onClick={() => goAuth('login')}>
               <User className="h-4 w-4" /> {t('auth.signIn')}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleDemoLogin}>
-              <User className="h-4 w-4" /> {t('common.demoBuyer')}
+            <DropdownMenuItem onClick={() => goAuth('register')}>
+              <UserPlus className="h-4 w-4" /> {t('auth.createAccount')}
             </DropdownMenuItem>
           </>
         )}
@@ -1041,7 +1032,6 @@ function MobileMenu() {
   const [open, setOpen] = useState(false);
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
-  const demoLogin = useAuthStore((s) => s.demoLogin);
   const role = useNavStore((s) => s.role);
   const setRole = useNavStore((s) => s.setRole);
   const goBuyer = useNavStore((s) => s.goBuyer);
@@ -1052,15 +1042,6 @@ function MobileMenu() {
   const wishlistCount = useWishlistStore((s) => s.items.length);
   const { toast } = useToast();
   const { t } = useI18n();
-
-  const handleDemoLogin = (r: 'buyer' | 'seller' | 'admin') => {
-    demoLogin(r);
-    toast({ title: `${t('auth.welcomeBack')} — ${r.charAt(0).toUpperCase() + r.slice(1)}`, description: 'Demo mode active.' });
-    setOpen(false);
-    if (r === 'buyer') goBuyer('buyer-orders');
-    else if (r === 'seller') goSeller();
-    else goAdmin();
-  };
 
   const handleLogout = () => {
     logout();
@@ -1177,15 +1158,6 @@ function MobileMenu() {
             </div>
           )}
 
-          <div className="my-2 h-px bg-border/60" />
-          <div className="px-2">
-            <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              {t('common.demoLogins')}
-            </div>
-            <MobileLink icon={<User className="h-4 w-4" />} label={t('common.demoBuyer')} onClick={() => handleDemoLogin('buyer')} />
-            <MobileLink icon={<Store className="h-4 w-4" />} label={t('common.demoSeller')} onClick={() => handleDemoLogin('seller')} />
-            <MobileLink icon={<Settings className="h-4 w-4" />} label={t('common.demoAdmin')} onClick={() => handleDemoLogin('admin')} />
-          </div>
 
           {user && (
             <>

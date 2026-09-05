@@ -1852,16 +1852,17 @@ export function BuyerDashboard() {
 
   const { items: wishlistItems, remove: removeFromWishlist, clear: clearWishlist } = useWishlistStore();
 
-  // Live data hooks (per task spec use 'demo-buyer')
-  const { data: liveOrders } = useOrders('demo-buyer');
-  const { data: liveNotifications } = useNotifications('demo-buyer');
+  // Live data hooks using authenticated user
+  const effectiveUserId = user?.id ?? 'demo-buyer';
+  const { data: liveOrders } = useOrders(effectiveUserId);
+  const { data: liveNotifications } = useNotifications(effectiveUserId);
 
-  // Fall back to DEMO_ORDERS when API returns empty (demo-buyer not seeded)
-  const orders: DemoOrder[] = (Array.isArray(liveOrders) && liveOrders.length > 0 ? liveOrders : DEMO_ORDERS) as DemoOrder[];
-  const notifications = (Array.isArray(liveNotifications) && liveNotifications.length > 0 ? liveNotifications : DEMO_NOTIFICATIONS) as Array<{ id: string; type: string; title: string; body: string; read: boolean; createdAt: string }>;
+  // Use real orders when available, or empty list for new users
+  const orders: DemoOrder[] = (Array.isArray(liveOrders) && liveOrders.length > 0 ? liveOrders : (user?.id && !user.id.startsWith('demo-') ? [] : DEMO_ORDERS)) as DemoOrder[];
+  const notifications = (Array.isArray(liveNotifications) && liveNotifications.length > 0 ? liveNotifications : (user?.id && !user.id.startsWith('demo-') ? [] : DEMO_NOTIFICATIONS)) as Array<{ id: string; type: string; title: string; body: string; read: boolean; createdAt: string }>;
 
-  const displayName = user?.name ?? 'Buyer';
-  const displayEmail = user?.email ?? 'buyer1@example.com';
+  const displayName = user?.name ?? 'Khách hàng';
+  const displayEmail = user?.email ?? '';
   const displayPhone = '0901234567';
   const displayAvatar = user?.avatarUrl;
 
