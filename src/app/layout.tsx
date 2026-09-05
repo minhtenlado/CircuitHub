@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     "engineering services",
   ],
   authors: [{ name: "CircuitHub" }],
-  icons: { icon: "/logo.png" },
+  icons: { icon: "/favicon.png" },
   openGraph: {
     title: "CircuitHub — Buy Electronics. Build Anything.",
     description:
