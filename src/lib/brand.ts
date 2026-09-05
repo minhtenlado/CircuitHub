@@ -47,6 +47,7 @@ export const footerLinks = {
     { label: 'Engineering Blog', view: 'blog' },
     { label: 'Careers', view: 'careers' },
     { label: 'Contact', view: 'contact' },
+    { label: 'Admin Portal', view: 'admin' },
   ],
   Legal: [
     { label: 'Terms of Service', view: 'terms' },

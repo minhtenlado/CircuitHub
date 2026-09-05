@@ -60,6 +60,7 @@ import {
   AlertCircle,
   Globe,
   Check,
+  Shield,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQueryClient } from '@tanstack/react-query';
@@ -942,6 +943,7 @@ function UserMenu() {
   const goBuyer = useNavStore((s) => s.goBuyer);
   const goShop = useNavStore((s) => s.goShop);
   const goAuth = useNavStore((s) => s.goAuth);
+  const goAdmin = useNavStore((s) => s.goAdmin);
   const { toast } = useToast();
   const { t } = useI18n();
 
@@ -1005,6 +1007,14 @@ function UserMenu() {
                 </DropdownMenuItem>
               </>
             )}
+            {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => goAdmin()} className="text-cyan-600 font-medium">
+                  <Shield className="h-4 w-4" /> Cổng Quản trị (Admin)
+                </DropdownMenuItem>
+              </>
+            ) : null}
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onClick={handleLogout}>
               <LogOut className="h-4 w-4" /> {t('common.logout')}
@@ -1019,6 +1029,10 @@ function UserMenu() {
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => goAuth('register')}>
               <UserPlus className="h-4 w-4" /> {t('auth.createAccount')}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => goAdmin()} className="text-cyan-600 font-medium">
+              <Shield className="h-4 w-4" /> Cổng Quản trị (Admin)
             </DropdownMenuItem>
           </>
         )}
@@ -1152,6 +1166,15 @@ function MobileMenu() {
                 label={t('auth.createAccount')}
                 onClick={() => {
                   goAuth('register');
+                  setOpen(false);
+                }}
+              />
+              <div className="my-1 h-px bg-border/60" />
+              <MobileLink
+                icon={<Shield className="h-4 w-4 text-cyan-600" />}
+                label="Cổng Quản trị (Admin)"
+                onClick={() => {
+                  goAdmin();
                   setOpen(false);
                 }}
               />

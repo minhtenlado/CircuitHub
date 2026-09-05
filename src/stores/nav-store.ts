@@ -63,6 +63,26 @@ interface NavState {
  */
 function parseHash(): { view: AppView; params: Record<string, string> } {
   if (typeof window === 'undefined') return { view: 'home', params: {} };
+
+  // 1. Check pathname (e.g. /admin, /seller)
+  const pathname = window.location.pathname.replace(/^\//, '');
+  if (pathname === 'admin' || pathname.startsWith('admin/')) {
+    return { view: 'admin', params: {} };
+  }
+  if (pathname === 'seller' || pathname.startsWith('seller/')) {
+    return { view: 'seller', params: {} };
+  }
+
+  // 2. Check query string (e.g. ?_vercel_share=.../admin or ?admin or ?view=admin)
+  const search = window.location.search;
+  if (search.includes('/admin') || search.includes('view=admin') || search.includes('?admin') || search.includes('&admin')) {
+    return { view: 'admin', params: {} };
+  }
+  if (search.includes('/seller') || search.includes('view=seller')) {
+    return { view: 'seller', params: {} };
+  }
+
+  // 3. Check hash (e.g. #admin, #/admin)
   const hash = window.location.hash.replace(/^#/, '');
   if (!hash) return { view: 'home', params: {} };
   // Remove leading slash

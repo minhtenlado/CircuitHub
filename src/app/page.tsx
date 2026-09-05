@@ -235,6 +235,11 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
             </>
           )}
         </div>
+        <div className="mt-4 pt-4 border-t border-border/50 text-center text-xs text-muted-foreground">
+          <button onClick={() => setView('admin-login', {})} className="hover:text-cyan-600 transition-colors">
+            🛡️ Cổng đăng nhập Quản trị viên (Admin)
+          </button>
+        </div>
       </div>
     </div>
   );
