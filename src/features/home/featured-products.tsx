@@ -201,11 +201,11 @@ export function FeaturedProducts() {
       />
 
       <ProductCarousel
-        eyebrow="Hot right now"
-        title="Trending Digital Designs"
-        subtitle="Most-downloaded KiCad projects, Altium templates, Gerber packages, and firmware."
-        hookParams={{ trending: 'true' }}
-        viewAllFilters={{ trending: 'true' }}
+        eyebrow="Free & Open Source"
+        title="Open Source Projects"
+        subtitle="Free KiCad projects, Altium templates, Gerber files, and firmware — shared with the engineering community."
+        hookParams={{ category: 'open-source' }}
+        viewAllFilters={{ category: 'open-source' }}
       />
     </section>
   );

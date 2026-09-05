@@ -23,6 +23,8 @@ import {
   TrendingBadge,
   TechBadge,
   VerifiedBadge,
+  OpenSourceBadge,
+  FreeBadge,
 } from '@/components/common/badges';
 import {
   ShoppingCart,
@@ -175,24 +177,37 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
               </div>
             )}
 
-            {/* Price */}
-            <div className="flex items-end gap-2 pt-1">
-              {product.compareAtPrice && (
-                <span className="text-xs text-muted-foreground line-through mb-0.5">{formatVND(product.compareAtPrice)}</span>
-              )}
-              <span className="text-2xl font-bold text-cyan-700 tracking-tight">{formatVND(product.price)}</span>
-              {pct > 0 && (
-                <Badge className="bg-gradient-to-r from-rose-500 to-orange-400 text-white border-0 text-[10px] mb-1">
-                  -{pct}%
-                </Badge>
-              )}
-            </div>
+            {/* Price / Free badge */}
+            {product.price === 0 && product.productType === 'DIGITAL' ? (
+              <div className="flex items-center gap-2 pt-1">
+                <FreeBadge />
+                <span className="text-sm text-emerald-600 font-medium">Free & Open Source</span>
+              </div>
+            ) : (
+              <div className="flex items-end gap-2 pt-1">
+                {product.compareAtPrice && (
+                  <span className="text-xs text-muted-foreground line-through mb-0.5">{formatVND(product.compareAtPrice)}</span>
+                )}
+                <span className="text-2xl font-bold text-cyan-700 tracking-tight">{formatVND(product.price)}</span>
+                {pct > 0 && (
+                  <Badge className="bg-gradient-to-r from-rose-500 to-orange-400 text-white border-0 text-[10px] mb-1">
+                    -{pct}%
+                  </Badge>
+                )}
+              </div>
+            )}
 
-            {/* Stock + sold */}
+            {/* Stock + sold / downloads */}
             <div className="flex items-center justify-between text-xs">
-              <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
-              {product.soldCount > 0 && (
-                <span className="text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} sold</span>
+              {product.price === 0 && product.productType === 'DIGITAL' ? (
+                <span className="text-muted-foreground">{(product.downloadCount ?? product.soldCount ?? 0).toLocaleString('vi-VN')} downloads</span>
+              ) : (
+                <>
+                  <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
+                  {product.soldCount > 0 && (
+                    <span className="text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} sold</span>
+                  )}
+                </>
               )}
             </div>
 
@@ -200,14 +215,27 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
 
             {/* Actions */}
             <div className="flex items-center gap-2 mt-auto">
-              <Button
-                onClick={handleAddToCart}
-                className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white"
-                disabled={product.productType === 'SERVICE'}
-              >
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                {product.productType === 'SERVICE' ? 'Request Quote' : 'Add to Cart'}
-              </Button>
+              {product.price === 0 && product.productType === 'DIGITAL' ? (
+                <Button
+                  onClick={() => {
+                    toast({ title: 'Download started', description: `${product.name} — Free open source download` });
+                    onOpenChange(false);
+                  }}
+                  className="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Free
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleAddToCart}
+                  className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white"
+                  disabled={product.productType === 'SERVICE'}
+                >
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  {product.productType === 'SERVICE' ? 'Request Quote' : 'Add to Cart'}
+                </Button>
+              )}
               <Button
                 onClick={() => {
                   wishlist.toggle({

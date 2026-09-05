@@ -610,8 +610,8 @@ function ProductDetailContent({ product }: { product: any }) {
             {/* Service-specific quick info */}
             {isService && <ServiceQuickInfo product={product} />}
 
-            {/* License acceptance for digital */}
-            {isDigital && (
+            {/* License acceptance for digital (not for open source) */}
+            {isDigital && product.licenseType !== 'OPEN_SOURCE' && (
               <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-4 space-y-3">
                 <label
                   htmlFor="license-accept"
@@ -654,28 +654,66 @@ function ProductDetailContent({ product }: { product: any }) {
               </div>
             )}
 
+            {/* Open Source badge for free digital products */}
+            {isDigital && product.licenseType === 'OPEN_SOURCE' && product.price === 0 && (
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-400 px-2.5 py-0.5 text-xs font-bold text-white">
+                    FREE
+                  </span>
+                  <span className="text-sm font-semibold text-emerald-700">Open Source Project</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  This project is free and open source. You can download, modify, and share it freely.
+                  Attribution to the original author is appreciated.
+                </p>
+              </div>
+            )}
+
             {/* CTAs */}
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white shadow-[0_8px_20px_-8px_rgba(6,182,212,0.5)] border-0"
-                disabled={isDigital && !licenseAccepted}
-                onClick={() => handleAddToCart(false)}
-              >
-                <ShoppingBag className="h-4 w-4" />
-                Add to Cart
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-cyan-300 text-cyan-700 hover:bg-cyan-50"
-                disabled={isDigital && !licenseAccepted}
-                onClick={() => handleAddToCart(true)}
-              >
-                Buy Now
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
+            {isDigital && product.price === 0 && product.licenseType === 'OPEN_SOURCE' ? (
+              /* Free download button for open source */
+              <div className="space-y-3">
+                <Button
+                  size="lg"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.5)] border-0"
+                  onClick={() => {
+                    toast({
+                      title: 'Download started',
+                      description: `${product.name} — Free open source download`,
+                    });
+                  }}
+                >
+                  <Download className="h-5 w-5" />
+                  Download Free
+                </Button>
+                <p className="text-center text-xs text-muted-foreground">
+                  No registration required · Free for commercial & personal use
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white shadow-[0_8px_20px_-8px_rgba(6,182,212,0.5)] border-0"
+                  disabled={isDigital && !licenseAccepted}
+                  onClick={() => handleAddToCart(false)}
+                >
+                  <ShoppingBag className="h-4 w-4" />
+                  Add to Cart
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-cyan-300 text-cyan-700 hover:bg-cyan-50"
+                  disabled={isDigital && !licenseAccepted}
+                  onClick={() => handleAddToCart(true)}
+                >
+                  Buy Now
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
 
             {/* Wishlist + Compare */}
             <div className="grid grid-cols-2 gap-3">

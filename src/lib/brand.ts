@@ -3,9 +3,9 @@
  */
 export const brand = {
   name: 'CircuitHub',
-  tagline: 'Build it. Design it. Ship it.',
+  tagline: 'Buy Electronics. Build Anything.',
   description:
-    'The modern engineering marketplace for hardware creators. Buy & sell PCB boards, KiCad/Altium projects, Gerber packages, electronic components, and engineering services.',
+    'The modern electronics marketplace for PCB boards, dev boards, components, sensors, modules, and tools — plus free open source KiCad projects, Gerber files, and firmware for the engineering community.',
   currency: 'VND',
   currencySymbol: '₫',
   timezone: 'Asia/Ho_Chi_Minh',

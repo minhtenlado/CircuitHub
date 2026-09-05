@@ -92,3 +92,23 @@ export function CategoryBadge({ category, icon }: { category: string; icon?: str
     </Badge>
   );
 }
+
+export function OpenSourceBadge({ className }: { className?: string }) {
+  return (
+    <Badge className={cn('gap-1 bg-gradient-to-r from-emerald-500 to-teal-400 text-white border-0 font-semibold', className)}>
+      <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93C7.05 19.44 4 16.08 4 12c0-.61.08-1.21.21-1.78l5.79 5.79v1.92zm9.45-4.11c-.57-1.07-1.65-1.82-2.95-1.82-1.32 0-2.5.78-3.05 1.9l-2.43-2.43c.57-1.08.97-2.27.97-3.47 0-1.39-.52-2.65-1.38-3.63l3.06-3.06c1.4.78 3.05 1.23 4.81 1.23.58 0 1.14-.06 1.69-.15C19.4 9.73 20 10.8 20 12c0 1.39-.43 2.69-1.55 3.82z" />
+      </svg>
+      Open Source
+    </Badge>
+  );
+}
+
+export function FreeBadge({ className }: { className?: string }) {
+  return (
+    <Badge className={cn('gap-1 bg-gradient-to-r from-emerald-500 to-cyan-400 text-white border-0 font-bold tracking-tight', className)}>
+      FREE
+    </Badge>
+  );
+}
+

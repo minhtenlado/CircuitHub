@@ -96,10 +96,10 @@ function NavPills({ onNavigate }: { onNavigate?: () => void }) {
       go: () => goCategory('pcb-boards'),
     },
     {
-      label: 'KiCad Projects',
+      label: 'Open Source',
       icon: <Cpu className="h-3.5 w-3.5" />,
-      active: (v, p) => v === 'category' && p.slug === 'kicad-projects',
-      go: () => goCategory('kicad-projects'),
+      active: (v, p) => v === 'category' && p.slug === 'open-source',
+      go: () => goCategory('open-source'),
     },
     {
       label: 'Services',
@@ -1216,10 +1216,10 @@ function MobileNavList({ onNavigate }: { onNavigate: () => void }) {
       go: () => goCategory('pcb-boards'),
     },
     {
-      label: 'KiCad Projects',
+      label: 'Open Source',
       icon: <Cpu className="h-4 w-4" />,
-      active: (v, p) => v === 'category' && p.slug === 'kicad-projects',
-      go: () => goCategory('kicad-projects'),
+      active: (v, p) => v === 'category' && p.slug === 'open-source',
+      go: () => goCategory('open-source'),
     },
     {
       label: 'Services',

@@ -160,15 +160,15 @@ export function Hero() {
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-foreground">
-              Build it. Design it.{' '}
-              <span className="text-gradient-cyan">Ship it.</span>
+              Buy electronics.{' '}
+              <span className="text-gradient-cyan">Build anything.</span>
             </h1>
 
             {/* Subtitle */}
             <p className="max-w-xl text-base sm:text-lg leading-relaxed text-muted-foreground">
-              The modern engineering marketplace for PCB boards, KiCad &amp; Altium
-              projects, Gerber packages, dev boards, sensors, and on-demand
-              engineering services — verified by engineers, ready to ship.
+              The modern electronics marketplace for PCB boards, dev boards,
+              components, sensors, modules, and tools — plus free open source
+              KiCad projects, Gerber files, and firmware for the community.
             </p>
 
             {/* CTAs */}

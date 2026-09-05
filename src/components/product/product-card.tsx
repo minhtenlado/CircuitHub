@@ -13,7 +13,7 @@ import { useQuickViewStore } from '@/stores/quick-view-store';
 import { useToast } from '@/hooks/use-toast';
 import { formatVND, discountPct as calcPct } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
-import { ProductTypeBadge, StockBadge, DiscountBadge, NewBadge, TrendingBadge, TechBadge } from '@/components/common/badges';
+import { ProductTypeBadge, StockBadge, DiscountBadge, NewBadge, TrendingBadge, TechBadge, OpenSourceBadge, FreeBadge } from '@/components/common/badges';
 import { Cpu, Layers, FileCode, Download } from 'lucide-react';
 
 export function ProductCard({ product, index = 0 }: { product: any; index?: number }) {
@@ -204,6 +204,9 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
 
         {/* Tech badges */}
         <div className="flex flex-wrap gap-1 mt-auto">
+          {product.productType === 'DIGITAL' && product.licenseType === 'OPEN_SOURCE' && (
+            <OpenSourceBadge className="text-[10px]" />
+          )}
           {product.productType === 'DIGITAL' && product.software && (
             <TechBadge icon={FileCode} label={`${product.software} ${product.softwareVersion ?? ''}`.trim()} />
           )}
@@ -221,46 +224,74 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
           )}
         </div>
 
-        {/* Price + cart */}
+        {/* Price + cart / Free download */}
         <div className="flex items-end justify-between pt-2 mt-1 border-t border-border/60">
-          <div className="flex flex-col">
-            {product.compareAtPrice && (
-              <span className="text-[11px] text-muted-foreground line-through">{formatVND(product.compareAtPrice)}</span>
-            )}
-            <span className="text-base font-bold text-cyan-700 tracking-tight">{formatVND(product.price)}</span>
-          </div>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (product.productType === 'SERVICE') {
-                goProduct(product.slug);
-                return;
-              }
-              cart.addItem({
-                productId: product.id,
-                slug: product.slug,
-                name: product.name,
-                imageUrl: image,
-                price: product.price,
-                productType: product.productType,
-                shopId: product.shop.id,
-                shopName: product.shop.name,
-              });
-              toast({ title: 'Added to cart', description: product.name });
-            }}
-            className="flex items-center gap-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold px-2.5 py-1.5 transition-colors shadow-sm"
-            aria-label="Add to cart"
-          >
-            <ShoppingBag className="h-3.5 w-3.5" />
-            Add
-          </button>
+          {product.price === 0 && product.productType === 'DIGITAL' ? (
+            <>
+              <div className="flex items-center gap-1.5">
+                <FreeBadge className="text-[11px]" />
+                <span className="text-xs text-emerald-600 font-medium">Open Source</span>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toast({ title: 'Download started', description: `${product.name} — Free open source download` });
+                }}
+                className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white text-xs font-semibold px-2.5 py-1.5 transition-colors shadow-sm"
+                aria-label="Download free"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Get
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col">
+                {product.compareAtPrice && (
+                  <span className="text-[11px] text-muted-foreground line-through">{formatVND(product.compareAtPrice)}</span>
+                )}
+                <span className="text-base font-bold text-cyan-700 tracking-tight">{formatVND(product.price)}</span>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (product.productType === 'SERVICE') {
+                    goProduct(product.slug);
+                    return;
+                  }
+                  cart.addItem({
+                    productId: product.id,
+                    slug: product.slug,
+                    name: product.name,
+                    imageUrl: image,
+                    price: product.price,
+                    productType: product.productType,
+                    shopId: product.shop.id,
+                    shopName: product.shop.name,
+                  });
+                  toast({ title: 'Added to cart', description: product.name });
+                }}
+                className="flex items-center gap-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold px-2.5 py-1.5 transition-colors shadow-sm"
+                aria-label="Add to cart"
+              >
+                <ShoppingBag className="h-3.5 w-3.5" />
+                Add
+              </button>
+            </>
+          )}
         </div>
 
         {/* Stock footer */}
         <div className="flex items-center justify-between pt-1">
-          <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
-          {product.soldCount > 0 && (
-            <span className="text-[10px] text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} sold</span>
+          {product.price === 0 && product.productType === 'DIGITAL' ? (
+            <span className="text-[10px] text-muted-foreground">{(product.downloadCount ?? product.soldCount ?? 0).toLocaleString('vi-VN')} downloads</span>
+          ) : (
+            <>
+              <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
+              {product.soldCount > 0 && (
+                <span className="text-[10px] text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} sold</span>
+              )}
+            </>
           )}
         </div>
       </div>

@@ -19,7 +19,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CircuitHub — Build it. Design it. Ship it.",
+  title: "CircuitHub — Buy Electronics. Build Anything.",
   description:
     "The modern engineering marketplace for hardware creators. Buy & sell PCB boards, KiCad/Altium projects, Gerber packages, electronic components, and engineering services.",
   keywords: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   authors: [{ name: "CircuitHub" }],
   icons: { icon: "/logo.svg" },
   openGraph: {
-    title: "CircuitHub — Build it. Design it. Ship it.",
+    title: "CircuitHub — Buy Electronics. Build Anything.",
     description:
       "The modern engineering marketplace for hardware creators. PCB, digital designs, components & services.",
     siteName: "CircuitHub",

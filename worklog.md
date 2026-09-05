@@ -1472,3 +1472,100 @@ Project was stable after Round 10 with enhanced notification bell, animated stat
 6. **Admin pagination** — Add proper pagination UI for admin product list
 7. **Quick View "You may also like"** — Add related products carousel in the Quick View dialog
 
+
+---
+Task ID: Business-Pivot-1
+Agent: Main (Z.ai Code)
+Task: Pivot business model — electronics sales focus, KiCad/source code becomes free open source
+
+## Current Project Status Assessment
+
+User requested a business model pivot:
+- **Focus**: Selling electronic circuits (PCB boards, dev boards, components, sensors, modules, tools)
+- **Change**: KiCad projects, Altium projects, Gerber packages, and firmware → FREE open source sharing (not for sale)
+
+This was a major business model change affecting: database seed data, categories, product cards, product detail page, quick view dialog, homepage, header nav, and brand messaging.
+
+## Completed Modifications
+
+### Database & Seed Data
+
+1. **Categories restructured** (`prisma/seed.ts`)
+   - Removed: "KiCad Projects", "Altium Projects", "Gerber Packages", "Firmware"
+   - Added: "Open Source Projects" (slug: `open-source`), "Open Source Firmware" (slug: `firmware`), "Open Gerber Files" (slug: `gerber-files`)
+   - Merged KiCad + Altium projects into "Open Source Projects"
+
+2. **Digital products converted to free open source**
+   - All 6 DIGITAL products now have `price: VND(0)` (was 350000, 180000, 850000, etc.)
+   - All `licenseType` changed to `'OPEN_SOURCE'` (was 'COMMERCIAL', 'PERSONAL', 'EXTENDED_COMMERCIAL')
+   - Categories reassigned: KiCad/Altium → `open-source`, Gerber → `gerber-files`, Firmware → `firmware`
+
+3. **Database reset and re-seeded** with new data
+
+### UI Changes
+
+1. **New badges** (`src/components/common/badges.tsx`)
+   - `OpenSourceBadge`: Emerald-to-teal gradient with open source icon
+   - `FreeBadge`: Emerald-to-cyan gradient with "FREE" text
+
+2. **Product Card** (`src/components/product/product-card.tsx`)
+   - For free open source products (price=0 + DIGITAL + OPEN_SOURCE):
+     - Shows `OpenSourceBadge` + `FreeBadge` + "Open Source" label instead of price
+     - "Get" button with Download icon (emerald gradient) instead of "Add" with ShoppingBag
+     - Shows "N downloads" instead of "N sold" in footer
+   - For paid products: unchanged (price + Add to Cart + stock + sold)
+
+3. **Quick View Dialog** (`src/components/product/quick-view-dialog.tsx`)
+   - For free open source products:
+     - Shows FreeBadge + "Free & Open Source" label instead of price
+     - "Download Free" button (emerald gradient) instead of "Add to Cart"
+     - Shows download count instead of sold count
+   - For paid products: unchanged
+
+4. **Product Detail Page** (`src/features/products/product-detail-view.tsx`)
+   - For free open source products:
+     - Hides license acceptance checkbox (not needed for open source)
+     - Shows emerald "FREE" + "Open Source Project" info card
+     - "Download Free" button (full width, emerald gradient) instead of Add to Cart + Buy Now
+     - "No registration required · Free for commercial & personal use" subtitle
+   - For paid digital products: license acceptance still shown
+   - For physical products: unchanged
+
+5. **Homepage** (`src/features/home/hero.tsx` + `featured-products.tsx`)
+   - New hero headline: "Buy electronics. Build anything." (was "Build it. Design it. Ship it.")
+   - New subtitle: "The modern electronics marketplace for PCB boards, dev boards, components, sensors, modules, and tools — plus free open source KiCad projects, Gerber files, and firmware for the community."
+   - "Trending Digital Designs" section → "Open Source Projects" section with "Free & Open Source" eyebrow
+
+6. **Header Navigation** (`src/components/layout/header.tsx`)
+   - "KiCad Projects" nav link → "Open Source" (links to `open-source` category)
+
+7. **Brand & Metadata** (`src/lib/brand.ts` + `src/app/layout.tsx`)
+   - Tagline: "Buy Electronics. Build Anything." (was "Build it. Design it. Ship it.")
+   - SEO title updated
+   - Description updated to reflect electronics focus + open source
+
+## Verification Results
+
+- `bun run lint` → **0 errors, 0 warnings** (clean)
+- All API endpoints return 200
+- Homepage: Hero shows "Buy electronics. Build anything.", "Open Source Projects" section with FREE badges
+- Product cards: Open source products show FREE + Open Source + "Get" button + downloads count
+- Quick View: Open source products show "Download Free" button, paid products show "Add to Cart"
+- Product detail: Open source product (ESP32 IoT Board KiCad 9) shows "Download Free" + "No registration required"
+- Physical products: Still show price + Add to Cart + Buy Now (unchanged)
+- Database: 6 free open source products, 14 paid physical/service products, 4 services
+
+## Unresolved Issues / Risks
+
+1. **Services still sold** — Engineering services (PCB design, review, firmware dev) remain paid. This is intentional as they are labor-based, not digital products.
+2. **Old category slugs in search** — The search API may still reference old category slugs. Should verify search results.
+3. **Buyer dashboard "My Downloads"** — May need updating to show "Open Source Downloads" for free items.
+4. **Seller Center Add Product** — The Add Product dialog still has "Digital Product" with price field. Should add a "Free/Open Source" toggle that sets price=0.
+
+## Priority Recommendations for Next Phase
+
+1. **Add Product dialog: Free/Open Source toggle** — When creating a DIGITAL product, add a toggle "Make this free & open source" that sets price=0 and licenseType=OPEN_SOURCE
+2. **Buyer dashboard "My Open Source Downloads"** — Separate free downloads from purchased items
+3. **Search filter for "Free only"** — Add a filter in the products page to show only free/open source items
+4. **Open Source category landing page** — Dedicated page with featured open source projects, download stats, community contribution info
+
