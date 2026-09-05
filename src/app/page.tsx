@@ -246,9 +246,10 @@ import { useToast as useToastHook } from '@/hooks/use-toast';
 function PageRouter() {
   const view = useNavStore((s) => s.view);
   const params = useNavStore((s) => s.params);
+  const user = useAuthStore((s) => s.user);
 
   let content: React.ReactNode = null;
-  let key = view;
+  let key: string = view;
 
   switch (view) {
     case 'home':
@@ -356,21 +357,32 @@ function PageRouter() {
 }
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+
   // Initialize hash-based routing on mount
   useEffect(() => {
     setupHashListener();
+    setMounted(true);
   }, []);
 
   const view = useNavStore((s) => s.view);
   const user = useAuthStore((s) => s.user);
 
-  const isAdminView = view === 'admin-login' || view.startsWith('admin');
+  const isAdminView = view === 'admin-login' || (typeof view === 'string' && view.startsWith('admin'));
   const isAdminAuthenticated = user && (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN');
 
   const isStandaloneView =
     view === 'admin-login' ||
     view === 'seller-onboarding' ||
     (isAdminView && !isAdminAuthenticated);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+      </div>
+    );
+  }
 
   if (isStandaloneView) {
     return (

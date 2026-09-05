@@ -100,7 +100,7 @@ export function ProductModerationDialog({ open, onOpenChange, product, action }:
       const json = await res.json();
       if (json.success) {
         toast({
-          title: `Product ${action.toLowerCase()}`,
+          title: `Product ${action ? action.toLowerCase() : 'updated'}`,
           description: `"${product!.name}" is now ${json.data.newStatus.toLowerCase()}.`,
         });
         // Invalidate queries to refresh data

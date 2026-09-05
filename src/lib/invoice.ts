@@ -30,18 +30,27 @@ interface InvoiceOrder {
   createdAt: string | Date;
   status: string;
   subtotal: number;
-  discountTotal: number;
+  discountTotal?: number;
   shippingTotal: number;
   grandTotal: number;
   paymentMethod?: string | null;
   paymentStatus: string;
-  shippingAddress?: string | null;
+  shippingAddress?: any;
   items: InvoiceItem[];
   sellerOrders?: InvoiceSellerOrder[];
 }
 
 export function generateInvoiceHTML(order: InvoiceOrder): string {
-  const address = order.shippingAddress ? JSON.parse(order.shippingAddress) : {};
+  let address: any = {};
+  if (typeof order.shippingAddress === 'string') {
+    try {
+      address = JSON.parse(order.shippingAddress);
+    } catch {
+      address = { line1: order.shippingAddress };
+    }
+  } else if (order.shippingAddress && typeof order.shippingAddress === 'object') {
+    address = order.shippingAddress;
+  }
 
   // Build seller breakdown section if sellerOrders available
   const sellerBreakdown = order.sellerOrders && order.sellerOrders.length > 0 ? `
@@ -50,7 +59,7 @@ export function generateInvoiceHTML(order: InvoiceOrder): string {
       ${order.sellerOrders.map((so) => `
         <div style="border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <div style="font-weight:600;font-size:13px;color:#0f172a;">${so.shop?.name ?? 'Shop'}</div>
+            <div style="font-weight:600;font-size:13px;color:#0f172a;">${so.shopName ?? (so as any).shop?.name ?? 'Shop'}</div>
             ${so.fulfillmentType ? `<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">${so.fulfillmentType}</span>` : ''}
           </div>
           <div style="font-size:12px;color:#64748b;">
@@ -198,7 +207,7 @@ export function generateInvoiceHTML(order: InvoiceOrder): string {
 
       <div class="totals">
         <div class="totals-row"><span>Subtotal</span><span>${formatVND(order.subtotal)}</span></div>
-        ${order.discountTotal > 0 ? `<div class="totals-row"><span>Discount</span><span style="color:#059669;">−${formatVND(order.discountTotal)}</span></div>` : ''}
+        ${(order.discountTotal ?? 0) > 0 ? `<div class="totals-row"><span>Discount</span><span style="color:#059669;">−${formatVND(order.discountTotal!)}</span></div>` : ''}
         <div class="totals-row"><span>Shipping</span><span>${formatVND(order.shippingTotal)}</span></div>
         <div class="totals-divider"></div>
         <div class="totals-grand"><span>Grand Total</span><span>${formatVND(order.grandTotal)}</span></div>

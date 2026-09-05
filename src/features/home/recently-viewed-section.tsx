@@ -60,7 +60,7 @@ export function RecentlyViewedSection() {
                 <p className="text-xs text-muted-foreground truncate">{item.shopName}</p>
                 <div className="flex items-center justify-between pt-1">
                   <span className="text-sm font-bold text-cyan-700">{formatVND(item.price)}</span>
-                  <span className="text-[10px] text-muted-foreground">{timeAgo(item.viewedAt)}</span>
+                  <span className="text-[10px] text-muted-foreground">{timeAgo(new Date(item.viewedAt))}</span>
                 </div>
               </div>
             </motion.button>

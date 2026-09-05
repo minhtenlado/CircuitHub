@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 
 export function AdminLoginView() {
-  const setView = useNavStore.getState().setView;
+  const setView = useNavStore((s) => s.setView);
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

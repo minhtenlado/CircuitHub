@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 /** Animate a number from 0 to target with a delay. */
-export function useCountUp(target: number, duration = 1500, startDelay = 300): { ref: React.RefObject<HTMLSpanElement>; display: string } {
+export function useCountUp(target: number, duration = 1500, startDelay = 300): { ref: React.RefObject<HTMLSpanElement | null>; display: string } {
   const ref = useRef<HTMLSpanElement>(null);
   const [count, setCount] = useState(0);
 
