@@ -159,7 +159,7 @@ export function SellerOnboardingView() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cyan-50/40 via-white to-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Step indicator */}
         <div className="flex items-center justify-between mb-8">
@@ -171,8 +171,8 @@ export function SellerOnboardingView() {
               <div key={s.id} className="flex flex-col items-center gap-1.5 flex-1">
                 <div
                   className={`h-10 w-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                    isCurrent ? 'border-cyan-500 bg-cyan-50 shadow-[0_4px_12px_-4px_rgba(6,182,212,0.4)]' :
-                    isPast ? 'border-emerald-500 bg-emerald-50' : 'border-slate-200 bg-white'
+                    isCurrent ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/60 shadow-[0_4px_12px_-4px_rgba(6,182,212,0.4)]' :
+                    isPast ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60' : 'border-border bg-card'
                   }`}
                 >
                   {isPast ? <CheckCircle2 className="h-5 w-5 text-emerald-500" /> : <Icon className={`h-5 w-5 ${isCurrent ? 'text-cyan-600' : 'text-slate-400'}`} />}

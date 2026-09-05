@@ -59,6 +59,7 @@ import {
 } from '@/components/ui/drawer';
 import { useProducts, useCategories } from '@/lib/api/hooks';
 import { useNavStore } from '@/stores/nav-store';
+import { useI18n, getCategoryName } from '@/lib/i18n';
 import { ProductCard, ProductCardSkeleton } from '@/components/product/product-card';
 import { formatVND } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -68,19 +69,19 @@ import { cn } from '@/lib/utils';
 const PAGE_SIZE = 12;
 const PRICE_MAX = 5_000_000; // 5M VND cap
 
-const SORT_OPTIONS: { value: string; label: string }[] = [
-  { value: 'popular', label: 'Popular' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'price-asc', label: 'Price: Low to High' },
-  { value: 'price-desc', label: 'Price: High to Low' },
-  { value: 'rating', label: 'Top Rated' },
-  { value: 'trending', label: 'Trending' },
+const SORT_OPTIONS = [
+  { value: 'popular', labelKey: 'sort.popular', fallback: 'Popular' },
+  { value: 'newest', labelKey: 'sort.newest', fallback: 'Newest' },
+  { value: 'price-asc', labelKey: 'sort.priceAsc', fallback: 'Price: Low to High' },
+  { value: 'price-desc', labelKey: 'sort.priceDesc', fallback: 'Price: High to Low' },
+  { value: 'rating', labelKey: 'sort.topRated', fallback: 'Top Rated' },
+  { value: 'trending', labelKey: 'sort.trending', fallback: 'Trending' },
 ];
 
-const PRODUCT_TYPES: { value: string; label: string; icon: typeof Package }[] = [
-  { value: 'PHYSICAL', label: 'Sản phẩm vật lý', icon: Package },
-  { value: 'DIGITAL', label: 'Mã nguồn mở / Thiết kế số', icon: FileCode },
-  { value: 'BUNDLE', label: 'Combo / Kit', icon: Box },
+const PRODUCT_TYPES = [
+  { value: 'PHYSICAL', labelKey: 'productType.physical', fallback: 'Sản phẩm vật lý', icon: Package },
+  { value: 'DIGITAL', labelKey: 'productType.digital', fallback: 'Mã nguồn mở / Thiết kế số', icon: FileCode },
+  { value: 'BUNDLE', labelKey: 'productType.bundle', fallback: 'Combo / Kit', icon: Box },
 ];
 
 const SOFTWARE_OPTIONS = ['KiCad', 'Altium', 'Proteus', 'Gerber', 'ESP-IDF'];
@@ -112,6 +113,7 @@ function getInitialCategory(initialCategory?: string, params?: Record<string, st
 export function ProductsView({ initialCategory }: { initialCategory?: string }) {
   const params = useNavStore((s) => s.params);
   const goProducts = useNavStore((s) => s.goProducts);
+  const { t } = useI18n();
 
   /* ---- URL-driven filter state (single source of truth) ---- */
   const category = getInitialCategory(initialCategory, params);
@@ -128,10 +130,7 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
   const [inStockOnly, setInStockOnly] = useState(false);
   const [selectedPcbLayers, setSelectedPcbLayers] = useState<number[]>([]);
 
-  /* ---- Search box with debounce (300ms) ----
-     We use the "adjust state during render" pattern (recommended by React docs)
-     instead of useEffect to sync the local input with the URL `q` param when
-     it changes externally (e.g., from header search). */
+  /* ---- Search box with debounce (300ms) ---- */
   const qParam = params.q ?? '';
   const [searchInput, setSearchInput] = useState(qParam);
   const [prevQParam, setPrevQParam] = useState(qParam);
@@ -140,9 +139,7 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
     setSearchInput(qParam);
   }
 
-  /* ---- Apply filters helper ----
-     Strips the `slug` key (only present when arriving from a category view)
-     before merging — products view uses `category` instead. */
+  /* ---- Apply filters helper ---- */
   function applyFilters(newFilters: Record<string, string | undefined>) {
     const merged: Record<string, string> = {};
     const { slug: _slug, ...restParams } = params;
@@ -150,81 +147,70 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
     for (const [k, v] of Object.entries({ ...restParams, ...newFilters })) {
       if (v !== undefined && v !== '' && v !== null) merged[k] = String(v);
     }
-    // Always include category from initialCategory when present
     if (!merged.category && initialCategory) merged.category = initialCategory;
     goProducts(merged);
   }
 
-  // Debounced update to URL (300ms) — setState inside setTimeout is async,
-  // so the set-state-in-effect rule does not apply.
   useEffect(() => {
-    const t = setTimeout(() => {
-      if (qParam !== searchInput) {
+    const timer = setTimeout(() => {
+      if (searchInput !== (params.q ?? '')) {
         applyFilters({ q: searchInput || undefined, offset: undefined });
       }
     }, 300);
-    return () => clearTimeout(t);
-  }, [searchInput, qParam, applyFilters]);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   function resetAllFilters() {
-    setSearchInput('');
     setSelectedBrands([]);
     setMinRating(0);
     setInStockOnly(false);
     setSelectedPcbLayers([]);
-    const merged: Record<string, string> = {};
-    if (initialCategory) merged.category = initialCategory;
-    merged.sort = 'popular';
-    goProducts(merged);
+    setSearchInput('');
+    goProducts(initialCategory ? { category: initialCategory } : {});
   }
 
-  /* ---- Data fetch ---- */
-  const query = useMemo(
+  /* ---- Data fetching ---- */
+  const queryFilters = useMemo(
     () => ({
-      q: qParam || undefined,
       category: category || undefined,
       productType: productType || undefined,
       software: software || undefined,
-      sort: sort || 'popular',
+      sort,
       minPrice: minPrice || undefined,
       maxPrice: maxPrice || undefined,
+      q: qParam || undefined,
       limit: String(PAGE_SIZE),
       offset: offset > 0 ? String(offset) : undefined,
     }),
-    [qParam, category, productType, software, sort, minPrice, maxPrice, offset],
+    [category, productType, software, sort, minPrice, maxPrice, qParam, offset],
   );
-  const { data, isLoading } = useProducts(query);
+
+  const { data, isLoading } = useProducts(queryFilters);
   const { data: categories } = useCategories();
 
-  /* ---- Apply local filters client-side ---- */
-  const allItems = (data?.items ?? []) as any[];
-  const visibleItems = useMemo(() => {
-    let arr = allItems;
-    if (selectedBrands.length > 0) {
-      arr = arr.filter((p) => p.brand && selectedBrands.includes(p.brand));
-    }
-    if (minRating > 0) {
-      arr = arr.filter((p) => (p.rating ?? 0) >= minRating);
-    }
-    if (inStockOnly) {
-      arr = arr.filter((p) => p.unlimited || (p.stockAvailable ?? 0) > 0);
-    }
-    if (selectedPcbLayers.length > 0 && category === 'pcb-boards') {
-      arr = arr.filter((p) => p.pcbLayers && selectedPcbLayers.includes(p.pcbLayers));
-    }
-    return arr;
-  }, [allItems, selectedBrands, minRating, inStockOnly, selectedPcbLayers, category]);
-
-  /* ---- Brand options (dynamically populated from current results) ---- */
+  /* ---- Derive available brands from current results ---- */
   const brandOptions = useMemo(() => {
+    if (!data?.items) return [];
     const set = new Set<string>();
-    for (const p of allItems) {
+    for (const p of data.items) {
       if (p.brand) set.add(p.brand);
     }
     return Array.from(set).sort();
-  }, [allItems]);
+  }, [data]);
 
-  /* ---- Pagination ---- */
+  /* ---- Client-side filtering on top of server results ---- */
+  const visibleItems = useMemo(() => {
+    if (!data?.items) return [];
+    return data.items.filter((p: any) => {
+      if (selectedBrands.length > 0 && (!p.brand || !selectedBrands.includes(p.brand))) return false;
+      if (minRating > 0 && (p.rating ?? 0) < minRating) return false;
+      if (inStockOnly && !p.unlimited && (p.stockAvailable ?? 0) <= 0) return false;
+      if (selectedPcbLayers.length > 0 && (!p.pcbLayers || !selectedPcbLayers.includes(p.pcbLayers))) return false;
+      return true;
+    });
+  }, [data, selectedBrands, minRating, inStockOnly, selectedPcbLayers]);
+
+  /* ---- Pagination calculation ---- */
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const currentPage = Math.floor(offset / PAGE_SIZE) + 1;
@@ -232,25 +218,23 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
   function goToPage(page: number) {
     const newOffset = (page - 1) * PAGE_SIZE;
     applyFilters({ offset: newOffset > 0 ? String(newOffset) : undefined });
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  /* ---- Price slider state ----
-     Same "adjust state during render" pattern: sync local slider state
-     with URL `minPrice`/`maxPrice` when they change externally. */
-  const minP = minPrice ? parseInt(minPrice, 10) : 0;
-  const maxP = maxPrice ? parseInt(maxPrice, 10) : PRICE_MAX;
-  const [priceRange, setPriceRange] = useState<[number, number]>([minP, maxP]);
-  const [prevPriceKey, setPrevPriceKey] = useState(`${minP}-${maxP}`);
-  const priceKey = `${minP}-${maxP}`;
-  if (priceKey !== prevPriceKey) {
-    setPrevPriceKey(priceKey);
-    setPriceRange([minP, maxP]);
+  /* ---- Local price state for slider drag smoothness ---- */
+  const parsedMin = parseInt(minPrice, 10) || 0;
+  const parsedMax = parseInt(maxPrice, 10) || PRICE_MAX;
+  const [priceRange, setPriceRange] = useState<[number, number]>([parsedMin, parsedMax]);
+
+  const prevMinMax = `${minPrice}-${maxPrice}`;
+  const [lastSyncedMinMax, setLastSyncedMinMax] = useState(prevMinMax);
+  if (prevMinMax !== lastSyncedMinMax) {
+    setLastSyncedMinMax(prevMinMax);
+    setPriceRange([parsedMin, parsedMax]);
   }
 
   function applyPriceRange(range: [number, number]) {
+    setPriceRange(range);
     applyFilters({
       minPrice: range[0] > 0 ? String(range[0]) : undefined,
       maxPrice: range[1] < PRICE_MAX ? String(range[1]) : undefined,
@@ -261,13 +245,17 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
   /* ---- Mobile drawer state ---- */
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  const categoryHeaderTitle = initialCategory
+    ? getCategoryName(initialCategory, categories ? getCategoryNameFromList(categories, initialCategory) : 'Products', t)
+    : t('common.allProducts');
+
   /* ============================================================
      Render
      ============================================================ */
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-cyan-50/20 to-white">
+    <main className="min-h-screen bg-background text-foreground">
       {/* Page header */}
-      <div className="border-b border-border/60 bg-white/70 backdrop-blur-sm sticky top-[60px] z-30">
+      <div className="border-b border-border/60 bg-background/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-[60px] z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -276,14 +264,14 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                  {initialCategory && categories ? getCategoryName(categories, initialCategory) : 'All Products'}
+                  {categoryHeaderTitle}
                 </h1>
                 <p className="text-xs sm:text-sm text-muted-foreground tabular-nums">
                   {isLoading
-                    ? 'Loading products…'
+                    ? t('common.loading')
                     : total > 0
-                      ? `Showing ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)} of ${total.toLocaleString('vi-VN')} products`
-                      : 'No products found'}
+                      ? `${t('common.showing')} ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)} ${t('common.of')} ${total.toLocaleString('vi-VN')} ${t('categories.countProducts')}`
+                      : t('filter.noProducts')}
                 </p>
               </div>
             </div>
@@ -291,16 +279,16 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
               {/* Mobile filter button */}
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <DrawerTrigger asChild>
-                  <Button variant="outline" size="sm" className="lg:hidden border-cyan-200 text-cyan-700">
+                  <Button variant="outline" size="sm" className="lg:hidden border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800">
                     <SlidersHorizontal className="h-4 w-4" />
-                    Filters
+                    {t('filter.filters')}
                   </Button>
                 </DrawerTrigger>
                 <DrawerContent className="max-w-[85vw] sm:max-w-[400px]">
                   <DrawerHeader className="border-b border-border/60">
-                    <DrawerTitle className="flex items-center gap-2 text-cyan-700">
+                    <DrawerTitle className="flex items-center gap-2 text-cyan-700 dark:text-cyan-400">
                       <SlidersHorizontal className="h-4 w-4" />
-                      Filters
+                      {t('filter.filters')}
                     </DrawerTitle>
                   </DrawerHeader>
                   <div className="flex-1 overflow-y-auto p-4">
@@ -322,7 +310,7 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
                       onCategoryChange={(v) => applyFilters({ category: v || undefined, offset: undefined })}
                       onProductTypeChange={(v) => applyFilters({ productType: v || undefined, offset: undefined })}
                       onSoftwareChange={(v) => applyFilters({ software: v || undefined, offset: undefined })}
-                      onPriceRangeChange={applyPriceRange}
+                      onPriceRangeChange={setPriceRange}
                       onPriceRangeCommit={applyPriceRange}
                       onBrandsChange={setSelectedBrands}
                       onRatingChange={(v) => setMinRating(v)}
@@ -334,13 +322,13 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
                   <div className="border-t border-border/60 p-4 flex gap-2">
                     <Button variant="outline" className="flex-1" onClick={resetAllFilters}>
                       <RotateCcw className="h-4 w-4" />
-                      Reset
+                      {t('filter.reset')}
                     </Button>
                     <Button
                       className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white"
                       onClick={() => setDrawerOpen(false)}
                     >
-                      Show {total.toLocaleString('vi-VN')} results
+                      {t('filter.apply')}
                     </Button>
                   </div>
                 </DrawerContent>
@@ -348,13 +336,13 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
 
               {/* Sort dropdown */}
               <Select value={sort} onValueChange={(v) => applyFilters({ sort: v, offset: undefined })}>
-                <SelectTrigger size="sm" className="w-[180px] sm:w-[200px]">
-                  <SelectValue placeholder="Sort by" />
+                <SelectTrigger size="sm" className="w-[180px] sm:w-[200px] bg-background">
+                  <SelectValue placeholder={t('sort.label')} />
                 </SelectTrigger>
                 <SelectContent>
                   {SORT_OPTIONS.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
+                      {t(opt.labelKey) !== opt.labelKey ? t(opt.labelKey) : opt.fallback}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -511,6 +499,7 @@ interface FiltersPanelProps {
 }
 
 function FiltersPanel(props: FiltersPanelProps) {
+  const { t } = useI18n();
   const {
     categories,
     category,
@@ -542,14 +531,14 @@ function FiltersPanel(props: FiltersPanelProps) {
   return (
     <div className="space-y-4">
       {/* Search box */}
-      <FilterCard title="Search" icon={Search}>
+      <FilterCard title={t('filter.search')} icon={Search}>
         <div className="relative">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <Input
             value={searchInput}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search products…"
-            className="pl-8 h-8 text-sm"
+            placeholder={t('filter.searchPlaceholder')}
+            className="pl-8 h-8 text-sm bg-background"
           />
           {searchInput && (
             <button
@@ -564,19 +553,20 @@ function FiltersPanel(props: FiltersPanelProps) {
       </FilterCard>
 
       {/* Product Type */}
-      <FilterCard title="Product Type" icon={Package}>
+      <FilterCard title={t('filter.productType')} icon={Package}>
         <div className="space-y-0.5">
           <RadioRow
-            label="All types"
+            label={t('filter.allTypes')}
             checked={!productType}
             onCheck={() => onProductTypeChange('')}
           />
           {PRODUCT_TYPES.map((pt) => {
             const Icon = pt.icon;
+            const label = t(pt.labelKey) !== pt.labelKey ? t(pt.labelKey) : pt.fallback;
             return (
               <RadioRow
                 key={pt.value}
-                label={pt.label}
+                label={label}
                 checked={productType === pt.value}
                 onCheck={() => onProductTypeChange(productType === pt.value ? '' : pt.value)}
                 icon={<Icon className="h-3.5 w-3.5" />}
@@ -587,10 +577,10 @@ function FiltersPanel(props: FiltersPanelProps) {
       </FilterCard>
 
       {/* Category tree */}
-      <FilterCard title="Category" icon={LayersIcon}>
+      <FilterCard title={t('filter.category')} icon={LayersIcon}>
         <div className="space-y-0.5">
           <RadioRow
-            label="All categories"
+            label={t('filter.allTypes')}
             checked={!category}
             onCheck={() => onCategoryChange('')}
           />
@@ -599,10 +589,11 @@ function FiltersPanel(props: FiltersPanelProps) {
               const Icon = CATEGORY_ICONS[cat.slug] ?? Package;
               const isSel = category === cat.slug;
               const hasChildren = cat.children && cat.children.length > 0;
+              const catLabel = getCategoryName(cat.slug, cat.name, t);
               return (
                 <CategoryTreeRow
                   key={cat.id}
-                  label={cat.name}
+                  label={catLabel}
                   slug={cat.slug}
                   count={(cat._count?.products ?? 0) as number}
                   icon={<Icon className="h-3.5 w-3.5" />}
@@ -617,7 +608,7 @@ function FiltersPanel(props: FiltersPanelProps) {
       </FilterCard>
 
       {/* Price range */}
-      <FilterCard title="Price Range" icon={Cpu}>
+      <FilterCard title={t('filter.price')} icon={Cpu}>
         <div className="space-y-3">
           <div className="flex items-center justify-between text-xs text-muted-foreground tabular-nums">
             <span>{formatVND(priceRange[0])}</span>
@@ -641,7 +632,7 @@ function FiltersPanel(props: FiltersPanelProps) {
                 onChange={(e) => onPriceRangeChange([parseInt(e.target.value, 10) || 0, priceRange[1]])}
                 onBlur={() => onPriceRangeCommit(priceRange)}
                 placeholder="0"
-                className="h-7 text-xs"
+                className="h-7 text-xs bg-background"
               />
             </div>
             <div>
@@ -652,7 +643,7 @@ function FiltersPanel(props: FiltersPanelProps) {
                 onChange={(e) => onPriceRangeChange([priceRange[0], parseInt(e.target.value, 10) || PRICE_MAX])}
                 onBlur={() => onPriceRangeCommit(priceRange)}
                 placeholder="Any"
-                className="h-7 text-xs"
+                className="h-7 text-xs bg-background"
               />
             </div>
           </div>
@@ -661,7 +652,7 @@ function FiltersPanel(props: FiltersPanelProps) {
 
       {/* Software — only when DIGITAL selected */}
       {isDigitalType && (
-        <FilterCard title="Software" icon={FileCode}>
+        <FilterCard title={t('filter.software')} icon={FileCode}>
           <div className="space-y-0.5">
             <RadioRow
               label="All software"
@@ -682,12 +673,12 @@ function FiltersPanel(props: FiltersPanelProps) {
 
       {/* PCB Layers — only when category is PCB */}
       {isPcbCategory && (
-        <FilterCard title="PCB Layers" icon={LayersIcon}>
+        <FilterCard title={t('filter.layers')} icon={LayersIcon}>
           <div className="space-y-0.5">
             {PCB_LAYERS_OPTIONS.map((layer) => (
               <CheckRow
                 key={layer}
-                label={`${layer} layers`}
+                label={`${layer} ${t('filter.layers')}`}
                 checked={selectedPcbLayers.includes(layer)}
                 onCheck={(checked) =>
                   onPcbLayersChange(
@@ -725,7 +716,7 @@ function FiltersPanel(props: FiltersPanelProps) {
       )}
 
       {/* Rating minimum */}
-      <FilterCard title="Minimum Rating" icon={Star}>
+      <FilterCard title={t('filter.rating')} icon={Star}>
         <div className="space-y-0.5">
           <RadioRow label="Any rating" checked={minRating === 0} onCheck={() => onRatingChange(0)} />
           <RadioRow
@@ -744,20 +735,20 @@ function FiltersPanel(props: FiltersPanelProps) {
       </FilterCard>
 
       {/* In stock toggle */}
-      <FilterCard title="Availability" icon={Check}>
+      <FilterCard title={t('filter.inStock')} icon={Check}>
         <label
           htmlFor="in-stock-only"
-          className="flex items-center justify-between gap-2 cursor-pointer rounded-md px-1.5 py-1.5 hover:bg-cyan-50 transition-colors"
+          className="flex items-center justify-between gap-2 cursor-pointer rounded-md px-1.5 py-1.5 hover:bg-cyan-50 dark:hover:bg-slate-800 transition-colors"
         >
-          <span className="text-sm text-foreground">In stock only</span>
+          <span className="text-sm text-foreground">{t('filter.inStock')}</span>
           <Switch id="in-stock-only" checked={inStockOnly} onCheckedChange={onInStockChange} />
         </label>
       </FilterCard>
 
       {/* Reset button */}
-      <Button variant="outline" className="w-full border-cyan-200 text-cyan-700 hover:bg-cyan-50" onClick={onReset}>
+      <Button variant="outline" className="w-full border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onReset}>
         <RotateCcw className="h-3.5 w-3.5" />
-        Reset all filters
+        {t('filter.reset')}
       </Button>
     </div>
   );
@@ -777,8 +768,8 @@ function FilterCard({
   children: React.ReactNode;
 }) {
   return (
-    <Card className="py-3 px-3 gap-3 border-border/60 bg-white/80 backdrop-blur-sm">
-      <div className="flex items-center gap-1.5 px-0 text-xs font-semibold uppercase tracking-wider text-cyan-700">
+    <Card className="py-3 px-3 gap-3 border-border/60 bg-card/90 dark:bg-slate-900/90 backdrop-blur-sm">
+      <div className="flex items-center gap-1.5 px-0 text-xs font-semibold uppercase tracking-wider text-cyan-700 dark:text-cyan-400">
         <Icon className="h-3.5 w-3.5" />
         {title}
       </div>
@@ -803,8 +794,8 @@ function RadioRow({
       type="button"
       onClick={onCheck}
       className={cn(
-        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-left transition-colors hover:bg-cyan-50',
-        checked && 'bg-cyan-50 text-cyan-700 font-medium',
+        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-left transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
+        checked && 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 font-medium',
       )}
     >
       <span
@@ -833,8 +824,8 @@ function CheckRow({
   return (
     <label
       className={cn(
-        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50',
-        checked && 'text-cyan-700 font-medium',
+        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
+        checked && 'text-cyan-700 dark:text-cyan-300 font-medium',
       )}
     >
       <Checkbox checked={checked} onCheckedChange={(v) => onCheck(!!v)} className="data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500" />
@@ -869,8 +860,8 @@ function CategoryTreeRow({
     <div>
       <div
         className={cn(
-          'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50',
-          selected && 'bg-cyan-50 text-cyan-700 font-medium',
+          'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
+          selected && 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 font-medium',
         )}
         onClick={() => onSelect(slug)}
       >
@@ -916,8 +907,8 @@ function CategoryTreeRow({
                 key={ch.id}
                 onClick={() => onSelect(ch.slug)}
                 className={cn(
-                  'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50',
-                  isChildSel && 'bg-cyan-50 text-cyan-700 font-medium',
+                  'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
+                  isChildSel && 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 font-medium',
                 )}
               >
                 <span
@@ -960,20 +951,21 @@ function RatingMini({ value }: { value: number }) {
 }
 
 function EmptyState({ onReset }: { onReset: () => void }) {
+  const { t } = useI18n();
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-500 border border-cyan-100">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-500 border border-cyan-100 dark:border-cyan-800/60">
         <PackageSearch className="h-8 w-8" />
       </div>
       <div>
-        <p className="text-lg font-semibold text-foreground">No products found</p>
+        <p className="text-lg font-semibold text-foreground">{t('filter.noProducts')}</p>
         <p className="text-sm text-muted-foreground mt-1 max-w-md">
-          Try adjusting your search or filters to find what you're looking for.
+          {t('filter.noProductsHint')}
         </p>
       </div>
-      <Button variant="outline" className="border-cyan-200 text-cyan-700 hover:bg-cyan-50" onClick={onReset}>
+      <Button variant="outline" className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onReset}>
         <RotateCcw className="h-4 w-4" />
-        Reset filters
+        {t('filter.reset')}
       </Button>
     </div>
   );
@@ -983,7 +975,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
    Utilities
    ============================================================ */
 
-function getCategoryName(categories: any[], slug: string): string {
+function getCategoryNameFromList(categories: any[], slug: string): string {
   for (const c of categories) {
     if (c.slug === slug) return c.name;
     if (Array.isArray(c.children)) {

@@ -162,7 +162,7 @@ function EmptyState() {
    ---------------------------------------------------------------- */
 export function FeaturedProducts() {
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white via-cyan-50/30 to-white">
+    <section className="py-12 sm:py-16 lg:py-20 bg-background text-foreground">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}

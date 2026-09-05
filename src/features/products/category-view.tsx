@@ -37,6 +37,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useCategories } from '@/lib/api/hooks';
 import { useNavStore } from '@/stores/nav-store';
+import { useI18n, getCategoryName, getCategoryBlurb } from '@/lib/i18n';
 import { ProductsView } from './products-view';
 
 /* ---------------- Static category metadata ---------------- */
@@ -117,33 +118,36 @@ export function CategoryView() {
   const slug = useNavStore((s) => s.params.slug);
   const goHome = useNavStore((s) => s.goHome);
   const { data: categories, isLoading } = useCategories();
+  const { t } = useI18n();
 
   const resolved = resolveCategory(categories, slug);
-  const name = resolved?.name ?? 'Category';
-  const description = (resolved?.description as string) || CATEGORY_BLURBS[slug ?? ''] || '';
+  const rawName = resolved?.name ?? 'Category';
+  const name = getCategoryName(slug, rawName, t);
+  const rawDescription = (resolved?.description as string) || CATEGORY_BLURBS[slug ?? ''] || '';
+  const description = getCategoryBlurb(slug, rawDescription, t);
   const productCount = resolved?.productCount ?? 0;
   const isSubCategory = !!resolved?.parentName;
   const parentName = resolved?.parentName;
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-cyan-50/20 to-white">
+    <main className="min-h-screen bg-background text-foreground">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 lg:pt-8">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <button onClick={goHome} className="hover:text-cyan-600 flex items-center gap-1">
+                <button onClick={goHome} className="hover:text-cyan-600 dark:hover:text-cyan-400 flex items-center gap-1 text-muted-foreground transition-colors">
                   <Home className="h-3.5 w-3.5" />
-                  Home
+                  {t('common.home')}
                 </button>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <button onClick={goHome} className="hover:text-cyan-600">
-                  Categories
+                <button onClick={goHome} className="hover:text-cyan-600 dark:hover:text-cyan-400 text-muted-foreground transition-colors">
+                  {t('common.categories')}
                 </button>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -152,24 +156,24 @@ export function CategoryView() {
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <button className="hover:text-cyan-600">{parentName}</button>
+                    <button className="hover:text-cyan-600 dark:hover:text-cyan-400 text-muted-foreground transition-colors">{parentName}</button>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </>
             )}
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-cyan-700 font-medium">{name}</BreadcrumbPage>
+              <BreadcrumbPage className="text-cyan-600 dark:text-cyan-400 font-semibold">{name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>
 
       {/* Category header */}
-      <section className="relative overflow-hidden mt-6">
+      <section className="relative overflow-hidden mt-6 border-b border-border/40 pb-8 sm:pb-10">
         {/* Decorative PCB grid background */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.08]"
           style={{
             backgroundImage:
               'linear-gradient(to right, #06b6d4 1px, transparent 1px), linear-gradient(to bottom, #06b6d4 1px, transparent 1px)',
@@ -177,7 +181,7 @@ export function CategoryView() {
           }}
           aria-hidden
         />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-14">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -190,11 +194,11 @@ export function CategoryView() {
             </div>
             {/* Title + meta */}
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-cyan-600 uppercase mb-1.5">
-                <span>Category</span>
+              <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-cyan-600 dark:text-cyan-400 uppercase mb-1.5">
+                <span>{t('common.category')}</span>
                 <ChevronRight className="h-3 w-3" />
                 <span className="text-muted-foreground">
-                  {isLoading ? 'Loading…' : `${productCount.toLocaleString('vi-VN')} products`}
+                  {isLoading ? t('common.loading') : `${productCount.toLocaleString('vi-VN')} ${t('categories.countProducts')}`}
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">

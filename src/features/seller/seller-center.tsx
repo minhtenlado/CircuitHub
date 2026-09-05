@@ -2668,14 +2668,14 @@ export function SellerCenter() {
   const activeTabDef = ALL_TABS.find((t) => t.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-cyan-50/20 to-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative overflow-hidden rounded-2xl border border-cyan-100 bg-gradient-to-r from-cyan-50 via-white to-teal-50 p-5 sm:p-6 mb-6"
+          className="relative overflow-hidden rounded-2xl border border-cyan-100 dark:border-cyan-900/50 bg-gradient-to-r from-cyan-50 via-white to-teal-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-cyan-950/40 p-5 sm:p-6 mb-6"
         >
           <div
             aria-hidden

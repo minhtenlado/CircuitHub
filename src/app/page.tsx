@@ -28,6 +28,7 @@ import { useShop } from '@/lib/api/hooks';
 import { ArrowLeft, Building2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast as useToastHook } from '@/hooks/use-toast';
+import { useI18n } from '@/lib/i18n';
 
 function ShopView() {
   const slug = useNavStore((s) => s.params.slug);
@@ -40,18 +41,18 @@ function ShopView() {
   const products = data.products ?? [];
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <button onClick={() => goProducts()} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-cyan-700 mb-4">
+      <button onClick={() => goProducts()} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 mb-4 transition-colors">
         <ArrowLeft className="h-3.5 w-3.5" /> Back to products
       </button>
       {/* Banner */}
-      <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-100 via-teal-50 to-white mb-6">
+      <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-100 via-teal-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 mb-6 border border-border/40">
         {shop.bannerUrl && (
            
           <img src={shop.bannerUrl} alt={shop.name} className="absolute inset-0 w-full h-full object-cover opacity-90" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
         <div className="absolute bottom-4 left-4 right-4 flex items-end gap-4">
-          <div className="relative h-20 w-20 rounded-xl overflow-hidden bg-white border-2 border-white shadow-lg flex-shrink-0">
+          <div className="relative h-20 w-20 rounded-xl overflow-hidden bg-card border-2 border-border shadow-lg flex-shrink-0">
             {shop.logoUrl && (
                
               <img src={shop.logoUrl} alt={shop.name} className="w-full h-full object-cover" />
@@ -124,6 +125,7 @@ function ShopView() {
 function AuthView({ mode }: { mode: 'login' | 'register' }) {
   const setView = useNavStore((s) => s.setView);
   const { toast } = useToastHook();
+  const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -167,18 +169,18 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
   return (
     <div className="max-w-md mx-auto px-4 py-12 sm:py-16">
       <div className="bg-card border border-border/60 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <h1 className="text-2xl font-bold text-center mb-1">
-          {mode === 'login' ? 'Welcome back' : 'Create your account'}
+        <h1 className="text-2xl font-bold text-center mb-1 text-foreground">
+          {mode === 'login' ? t('auth.welcomeBack') : t('auth.createAccount')}
         </h1>
         <p className="text-sm text-muted-foreground text-center mb-6">
-          {mode === 'login' ? 'Sign in to your CircuitHub account' : 'Join CircuitHub — the electronics marketplace'}
+          {mode === 'login' ? t('auth.signIn') : t('hero.tagline')}
         </p>
 
         {/* Google Sign-In */}
         <button
           onClick={googleLogin}
           disabled={googleLoading}
-          className="w-full h-11 rounded-lg border border-border/60 bg-white hover:bg-slate-50 flex items-center justify-center gap-3 font-medium text-sm text-foreground transition-colors disabled:opacity-50"
+          className="w-full h-11 rounded-lg border border-border/60 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-center gap-3 font-medium text-sm text-foreground transition-colors disabled:opacity-50"
         >
           {googleLoading ? (
             <Loader2 className="h-5 w-5 animate-spin text-cyan-500" />
@@ -190,7 +192,7 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
           )}
-          {mode === 'login' ? 'Continue with Google' : 'Sign up with Google'}
+          {mode === 'login' ? 'Google' : 'Google'}
         </button>
 
         {/* Divider */}
@@ -203,34 +205,34 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
         <form onSubmit={submit} className="space-y-4">
           {mode === 'register' && (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium">Full Name</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+              <label className="text-sm font-medium text-foreground">{t('auth.fullName')}</label>
+              <input value={name} onChange={(e) => setName(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:focus:ring-cyan-950 outline-none" />
             </div>
           )}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+            <label className="text-sm font-medium text-foreground">{t('auth.email')}</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:focus:ring-cyan-950 outline-none" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+            <label className="text-sm font-medium text-foreground">{t('auth.password')}</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:focus:ring-cyan-950 outline-none" />
           </div>
           <button
             type="submit"
             disabled={loading}
             className="w-full h-10 rounded-md bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white font-semibold disabled:opacity-50"
           >
-            {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : mode === 'login' ? 'Sign In' : 'Create Account'}
+            {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : mode === 'login' ? t('auth.signIn') : t('auth.signUp')}
           </button>
         </form>
         <div className="mt-4 text-center text-sm text-muted-foreground">
           {mode === 'login' ? (
             <>Don&apos;t have an account?{' '}
-              <button onClick={() => setView('register', {})} className="text-cyan-600 hover:text-cyan-700 font-medium">Sign up</button>
+              <button onClick={() => setView('register', {})} className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium">{t('auth.signUp')}</button>
             </>
           ) : (
             <>Already have an account?{' '}
-              <button onClick={() => setView('login', {})} className="text-cyan-600 hover:text-cyan-700 font-medium">Sign in</button>
+              <button onClick={() => setView('login', {})} className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium">{t('auth.signIn')}</button>
             </>
           )}
         </div>

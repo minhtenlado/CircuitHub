@@ -93,7 +93,7 @@ export function OpenSourceSection() {
   const liveItems = (data?.items ?? []).filter((p: any) => p.productType === 'DIGITAL');
 
   return (
-    <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-cyan-50/30 border-y border-border/40">
+    <section className="relative py-12 sm:py-16 lg:py-20 bg-background text-foreground border-y border-border/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <SectionHeader

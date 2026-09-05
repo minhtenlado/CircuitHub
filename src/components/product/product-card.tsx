@@ -11,12 +11,14 @@ import { useCompareStore } from '@/stores/compare-store';
 import { useRecentlyViewedStore } from '@/stores/recently-viewed-store';
 import { useQuickViewStore } from '@/stores/quick-view-store';
 import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/lib/i18n';
 import { formatVND, discountPct as calcPct } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
 import { ProductTypeBadge, StockBadge, DiscountBadge, NewBadge, TrendingBadge, TechBadge, OpenSourceBadge, FreeBadge } from '@/components/common/badges';
 import { Cpu, Layers, FileCode, Download } from 'lucide-react';
 
 export function ProductCard({ product, index = 0 }: { product: any; index?: number }) {
+  const { t } = useI18n();
   const goProduct = useNavStore((s) => s.goProduct);
   const goShop = useNavStore((s) => s.goShop);
   const wishlist = useWishlistStore();
@@ -136,14 +138,14 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
                 description: product.name,
               });
             }}
-            className="p-1.5 bg-white/80 backdrop-blur rounded-full text-slate-600 hover:text-rose-500 transition-colors"
+            className="p-1.5 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-rose-500 transition-colors"
             aria-label="Toggle wishlist"
           >
             <Heart className={inWishlist ? 'h-4 w-4 fill-rose-500 text-rose-500' : 'h-4 w-4'} />
           </button>
           <button
             onClick={handleToggleCompare}
-            className={`p-1.5 backdrop-blur rounded-full transition-colors ${inCompare ? 'bg-cyan-500 text-white' : 'bg-white/80 text-slate-600 hover:text-cyan-600'}`}
+            className={`p-1.5 backdrop-blur rounded-full transition-colors ${inCompare ? 'bg-cyan-500 text-white' : 'bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-cyan-600'}`}
             aria-label="Toggle compare"
           >
             <GitCompare className="h-4 w-4" />
@@ -163,9 +165,9 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
           className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3 cursor-pointer"
           aria-label="Quick view"
         >
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cyan-700 shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-slate-800/95 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cyan-700 dark:text-cyan-300 shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300 border border-border/40">
             <Eye className="h-3.5 w-3.5" />
-            Quick View
+            {t('product.quickView')}
           </span>
         </button>
       </div>
@@ -178,7 +180,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
             onClick={() => goShop(product.shop.slug)}
             className="flex items-center gap-1.5 hover:text-cyan-600 truncate"
           >
-            <span className="relative h-4 w-4 rounded overflow-hidden bg-cyan-50 border border-cyan-100">
+            <span className="relative h-4 w-4 rounded overflow-hidden bg-cyan-50 dark:bg-slate-800 border border-cyan-100 dark:border-slate-700">
               {product.shop.logoUrl && (
                 <Image src={product.shop.logoUrl} alt={product.shop.name} fill className="object-cover" sizes="16px" />
               )}
@@ -192,7 +194,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
         {/* Name */}
         <button
           onClick={handleOpenProduct}
-          className="text-sm font-semibold leading-snug text-foreground text-left line-clamp-2 hover:text-cyan-700 transition-colors"
+          className="text-sm font-semibold leading-snug text-foreground text-left line-clamp-2 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
         >
           {product.name}
         </button>
@@ -230,7 +232,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
             <>
               <div className="flex items-center gap-1.5">
                 <FreeBadge className="text-[11px]" />
-                <span className="text-xs text-emerald-600 font-medium">Open Source</span>
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{t('product.openSource')}</span>
               </div>
               <button
                 onClick={(e) => {
@@ -241,7 +243,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
                 aria-label="Download free"
               >
                 <Download className="h-3.5 w-3.5" />
-                Get
+                {t('product.get')}
               </button>
             </>
           ) : (
@@ -250,7 +252,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
                 {product.compareAtPrice && (
                   <span className="text-[11px] text-muted-foreground line-through">{formatVND(product.compareAtPrice)}</span>
                 )}
-                <span className="text-base font-bold text-cyan-700 tracking-tight">{formatVND(product.price)}</span>
+                <span className="text-base font-bold text-cyan-600 dark:text-cyan-400 tracking-tight">{formatVND(product.price)}</span>
               </div>
               <button
                 onClick={(e) => {
@@ -275,7 +277,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
                 aria-label="Add to cart"
               >
                 <ShoppingBag className="h-3.5 w-3.5" />
-                Add
+                {t('product.addToCart')}
               </button>
             </>
           )}
@@ -284,12 +286,12 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
         {/* Stock footer */}
         <div className="flex items-center justify-between pt-1">
           {product.price === 0 && product.productType === 'DIGITAL' ? (
-            <span className="text-[10px] text-muted-foreground">{(product.downloadCount ?? product.soldCount ?? 0).toLocaleString('vi-VN')} downloads</span>
+            <span className="text-[10px] text-muted-foreground">{(product.downloadCount ?? product.soldCount ?? 0).toLocaleString('vi-VN')} {t('product.downloads')}</span>
           ) : (
             <>
               <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
               {product.soldCount > 0 && (
-                <span className="text-[10px] text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} sold</span>
+                <span className="text-[10px] text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} {t('product.sold')}</span>
               )}
             </>
           )}

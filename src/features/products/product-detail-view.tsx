@@ -336,7 +336,7 @@ function ProductDetailContent({ product }: { product: any }) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-cyan-50/20 to-white">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         {/* Breadcrumb */}
         <Breadcrumb className="mb-5">
@@ -1592,7 +1592,7 @@ function ShippingTab({ product }: { product: any }) {
    ============================================================ */
 function ProductDetailSkeleton() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-cyan-50/20 to-white">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         <div className="h-5 w-72 mb-5">
           <Skeleton className="h-5 w-72" />

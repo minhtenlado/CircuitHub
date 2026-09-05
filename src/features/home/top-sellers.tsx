@@ -31,7 +31,7 @@ export function TopSellers() {
   const shops = (data ?? []).slice(0, 8);
 
   return (
-    <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-cyan-50/40 via-white to-white">
+    <section className="relative py-12 sm:py-16 lg:py-20 bg-background text-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Trusted partners"

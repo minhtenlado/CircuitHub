@@ -50,3 +50,42 @@ export function langShort(code: Lang): string {
 export function langFlag(code: Lang): string {
   return LANGS.find((l) => l.code === code)?.flag ?? '🌐';
 }
+
+export const SLUG_TO_CATEGORY_KEY: Record<string, string> = {
+  'dev-boards': 'categories.devBoards',
+  'pcb-boards': 'categories.pcbBoards',
+  components: 'categories.components',
+  sensors: 'categories.sensors',
+  modules: 'categories.modules',
+  tools: 'categories.tools',
+  'open-source': 'categories.openSource',
+  firmware: 'categories.firmware',
+  'gerber-files': 'categories.gerberFiles',
+  'kicad-projects': 'categories.kicadProjects',
+  'altium-projects': 'categories.altiumProjects',
+  'gerber-packages': 'categories.gerberPackages',
+};
+
+export function getCategoryName(
+  slug: string | undefined | null,
+  fallback: string,
+  t: (key: string) => string,
+): string {
+  if (!slug) return fallback;
+  const key = SLUG_TO_CATEGORY_KEY[slug];
+  if (!key) return fallback;
+  const translated = t(key);
+  return translated && translated !== key ? translated : fallback;
+}
+
+export function getCategoryBlurb(
+  slug: string | undefined | null,
+  fallback: string,
+  t: (key: string) => string,
+): string {
+  if (!slug) return fallback;
+  const key = `categoryBlurbs.${slug}`;
+  const translated = t(key);
+  return translated && translated !== key ? translated : fallback;
+}
+
