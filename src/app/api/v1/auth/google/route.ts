@@ -45,9 +45,11 @@ export async function GET(req: NextRequest) {
   googleAuthUrl.searchParams.set('prompt', 'select_account');
 
   const vercelShare = req.nextUrl.searchParams.get('_vercel_share');
-  if (vercelShare) {
-    googleAuthUrl.searchParams.set('state', JSON.stringify({ vercelShare }));
-  }
+  const statePayload = {
+    callbackUrl,
+    vercelShare: vercelShare || undefined,
+  };
+  googleAuthUrl.searchParams.set('state', JSON.stringify(statePayload));
 
   return NextResponse.redirect(googleAuthUrl.toString());
 }

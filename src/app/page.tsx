@@ -392,6 +392,7 @@ export default function Home() {
           toast({
             title: 'Đăng nhập Google thành công!',
             description: `Chào mừng ${userData.name} đã đến với CircuitHub!`,
+            duration: 8000,
           });
         } catch (e) {
           console.error('Lỗi phân tích thông tin Google user:', e);
@@ -407,10 +408,13 @@ export default function Home() {
 
     if (googleAuth === 'error') {
       const msg = url.searchParams.get('message') || 'Đăng nhập Google thất bại';
+      const decodedMsg = decodeURIComponent(msg);
+      console.error('[Google OAuth Callback Error]:', decodedMsg);
       toast({
         title: 'Đăng nhập Google thất bại',
-        description: decodeURIComponent(msg),
+        description: decodedMsg,
         variant: 'destructive',
+        duration: 20000,
       });
       url.searchParams.delete('google_auth');
       url.searchParams.delete('message');

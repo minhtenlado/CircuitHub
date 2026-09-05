@@ -9,17 +9,20 @@ export async function GET(req: NextRequest) {
   const state = searchParams.get('state');
 
   let vercelShare: string | null = null;
+  let originalCallbackUrl: string | null = null;
   if (state) {
     try {
       const parsed = JSON.parse(state);
       if (parsed.vercelShare) vercelShare = parsed.vercelShare;
+      if (parsed.callbackUrl) originalCallbackUrl = parsed.callbackUrl;
     } catch {}
   }
 
   const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
   const proto = req.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
   const baseUrl = `${proto}://${host}`;
-  const callbackUrl = `${baseUrl}/api/v1/auth/google/callback`;
+  // Use character-identical callbackUrl from state to guarantee 0% redirect_uri_mismatch
+  const callbackUrl = originalCallbackUrl || `${baseUrl}/api/v1/auth/google/callback`;
 
   const makeRedirect = (params: Record<string, string>) => {
     const target = new URL(`${baseUrl}/`);
@@ -38,9 +41,10 @@ export async function GET(req: NextRequest) {
 
   if (!clientId || !clientSecret) {
     return NextResponse.redirect(
-      `${baseUrl}/?google_auth=error&message=${encodeURIComponent(
-        'GOOGLE_CLIENT_ID hoặc GOOGLE_CLIENT_SECRET chưa được cấu hình trên Vercel',
-      )}`,
+      makeRedirect({
+        google_auth: 'error',
+        message: 'GOOGLE_CLIENT_ID hoặc GOOGLE_CLIENT_SECRET chưa được cấu hình trên Vercel',
+      }),
     );
   }
 
@@ -61,8 +65,18 @@ export async function GET(req: NextRequest) {
     if (!tokenRes.ok) {
       const errText = await tokenRes.text();
       console.error('Google token exchange error:', errText);
+      let errorDetail = 'Không thể đổi mã xác thực với Google';
+      try {
+        const errJson = JSON.parse(errText);
+        errorDetail = errJson.error_description || errJson.error || errText;
+      } catch {
+        errorDetail = errText;
+      }
       return NextResponse.redirect(
-        `${baseUrl}/?google_auth=error&message=${encodeURIComponent('Không thể đổi mã xác thực với máy chủ Google')}`,
+        makeRedirect({
+          google_auth: 'error',
+          message: `Lỗi Google: ${errorDetail}`,
+        }),
       );
     }
 
@@ -75,8 +89,12 @@ export async function GET(req: NextRequest) {
     });
 
     if (!userRes.ok) {
+      const userErrText = await userRes.text().catch(() => '');
       return NextResponse.redirect(
-        `${baseUrl}/?google_auth=error&message=${encodeURIComponent('Không thể lấy thông tin hồ sơ Google')}`,
+        makeRedirect({
+          google_auth: 'error',
+          message: `Không thể lấy thông tin Google: ${userErrText}`,
+        }),
       );
     }
 
