@@ -27,6 +27,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useShop } from '@/lib/api/hooks';
 import { ArrowLeft, Building2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast as useToastHook } from '@/hooks/use-toast';
 
 function ShopView() {
   const slug = useNavStore((s) => s.params.slug);
@@ -155,13 +156,32 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
 
   async function googleLogin() {
     setGoogleLoading(true);
-    setTimeout(() => {
-      toast({
-        title: 'Google Sign-In',
-        description: 'Tính năng Google OAuth đang được liên kết. Vui lòng sử dụng Email và Mật khẩu để đăng nhập.',
-      });
-      setGoogleLoading(false);
-    }, 600);
+    try {
+      // 1. Kiểm tra trạng thái cấu hình Google OAuth từ máy chủ
+      const res = await fetch('/api/v1/auth/google', { method: 'GET', redirect: 'manual' });
+      
+      // Nếu máy chủ đã cấu hình và trả về chuyển hướng (302/307/opaqueredirect), chuyển sang Google
+      if (res.type === 'opaqueredirect' || res.status === 302 || res.status === 307 || res.ok) {
+        window.location.href = '/api/v1/auth/google';
+        return;
+      }
+      
+      const json = await res.json().catch(() => null);
+      if (json?.code === 'GOOGLE_CLIENT_ID_MISSING' || !res.ok) {
+        toast({
+          title: 'Chưa cấu hình Google OAuth',
+          description: json?.message || 'Vui lòng thiết lập biến môi trường GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET trên Vercel theo hướng dẫn.',
+          variant: 'destructive',
+        });
+        setGoogleLoading(false);
+        return;
+      }
+      
+      window.location.href = '/api/v1/auth/google';
+    } catch {
+      // Fallback: điều hướng trực tiếp
+      window.location.href = '/api/v1/auth/google';
+    }
   }
 
   return (
@@ -234,18 +254,10 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
             </>
           )}
         </div>
-        <div className="mt-4 pt-4 border-t border-border/50 text-center text-xs text-muted-foreground">
-          <button onClick={() => setView('admin-login', {})} className="hover:text-cyan-600 transition-colors">
-            🛡️ Cổng đăng nhập Quản trị viên (Admin)
-          </button>
-        </div>
       </div>
     </div>
   );
 }
-
-// Quick alias to avoid import name clash
-import { useToast as useToastHook } from '@/hooks/use-toast';
 
 function PageRouter() {
   const view = useNavStore((s) => s.view);
@@ -362,12 +374,49 @@ function PageRouter() {
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const { toast } = useToastHook();
 
-  // Initialize hash-based routing on mount
+  // Initialize hash-based routing on mount + check for Google OAuth callback
   useEffect(() => {
     setupHashListener();
     setMounted(true);
-  }, []);
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      const googleAuth = url.searchParams.get('google_auth');
+      if (googleAuth === 'success') {
+        const token = url.searchParams.get('token');
+        const userStr = url.searchParams.get('user');
+        if (token && userStr) {
+          try {
+            const userData = JSON.parse(userStr);
+            useAuthStore.getState().setAuth(userData, token);
+            toast({
+              title: 'Đăng nhập Google thành công!',
+              description: `Chào mừng ${userData.name} đã đến với CircuitHub!`,
+            });
+            url.searchParams.delete('google_auth');
+            url.searchParams.delete('token');
+            url.searchParams.delete('user');
+            window.history.replaceState({}, document.title, url.pathname + url.hash);
+            useNavStore.getState().setView('home', {});
+          } catch (e) {
+            console.error('Lỗi phân tích thông tin Google user:', e);
+          }
+        }
+      } else if (googleAuth === 'error') {
+        const msg = url.searchParams.get('message') || 'Đăng nhập Google thất bại';
+        toast({
+          title: 'Đăng nhập Google thất bại',
+          description: decodeURIComponent(msg),
+          variant: 'destructive',
+        });
+        url.searchParams.delete('google_auth');
+        url.searchParams.delete('message');
+        window.history.replaceState({}, document.title, url.pathname + url.hash);
+      }
+    }
+  }, [toast]);
 
   const view = useNavStore((s) => s.view);
   const user = useAuthStore((s) => s.user);

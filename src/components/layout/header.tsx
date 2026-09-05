@@ -1033,10 +1033,6 @@ function UserMenu() {
             <DropdownMenuItem onClick={() => goAuth('register')}>
               <UserPlus className="h-4 w-4" /> {t('auth.createAccount')}
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => goAdmin()} className="text-cyan-600 font-medium">
-              <Shield className="h-4 w-4" /> Cổng Quản trị (Admin)
-            </DropdownMenuItem>
           </>
         )}
       </DropdownMenuContent>
@@ -1169,15 +1165,6 @@ function MobileMenu() {
                 label={t('auth.createAccount')}
                 onClick={() => {
                   goAuth('register');
-                  setOpen(false);
-                }}
-              />
-              <div className="my-1 h-px bg-border/60" />
-              <MobileLink
-                icon={<Shield className="h-4 w-4 text-cyan-600" />}
-                label="Cổng Quản trị (Admin)"
-                onClick={() => {
-                  goAdmin();
                   setOpen(false);
                 }}
               />
