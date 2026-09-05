@@ -32,11 +32,31 @@ import { motion } from 'framer-motion';
 type FooterLinkItem = { readonly label: string; readonly view: string; readonly params?: Readonly<Record<string, string>> };
 
 /** Maps a footerLinks group key (English heading) to an i18n key. */
-const FOOTER_GROUP_KEYS: Record<string, string> = {
+const FOOTER_GROUP_KEYS: Record<string, any> = {
   Marketplace: 'footer.marketplace',
   'For Sellers': 'footer.forSellers',
   Company: 'footer.company',
   Legal: 'footer.legal',
+};
+
+const FOOTER_LINK_KEYS: Record<string, any> = {
+  'Browse Products': 'footerLinks.browseProducts',
+  'Dev Boards': 'footerLinks.devBoards',
+  'PCB Boards': 'footerLinks.pcbBoards',
+  'Components': 'footerLinks.components',
+  'Open Source Projects': 'footerLinks.openSourceProjects',
+  'Become a Seller': 'footerLinks.becomeSeller',
+  'Seller Center': 'footerLinks.sellerCenter',
+  'Pricing & Commission': 'footerLinks.pricingCommission',
+  'Seller Guide': 'footerLinks.sellerGuide',
+  'About Us': 'footerLinks.aboutUs',
+  'Engineering Blog': 'footerLinks.engineeringBlog',
+  'Careers': 'footerLinks.careers',
+  'Contact': 'footerLinks.contact',
+  'Terms of Service': 'footerLinks.termsOfService',
+  'Privacy Policy': 'footerLinks.privacyPolicy',
+  'License Terms': 'footerLinks.licenseTerms',
+  'Refund Policy': 'footerLinks.refundPolicy',
 };
 
 const SOCIALS = [
@@ -58,8 +78,8 @@ function FooterBadge({
       className={
         'inline-flex items-center rounded-md border px-2 py-1 font-mono text-[10px] tracking-tight transition-colors ' +
         (highlight
-          ? 'border-cyan-300/60 bg-cyan-50/70 text-cyan-700'
-          : 'border-border/60 bg-white/80 text-muted-foreground')
+          ? 'border-cyan-300/60 bg-cyan-50/70 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300'
+          : 'border-border/60 bg-card/80 dark:bg-slate-900/80 text-muted-foreground')
       }
     >
       {label}
@@ -119,7 +139,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="mt-auto relative border-t border-border/60 bg-slate-50/40 backdrop-blur-sm">
+    <footer className="mt-auto relative border-t border-border/60 bg-slate-50/40 dark:bg-slate-950/60 backdrop-blur-sm">
 
       {/* Content wrapper */}
       <div>
@@ -133,14 +153,14 @@ export function Footer() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ delay: idx * 0.06, duration: 0.4, ease: 'easeOut' }}
-                className="group relative flex items-center gap-3 rounded-xl border border-border/60 bg-white/80 px-4 py-3.5 backdrop-blur-sm transition-all hover:border-cyan-300/70 hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.35)]"
+                className="group relative flex items-center gap-3 rounded-xl border border-border/60 bg-card/80 dark:bg-slate-900/80 px-4 py-3.5 backdrop-blur-sm transition-all hover:border-cyan-300/70 hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.35)]"
               >
                 {/* Cyan-accented icon tile */}
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-50 to-teal-50 text-cyan-600 ring-1 ring-cyan-200/60 transition-all group-hover:from-cyan-500 group-hover:to-teal-400 group-hover:text-white group-hover:ring-transparent">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-900/50 dark:to-teal-900/50 text-cyan-600 dark:text-cyan-400 ring-1 ring-cyan-200/60 dark:ring-cyan-700/40 transition-all group-hover:from-cyan-500 group-hover:to-teal-400 group-hover:text-white group-hover:ring-transparent">
                   <item.icon className="h-4 w-4" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-semibold text-slate-800 group-hover:text-cyan-700 transition-colors">
+                  <span className="block text-sm font-semibold text-foreground group-hover:text-cyan-700 transition-colors">
                     {item.title}
                   </span>
                   <span className="block truncate text-[11px] text-muted-foreground">
@@ -177,7 +197,7 @@ export function Footer() {
                     rel="noopener noreferrer"
                     aria-label={s.label}
                     title={s.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-white text-slate-600 transition-all hover:border-cyan-300 hover:bg-cyan-50/60 hover:text-cyan-600 hover:shadow-[0_4px_18px_-8px_rgba(6,182,212,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-card dark:bg-slate-900 text-muted-foreground transition-all hover:border-cyan-300 hover:bg-cyan-50/60 hover:text-cyan-600 hover:shadow-[0_4px_18px_-8px_rgba(6,182,212,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40"
                   >
                     <s.icon className="h-4 w-4" />
                   </a>
@@ -202,7 +222,7 @@ export function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     aria-label="Email for newsletter"
-                    className="flex-1 bg-white/85"
+                    className="flex-1 bg-background"
                   />
                   <Button
                     type="submit"
@@ -222,15 +242,17 @@ export function Footer() {
             {/* Columns 2–5 — Link groups from footerLinks */}
             {Object.entries(footerLinks).map(([group, links]) => {
               const headingKey = FOOTER_GROUP_KEYS[group] ?? '';
-              const heading = headingKey ? t(headingKey) : group;
+              const heading = headingKey ? t(headingKey as any) : group;
               return (
                 <div key={group}>
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground dark:text-slate-300">
                     {heading}
                   </h3>
                   <ul className="mt-4 space-y-2.5">
                     {links.map((link) => {
                       const item = link as FooterLinkItem;
+                      const translationKey = FOOTER_LINK_KEYS[item.label];
+                      const label = translationKey ? t(translationKey as any) : item.label;
                       return (
                         <li key={item.label}>
                           <button
@@ -239,7 +261,7 @@ export function Footer() {
                             className="group inline-flex items-center gap-1 text-left text-sm text-muted-foreground transition-colors hover:text-cyan-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 rounded"
                           >
                             <span className="transition-transform group-hover:translate-x-0.5">
-                              {item.label}
+                              {label}
                             </span>
                           </button>
                         </li>

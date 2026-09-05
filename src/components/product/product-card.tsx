@@ -96,7 +96,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.025, 0.4) }}
-      className="group relative flex flex-col bg-card border border-border/70 rounded-xl overflow-hidden hover:border-cyan-400/50 hover:shadow-[0_10px_40px_-12px_rgba(6,182,212,0.25)] transition-all duration-300"
+      className="group relative flex flex-col bg-card border border-border/70 dark:border-slate-800 rounded-xl overflow-hidden hover:border-cyan-400/60 dark:hover:border-cyan-500/60 hover:shadow-[0_10px_40px_-12px_rgba(6,182,212,0.35)] transition-all duration-300"
     >
       {/* Image */}
       <div
@@ -185,7 +185,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
                 <Image src={product.shop.logoUrl} alt={product.shop.name} fill className="object-cover" sizes="16px" />
               )}
             </span>
-            <span className="font-medium truncate max-w-[140px]">{product.shop.name}</span>
+            <span className="font-medium truncate max-w-[200px]">{product.shop.name}</span>
             {product.shop.verified && <span className="text-cyan-500">✓</span>}
           </button>
           <Rating value={product.rating} count={product.ratingCount} size="xs" showCount={false} />

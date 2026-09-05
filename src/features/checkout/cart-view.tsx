@@ -14,11 +14,13 @@ import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, Tag, X, Lock, Package, L
 import Image from 'next/image';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n } from '@/lib/i18n';
 
 export function CartView() {
   const { items, removeItem, updateQty, clear } = useCartStore();
   const { goCheckout, goProducts } = useNavStore();
   const { toast } = useToast();
+  const { t } = useI18n();
   const [voucherCode, setVoucherCode] = useState('');
   const [appliedVoucher, setAppliedVoucher] = useState<{ code: string; discount: number } | null>(null);
   const [voucherLoading, setVoucherLoading] = useState(false);
@@ -52,14 +54,14 @@ export function CartView() {
   if (items.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="h-24 w-24 rounded-full bg-cyan-50 border-2 border-cyan-200 flex items-center justify-center mx-auto mb-6">
-          <ShoppingCart className="h-11 w-11 text-cyan-400" />
+        <div className="h-24 w-24 rounded-full bg-cyan-50 dark:bg-cyan-950/30 border-2 border-cyan-200 dark:border-cyan-800 flex items-center justify-center mx-auto mb-6">
+          <ShoppingCart className="h-11 w-11 text-cyan-400 dark:text-cyan-600" />
         </div>
-        <h1 className="text-3xl font-bold mb-2">Your cart is empty</h1>
+        <h1 className="text-3xl font-bold mb-2">{t('cart.empty')}</h1>
         <p className="text-muted-foreground mb-8">Browse the marketplace to find PCB boards, KiCad projects, components & engineering services.</p>
-        <Button onClick={() => goProducts()} className="bg-cyan-600 hover:bg-cyan-700 text-white">
+        <Button onClick={() => goProducts()} className="bg-cyan-600 hover:bg-cyan-700 text-white dark:bg-cyan-700 dark:hover:bg-cyan-600">
           <Package className="h-4 w-4 mr-2" />
-          Browse Products
+          {t('cart.browseProducts')}
         </Button>
       </div>
     );
@@ -69,26 +71,26 @@ export function CartView() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-end justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Your Cart</h1>
+          <h1 className="text-3xl font-bold">{t('cart.title')}</h1>
           <p className="text-muted-foreground">{count} {count === 1 ? 'item' : 'items'} from {byShop.length} {byShop.length === 1 ? 'shop' : 'shops'}</p>
         </div>
         <Button variant="ghost" size="sm" onClick={() => { clear(); toast({ title: 'Cart cleared' }); }}>
           <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-          Clear all
+          {t('cart.clear')}
         </Button>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-5">
           {byShop.map((g) => (
-            <Card key={g.shopId} className="border-border/60">
+            <Card key={g.shopId} className="border-border/60 bg-card dark:bg-slate-900">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2 pb-2 border-b border-border/40">
-                  <Package className="h-4 w-4 text-cyan-600" />
+                  <Package className="h-4 w-4 text-cyan-600 dark:text-cyan-500" />
                   <span className="font-semibold">{g.shopName}</span>
-                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px]">✓ Verified</Badge>
+                  <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 text-[10px]">✓ Verified</Badge>
                   <span className="ml-auto text-sm font-medium text-muted-foreground">
-                    Subtotal: <span className="font-semibold text-foreground">{formatVND(g.subtotal)}</span>
+                    {t('cart.subtotal')}: <span className="font-semibold text-foreground">{formatVND(g.subtotal)}</span>
                   </span>
                 </div>
                 <AnimatePresence initial={false}>
@@ -97,7 +99,7 @@ export function CartView() {
                       key={item.productId}
                       layout
                       exit={{ opacity: 0, x: -20 }}
-                      className="flex gap-4 p-2 rounded-lg hover:bg-cyan-50/20 transition-colors"
+                      className="flex gap-4 p-2 rounded-lg hover:bg-cyan-50/20 dark:hover:bg-cyan-900/10 transition-colors"
                     >
                       <div className="relative h-20 w-20 rounded-md overflow-hidden bg-muted border border-border/40 flex-shrink-0">
                         {item.imageUrl && (
@@ -112,15 +114,15 @@ export function CartView() {
                         </div>
                         <div className="flex items-center justify-between mt-3">
                           <div className="flex items-center border border-border/60 rounded-md">
-                            <button onClick={() => updateQty(item.productId, item.quantity - 1)} className="p-1.5 hover:bg-cyan-50 text-muted-foreground hover:text-cyan-700 rounded-l-md transition-colors disabled:opacity-30" disabled={item.quantity <= 1}>
+                            <button onClick={() => updateQty(item.productId, item.quantity - 1)} className="p-1.5 hover:bg-cyan-50 dark:hover:bg-cyan-900/30 text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 rounded-l-md transition-colors disabled:opacity-30" disabled={item.quantity <= 1}>
                               <Minus className="h-3.5 w-3.5" />
                             </button>
                             <span className="px-3 text-sm font-semibold tabular-nums">{item.quantity}</span>
-                            <button onClick={() => updateQty(item.productId, item.quantity + 1)} className="p-1.5 hover:bg-cyan-50 text-muted-foreground hover:text-cyan-700 rounded-r-md transition-colors">
+                            <button onClick={() => updateQty(item.productId, item.quantity + 1)} className="p-1.5 hover:bg-cyan-50 dark:hover:bg-cyan-900/30 text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 rounded-r-md transition-colors">
                               <Plus className="h-3.5 w-3.5" />
                             </button>
                           </div>
-                          <span className="font-bold text-cyan-700 tabular-nums">{formatVND(item.price * item.quantity)}</span>
+                          <span className="font-bold text-cyan-700 dark:text-cyan-400 tabular-nums">{formatVND(item.price * item.quantity)}</span>
                           <button onClick={() => removeItem(item.productId)} className="p-1.5 text-muted-foreground hover:text-red-500 transition-colors" aria-label="Remove">
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -135,15 +137,15 @@ export function CartView() {
         </div>
 
         <div className="lg:col-span-1">
-          <Card className="lg:sticky lg:top-32 border-border/60">
+          <Card className="lg:sticky lg:top-32 border-border/60 bg-card dark:bg-slate-900">
             <CardContent className="p-5 space-y-4">
               <h3 className="font-semibold">Order Summary</h3>
               <Separator />
               <div className="space-y-1.5 text-sm">
-                <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span className="font-medium">{formatVND(subtotal)}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Shipping estimate</span><span className="font-medium">{shippingEstimate === 0 ? 'Free' : formatVND(shippingEstimate)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">{t('cart.subtotal')}</span><span className="font-medium">{formatVND(subtotal)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">{t('product.shipping') || 'Shipping estimate'}</span><span className="font-medium">{shippingEstimate === 0 ? 'Free' : formatVND(shippingEstimate)}</span></div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-emerald-700">
+                  <div className="flex justify-between text-emerald-700 dark:text-emerald-400">
                     <span>Discount</span><span className="font-semibold">−{formatVND(discount)}</span>
                   </div>
                 )}
@@ -151,32 +153,32 @@ export function CartView() {
               <Separator />
               <div className="flex justify-between items-baseline">
                 <span className="font-semibold">Total</span>
-                <span className="text-xl font-bold text-cyan-700 tabular-nums">{formatVND(total)}</span>
+                <span className="text-xl font-bold text-cyan-700 dark:text-cyan-400 tabular-nums">{formatVND(total)}</span>
               </div>
 
               {!appliedVoucher ? (
                 <div className="flex gap-2 pt-1">
                   <div className="relative flex-1">
                     <Tag className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-                    <Input value={voucherCode} onChange={(e) => setVoucherCode(e.target.value)} placeholder="Voucher" className="pl-8 h-9 text-sm" />
+                    <Input value={voucherCode} onChange={(e) => setVoucherCode(e.target.value)} placeholder="Voucher" className="pl-8 h-9 text-sm bg-background text-foreground focus-visible:ring-cyan-400 dark:focus-visible:ring-cyan-900" />
                   </div>
-                  <Button size="sm" onClick={applyVoucher} disabled={voucherLoading} variant="outline" className="border-cyan-300 text-cyan-700 hover:bg-cyan-50">
+                  <Button size="sm" onClick={applyVoucher} disabled={voucherLoading} variant="outline" className="border-cyan-300 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-900/30">
                     {voucherLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Apply'}
                   </Button>
                 </div>
               ) : (
-                <div className="flex items-center justify-between text-xs bg-emerald-50 border border-emerald-200 rounded-md px-3 py-1.5">
-                  <span className="flex items-center gap-1.5 text-emerald-700"><Tag className="h-3 w-3" />{appliedVoucher.code}</span>
-                  <button onClick={() => { setAppliedVoucher(null); setVoucherCode(''); }} className="text-emerald-600 hover:text-red-500"><X className="h-3 w-3" /></button>
+                <div className="flex items-center justify-between text-xs bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-md px-3 py-1.5">
+                  <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400"><Tag className="h-3 w-3" />{appliedVoucher.code}</span>
+                  <button onClick={() => { setAppliedVoucher(null); setVoucherCode(''); }} className="text-emerald-600 dark:text-emerald-500 hover:text-red-500"><X className="h-3 w-3" /></button>
                 </div>
               )}
 
-              <Button onClick={() => goCheckout()} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white">
+              <Button onClick={() => goCheckout()} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white dark:bg-cyan-700 dark:hover:bg-cyan-600">
                 <Lock className="h-4 w-4 mr-2" />
-                Checkout
+                {t('cart.checkout')}
               </Button>
-              <Button onClick={() => goProducts()} variant="outline" className="w-full border-cyan-200 text-cyan-700 hover:bg-cyan-50">
-                Continue Shopping
+              <Button onClick={() => goProducts()} variant="outline" className="w-full border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-900/30">
+                {t('cart.continueShopping')}
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </CardContent>

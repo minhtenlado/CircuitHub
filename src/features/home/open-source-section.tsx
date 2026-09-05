@@ -24,6 +24,7 @@ import { Badge } from '@/components/ui/badge';
 import { useProducts } from '@/lib/api/hooks';
 import { useNavStore } from '@/stores/nav-store';
 import { SectionHeader } from './categories-section';
+import { useI18n } from '@/lib/i18n';
 
 interface FallbackProject {
   id: string;
@@ -88,6 +89,7 @@ export function OpenSourceSection() {
   const goCategory = useNavStore((s) => s.goCategory);
   const goProduct = useNavStore((s) => s.goProduct);
   const { data, isLoading } = useProducts({ category: 'open-source', limit: '8' });
+  const { t } = useI18n();
 
   // Use real open-source products from API or high-quality curated open source designs
   const liveItems = (data?.items ?? []).filter((p: any) => p.productType === 'DIGITAL');
@@ -97,17 +99,17 @@ export function OpenSourceSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <SectionHeader
-            eyebrow="Cộng đồng & Mã nguồn mở"
-            title="Dự án KiCad & Mã Nguồn Mở Miễn Phí"
-            subtitle="Kho schematic, layout PCB KiCad/Altium, file Gerber và firmware mở do cộng đồng kỹ sư chia sẻ. Hoàn toàn miễn phí để tải về, học tập và sản xuất."
+            eyebrow={t('openSource.eyebrow')}
+            title={t('openSource.title')}
+            subtitle={t('openSource.subtitle')}
           />
           <Button
             variant="outline"
             onClick={() => goCategory('open-source')}
-            className="hidden sm:inline-flex items-center gap-2 border-cyan-300 text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800 self-start sm:self-auto shrink-0"
+            className="hidden sm:inline-flex items-center gap-2 border-cyan-300 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-800 dark:hover:text-cyan-300 self-start sm:self-auto shrink-0"
           >
             <FileCode className="h-4 w-4" />
-            Xem tất cả dự án
+            {t('openSource.viewAll')}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
@@ -122,7 +124,7 @@ export function OpenSourceSection() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.35, delay: i * 0.08 }}
               whileHover={{ y: -4 }}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-white dark:bg-slate-900 transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.35)]"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 dark:border-slate-800 bg-card dark:bg-slate-900 transition-all duration-300 hover:border-cyan-300 dark:hover:border-cyan-600 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.35)]"
             >
               {/* Top Accent Strip */}
               <div className="h-1.5 w-full bg-gradient-to-r from-teal-500 via-cyan-400 to-emerald-400" />
@@ -134,8 +136,8 @@ export function OpenSourceSection() {
                     <FileCode className="h-5 w-5" />
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-mono">
-                      ✓ Open Source
+                    <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60 text-[10px] font-mono">
+                      ✓ {t('openSource.freeOpenSource')}
                     </Badge>
                   </div>
                 </div>
@@ -143,7 +145,7 @@ export function OpenSourceSection() {
                 {/* Title */}
                 <h3
                   onClick={() => goCategory('open-source')}
-                  className="cursor-pointer text-base font-semibold leading-snug text-foreground group-hover:text-cyan-600 transition-colors line-clamp-2"
+                  className="cursor-pointer text-base font-semibold leading-snug text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2"
                 >
                   {proj.name}
                 </h3>
@@ -155,14 +157,14 @@ export function OpenSourceSection() {
 
                 {/* Tech Badges */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  <span className="inline-flex items-center gap-1 rounded-md bg-cyan-50 border border-cyan-200/80 px-2 py-0.5 text-[10px] font-medium text-cyan-700">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/80 dark:border-cyan-800/60 px-2 py-0.5 text-[10px] font-medium text-cyan-700 dark:text-cyan-300">
                     <Layers className="h-2.5 w-2.5" />
                     {proj.software}
                   </span>
-                  <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 border border-slate-200 px-2 py-0.5 text-[10px] font-mono text-slate-700">
-                    {proj.layers} Lớp
+                  <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 text-[10px] font-mono text-slate-700 dark:text-slate-300">
+                    {proj.layers} {t('openSource.layers')}
                   </span>
-                  <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 border border-slate-200 px-2 py-0.5 text-[10px] font-mono text-slate-600">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 text-[10px] font-mono text-slate-600 dark:text-slate-400">
                     {proj.license}
                   </span>
                 </div>
@@ -171,13 +173,13 @@ export function OpenSourceSection() {
                 <div className="pt-3 mt-2 border-t border-border/50 flex items-center justify-between">
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                     <Download className="h-3.5 w-3.5 text-cyan-500" />
-                    {proj.downloads.toLocaleString()} lượt tải
+                    {proj.downloads.toLocaleString('vi-VN')} {t('openSource.downloads')}
                   </span>
                   <button
                     onClick={() => goCategory('open-source')}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-600 hover:text-cyan-700 hover:underline transition-all"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 hover:underline transition-all"
                   >
-                    Tải về miễn phí
+                    {t('openSource.downloadFree')}
                     <ArrowRight className="h-3 w-3" />
                   </button>
                 </div>
@@ -191,10 +193,10 @@ export function OpenSourceSection() {
           <Button
             variant="outline"
             onClick={() => goCategory('open-source')}
-            className="w-full border-cyan-300 text-cyan-700 hover:bg-cyan-50"
+            className="w-full border-cyan-300 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800"
           >
             <FileCode className="h-4 w-4 mr-2" />
-            Xem tất cả dự án mã nguồn mở
+            {t('openSource.viewAll')}
           </Button>
         </div>
       </div>

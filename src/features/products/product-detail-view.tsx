@@ -17,6 +17,7 @@
    ============================================================ */
 
 import { useMemo, useState } from 'react';
+import { useI18n } from '@/lib/i18n';
 import Image from 'next/image';
 import {
   ChevronRight,
@@ -116,6 +117,7 @@ const CATEGORY_ICONS: Record<string, typeof CircuitBoard> = {
    FrequentlyBoughtTogether
    ============================================================ */
 function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; related: any[] }) {
+  const { t } = useI18n();
   const { toast } = useToast();
   const cart = useCartStore();
   const [selected, setSelected] = useState<Set<string>>(new Set(related.map((r) => r.id)));
@@ -193,12 +195,12 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
                         </span>
                       )}
                       <div className={`absolute top-1 right-1 h-4 w-4 rounded-full border-2 flex items-center justify-center ${
-                        isChecked ? 'bg-cyan-500 border-cyan-500' : 'bg-white border-border'
+                        isChecked ? 'bg-cyan-500 border-cyan-500' : 'bg-card dark:bg-slate-900 border-border'
                       }`}>
                         {isChecked && <CheckCircle2 className="h-3 w-3 text-white" />}
                       </div>
                     </div>
-                    <div className="p-2 bg-white">
+                    <div className="p-2 bg-card dark:bg-slate-900">
                       <p className="text-xs font-medium line-clamp-2 leading-tight">{item.name}</p>
                       <p className="text-xs font-bold text-cyan-700 mt-1">{formatVND(item.price)}</p>
                     </div>
@@ -209,7 +211,7 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
           </div>
 
           {/* Bundle summary */}
-          <div className="rounded-xl bg-white border border-border/60 p-4 flex flex-col gap-3 justify-between">
+          <div className="rounded-xl bg-card dark:bg-slate-900 border border-border/60 p-4 flex flex-col gap-3 justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                 Bundle Price ({checkedItems.length} items)
@@ -260,6 +262,7 @@ export function ProductDetailView() {
    ProductDetailContent — main rendering
    ============================================================ */
 function ProductDetailContent({ product }: { product: any }) {
+  const { t } = useI18n();
   const goHome = useNavStore((s) => s.goHome);
   const goCategory = useNavStore((s) => s.goCategory);
   const goShop = useNavStore((s) => s.goShop);
@@ -500,7 +503,7 @@ function ProductDetailContent({ product }: { product: any }) {
 
             {/* Seller row */}
             {product.shop && (
-              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-white/80 p-3">
+              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/80 dark:bg-slate-900/80 p-3">
                 <div className="relative h-11 w-11 rounded-full overflow-hidden border border-cyan-100 bg-cyan-50">
                   {product.shop.logoUrl && (
                     <Image
@@ -544,7 +547,7 @@ function ProductDetailContent({ product }: { product: any }) {
             {isPhysical && (
               <div className="flex items-center gap-3">
                 <span className="text-sm font-medium text-foreground">Quantity</span>
-                <div className="flex items-center rounded-lg border border-border bg-white overflow-hidden">
+                <div className="flex items-center rounded-lg border border-border bg-card dark:bg-slate-900 overflow-hidden">
                   <button
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
                     className="flex h-9 w-9 items-center justify-center hover:bg-cyan-50 transition-colors text-muted-foreground hover:text-cyan-600"
@@ -592,7 +595,7 @@ function ProductDetailContent({ product }: { product: any }) {
                 </Badge>
               )}
               {product.warranty && (
-                <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200 gap-1">
+                <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 gap-1">
                   <ShieldCheck className="h-3 w-3" />
                   {product.warranty}
                 </Badge>
@@ -688,7 +691,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   Download Free
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
-                  No registration required · Free for commercial & personal use
+                  {t('productDetail.noReg')}
                 </p>
               </div>
             ) : (
@@ -781,6 +784,7 @@ function ProductDetailContent({ product }: { product: any }) {
    DigitalQuickInfo — for DIGITAL products
    ============================================================ */
 function DigitalQuickInfo({ product }: { product: any }) {
+  const { t } = useI18n();
   const items: { label: string; value: string | null; icon: typeof FileCode }[] = [
     {
       label: 'Software',
@@ -826,6 +830,7 @@ function DigitalQuickInfo({ product }: { product: any }) {
    PcbQuickSpecs — for PHYSICAL PCB products
    ============================================================ */
 function PcbQuickSpecs({ product }: { product: any }) {
+  const { t } = useI18n();
   const specs: { label: string; value: string | null }[] = [
     { label: 'Layers', value: product.pcbLayers ? `${product.pcbLayers}` : null },
     { label: 'Thickness', value: product.pcbThickness ? `${product.pcbThickness} mm` : null },
@@ -866,6 +871,7 @@ function PcbQuickSpecs({ product }: { product: any }) {
    ServiceQuickInfo — for SERVICE products
    ============================================================ */
 function ServiceQuickInfo({ product }: { product: any }) {
+  const { t } = useI18n();
   return (
     <div className="rounded-xl border border-amber-200 bg-amber-50/40 p-4 space-y-3">
       <p className="text-xs font-semibold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
@@ -876,26 +882,26 @@ function ServiceQuickInfo({ product }: { product: any }) {
         {product.serviceScope && (
           <div className="flex items-start gap-2 sm:col-span-2">
             <Briefcase className="h-3.5 w-3.5 text-amber-600 mt-0.5 shrink-0" />
-            <dt className="text-muted-foreground min-w-[100px]">Service scope:</dt>
+            <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.serviceScope')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceScope}</dd>
           </div>
         )}
         {product.serviceDeliverables && (
           <div className="flex items-start gap-2 sm:col-span-2">
             <FileCheck2 className="h-3.5 w-3.5 text-amber-600 mt-0.5 shrink-0" />
-            <dt className="text-muted-foreground min-w-[100px]">Deliverables:</dt>
+            <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.deliverables')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceDeliverables}</dd>
           </div>
         )}
         <div className="flex items-center gap-2">
           <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-          <dt className="text-muted-foreground">Duration:</dt>
-          <dd className="font-medium text-foreground">{product.serviceDurationDays ?? '—'} days</dd>
+          <dt className="text-muted-foreground">{t('productDetail.duration')}:</dt>
+          <dd className="font-medium text-foreground">{product.serviceDurationDays ?? '—'}  {t('productDetail.days')}</dd>
         </div>
         <div className="flex items-center gap-2">
           <RefreshCw className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-          <dt className="text-muted-foreground">Revisions:</dt>
-          <dd className="font-medium text-foreground">{product.serviceRevisions ?? 0} included</dd>
+          <dt className="text-muted-foreground">{t('productDetail.revisions')}:</dt>
+          <dd className="font-medium text-foreground">{product.serviceRevisions ?? 0}  {t('productDetail.included')}</dd>
         </div>
       </dl>
       {product.servicePortfolio && (
@@ -930,22 +936,22 @@ function ProductTabs({
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="mt-12">
       <TabsList className="bg-cyan-50/60 border border-cyan-100 p-1 flex flex-wrap h-auto">
-        <TabsTrigger value="description" className="data-[state=active]:bg-white data-[state=active]:text-cyan-700">
-          Description
+        <TabsTrigger value="description" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+          {t('productDetail.description')}
         </TabsTrigger>
-        <TabsTrigger value="specifications" className="data-[state=active]:bg-white data-[state=active]:text-cyan-700">
-          Specifications
+        <TabsTrigger value="specifications" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+          {t('productDetail.specifications')}
         </TabsTrigger>
         {isDigital && (
-          <TabsTrigger value="versions" className="data-[state=active]:bg-white data-[state=active]:text-cyan-700">
-            Versions
+          <TabsTrigger value="versions" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+            {t('productDetail.versions')}
           </TabsTrigger>
         )}
-        <TabsTrigger value="reviews" className="data-[state=active]:bg-white data-[state=active]:text-cyan-700">
-          Reviews ({product.reviews?.length ?? 0})
+        <TabsTrigger value="reviews" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+          {t('productDetail.reviews')} ({product.reviews?.length ?? 0})
         </TabsTrigger>
-        <TabsTrigger value="shipping" className="data-[state=active]:bg-white data-[state=active]:text-cyan-700">
-          Shipping
+        <TabsTrigger value="shipping" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+          {t('productDetail.shipping')}
         </TabsTrigger>
       </TabsList>
 
@@ -1179,6 +1185,7 @@ function SpecificationsTab({ product }: { product: any }) {
    Versions tab — for digital products
    ============================================================ */
 function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVersion?: string | null }) {
+  const { t } = useI18n();
   if (!versions || versions.length === 0) {
     return (
       <Card className="p-6 text-sm text-muted-foreground">
@@ -1214,7 +1221,7 @@ function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVer
                       </Badge>
                     )}
                     {!isCurrent && i === 0 && (
-                      <Badge variant="outline" className="text-[10px] bg-slate-50 text-slate-600 border-slate-200">
+                      <Badge variant="outline" className="text-[10px] bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700">
                         LATEST
                       </Badge>
                     )}
@@ -1258,6 +1265,7 @@ function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVer
    Reviews tab
    ============================================================ */
 function ReviewsTab({ product }: { product: any }) {
+  const { t } = useI18n();
   const reviews = (product.reviews ?? []) as any[];
   const { user } = useAuthStore();
   const { toast } = useToast();
@@ -1375,9 +1383,9 @@ function ReviewsTab({ product }: { product: any }) {
           </Button>
         ) : (
           <Card className="p-5 space-y-3">
-            <h3 className="font-semibold text-foreground">Write your review</h3>
+            <h3 className="font-semibold text-foreground">{t('productDetail.writeYourReview')}</h3>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Your rating:</span>
+              <span className="text-sm text-muted-foreground">{t('productDetail.yourRating')}</span>
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <button
@@ -1400,8 +1408,8 @@ function ReviewsTab({ product }: { product: any }) {
             <textarea
               value={reviewComment}
               onChange={(e) => setReviewComment(e.target.value)}
-              placeholder="Share your experience with this product…"
-              className="w-full min-h-[100px] rounded-lg border border-border bg-white px-3 py-2 text-sm focus-visible:border-cyan-500 focus-visible:ring-cyan-500/30 outline-none"
+              placeholder={t('productDetail.shareExp')}
+              className="w-full min-h-[100px] rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus-visible:border-cyan-500 focus-visible:ring-cyan-500/30 outline-none"
             />
             <div className="flex items-center gap-2">
               <Button
@@ -1410,11 +1418,9 @@ function ReviewsTab({ product }: { product: any }) {
                 disabled={submitting}
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-                Submit review
+                {t('productDetail.submitReview')}
               </Button>
-              <Button variant="outline" onClick={() => setShowForm(false)}>
-                Cancel
-              </Button>
+              <Button variant="outline" onClick={() => setShowForm(false)}>{t('productDetail.cancel')}</Button>
             </div>
           </Card>
         )}
@@ -1479,6 +1485,7 @@ function ReviewsTab({ product }: { product: any }) {
    Shipping tab
    ============================================================ */
 function ShippingTab({ product }: { product: any }) {
+  const { t } = useI18n();
   const isDigital = product.productType === 'DIGITAL';
   const isService = product.productType === 'SERVICE';
 
@@ -1492,19 +1499,19 @@ function ShippingTab({ product }: { product: any }) {
         <ul className="space-y-3 text-sm text-muted-foreground">
           <li className="flex items-start gap-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-            <span><strong className="text-foreground">Instant download</strong> after payment confirmation.</span>
+            <span>{t('productDetail.instantDownload')}</span>
           </li>
           <li className="flex items-start gap-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-            <span><strong className="text-foreground">License granted immediately</strong> — your license key is available in your Downloads page.</span>
+            <span>{t('productDetail.licenseGranted')}</span>
           </li>
           <li className="flex items-start gap-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-            <span><strong className="text-foreground">Download logs stored securely</strong> for license verification and audit purposes.</span>
+            <span>{t('productDetail.downloadLogged')}</span>
           </li>
           <li className="flex items-start gap-2">
             <ShieldCheck className="h-4 w-4 text-cyan-500 mt-0.5 shrink-0" />
-            <span>All downloads are scanned for malware and integrity-checked with SHA-256 hashes.</span>
+            <span>{t('productDetail.securityScanned')}</span>
           </li>
         </ul>
       </Card>
@@ -1521,7 +1528,7 @@ function ShippingTab({ product }: { product: any }) {
         <ul className="space-y-3 text-sm text-muted-foreground">
           <li className="flex items-start gap-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-            <span>Service starts within <strong className="text-foreground">24 hours</strong> after payment.</span>
+            <span>{t('productDetail.serviceStarts')}</span>
           </li>
           <li className="flex items-start gap-2">
             <Clock className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
@@ -1533,7 +1540,7 @@ function ShippingTab({ product }: { product: any }) {
           </li>
           <li className="flex items-start gap-2">
             <FileCheck2 className="h-4 w-4 text-cyan-500 mt-0.5 shrink-0" />
-            <span>Deliverables: <strong className="text-foreground">{product.serviceDeliverables ?? 'As agreed in scope'}</strong>.</span>
+            <span>{t('productDetail.deliverables')}: <strong className="text-foreground">{product.serviceDeliverables ?? 'As agreed in scope'}</strong>.</span>
           </li>
         </ul>
       </Card>
@@ -1629,6 +1636,7 @@ function ProductDetailSkeleton() {
    Not found
    ============================================================ */
 function ProductNotFound() {
+  const { t } = useI18n();
   const goHome = useNavStore((s) => s.goHome);
   const goProducts = useNavStore((s) => s.goProducts);
   return (
@@ -1637,9 +1645,9 @@ function ProductNotFound() {
         <div className="flex h-20 w-20 mx-auto items-center justify-center rounded-3xl bg-cyan-50 text-cyan-500 border border-cyan-100">
           <PackageSearch className="h-10 w-10" />
         </div>
-        <h1 className="text-2xl font-bold text-foreground">Product not found</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t('productDetail.notFound')}</h1>
         <p className="text-sm text-muted-foreground">
-          The product you're looking for doesn't exist or has been removed by the seller.
+          {t('productDetail.notFoundDesc')}
         </p>
         <div className="flex items-center justify-center gap-3 pt-2">
           <Button variant="outline" onClick={goHome}>

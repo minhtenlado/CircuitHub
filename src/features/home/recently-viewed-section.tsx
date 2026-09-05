@@ -10,10 +10,12 @@ import { formatVND } from '@/lib/format';
 import { ProductTypeBadge } from '@/components/common/badges';
 import Image from 'next/image';
 import { timeAgo } from '@/lib/format';
+import { useI18n } from '@/lib/i18n';
 
 export function RecentlyViewedSection() {
   const { items, clear } = useRecentlyViewedStore();
   const { goProduct } = useNavStore();
+  const { t } = useI18n();
 
   if (items.length === 0) return null;
 
@@ -26,13 +28,13 @@ export function RecentlyViewedSection() {
               <History className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-foreground">Recently Viewed</h2>
-              <p className="text-sm text-muted-foreground">Pick up where you left off</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground">{t('recentlyViewed.title')}</h2>
+              <p className="text-sm text-muted-foreground">{t('recentlyViewed.subtitle')}</p>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={clear} className="text-xs text-muted-foreground hover:text-red-500">
             <X className="h-3.5 w-3.5 mr-1" />
-            Clear
+            {t('recentlyViewed.clear')}
           </Button>
         </div>
 

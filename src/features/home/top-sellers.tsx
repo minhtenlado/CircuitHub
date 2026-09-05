@@ -8,6 +8,7 @@
    specializations chips, "Visit Shop →" → goShop(slug)
    ============================================================ */
 
+import { useI18n } from '@/lib/i18n';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -27,6 +28,7 @@ import { Rating } from '@/components/common/rating';
 import { SectionHeader } from './categories-section';
 
 export function TopSellers() {
+  const { t } = useI18n();
   const { data, isLoading } = useShops(true, 8);
   const shops = (data ?? []).slice(0, 8);
 
@@ -34,13 +36,13 @@ export function TopSellers() {
     <section className="relative py-12 sm:py-16 lg:py-20 bg-background text-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Trusted partners"
-          title="Top Sellers"
-          subtitle="Vetted engineering studios with proven track records, secure licenses, and on-time delivery."
+          eyebrow={t('topSellers.eyebrow')}
+          title={t('topSellers.title')}
+          subtitle={t('topSellers.subtitle')}
           action={
             <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-emerald-500" />
-              All sellers are spec-sheet verified
+              {t('topSellers.verifiedNote')}
             </div>
           }
         />
@@ -57,7 +59,7 @@ export function TopSellers() {
         {/* Empty state */}
         {!isLoading && shops.length === 0 && (
           <div className="mt-10 text-center text-sm text-muted-foreground">
-            No verified shops found yet. New engineering studios are joining every week.
+            {t('topSellers.noShops')}
           </div>
         )}
       </div>
@@ -69,6 +71,7 @@ export function TopSellers() {
    ShopCard
    ---------------------------------------------------------------- */
 function ShopCard({ shop, index }: { shop: any; index: number }) {
+  const { t } = useI18n();
   const goShop = useNavStore((s) => s.goShop);
 
   const specs = (shop.specializations ?? '')
@@ -104,7 +107,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
         {shop.verified && (
           <span className="absolute top-2 right-2 inline-flex items-center gap-1 rounded-full bg-white dark:bg-slate-900/90 backdrop-blur px-2 py-0.5 text-[10px] font-semibold text-emerald-700 border border-emerald-200">
             <CheckCircle2 className="h-3 w-3" />
-            Verified
+            {t('topSellers.verified')}
           </span>
         )}
         {/* Logo (overlap bottom-left) */}
@@ -143,21 +146,21 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-3 gap-1 rounded-xl bg-cyan-50/50 border border-cyan-100/70 p-2.5">
+        <div className="grid grid-cols-3 gap-1 rounded-xl bg-cyan-50/50 dark:bg-slate-800/60 border border-cyan-100/70 dark:border-slate-700/60 p-2.5">
           <Stat
             icon={ShoppingBag}
             value={(shop.completedOrders ?? 0).toLocaleString('vi-VN')}
-            label="Orders"
+            label={t('topSellers.orders')}
           />
           <Stat
             icon={Package}
             value={(shop.productCount ?? 0).toLocaleString('vi-VN')}
-            label="Products"
+            label={t('topSellers.products')}
           />
           <Stat
             icon={Users}
             value={(shop.followersCount ?? 0).toLocaleString('vi-VN')}
-            label="Followers"
+            label={t('topSellers.followers')}
           />
         </div>
 
@@ -168,7 +171,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
               <Badge
                 key={s}
                 variant="outline"
-                className="bg-cyan-50 text-cyan-700 border-cyan-200 font-medium text-[10px]"
+                className="bg-cyan-50 text-cyan-700 border-cyan-200 font-medium text-[10px] dark:bg-cyan-900/30 dark:text-cyan-300 dark:border-cyan-700/50"
               >
                 {s}
               </Badge>
@@ -182,9 +185,9 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
             onClick={() => goShop(shop.slug)}
             size="sm"
             variant="outline"
-            className="w-full border-cyan-200 text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800"
+            className="w-full border-cyan-200 text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800 dark:border-cyan-700/50 dark:text-cyan-300 dark:hover:bg-cyan-900/40"
           >
-            Visit Shop
+            {t('topSellers.visitShop')}
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>

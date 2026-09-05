@@ -170,10 +170,10 @@ export function CategoryView() {
       </div>
 
       {/* Category header */}
-      <section className="relative overflow-hidden mt-6 border-b border-border/40 pb-8 sm:pb-10">
+      <section className="relative overflow-hidden mt-4 border-b border-border/40 bg-gradient-to-b from-cyan-950/15 via-background to-background pb-6 sm:pb-8 pt-2">
         {/* Decorative PCB grid background */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.08]"
+          className="absolute inset-0 pointer-events-none opacity-[0.02] dark:opacity-[0.04]"
           style={{
             backgroundImage:
               'linear-gradient(to right, #06b6d4 1px, transparent 1px), linear-gradient(to bottom, #06b6d4 1px, transparent 1px)',
@@ -214,8 +214,8 @@ export function CategoryView() {
         </div>
       </section>
 
-      {/* Products view with category pre-applied */}
-      <ProductsView initialCategory={slug ?? undefined} />
+      {/* Products view with category pre-applied and clean toolbar without duplicate header */}
+      <ProductsView initialCategory={slug ?? undefined} hideHeaderTitle={true} />
     </main>
   );
 }

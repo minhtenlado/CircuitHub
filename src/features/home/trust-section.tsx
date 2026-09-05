@@ -19,39 +19,42 @@ import {
   Clock,
   CheckCircle2,
 } from 'lucide-react';
-
-const STATS = [
-  { label: 'GMV processed', value: '₫8.2B+', icon: TrendingUp, sub: 'Gross marketplace volume' },
-  { label: 'Downloads', value: '1.2M+', icon: Download, sub: 'Digital products delivered' },
-  { label: 'Avg rating', value: '4.9/5', icon: Star, sub: 'Across 24K+ reviews' },
-  { label: 'On-time delivery', value: '97%', icon: Clock, sub: 'Shipped & delivered on schedule' },
-] as const;
-
-const PILLARS = [
-  {
-    icon: Cpu,
-    title: 'Technical verification',
-    body: 'Every product is spec-sheet reviewed — pin counts, voltage rails, package outlines, and stack-ups are validated by engineers before listing goes live.',
-    accent: 'from-cyan-500 to-cyan-400',
-    points: ['Spec-sheet verification', 'Stack-up & layer check', 'DFM rule pass'],
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Secure download license system',
-    body: 'Signed download URLs, per-customer licenses, and revocation tracking keep digital assets protected across PERSONAL, COMMERCIAL, and EXTENDED_COMMERCIAL tiers.',
-    accent: 'from-teal-500 to-aqua-400',
-    points: ['Per-license signing', 'Revocation & audit trail', 'License tier enforcement'],
-  },
-  {
-    icon: Award,
-    title: 'Engineering-grade quality',
-    body: 'Verified studios only — with response-rate, on-time delivery, and revision discipline tracked publicly on every shop profile.',
-    accent: 'from-sky-500 to-cyan-400',
-    points: ['Verified seller program', 'Public quality metrics', 'Quality-driven ranking'],
-  },
-] as const;
+import { useI18n } from '@/lib/i18n';
 
 export function TrustSection() {
+  const { t } = useI18n();
+
+  const STATS = [
+    { label: t('trust.gmv'), value: '₫8.2B+', icon: TrendingUp, sub: t('trust.gmvSub') },
+    { label: t('trust.downloads'), value: '1.2M+', icon: Download, sub: t('trust.downloadsSub') },
+    { label: t('trust.avgRating'), value: '4.9/5', icon: Star, sub: t('trust.avgRatingSub') },
+    { label: t('trust.onTime'), value: '97%', icon: Clock, sub: t('trust.onTimeSub') },
+  ] as const;
+
+  const PILLARS = [
+    {
+      icon: Cpu,
+      title: t('trust.techVerification'),
+      body: t('trust.techVerificationBody'),
+      accent: 'from-cyan-500 to-cyan-400',
+      points: [t('trust.point1'), t('trust.point2'), t('trust.point3')],
+    },
+    {
+      icon: ShieldCheck,
+      title: t('trust.secureLicense'),
+      body: t('trust.secureLicenseBody'),
+      accent: 'from-teal-500 to-aqua-400',
+      points: [t('trust.point4'), t('trust.point5'), t('trust.point6')],
+    },
+    {
+      icon: Award,
+      title: t('trust.quality'),
+      body: t('trust.qualityBody'),
+      accent: 'from-sky-500 to-cyan-400',
+      points: [t('trust.point7'), t('trust.point8'), t('trust.point9')],
+    },
+  ] as const;
+
   return (
     <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
       {/* Cyan glow */}

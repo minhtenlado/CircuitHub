@@ -22,6 +22,7 @@
    - Mock licenses, reviews, address used for demo state.
    ============================================================ */
 
+import { useI18n } from '@/lib/i18n';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -219,7 +220,7 @@ const PAYMENT_STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
   PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
   SUCCESS: { label: 'Paid', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
   FAILED: { label: 'Failed', cls: 'bg-red-50 text-red-700 border-red-200' },
-  REFUNDED: { label: 'Refunded', cls: 'bg-slate-50 text-slate-700 border-slate-200' },
+  REFUNDED: { label: 'Refunded', cls: 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:border-slate-800' },
 };
 
 const LICENSE_TYPE_CONFIG: Record<string, { label: string; cls: string }> = {
@@ -691,7 +692,7 @@ function StatCard({
     amber: 'from-amber-500 to-orange-400',
   };
   return (
-    <Card className="relative overflow-hidden border-border/60 bg-white/80 backdrop-blur-sm hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)] transition-shadow">
+    <Card className="relative overflow-hidden border-border/60 bg-card/80 dark:bg-slate-900/80 backdrop-blur-sm hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)] transition-shadow">
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -831,7 +832,7 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="border-t border-border/60 bg-slate-50/40 overflow-hidden"
+            className="border-t border-border/60 bg-slate-50/40 dark:bg-slate-900/40 overflow-hidden"
           >
             <div className="p-5 grid lg:grid-cols-[1.4fr_1fr] gap-6">
               {/* Left: items + timeline */}
@@ -843,7 +844,7 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
                   </h4>
                   <div className="space-y-2">
                     {order.items.map((it) => (
-                      <div key={it.id} className="flex items-center gap-3 rounded-lg border border-border/60 bg-white p-3">
+                      <div key={it.id} className="flex items-center gap-3 rounded-lg border border-border/60 bg-card dark:bg-slate-900 p-3">
                         <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-cyan-50">
                           {it.imageUrl && (
                             <Image src={it.imageUrl} alt={it.name} fill sizes="48px" className="object-cover" unoptimized />
@@ -881,7 +882,7 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
                     <MapPin className="h-3.5 w-3.5" />
                     Shipping address
                   </h4>
-                  <div className="rounded-lg border border-border/60 bg-white p-3 text-sm">
+                  <div className="rounded-lg border border-border/60 bg-card dark:bg-slate-900 p-3 text-sm">
                     <p className="font-medium text-foreground">{order.shippingAddress.fullName}</p>
                     <p className="text-muted-foreground">{order.shippingAddress.phone}</p>
                     <p className="text-muted-foreground mt-1.5">
@@ -898,7 +899,7 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
                       <Truck className="h-3.5 w-3.5" />
                       Tracking
                     </h4>
-                    <div className="rounded-lg border border-border/60 bg-white p-3 text-sm space-y-1.5">
+                    <div className="rounded-lg border border-border/60 bg-card dark:bg-slate-900 p-3 text-sm space-y-1.5">
                       {order.shipments.map((sh) => (
                         <div key={sh.id} className="flex items-center justify-between">
                           <div>
@@ -1053,7 +1054,7 @@ function WishlistCard({
           type="button"
           onClick={() => onRemove(item.productId)}
           aria-label="Remove from wishlist"
-          className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 hover:bg-white shadow border border-border/60 text-rose-500 hover:text-rose-600 transition-colors"
+          className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 shadow border border-border/60 text-rose-500 hover:text-rose-600 transition-colors"
         >
           <Trash2 className="h-3.5 w-3.5" />
         </button>
@@ -1104,11 +1105,11 @@ function LicenseCard({ license }: { license: DemoLicense }) {
         </div>
 
         <div className="mt-4 grid sm:grid-cols-2 gap-3">
-          <div className="rounded-lg border border-border/60 bg-slate-50/60 p-3">
+          <div className="rounded-lg border border-border/60 bg-slate-50/60 dark:bg-slate-900/60 p-3">
             <p className="text-xs text-muted-foreground mb-1">License key</p>
             <p className="font-mono text-sm font-semibold text-foreground break-all">{license.licenseKey}</p>
           </div>
-          <div className="rounded-lg border border-border/60 bg-slate-50/60 p-3">
+          <div className="rounded-lg border border-border/60 bg-slate-50/60 dark:bg-slate-900/60 p-3">
             <p className="text-xs text-muted-foreground mb-1">Seats</p>
             <p className="text-sm font-semibold text-foreground tabular-nums">
               {license.usedSeats} / {license.seats} <span className="text-muted-foreground font-normal">used</span>
@@ -1258,7 +1259,7 @@ function NotificationItem({ n }: { n: { id: string; type: string; title: string;
     : 'bg-slate-50 text-slate-600';
 
   return (
-    <div className="flex gap-3 rounded-lg border border-border/60 bg-white p-3">
+    <div className="flex gap-3 rounded-lg border border-border/60 bg-card dark:bg-slate-900 p-3">
       <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg', accentCls)}>
         <Icon className="h-4 w-4" />
       </div>
@@ -1291,6 +1292,7 @@ function OverviewTab({
   onGoProducts: () => void;
   onGoTab: (t: TabId) => void;
 }) {
+  const { t } = useI18n();
   const totalSpent = orders.reduce((s, o) => s + o.grandTotal, 0);
   const recentOrders = orders.slice(0, 3);
 
@@ -1298,10 +1300,10 @@ function OverviewTab({
     <div className="space-y-6">
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard icon={Package} label="Total Orders" value={String(orders.length)} hint={`${orders.filter((o) => o.status === 'COMPLETED').length} completed`} accent="cyan" />
-        <StatCard icon={Wallet} label="Total Spent" value={formatVND(totalSpent)} hint="All-time spending" accent="aqua" />
-        <StatCard icon={Heart} label="Wishlist" value={String(wishlistCount)} hint={wishlistCount === 0 ? 'Add favorites' : 'Saved products'} accent="rose" />
-        <StatCard icon={Download} label="Downloads" value={String(downloads.length)} hint="Digital purchases" accent="amber" />
+        <StatCard icon={Package} label={t('buyer.overview.totalOrders')} value={String(orders.length)} hint={`${orders.filter((o) => o.status === 'COMPLETED').length} completed`} accent="cyan" />
+        <StatCard icon={Wallet} label={t('buyer.overview.totalSpent')} value={formatVND(totalSpent)} hint="All-time spending" accent="aqua" />
+        <StatCard icon={Heart} label={t('buyer.overview.wishlistItems')} value={String(wishlistCount)} hint={wishlistCount === 0 ? 'Add favorites' : 'Saved products'} accent="rose" />
+        <StatCard icon={Download} label={t('buyer.tabs.downloads')} value={String(downloads.length)} hint="Digital purchases" accent="amber" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -1311,12 +1313,12 @@ function OverviewTab({
             <div>
               <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 <Clock className="h-4 w-4 text-cyan-600" />
-                Recent orders
+                {t('buyer.overview.recentActivity')}
               </h2>
               <p className="text-xs text-muted-foreground">Your latest 3 purchases</p>
             </div>
             <Button size="sm" variant="outline" onClick={() => onGoTab('orders')}>
-              View all
+              {t('buyer.overview.viewAllActivity')}
               <ChevronRight className="h-3.5 w-3.5" />
             </Button>
           </div>
@@ -1386,6 +1388,7 @@ function OrdersTab({
   toast: (t: any) => void;
   onGoProducts: () => void;
 }) {
+  const { t } = useI18n();
   const [filter, setFilter] = useState<string>('ALL');
   const filtered = filter === 'ALL' ? orders : orders.filter((o) => o.status === filter);
 
@@ -1402,12 +1405,12 @@ function OrdersTab({
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-foreground">My Orders</h2>
+          <h2 className="text-xl font-semibold text-foreground">{t('buyer.orders.title')}</h2>
           <p className="text-sm text-muted-foreground">{orders.length} total orders · Click any order to expand details</p>
         </div>
         <Button variant="outline" size="sm" onClick={onGoProducts}>
           <ShoppingBag className="h-3.5 w-3.5" />
-          Continue shopping
+          {t('buyer.orders.startShopping')}
         </Button>
       </div>
 
@@ -1422,7 +1425,7 @@ function OrdersTab({
               'px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
               filter === f.id
                 ? 'bg-cyan-500 text-white border-cyan-500'
-                : 'bg-white text-muted-foreground border-border/60 hover:border-cyan-300 hover:text-cyan-700',
+                : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60 hover:border-cyan-300 hover:text-cyan-700',
             )}
           >
             {f.label}
@@ -1437,9 +1440,9 @@ function OrdersTab({
       {filtered.length === 0 ? (
         <EmptyState
           icon={PackageSearch}
-          title="No orders found"
-          description="Try a different filter, or place your first order from the marketplace."
-          cta="Browse products"
+          title={t('buyer.orders.empty')}
+          description={t('buyer.orders.emptyDesc')}
+          cta={t('buyer.orders.startShopping')}
           onCta={onGoProducts}
         />
       ) : (
@@ -1462,6 +1465,7 @@ function DownloadsTab({
   toast: (t: any) => void;
   onGoProducts: () => void;
 }) {
+  const { t } = useI18n();
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-2">
@@ -1469,7 +1473,7 @@ function DownloadsTab({
           <Download className="h-5 w-5" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-foreground">My Downloads</h2>
+          <h2 className="text-xl font-semibold text-foreground">{t('buyer.downloads.title')}</h2>
           <p className="text-sm text-muted-foreground">{downloads.length} digital products · Secure download links valid for 24h</p>
         </div>
       </div>
@@ -1477,9 +1481,9 @@ function DownloadsTab({
       {downloads.length === 0 ? (
         <EmptyState
           icon={Download}
-          title="No digital purchases yet"
-          description="When you buy a digital product (KiCad project, Altium design, firmware bundle, Gerber package), it will appear here for instant download."
-          cta="Browse digital products"
+          title={t('buyer.downloads.empty')}
+          description={t('buyer.downloads.emptyDesc')}
+          cta={t('buyer.downloads.browseDigital')}
           onCta={onGoProducts}
         />
       ) : (
@@ -1816,25 +1820,27 @@ function ReviewsTab({
 /* ---------------- Sidebar / mobile pill trigger ---------------- */
 
 function SidebarTabTrigger({ tab }: { tab: { id: TabId; label: string; icon: typeof Package; description: string } }) {
+  const { t } = useI18n();
   return (
     <TabsTrigger
       value={tab.id}
-      className="justify-start w-full h-auto py-2.5 px-3 gap-3 rounded-lg data-[state=active]:bg-cyan-50 data-[state=active]:text-cyan-700 data-[state=active]:border-cyan-200 data-[state=active]:shadow-sm text-muted-foreground hover:text-cyan-700 hover:bg-cyan-50/50 font-medium text-sm"
+      className="justify-start w-full h-auto py-2.5 px-3 gap-3 rounded-lg data-[state=active]:bg-cyan-50 data-[state=active]:text-cyan-700 data-[state=active]:border-cyan-200 data-[state=active]:shadow-sm text-muted-foreground hover:text-cyan-700 hover:bg-cyan-50/50 font-medium text-sm dark:data-[state=active]:bg-cyan-900/40 dark:data-[state=active]:text-cyan-300 dark:hover:bg-cyan-900/30"
     >
       <TabIcon id={tab.id} className="h-4 w-4 shrink-0" />
-      <span className="truncate text-left">{tab.label}</span>
+      <span className="truncate text-left">{t(`buyer.tabs.${tab.id}` as any) || tab.label}</span>
     </TabsTrigger>
   );
 }
 
 function MobileTabTrigger({ tab }: { tab: { id: TabId; label: string; icon: typeof Package; description: string } }) {
+  const { t } = useI18n();
   return (
     <TabsTrigger
       value={tab.id}
-      className="flex-none gap-1.5 rounded-full px-3 py-1.5 text-xs data-[state=active]:bg-cyan-500 data-[state=active]:text-white data-[state=active]:border-cyan-500 text-muted-foreground border-border/60 bg-white"
+      className="flex-none gap-1.5 rounded-full px-3 py-1.5 text-xs data-[state=active]:bg-cyan-500 data-[state=active]:text-white data-[state=active]:border-cyan-500 text-muted-foreground border-border/60 bg-card dark:bg-slate-900"
     >
       <TabIcon id={tab.id} className="h-3.5 w-3.5" />
-      <span className="whitespace-nowrap">{tab.label}</span>
+      <span className="whitespace-nowrap">{t(`buyer.tabs.${tab.id}` as any) || tab.label}</span>
     </TabsTrigger>
   );
 }

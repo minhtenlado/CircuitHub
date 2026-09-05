@@ -110,7 +110,13 @@ function getInitialCategory(initialCategory?: string, params?: Record<string, st
 /* ============================================================
    ProductsView
    ============================================================ */
-export function ProductsView({ initialCategory }: { initialCategory?: string }) {
+export function ProductsView({
+  initialCategory,
+  hideHeaderTitle = false,
+}: {
+  initialCategory?: string;
+  hideHeaderTitle?: boolean;
+}) {
   const params = useNavStore((s) => s.params);
   const goProducts = useNavStore((s) => s.goProducts);
   const { t } = useI18n();
@@ -256,25 +262,35 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
     <main className="min-h-screen bg-background text-foreground">
       {/* Page header */}
       <div className="border-b border-border/60 bg-background/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-[60px] z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
-                <Package className="h-5 w-5" />
+            {hideHeaderTitle ? (
+              <div className="text-xs sm:text-sm font-medium text-muted-foreground tabular-nums">
+                {isLoading
+                  ? t('common.loading')
+                  : total > 0
+                    ? `${t('common.showing')} ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)} ${t('common.of')} ${total.toLocaleString('vi-VN')} ${t('categories.countProducts')}`
+                    : t('filter.noProducts')}
               </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                  {categoryHeaderTitle}
-                </h1>
-                <p className="text-xs sm:text-sm text-muted-foreground tabular-nums">
-                  {isLoading
-                    ? t('common.loading')
-                    : total > 0
-                      ? `${t('common.showing')} ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)} ${t('common.of')} ${total.toLocaleString('vi-VN')} ${t('categories.countProducts')}`
-                      : t('filter.noProducts')}
-                </p>
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+                  <Package className="h-5 w-5" />
+                </div>
+                <div>
+                  <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                    {categoryHeaderTitle}
+                  </h1>
+                  <p className="text-xs sm:text-sm text-muted-foreground tabular-nums mt-0.5">
+                    {isLoading
+                      ? t('common.loading')
+                      : total > 0
+                        ? `${t('common.showing')} ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)} ${t('common.of')} ${total.toLocaleString('vi-VN')} ${t('categories.countProducts')}`
+                        : t('filter.noProducts')}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
             <div className="flex items-center gap-2">
               {/* Mobile filter button */}
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -398,8 +414,8 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
 
             {/* Grid */}
             {isLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {Array.from({ length: 8 }).map((_, i) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+                {Array.from({ length: 6 }).map((_, i) => (
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
@@ -408,7 +424,7 @@ export function ProductsView({ initialCategory }: { initialCategory?: string }) 
             ) : (
               <motion.div
                 layout
-                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5"
               >
                 {visibleItems.map((p, i) => (
                   <ProductCard key={p.id} product={p} index={i} />
