@@ -6,15 +6,31 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code');
   const error = searchParams.get('error');
+  const state = searchParams.get('state');
+
+  let vercelShare: string | null = null;
+  if (state) {
+    try {
+      const parsed = JSON.parse(state);
+      if (parsed.vercelShare) vercelShare = parsed.vercelShare;
+    } catch {}
+  }
 
   const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
   const proto = req.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
   const baseUrl = `${proto}://${host}`;
   const callbackUrl = `${baseUrl}/api/v1/auth/google/callback`;
 
+  const makeRedirect = (params: Record<string, string>) => {
+    const target = new URL(`${baseUrl}/`);
+    Object.entries(params).forEach(([k, v]) => target.searchParams.set(k, v));
+    if (vercelShare) target.searchParams.set('_vercel_share', vercelShare);
+    return target.toString();
+  };
+
   if (error || !code) {
     const errorMsg = error || 'Không nhận được mã ủy quyền từ Google';
-    return NextResponse.redirect(`${baseUrl}/?google_auth=error&message=${encodeURIComponent(errorMsg)}`);
+    return NextResponse.redirect(makeRedirect({ google_auth: 'error', message: errorMsg }));
   }
 
   const clientId = process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -116,12 +132,13 @@ export async function GET(req: NextRequest) {
     };
 
     // 5. Chuyển hướng người dùng về trang chủ với thông tin xác thực
-    const redirectTarget = new URL(`${baseUrl}/`);
-    redirectTarget.searchParams.set('google_auth', 'success');
-    redirectTarget.searchParams.set('token', secureToken);
-    redirectTarget.searchParams.set('user', JSON.stringify(userPayload));
+    const targetUrl = makeRedirect({
+      google_auth: 'success',
+      token: secureToken,
+      user: JSON.stringify(userPayload),
+    });
 
-    const response = NextResponse.redirect(redirectTarget.toString());
+    const response = NextResponse.redirect(targetUrl);
     response.cookies.set('circuithub_token', secureToken, {
       httpOnly: false,
       secure: true,
@@ -141,7 +158,10 @@ export async function GET(req: NextRequest) {
   } catch (err: any) {
     console.error('Google Callback Error:', err);
     return NextResponse.redirect(
-      `${baseUrl}/?google_auth=error&message=${encodeURIComponent(err?.message || 'Lỗi xử lý xác thực')}`,
+      makeRedirect({
+        google_auth: 'error',
+        message: err?.message || 'Lỗi xử lý xác thực',
+      }),
     );
   }
 }

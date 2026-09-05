@@ -154,34 +154,14 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
     }
   }
 
-  async function googleLogin() {
+  function googleLogin() {
     setGoogleLoading(true);
-    try {
-      // 1. Kiểm tra trạng thái cấu hình Google OAuth từ máy chủ
-      const res = await fetch('/api/v1/auth/google', { method: 'GET', redirect: 'manual' });
-      
-      // Nếu máy chủ đã cấu hình và trả về chuyển hướng (302/307/opaqueredirect), chuyển sang Google
-      if (res.type === 'opaqueredirect' || res.status === 302 || res.status === 307 || res.ok) {
-        window.location.href = '/api/v1/auth/google';
-        return;
-      }
-      
-      const json = await res.json().catch(() => null);
-      if (json?.code === 'GOOGLE_CLIENT_ID_MISSING' || !res.ok) {
-        toast({
-          title: 'Chưa cấu hình Google OAuth',
-          description: json?.message || 'Vui lòng thiết lập biến môi trường GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET trên Vercel theo hướng dẫn.',
-          variant: 'destructive',
-        });
-        setGoogleLoading(false);
-        return;
-      }
-      
-      window.location.href = '/api/v1/auth/google';
-    } catch {
-      // Fallback: điều hướng trực tiếp
-      window.location.href = '/api/v1/auth/google';
-    }
+    const sp = new URLSearchParams(window.location.search);
+    const vercelShare = sp.get('_vercel_share');
+    const authUrl = vercelShare
+      ? `/api/v1/auth/google?_vercel_share=${encodeURIComponent(vercelShare)}`
+      : '/api/v1/auth/google';
+    window.location.href = authUrl;
   }
 
   return (
@@ -393,7 +373,9 @@ export default function Home() {
       url.searchParams.delete('google_auth');
       url.searchParams.delete('token');
       url.searchParams.delete('user');
-      window.history.replaceState({}, document.title, url.pathname);
+      const remainingSearch = url.searchParams.toString();
+      const cleanUrl = url.pathname + (remainingSearch ? `?${remainingSearch}` : '');
+      window.history.replaceState({}, document.title, cleanUrl);
 
       if (token && userStr) {
         try {
@@ -432,7 +414,9 @@ export default function Home() {
       });
       url.searchParams.delete('google_auth');
       url.searchParams.delete('message');
-      window.history.replaceState({}, document.title, url.pathname);
+      const remainingErrSearch = url.searchParams.toString();
+      const cleanErrUrl = url.pathname + (remainingErrSearch ? `?${remainingErrSearch}` : '');
+      window.history.replaceState({}, document.title, cleanErrUrl);
     }
 
     // Normal page load: setup hash routing
