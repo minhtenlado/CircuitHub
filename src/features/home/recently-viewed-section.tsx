@@ -58,10 +58,10 @@ export function RecentlyViewedSection() {
                 </div>
               </div>
               <div className="p-3 space-y-1">
-                <p className="text-sm font-semibold line-clamp-2 group-hover:text-cyan-700 transition-colors">{item.name}</p>
+                <p className="text-sm font-semibold line-clamp-2 group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors">{item.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{item.shopName}</p>
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-sm font-bold text-cyan-700">{formatVND(item.price)}</span>
+                  <span className="text-sm font-bold text-cyan-700 dark:text-cyan-400">{formatVND(item.price)}</span>
                   <span className="text-[10px] text-muted-foreground">{timeAgo(new Date(item.viewedAt))}</span>
                 </div>
               </div>

@@ -193,74 +193,74 @@ interface SidebarSection {
 /* ---------------- Status config ---------------- */
 
 const USER_ROLE_CONFIG: Record<string, { label: string; cls: string }> = {
-  BUYER: { label: 'Buyer', cls: 'bg-slate-100 text-slate-700 border-slate-200' },
-  SELLER: { label: 'Seller', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
-  ADMIN: { label: 'Admin', cls: 'bg-rose-50 text-rose-700 border-rose-200' },
-  SUPPORT: { label: 'Support', cls: 'bg-teal-50 text-teal-700 border-teal-200' },
-  MODERATOR: { label: 'Moderator', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-  ACCOUNTANT: { label: 'Accountant', cls: 'bg-violet-50 text-violet-700 border-violet-200' },
+  BUYER: { label: 'Buyer', cls: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
+  SELLER: { label: 'Seller', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800' },
+  ADMIN: { label: 'Admin', cls: 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800' },
+  SUPPORT: { label: 'Support', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800' },
+  MODERATOR: { label: 'Moderator', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800' },
+  ACCOUNTANT: { label: 'Accountant', cls: 'bg-violet-50 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800' },
 };
 
 const USER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  ACTIVE: { label: 'Active', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  SUSPENDED: { label: 'Suspended', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  INVITED: { label: 'Invited', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
+  ACTIVE: { label: 'Active', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  SUSPENDED: { label: 'Suspended', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  INVITED: { label: 'Invited', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
 };
 
 const ORDER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  PAID: { label: 'Paid', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  PACKING: { label: 'Packing', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  READY_TO_SHIP: { label: 'Ready to ship', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  SHIPPING: { label: 'Shipping', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 text-teal-700 border-teal-200', dot: 'bg-teal-500' },
-  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  PAID: { label: 'Paid', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  PACKING: { label: 'Packing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  READY_TO_SHIP: { label: 'Ready to ship', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  SHIPPING: { label: 'Shipping', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800', dot: 'bg-teal-500' },
+  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
 
 const PAYMENT_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  SUCCESS: { label: 'Success', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  FAILED: { label: 'Failed', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
-  REFUNDED: { label: 'Refunded', cls: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-500' },
-  PARTIALLY_REFUNDED: { label: 'Partial refund', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  SUCCESS: { label: 'Success', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  FAILED: { label: 'Failed', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
+  REFUNDED: { label: 'Refunded', cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' },
+  PARTIALLY_REFUNDED: { label: 'Partial refund', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
 };
 
 const WITHDRAWAL_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  APPROVED: { label: 'Approved', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  PROCESSING: { label: 'Processing', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  REJECTED: { label: 'Rejected', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  APPROVED: { label: 'Approved', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  PROCESSING: { label: 'Processing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  REJECTED: { label: 'Rejected', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
 
 const REVIEW_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  APPROVED: { label: 'Approved', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  REJECTED: { label: 'Rejected', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  APPROVED: { label: 'Approved', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  REJECTED: { label: 'Rejected', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
 
 const SHOP_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  ACTIVE: { label: 'Active', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  SUSPENDED: { label: 'Suspended', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
-  PENDING_REVIEW: { label: 'Pending review', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
+  ACTIVE: { label: 'Active', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  SUSPENDED: { label: 'Suspended', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
+  PENDING_REVIEW: { label: 'Pending review', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
 };
 
 const AUDIT_ACTION_CONFIG: Record<string, { cls: string }> = {
-  LOGIN: { cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
-  LOGOUT: { cls: 'bg-slate-100 text-slate-700 border-slate-200' },
-  SELLER_APPROVED: { cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  SELLER_SUSPENDED: { cls: 'bg-red-50 text-red-700 border-red-200' },
-  PRODUCT_APPROVED: { cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  PRODUCT_REJECTED: { cls: 'bg-red-50 text-red-700 border-red-200' },
-  WITHDRAWAL_APPROVED: { cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  WITHDRAWAL_REJECTED: { cls: 'bg-red-50 text-red-700 border-red-200' },
-  USER_SUSPENDED: { cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-  SETTINGS_UPDATED: { cls: 'bg-violet-50 text-violet-700 border-violet-200' },
-  DEFAULT: { cls: 'bg-slate-100 text-slate-700 border-slate-200' },
+  LOGIN: { cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800' },
+  LOGOUT: { cls: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
+  SELLER_APPROVED: { cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
+  SELLER_SUSPENDED: { cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' },
+  PRODUCT_APPROVED: { cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
+  PRODUCT_REJECTED: { cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' },
+  WITHDRAWAL_APPROVED: { cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
+  WITHDRAWAL_REJECTED: { cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' },
+  USER_SUSPENDED: { cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800' },
+  SETTINGS_UPDATED: { cls: 'bg-violet-50 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800' },
+  DEFAULT: { cls: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
 };
 
 /* ---------------- Sidebar config ---------------- */
@@ -429,7 +429,7 @@ function StatusPill({
   status: string;
   config: Record<string, { label: string; cls: string; dot: string }>;
 }) {
-  const cfg = config[status] ?? { label: status, cls: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-400' };
+  const cfg = config[status] ?? { label: status, cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' };
   return (
     <Badge variant="outline" className={cn('gap-1.5 font-medium', cfg.cls)}>
       <span className={cn('h-1.5 w-1.5 rounded-full', cfg.dot)} />
@@ -466,22 +466,22 @@ function StatCard({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 hover:shadow-md transition-shadow"
+      className="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-card dark:bg-slate-900 p-4 hover:shadow-md transition-shadow"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{label}</p>
-          <p className="mt-1 text-xl sm:text-2xl font-bold text-slate-900 tracking-tight tabular-nums truncate">{value}</p>
-          {hint && <p className="mt-0.5 text-[11px] text-slate-500">{hint}</p>}
+          <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{label}</p>
+          <p className="mt-1 text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight tabular-nums truncate">{value}</p>
+          {hint && <p className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">{hint}</p>}
           {trend !== undefined && (
             <div className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold">
               {trend >= 0 ? (
-                <span className="inline-flex items-center gap-0.5 text-emerald-600">
+                <span className="inline-flex items-center gap-0.5 text-emerald-600 dark:text-emerald-400">
                   <ArrowUpRight className="h-3 w-3" />
                   +{trend.toFixed(1)}%
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-0.5 text-rose-600">
+                <span className="inline-flex items-center gap-0.5 text-rose-600 dark:text-rose-400">
                   <ArrowDownRight className="h-3 w-3" />
                   {trend.toFixed(1)}%
                 </span>
@@ -513,7 +513,7 @@ function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 dark:bg-cyan-950/50 text-cyan-600 dark:text-cyan-400">
         <Icon className="h-6 w-6" />
       </div>
       <div className="space-y-1">
@@ -521,7 +521,7 @@ function EmptyState({
         <p className="text-sm text-muted-foreground max-w-md">{description}</p>
       </div>
       {cta && onCta && (
-        <Button size="sm" variant="outline" className="mt-2 border-cyan-200 text-cyan-700 hover:bg-cyan-50" onClick={onCta}>
+        <Button size="sm" variant="outline" className="mt-2 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onCta}>
           {cta}
         </Button>
       )}
@@ -532,7 +532,7 @@ function EmptyState({
 function ChartTooltip({ active, payload, label, valueFormatter }: any) {
   if (!active || !payload || !payload.length) return null;
   return (
-    <div className="rounded-lg border border-cyan-100 bg-white/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
+    <div className="rounded-lg border border-cyan-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
       <p className="font-semibold text-foreground mb-1">{label}</p>
       {payload.map((entry: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
@@ -593,12 +593,12 @@ function FilterPills({
             'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors',
             active === opt.id
               ? 'bg-cyan-500 text-white border-cyan-500 shadow-sm'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-200 hover:text-cyan-700',
+              : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60 hover:border-cyan-300 dark:hover:border-cyan-700 hover:text-cyan-600 dark:hover:text-cyan-400',
           )}
         >
           {opt.label}
           {opt.count !== undefined && (
-            <span className={cn('rounded-full px-1.5 text-[10px] font-semibold', active === opt.id ? 'bg-white/20' : 'bg-slate-100 text-slate-600')}>
+            <span className={cn('rounded-full px-1.5 text-[10px] font-semibold', active === opt.id ? 'bg-white/20' : 'bg-muted text-muted-foreground')}>
               {opt.count}
             </span>
           )}
@@ -641,16 +641,16 @@ function PaginationFooter({
   label?: string;
 }) {
   return (
-    <div className="flex items-center justify-between border-t border-slate-100 px-3 py-2 text-xs text-slate-500">
+    <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 px-3 py-2 text-xs text-slate-500 dark:text-slate-400">
       <span>
-        Showing <span className="font-semibold text-slate-700">{shown}</span> of{' '}
-        <span className="font-semibold text-slate-700">{total}</span> {label}
+        Showing <span className="font-semibold text-slate-700 dark:text-slate-200">{shown}</span> of{' '}
+        <span className="font-semibold text-slate-700 dark:text-slate-200">{total}</span> {label}
       </span>
       <div className="flex items-center gap-1">
         <Button size="sm" variant="outline" className="h-7 px-2 text-[11px]" disabled>
           Prev
         </Button>
-        <Button size="sm" variant="outline" className="h-7 px-2 text-[11px] bg-cyan-50 border-cyan-200 text-cyan-700" disabled>
+        <Button size="sm" variant="outline" className="h-7 px-2 text-[11px] bg-cyan-50 dark:bg-cyan-950/50 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300" disabled>
           1
         </Button>
         <Button size="sm" variant="outline" className="h-7 px-2 text-[11px]" disabled>
@@ -714,7 +714,7 @@ function OverviewTab({
         title="Platform Overview"
         description="Real-time metrics across all markets"
         action={
-          <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1.5">
+          <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 gap-1.5">
             <Activity className="h-3 w-3" />
             Live · updated 30s ago
           </Badge>
@@ -731,9 +731,9 @@ function OverviewTab({
       {/* Charts row */}
       <div className="grid lg:grid-cols-3 gap-4">
         {/* GMV + Commission 12-month */}
-        <Card className="lg:col-span-2 border-slate-200 shadow-sm">
+        <Card className="lg:col-span-2 border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-cyan-600" />
               GMV &amp; Platform Commission
               <span className="text-xs font-normal text-slate-400">· 12 months</span>
@@ -764,9 +764,9 @@ function OverviewTab({
         </Card>
 
         {/* Sales by type */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
               <PieIcon className="h-4 w-4 text-teal-600" />
               Sales by Product Type
             </CardTitle>
@@ -795,7 +795,7 @@ function OverviewTab({
               {pieData.map((p: any, i: number) => (
                 <div key={i} className="flex items-center gap-1.5 text-[11px]">
                   <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} />
-                  <span className="font-medium text-slate-700">{p.name}</span>
+                  <span className="font-medium text-slate-700 dark:text-slate-200">{p.name}</span>
                   <span className="text-slate-400">· {p.value}</span>
                 </div>
               ))}
@@ -805,9 +805,9 @@ function OverviewTab({
       </div>
 
       {/* Orders over time bar chart */}
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+          <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-cyan-600" />
             Orders Over Time
             <span className="text-xs font-normal text-slate-400">· last 12 months</span>
@@ -829,9 +829,9 @@ function OverviewTab({
       {/* Top sellers + Recent orders + Recent products */}
       <div className="grid lg:grid-cols-3 gap-4">
         {/* Top sellers */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
               <Store className="h-4 w-4 text-cyan-600" />
               Top Sellers
             </CardTitle>
@@ -842,32 +842,32 @@ function OverviewTab({
                 <p className="text-xs text-slate-400 text-center py-6">No seller data yet</p>
               )}
               {topSellers.slice(0, 5).map((s: any, i: number) => (
-                <div key={s.id ?? i} className="flex items-center gap-3 rounded-lg p-2 hover:bg-slate-50 transition-colors">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-50 text-cyan-700 text-[11px] font-bold">
+                <div key={s.id ?? i} className="flex items-center gap-3 rounded-lg p-2 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[11px] font-bold">
                     {i + 1}
                   </span>
-                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted">
                     {s.logoUrl ? (
                       <Image src={s.logoUrl} alt={s.name} fill className="object-cover" unoptimized />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-slate-500">
+                      <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-muted-foreground">
                         {initials(s.name ?? '')}
                       </div>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
-                      <p className="text-xs font-semibold text-slate-800 truncate">{s.name}</p>
+                      <p className="text-xs font-semibold text-foreground truncate">{s.name}</p>
                       {s.verified && <ShieldCheck className="h-3 w-3 text-emerald-500 shrink-0" />}
                     </div>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-muted-foreground">
                       {s.completedOrders ?? 0} orders · {s.productCount ?? 0} products
                     </p>
                   </div>
                   <div className="text-right">
                     <div className="flex items-center gap-0.5">
                       <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-semibold text-slate-700">{(s.rating ?? 0).toFixed(1)}</span>
+                      <span className="text-xs font-semibold text-foreground">{(s.rating ?? 0).toFixed(1)}</span>
                     </div>
                     <p className="text-[10px] text-slate-400">{s.ratingCount ?? 0} reviews</p>
                   </div>
@@ -878,13 +878,13 @@ function OverviewTab({
         </Card>
 
         {/* Recent orders */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <ShoppingCart className="h-4 w-4 text-cyan-600" />
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <ShoppingCart className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               Recent Orders
             </CardTitle>
-            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-cyan-700 hover:bg-cyan-50" onClick={() => goTab('orders')}>
+            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40" onClick={() => goTab('orders')}>
               View all
               <ChevronRight className="h-3 w-3" />
             </Button>
@@ -895,15 +895,15 @@ function OverviewTab({
                 <p className="text-xs text-slate-400 text-center py-6">No orders yet</p>
               )}
               {recentOrders.slice(0, 5).map((o: any, i: number) => (
-                <div key={o.id ?? i} className="flex items-center gap-2 rounded-lg p-2 hover:bg-slate-50 transition-colors">
+                <div key={o.id ?? i} className="flex items-center gap-2 rounded-lg p-2 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-mono font-semibold text-slate-800">{o.code}</p>
-                    <p className="text-[11px] text-slate-500 truncate">
+                    <p className="text-xs font-mono font-semibold text-foreground">{o.code}</p>
+                    <p className="text-[11px] text-muted-foreground truncate">
                       {o.user?.name ?? '—'} · {timeAgo(o.createdAt)}
                     </p>
                   </div>
                   <StatusPill status={o.status} config={ORDER_STATUS_CONFIG} />
-                  <span className="text-xs font-semibold text-slate-700 tabular-nums">
+                  <span className="text-xs font-semibold text-foreground tabular-nums">
                     {formatVNDCompact(o.grandTotal ?? o.subtotal ?? 0)}
                   </span>
                 </div>
@@ -913,13 +913,13 @@ function OverviewTab({
         </Card>
 
         {/* Recent products */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <Package className="h-4 w-4 text-cyan-600" />
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <Package className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               Recent Products
             </CardTitle>
-            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-cyan-700 hover:bg-cyan-50" onClick={() => goTab('products')}>
+            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40" onClick={() => goTab('products')}>
               View all
               <ChevronRight className="h-3 w-3" />
             </Button>
@@ -930,8 +930,8 @@ function OverviewTab({
                 <p className="text-xs text-slate-400 text-center py-6">No products yet</p>
               )}
               {recentProducts.slice(0, 5).map((p: any, i: number) => (
-                <div key={p.id ?? i} className="flex items-center gap-2 rounded-lg p-2 hover:bg-slate-50 transition-colors">
-                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-slate-100">
+                <div key={p.id ?? i} className="flex items-center gap-2 rounded-lg p-2 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
+                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
                     {p.images?.[0]?.url ? (
                       <Image src={p.images[0].url} alt={p.name} fill className="object-cover" unoptimized />
                     ) : (
@@ -941,11 +941,11 @@ function OverviewTab({
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-slate-800 truncate">{p.name}</p>
-                    <p className="text-[11px] text-slate-500 truncate">{p.shop?.name ?? '—'}</p>
+                    <p className="text-xs font-semibold text-foreground truncate">{p.name}</p>
+                    <p className="text-[11px] text-muted-foreground truncate">{p.shop?.name ?? '—'}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-semibold text-slate-700 tabular-nums">{formatVNDCompact(p.price ?? 0)}</p>
+                    <p className="text-xs font-semibold text-foreground tabular-nums">{formatVNDCompact(p.price ?? 0)}</p>
                     <p className="text-[10px] text-slate-400">{p.soldCount ?? 0} sold</p>
                   </div>
                 </div>
@@ -1005,10 +1005,10 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
 
       <FilterPills options={roleOptions} active={roleFilter} onSelect={setRoleFilter} />
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+            <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
               <SortHeader>User</SortHeader>
               <SortHeader>Email</SortHeader>
               <SortHeader>Role</SortHeader>
@@ -1035,29 +1035,29 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
               const roleCfg = USER_ROLE_CONFIG[u.role] ?? USER_ROLE_CONFIG.BUYER;
               const status = u.status ?? 'ACTIVE';
               return (
-                <TableRow key={u.id} className="hover:bg-cyan-50/30">
+                <TableRow key={u.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
                   <TableCell>
                     <div className="flex items-center gap-2.5">
-                      <Avatar className="h-8 w-8 border border-slate-200">
+                      <Avatar className="h-8 w-8 border border-border/60">
                         {u.avatarUrl && <AvatarImage src={u.avatarUrl} alt={u.name} />}
-                        <AvatarFallback className="bg-cyan-50 text-cyan-700 text-[10px] font-semibold">
+                        <AvatarFallback className="bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[10px] font-semibold">
                           {initials(u.name ?? u.email ?? 'U')}
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold text-slate-800 truncate">{u.name}</p>
-                        <p className="text-[11px] text-slate-500">ID: {u.id.slice(-8)}</p>
+                        <p className="text-xs font-semibold text-foreground truncate">{u.name}</p>
+                        <p className="text-[11px] text-muted-foreground">ID: {u.id.slice(-8)}</p>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="text-xs text-slate-600 font-mono">{u.email}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground font-mono">{u.email}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className={cn('gap-1 text-[11px]', roleCfg.cls)}>
                       {roleCfg.label}
                     </Badge>
                   </TableCell>
                   <TableCell><StatusPill status={status} config={USER_STATUS_CONFIG} /></TableCell>
-                  <TableCell className="text-xs text-slate-600">
+                  <TableCell className="text-xs text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3 text-slate-400" />
                       {formatDate(u.createdAt)}
@@ -1069,7 +1069,7 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-7 w-7 p-0 text-cyan-700 hover:bg-cyan-50"
+                        className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                         onClick={() => toast({ title: 'View profile', description: `Opening ${u.name}'s profile...` })}
                       >
                         <Eye className="h-3.5 w-3.5" />
@@ -1078,7 +1078,7 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 px-2 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                          className="h-7 px-2 text-[11px] border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                           onClick={() => handleSuspend(u, false)}
                         >
                           Activate
@@ -1087,7 +1087,7 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 px-2 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                          className="h-7 px-2 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => handleSuspend(u, true)}
                         >
                           Suspend
@@ -1104,7 +1104,7 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
       </Card>
       <p className="text-[11px] text-slate-400">
         Tip: Switch role filter or refine search ·{' '}
-        <button onClick={() => goTab('audit')} className="text-cyan-700 hover:underline">View audit log</button>
+        <button onClick={() => goTab('audit')} className="text-cyan-700 dark:text-cyan-400 hover:underline">View audit log</button>
       </p>
     </div>
   );
@@ -1162,7 +1162,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
         title="Sellers"
         description={`${filtered.length} of ${sellers.length} sellers`}
         action={
-          <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200">
+          <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">
             {sellers.filter((s) => !s.shop?.verified && s.shop?.status !== 'SUSPENDED').length} pending review
           </Badge>
         }
@@ -1170,10 +1170,10 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
 
       <FilterPills options={filterOptions} active={verifiedFilter} onSelect={setVerifiedFilter} />
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+            <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
               <SortHeader>Shop</SortHeader>
               <SortHeader>Seller</SortHeader>
               <SortHeader>Verified</SortHeader>
@@ -1195,48 +1195,48 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
               const shop = s.shop;
               const status = shop?.status ?? 'PENDING_REVIEW';
               return (
-                <TableRow key={s.id} className="hover:bg-cyan-50/30">
+                <TableRow key={s.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
                   <TableCell>
                     <div className="flex items-center gap-2.5">
-                      <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+                      <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted">
                         {shop?.logoUrl ? (
                           <Image src={shop.logoUrl} alt={shop.name} fill className="object-cover" unoptimized />
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-slate-500">
+                          <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-muted-foreground">
                             {initials(shop?.name ?? 'S')}
                           </div>
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold text-slate-800 truncate">{shop?.name ?? '—'}</p>
-                        <p className="text-[11px] text-slate-500 truncate">{shop?.slug ?? '—'}</p>
+                        <p className="text-xs font-semibold text-foreground truncate">{shop?.name ?? '—'}</p>
+                        <p className="text-[11px] text-muted-foreground truncate">{shop?.slug ?? '—'}</p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <p className="text-xs font-medium text-slate-700">{s.name}</p>
-                    <p className="text-[11px] text-slate-500 font-mono">{s.email}</p>
+                    <p className="text-xs font-medium text-foreground">{s.name}</p>
+                    <p className="text-[11px] text-muted-foreground font-mono">{s.email}</p>
                   </TableCell>
                   <TableCell>
                     {shop?.verified ? (
-                      <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1">
+                      <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 gap-1">
                         <Check className="h-3 w-3" />
                         Verified
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 gap-1">
+                      <Badge variant="outline" className="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 gap-1">
                         <Clock className="h-3 w-3" />
                         Pending
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-xs font-semibold text-slate-700 tabular-nums">
+                  <TableCell className="text-xs font-semibold text-foreground tabular-nums">
                     {shop?.completedOrders ?? 0}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1">
                       <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-semibold text-slate-700">{(shop?.rating ?? 0).toFixed(1)}</span>
+                      <span className="text-xs font-semibold text-foreground">{(shop?.rating ?? 0).toFixed(1)}</span>
                       <span className="text-[10px] text-slate-400">({shop?.ratingCount ?? 0})</span>
                     </div>
                   </TableCell>
@@ -1247,7 +1247,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 px-2 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                          className="h-7 px-2 text-[11px] border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                           onClick={() => handleAction(shop?.id, 'APPROVE', shop?.name ?? 'Shop')}
                         >
                           <Check className="h-3 w-3" />
@@ -1258,7 +1258,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 px-2 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                          className="h-7 px-2 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => handleAction(shop?.id, 'SUSPEND', shop?.name ?? 'Shop')}
                         >
                           <Lock className="h-3 w-3" />
@@ -1269,7 +1269,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 px-2 text-[11px] border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+                          className="h-7 px-2 text-[11px] border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                           onClick={() => handleAction(shop?.id, 'REACTIVATE', shop?.name ?? 'Shop')}
                         >
                           <RotateCcw className="h-3 w-3" />
@@ -1289,22 +1289,22 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
       {/* Specializations summary card */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {filtered.slice(0, 3).map((s) => (
-          <Card key={s.id} className="border-slate-200 shadow-sm">
+          <Card key={s.id} className="border-border/60 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <div className="relative h-8 w-8 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+                <div className="relative h-8 w-8 overflow-hidden rounded-lg border border-border/60 bg-muted">
                   {s.shop?.logoUrl ? (
                     <Image src={s.shop.logoUrl} alt={s.shop.name} fill className="object-cover" unoptimized />
                   ) : null}
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-800">{s.shop?.name}</p>
-                  <p className="text-[11px] text-slate-500">{s.shop?.slug}</p>
+                  <p className="text-xs font-semibold text-foreground">{s.shop?.name}</p>
+                  <p className="text-[11px] text-muted-foreground">{s.shop?.slug}</p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-1 mt-2">
                 {(s.shop?.specializations ?? ['PCB Design', 'Embedded', 'Hardware Kits']).slice(0, 3).map((sp: string, i: number) => (
-                  <Badge key={i} variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px]">
+                  <Badge key={i} variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 text-[10px]">
                     {sp}
                   </Badge>
                 ))}
@@ -1381,10 +1381,10 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
         <FilterPills options={statusOptions} active={statusFilter} onSelect={setStatusFilter} />
       </div>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+            <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
               <SortHeader>Product</SortHeader>
               <SortHeader>Type</SortHeader>
               <SortHeader className="text-right">Price</SortHeader>
@@ -1403,10 +1403,10 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
               </TableRow>
             )}
             {filtered.map((p) => (
-              <TableRow key={p.id} className="hover:bg-cyan-50/30">
+              <TableRow key={p.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
                 <TableCell>
                   <div className="flex items-center gap-2.5">
-                    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-slate-100">
+                    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
                       {p.images?.[0]?.url ? (
                         <Image src={p.images[0].url} alt={p.name} fill className="object-cover" unoptimized />
                       ) : (
@@ -1418,39 +1418,39 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
                     <div className="min-w-0 max-w-[220px]">
                       <button
                         onClick={() => goProduct(p.slug)}
-                        className="text-xs font-semibold text-slate-800 truncate hover:text-cyan-700 hover:underline text-left"
+                        className="text-xs font-semibold text-foreground truncate hover:text-cyan-700 dark:hover:text-cyan-400 hover:underline text-left"
                       >
                         {p.name}
                       </button>
-                      <p className="text-[11px] text-slate-500 font-mono truncate">{p.slug}</p>
+                      <p className="text-[11px] text-muted-foreground font-mono truncate">{p.slug}</p>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell><ProductTypeBadge type={p.productType} className="text-[10px]" /></TableCell>
-                <TableCell className="text-right text-xs font-semibold text-slate-700 tabular-nums">
+                <TableCell className="text-right text-xs font-semibold text-foreground tabular-nums">
                   {formatVND(p.price)}
                 </TableCell>
-                <TableCell className="text-right text-xs text-slate-600 tabular-nums">{p.soldCount ?? 0}</TableCell>
+                <TableCell className="text-right text-xs text-muted-foreground tabular-nums">{p.soldCount ?? 0}</TableCell>
                 <TableCell>
                   <StatusPill status={p.status ?? 'ACTIVE'} config={{
-                    ACTIVE: { label: 'Active', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-                    DRAFT: { label: 'Draft', cls: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-400' },
-                    PENDING_REVIEW: { label: 'In review', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-                    REJECTED: { label: 'Rejected', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
-                    DISCONTINUED: { label: 'Discontinued', cls: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-500' },
+                    ACTIVE: { label: 'Active', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+                    DRAFT: { label: 'Draft', cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' },
+                    PENDING_REVIEW: { label: 'In review', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+                    REJECTED: { label: 'Rejected', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
+                    DISCONTINUED: { label: 'Discontinued', cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-500' },
                   }} />
                 </TableCell>
-                <TableCell className="text-xs text-slate-600">{p.shop?.name ?? '—'}</TableCell>
+                <TableCell className="text-xs text-muted-foreground">{p.shop?.name ?? '—'}</TableCell>
                 <TableCell className="text-right">
                   <div className="inline-flex items-center gap-1">
-                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-cyan-700 hover:bg-cyan-50" onClick={() => goProduct(p.slug)} title="View product">
+                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40" onClick={() => goProduct(p.slug)} title="View product">
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
                     {p.isFeatured ? (
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-7 w-7 p-0 text-amber-500 hover:bg-amber-50"
+                        className="h-7 w-7 p-0 text-amber-500 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40"
                         onClick={() => setModeration({ product: p, action: 'UNFEATURE' })}
                         title="Remove feature"
                       >
@@ -1460,7 +1460,7 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-7 w-7 p-0 text-slate-400 hover:bg-amber-50 hover:text-amber-500"
+                        className="h-7 w-7 p-0 text-slate-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 hover:text-amber-500 dark:hover:text-amber-400"
                         onClick={() => setModeration({ product: p, action: 'FEATURE' })}
                         title="Feature product"
                       >
@@ -1471,7 +1471,7 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-7 px-2 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                        className="h-7 px-2 text-[11px] border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                         onClick={() => handleAction(p, 'approve')}
                       >
                         <Check className="h-3 w-3" />
@@ -1482,7 +1482,7 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-7 px-2 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                        className="h-7 px-2 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                         onClick={() => handleAction(p, 'reject')}
                       >
                         <X className="h-3 w-3" />
@@ -1543,10 +1543,10 @@ function OrdersTab({ toast }: { toast: any }) {
 
       <FilterPills options={statusOptions} active={statusFilter} onSelect={setStatusFilter} />
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+            <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
               <TableHead className="w-8" />
               <SortHeader>Code</SortHeader>
               <SortHeader>Date</SortHeader>
@@ -1572,40 +1572,40 @@ function OrdersTab({ toast }: { toast: any }) {
                 <>
                   <TableRow
                     key={o.id}
-                    className="hover:bg-cyan-50/30 cursor-pointer"
+                    className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/30 cursor-pointer"
                     onClick={() => setExpanded(isOpen ? null : o.id)}
                   >
                     <TableCell className="text-center">
                       <ChevronDown className={cn('h-3.5 w-3.5 text-slate-400 transition-transform', isOpen && 'rotate-180')} />
                     </TableCell>
-                    <TableCell className="text-xs font-mono font-semibold text-cyan-700">{o.code}</TableCell>
-                    <TableCell className="text-xs text-slate-600">
+                    <TableCell className="text-xs font-mono font-semibold text-cyan-700 dark:text-cyan-400">{o.code}</TableCell>
+                    <TableCell className="text-xs text-slate-600 dark:text-slate-400">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3 text-slate-400" />
                         {formatDate(o.createdAt)}
                       </div>
                       <p className="text-[10px] text-slate-400">{timeAgo(o.createdAt)}</p>
                     </TableCell>
-                    <TableCell className="text-xs text-slate-700">{o.user?.name ?? '—'}</TableCell>
-                    <TableCell className="text-right text-xs text-slate-600 tabular-nums">{itemCount}</TableCell>
-                    <TableCell className="text-right text-xs font-semibold text-slate-800 tabular-nums">
+                    <TableCell className="text-xs text-slate-700 dark:text-slate-300">{o.user?.name ?? '—'}</TableCell>
+                    <TableCell className="text-right text-xs text-slate-600 dark:text-slate-400 tabular-nums">{itemCount}</TableCell>
+                    <TableCell className="text-right text-xs font-semibold text-slate-800 dark:text-slate-200 tabular-nums">
                       {formatVND(o.grandTotal ?? o.subtotal ?? 0)}
                     </TableCell>
                     <TableCell><StatusPill status={o.paymentStatus ?? 'PENDING'} config={PAYMENT_STATUS_CONFIG} /></TableCell>
                     <TableCell><StatusPill status={o.status} config={ORDER_STATUS_CONFIG} /></TableCell>
                   </TableRow>
                   {isOpen && (
-                    <TableRow key={o.id + '-exp'} className="bg-slate-50/40 hover:bg-slate-50/40">
+                    <TableRow key={o.id + '-exp'} className="bg-slate-50/40 dark:bg-slate-800/40 hover:bg-slate-50/40 dark:hover:bg-slate-800/40">
                       <TableCell />
                       <TableCell colSpan={7} className="p-4">
                         <div className="grid md:grid-cols-3 gap-4">
                           {/* Items */}
                           <div className="md:col-span-2">
-                            <p className="text-[11px] font-semibold text-slate-700 uppercase mb-2">Items</p>
+                            <p className="text-[11px] font-semibold text-foreground uppercase mb-2">Items</p>
                             <div className="space-y-1.5">
                               {(o.items ?? []).map((it: any) => (
-                                <div key={it.id} className="flex items-center gap-2 rounded-md border border-slate-200 bg-white p-2">
-                                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-slate-100">
+                                <div key={it.id} className="flex items-center gap-2 rounded-md border border-border/60 bg-card dark:bg-slate-900 p-2">
+                                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
                                     {it.imageUrl ? (
                                       <Image src={it.imageUrl} alt={it.name} fill className="object-cover" unoptimized />
                                     ) : (
@@ -1615,45 +1615,45 @@ function OrdersTab({ toast }: { toast: any }) {
                                     )}
                                   </div>
                                   <div className="min-w-0 flex-1">
-                                    <p className="text-xs font-medium text-slate-700 truncate">{it.name}</p>
-                                    <p className="text-[10px] text-slate-500 font-mono">{it.sku ?? '—'} · qty {it.quantity}</p>
+                                    <p className="text-xs font-semibold text-foreground truncate">{it.name}</p>
+                                    <p className="text-[11px] text-muted-foreground">Qty: {it.qty}</p>
                                   </div>
-                                  <span className="text-xs font-semibold text-slate-700 tabular-nums">
+                                  <span className="text-xs font-semibold text-foreground tabular-nums">
                                     {formatVND(it.lineTotal ?? 0)}
                                   </span>
                                 </div>
                               ))}
-                              {(o.items ?? []).length === 0 && <p className="text-[11px] text-slate-400">No items</p>}
+                              {(o.items ?? []).length === 0 && <p className="text-[11px] text-muted-foreground">No items</p>}
                             </div>
                           </div>
 
                           {/* Seller orders */}
                           <div>
-                            <p className="text-[11px] font-semibold text-slate-700 uppercase mb-2">Seller Orders</p>
+                            <p className="text-[11px] font-semibold text-foreground uppercase mb-2">Seller Orders</p>
                             <div className="space-y-1.5">
                               {(o.sellerOrders ?? []).map((so: any) => (
-                                <div key={so.id} className="rounded-md border border-slate-200 bg-white p-2 text-[11px]">
+                                <div key={so.id} className="rounded-md border border-border/60 bg-card dark:bg-slate-900 p-2 text-[11px]">
                                   <div className="flex items-center justify-between">
-                                    <span className="font-mono font-semibold text-slate-700">{so.code}</span>
+                                    <span className="font-mono font-semibold text-foreground">{so.code}</span>
                                     <StatusPill status={so.status} config={ORDER_STATUS_CONFIG} />
                                   </div>
-                                  <p className="text-slate-500 mt-1">{so.shop?.name ?? '—'}</p>
-                                  <p className="text-slate-600 mt-1">
-                                    Revenue: <span className="font-semibold tabular-nums">{formatVND(so.sellerRevenue ?? 0)}</span>
-                                    <span className="text-slate-400"> · commission {formatVND(so.commissionAmount ?? 0)}</span>
+                                  <p className="text-muted-foreground mt-1">{so.shop?.name ?? '—'}</p>
+                                  <p className="text-muted-foreground mt-1">
+                                    Revenue: <span className="font-semibold tabular-nums text-foreground">{formatVND(so.sellerRevenue ?? 0)}</span>
+                                    <span className="text-slate-400 dark:text-slate-500"> · commission {formatVND(so.commissionAmount ?? 0)}</span>
                                   </p>
                                 </div>
                               ))}
                               {(o.sellerOrders ?? []).length === 0 && <p className="text-[11px] text-slate-400">No seller orders</p>}
                             </div>
 
-                            <p className="text-[11px] font-semibold text-slate-700 uppercase mt-3 mb-1.5">Shipment</p>
+                            <p className="text-[11px] font-semibold text-foreground uppercase mt-3 mb-1.5">Shipment</p>
                             {o.sellerOrders?.some((so: any) => so.fulfillmentType === 'PHYSICAL') ? (
-                              <div className="rounded-md border border-cyan-200 bg-cyan-50/60 p-2 text-[11px] text-cyan-800">
+                              <div className="rounded-md border border-cyan-200 dark:border-cyan-800 bg-cyan-50/60 dark:bg-cyan-950/40 p-2 text-[11px] text-cyan-800 dark:text-cyan-300">
                                 <p className="flex items-center gap-1 font-medium">
                                   <RefreshCw className="h-3 w-3" /> Auto-tracking (mock provider)
                                 </p>
-                                <p className="text-cyan-700 mt-0.5">Provider: GHN · ETA: 2-4 days</p>
+                                <p className="text-cyan-700 dark:text-cyan-400 mt-0.5">Provider: GHN · ETA: 2-4 days</p>
                               </div>
                             ) : (
                               <p className="text-[11px] text-slate-400">Digital only — no shipment</p>
@@ -1661,11 +1661,11 @@ function OrdersTab({ toast }: { toast: any }) {
                           </div>
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-200">
+                        <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-border/60">
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-7 text-[11px] border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+                            className="h-7 text-[11px] border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                             onClick={() => toast({ title: 'Order details', description: `Opening ${o.code} invoice...` })}
                           >
                             <FileText className="h-3 w-3" /> View invoice
@@ -1765,10 +1765,10 @@ function PaymentsTab({ toast }: { toast: any }) {
         <FilterPills options={statusOptions} active={statusFilter} onSelect={setStatusFilter} />
       </div>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+            <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
               <SortHeader>Order</SortHeader>
               <SortHeader>Provider</SortHeader>
               <SortHeader className="text-right">Amount</SortHeader>
@@ -1787,17 +1787,17 @@ function PaymentsTab({ toast }: { toast: any }) {
               </TableRow>
             )}
             {filtered.map((p) => (
-              <TableRow key={p.id} className="hover:bg-cyan-50/30">
-                <TableCell className="text-xs font-mono font-semibold text-cyan-700">{p.orderCode}</TableCell>
+              <TableRow key={p.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
+                <TableCell className="text-xs font-mono font-semibold text-cyan-700 dark:text-cyan-400">{p.orderCode}</TableCell>
                 <TableCell>
-                  <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200 text-[11px] font-mono">
+                  <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 text-[11px] font-mono">
                     {p.provider}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right text-xs font-semibold text-slate-800 tabular-nums">{formatVND(p.amount)}</TableCell>
+                <TableCell className="text-right text-xs font-semibold text-foreground tabular-nums">{formatVND(p.amount)}</TableCell>
                 <TableCell><StatusPill status={p.status} config={PAYMENT_STATUS_CONFIG} /></TableCell>
-                <TableCell className="text-xs font-mono text-slate-600">{p.transactionCode ?? '—'}</TableCell>
-                <TableCell className="text-xs text-slate-600">
+                <TableCell className="text-xs font-mono text-muted-foreground">{p.transactionCode ?? '—'}</TableCell>
+                <TableCell className="text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3 text-slate-400" />
                     {formatDate(p.paidAt ?? p.createdAt)}
@@ -1807,7 +1807,7 @@ function PaymentsTab({ toast }: { toast: any }) {
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-7 w-7 p-0 text-cyan-700 hover:bg-cyan-50"
+                    className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                     onClick={() => toast({ title: 'Payment details', description: `Viewing ${p.transactionCode ?? p.id}` })}
                   >
                     <Eye className="h-3.5 w-3.5" />
@@ -1835,21 +1835,21 @@ function ReturnsTab({ toast }: { toast: any }) {
         title="Returns & Refunds"
         description="Returns require seller approval. Track all return requests here."
         action={
-          <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200">
+          <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">
             {DEMO_RETURNS.length} active requests
           </Badge>
         }
       />
 
       {/* Empty state explanation banner */}
-      <Card className="border-cyan-200 bg-gradient-to-br from-cyan-50 to-teal-50 shadow-sm">
+      <Card className="border-cyan-200 dark:border-cyan-800/60 bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-950/30 dark:to-teal-950/30 shadow-sm">
         <CardContent className="p-4 flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300">
             <AlertCircle className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-cyan-900">How returns work</p>
-            <p className="text-xs text-cyan-700 mt-0.5 leading-relaxed">
+            <p className="text-sm font-semibold text-cyan-900 dark:text-cyan-200">How returns work</p>
+            <p className="text-xs text-cyan-700 dark:text-cyan-300 mt-0.5 leading-relaxed">
               Returns require seller approval. Track all return requests here. Buyers must submit a return within 7 days of delivery.
               Sellers have 48 hours to approve or reject. If unresolved, the admin can intervene.
             </p>
@@ -1861,39 +1861,39 @@ function ReturnsTab({ toast }: { toast: any }) {
       <div className="space-y-3">
         {DEMO_RETURNS.map((ret) => {
           const statusCfg: Record<string, { label: string; cls: string; dot: string }> = {
-            PENDING_SELLER_APPROVAL: { label: 'Pending seller', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-            SELLER_REJECTED: { label: 'Seller rejected', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
-            REFUND_PROCESSED: { label: 'Refunded', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
+            PENDING_SELLER_APPROVAL: { label: 'Pending seller', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+            SELLER_REJECTED: { label: 'Seller rejected', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
+            REFUND_PROCESSED: { label: 'Refunded', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
           };
           return (
-            <Card key={ret.id} className="border-slate-200 shadow-sm">
+            <Card key={ret.id} className="border-border/60 shadow-sm">
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-semibold text-cyan-700">{ret.code}</span>
+                      <span className="text-xs font-mono font-semibold text-cyan-700 dark:text-cyan-400">{ret.code}</span>
                       <StatusPill status={ret.status} config={statusCfg} />
                     </div>
-                    <p className="text-sm font-semibold text-slate-800 mt-1">{ret.product}</p>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      Order <span className="font-mono font-semibold text-slate-700">{ret.orderCode}</span> · {ret.buyer} → {ret.seller}
+                    <p className="text-sm font-semibold text-foreground mt-1">{ret.product}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                      Order <span className="font-mono font-semibold text-foreground">{ret.orderCode}</span> · {ret.buyer} → {ret.seller}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs text-slate-500">Refund amount</p>
-                    <p className="text-base font-bold text-slate-900 tabular-nums">{formatVND(ret.amount)}</p>
+                    <p className="text-xs text-muted-foreground">Refund amount</p>
+                    <p className="text-base font-bold text-foreground tabular-nums">{formatVND(ret.amount)}</p>
                     <p className="text-[10px] text-slate-400">Requested {timeAgo(ret.requestedAt)}</p>
                   </div>
                 </div>
 
-                <div className="rounded-md border border-slate-200 bg-slate-50/60 p-2.5 mb-3">
-                  <p className="text-[11px] font-semibold text-slate-700 uppercase tracking-wide mb-1">Reason</p>
-                  <p className="text-xs text-slate-600 leading-relaxed">{ret.reason}</p>
+                <div className="rounded-md border border-border/60 bg-muted/40 p-2.5 mb-3">
+                  <p className="text-[11px] font-semibold text-foreground uppercase tracking-wide mb-1">Reason</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{ret.reason}</p>
                 </div>
 
                 {/* Timeline */}
                 <div className="relative pl-5">
-                  <div className="absolute left-[7px] top-1.5 bottom-1.5 w-px bg-slate-200" />
+                  <div className="absolute left-[7px] top-1.5 bottom-1.5 w-px bg-border" />
                   {ret.timeline.map((step, i) => (
                     <div key={i} className="relative flex items-start gap-3 py-1.5">
                       <span
@@ -1903,14 +1903,14 @@ function ReturnsTab({ toast }: { toast: any }) {
                             ? step.current
                               ? 'border-cyan-500 bg-cyan-500'
                               : 'border-emerald-500 bg-emerald-500'
-                            : 'border-slate-300 bg-white',
+                            : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800',
                         )}
                       >
                         {step.done && !step.current && <Check className="h-2 w-2 text-white" />}
                         {step.current && <span className="h-1 w-1 rounded-full bg-white" />}
                       </span>
                       <div className="ml-2">
-                        <p className={cn('text-xs', step.current ? 'font-semibold text-cyan-700' : step.done ? 'font-medium text-slate-700' : 'text-slate-400')}>
+                        <p className={cn('text-xs', step.current ? 'font-semibold text-cyan-700 dark:text-cyan-400' : step.done ? 'font-medium text-slate-700 dark:text-slate-300' : 'text-slate-400')}>
                           {step.status}
                         </p>
                         <p className="text-[10px] text-slate-400">
@@ -1922,11 +1922,11 @@ function ReturnsTab({ toast }: { toast: any }) {
                 </div>
 
                 {(ret.status === 'PENDING_SELLER_APPROVAL' || ret.status === 'SELLER_REJECTED') && (
-                  <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-slate-100">
+                  <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border/60">
                     <Button
                       size="sm"
                       variant="outline"
-                      className="h-7 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                      className="h-7 text-[11px] border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                       onClick={() => toast({ title: 'Admin override', description: `Refund approved for ${ret.code}.` })}
                     >
                       <Check className="h-3 w-3" /> Approve refund
@@ -1934,7 +1934,7 @@ function ReturnsTab({ toast }: { toast: any }) {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="h-7 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                      className="h-7 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                       onClick={() => toast({ title: 'Return dismissed', description: `Return ${ret.code} dismissed.`, variant: 'destructive' })}
                     >
                       <X className="h-3 w-3" /> Dismiss
@@ -2038,7 +2038,7 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
         description={`${filtered.length} of ${withdrawals.length} withdrawal requests`}
         action={
           pendingCount > 0 ? (
-            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 gap-1.5">
+            <Badge variant="outline" className="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 gap-1.5">
               <Clock className="h-3 w-3" />
               {pendingCount} pending
             </Badge>
@@ -2048,10 +2048,10 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
 
       <FilterPills options={statusOptions} active={statusFilter} onSelect={setStatusFilter} />
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+            <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
               <SortHeader>Seller</SortHeader>
               <SortHeader>Shop</SortHeader>
               <SortHeader className="text-right">Amount</SortHeader>
@@ -2074,42 +2074,42 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
               const isRejecting = rejecting === w.id;
               return (
                 <>
-                  <TableRow key={w.id} className={cn('hover:bg-cyan-50/30', isRejecting && 'bg-amber-50/30')}>
+                  <TableRow key={w.id} className={cn('hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20', isRejecting && 'bg-amber-50/30 dark:bg-amber-950/20')}>
                     <TableCell>
                       <div className="flex items-center gap-2.5">
-                        <Avatar className="h-8 w-8 border border-slate-200">
+                        <Avatar className="h-8 w-8 border border-border/60">
                           {w.seller?.avatarUrl && <AvatarImage src={w.seller.avatarUrl} alt={w.seller.name} />}
-                          <AvatarFallback className="bg-cyan-50 text-cyan-700 text-[10px] font-semibold">
+                          <AvatarFallback className="bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[10px] font-semibold">
                             {initials(w.seller?.name ?? 'S')}
                           </AvatarFallback>
                         </Avatar>
                         <div className="min-w-0">
-                          <p className="text-xs font-semibold text-slate-800 truncate">{w.seller?.name ?? '—'}</p>
-                          <p className="text-[11px] text-slate-500 font-mono truncate">{w.seller?.email ?? '—'}</p>
+                          <p className="text-xs font-semibold text-foreground truncate">{w.seller?.name ?? '—'}</p>
+                          <p className="text-[11px] text-muted-foreground font-mono truncate">{w.seller?.email ?? '—'}</p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-xs text-slate-700">{w.seller?.shop?.name ?? '—'}</TableCell>
-                    <TableCell className="text-right text-xs font-bold text-slate-800 tabular-nums">
+                    <TableCell className="text-xs text-foreground">{w.seller?.shop?.name ?? '—'}</TableCell>
+                    <TableCell className="text-right text-xs font-bold text-foreground tabular-nums">
                       {formatVND(w.amount)}
                     </TableCell>
                     <TableCell><StatusPill status={w.status} config={WITHDRAWAL_STATUS_CONFIG} /></TableCell>
-                    <TableCell className="text-[11px] text-slate-600">
+                    <TableCell className="text-[11px] text-muted-foreground">
                       {bank ? (
                         <div>
-                          <p className="font-medium">{bank.bankName ?? '—'}</p>
-                          <p className="font-mono text-slate-500">{bank.accountNumber ?? '—'}</p>
+                          <p className="font-medium text-foreground">{bank.bankName ?? '—'}</p>
+                          <p className="font-mono text-muted-foreground">{bank.accountNumber ?? '—'}</p>
                         </div>
                       ) : (
                         <span className="text-slate-400">—</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-xs text-slate-600">
+                    <TableCell className="text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3 text-slate-400" />
                         {formatDate(w.createdAt)}
                       </div>
-                      {w.processedAt && <p className="text-[10px] text-emerald-600">processed {timeAgo(w.processedAt)}</p>}
+                      {w.processedAt && <p className="text-[10px] text-emerald-600 dark:text-emerald-400">processed {timeAgo(w.processedAt)}</p>}
                     </TableCell>
                     <TableCell className="text-right">
                       {w.status === 'PENDING' && !isRejecting && (
@@ -2117,7 +2117,7 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-7 px-2 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                            className="h-7 px-2 text-[11px] border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                             onClick={() => handleApprove(w)}
                           >
                             <Check className="h-3 w-3" /> Approve
@@ -2125,7 +2125,7 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-7 px-2 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                            className="h-7 px-2 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                             onClick={() => { setRejecting(w.id); setRejectReason(''); }}
                           >
                             <X className="h-3 w-3" /> Reject
@@ -2138,10 +2138,10 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
                     </TableCell>
                   </TableRow>
                   {isRejecting && (
-                    <TableRow key={w.id + '-reject'} className="bg-amber-50/30">
+                    <TableRow key={w.id + '-reject'} className="bg-amber-50/30 dark:bg-amber-950/20">
                       <TableCell colSpan={7} className="p-3">
-                        <div className="rounded-md border border-amber-200 bg-white p-3">
-                          <p className="text-[11px] font-semibold text-amber-800 uppercase mb-1.5">Rejection reason</p>
+                        <div className="rounded-md border border-amber-200 dark:border-amber-900/50 bg-card dark:bg-slate-900 p-3">
+                          <p className="text-[11px] font-semibold text-amber-800 dark:text-amber-300 uppercase mb-1.5">Rejection reason</p>
                           <Textarea
                             value={rejectReason}
                             onChange={(e) => setRejectReason(e.target.value)}
@@ -2160,7 +2160,7 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
                             <Button
                               size="sm"
                               variant="outline"
-                              className="h-7 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                              className="h-7 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                               onClick={() => handleReject(w)}
                             >
                               <X className="h-3 w-3" /> Confirm reject
@@ -2223,7 +2223,7 @@ function ReviewsTab({ toast, queryClient }: { toast: any; queryClient: any }) {
       <FilterPills options={statusOptions} active={statusFilter} onSelect={setStatusFilter} />
 
       {filtered.length === 0 ? (
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardContent className="py-12">
             <EmptyState
               icon={Star}
@@ -2235,36 +2235,36 @@ function ReviewsTab({ toast, queryClient }: { toast: any; queryClient: any }) {
       ) : (
         <div className="space-y-3">
           {filtered.map((r) => (
-            <Card key={r.id} className="border-slate-200 shadow-sm">
+            <Card key={r.id} className="border-border/60 shadow-sm">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
-                  <Avatar className="h-9 w-9 border border-slate-200 shrink-0">
+                  <Avatar className="h-9 w-9 border border-border/60 shrink-0">
                     <AvatarImage src={r.avatarUrl} alt={r.user} />
-                    <AvatarFallback className="bg-cyan-50 text-cyan-700 text-[10px] font-semibold">
+                    <AvatarFallback className="bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[10px] font-semibold">
                       {initials(r.user)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div>
-                        <p className="text-xs font-semibold text-slate-800">{r.user}</p>
-                        <p className="text-[11px] text-slate-500">
+                        <p className="text-xs font-semibold text-foreground">{r.user}</p>
+                        <p className="text-[11px] text-muted-foreground">
                           {formatDate(r.createdAt)} · {timeAgo(r.createdAt)}
                         </p>
                       </div>
                       <StatusPill status={r.status} config={REVIEW_STATUS_CONFIG} />
                     </div>
-                    <p className="text-sm font-semibold text-slate-800 mt-2">{r.productName}</p>
+                    <p className="text-sm font-semibold text-foreground mt-2">{r.productName}</p>
                     <div className="mt-1.5">
                       <Rating value={r.rating} size="xs" showCount={false} />
                     </div>
-                    <p className="text-xs text-slate-700 mt-2 leading-relaxed">{r.comment}</p>
+                    <p className="text-xs text-foreground mt-2 leading-relaxed">{r.comment}</p>
                     {r.status === 'PENDING' && (
-                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100">
+                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/60">
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 text-[11px] border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                          className="h-7 text-[11px] border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                           onClick={() => updateStatus(r.id, 'APPROVED')}
                         >
                           <Check className="h-3 w-3" /> Approve
@@ -2272,7 +2272,7 @@ function ReviewsTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 text-[11px] border-red-200 text-red-700 hover:bg-red-50"
+                          className="h-7 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => updateStatus(r.id, 'REJECTED')}
                         >
                           <X className="h-3 w-3" /> Reject
@@ -2280,7 +2280,7 @@ function ReviewsTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 text-[11px] text-cyan-700 hover:bg-cyan-50"
+                          className="h-7 text-[11px] text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                           onClick={() => toast({ title: 'View product', description: `Opening ${r.productName}...` })}
                         >
                           <Eye className="h-3 w-3" /> View product
@@ -2326,9 +2326,9 @@ function CategoriesTab({ toast }: { toast: any }) {
 
       <div className="grid lg:grid-cols-3 gap-3">
         {/* Tree view */}
-        <Card className="lg:col-span-2 border-slate-200 shadow-sm">
+        <Card className="lg:col-span-2 border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
               <ListTree className="h-4 w-4 text-cyan-600" />
               Category Tree
             </CardTitle>
@@ -2336,7 +2336,7 @@ function CategoriesTab({ toast }: { toast: any }) {
           <CardContent className="pt-0">
             <Table>
               <TableHeader>
-                <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+                <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
                   <SortHeader>Category</SortHeader>
                   <SortHeader>Parent</SortHeader>
                   <SortHeader className="text-right">Products</SortHeader>
@@ -2345,25 +2345,25 @@ function CategoriesTab({ toast }: { toast: any }) {
               </TableHeader>
               <TableBody>
                 {categories.map((c) => (
-                  <TableRow key={c.id} className="hover:bg-cyan-50/30">
+                  <TableRow key={c.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
                     <TableCell>
                       <div className={cn('flex items-center gap-2', !c.parentId && 'font-semibold')}>
                         {!c.parentId && <span className="text-cyan-500">▸</span>}
-                        {c.parentId && <span className="text-slate-300 pl-3">└─</span>}
-                        <span className="text-xs text-slate-800">{c.name}</span>
-                        <Badge variant="outline" className="text-[10px] bg-slate-50 text-slate-500 border-slate-200 font-mono">
+                        {c.parentId && <span className="text-muted-foreground/50 pl-3">└─</span>}
+                        <span className="text-xs text-foreground">{c.name}</span>
+                        <Badge variant="outline" className="text-[10px] bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 font-mono">
                           /{c.slug}
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell className="text-xs text-slate-500">{c.parentName ?? '—'}</TableCell>
-                    <TableCell className="text-right text-xs font-semibold text-slate-700 tabular-nums">{c.productCount ?? 0}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{c.parentName ?? '—'}</TableCell>
+                    <TableCell className="text-right text-xs font-semibold text-foreground tabular-nums">{c.productCount ?? 0}</TableCell>
                     <TableCell className="text-right">
                       <div className="inline-flex items-center gap-1">
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 w-7 p-0 text-cyan-700 hover:bg-cyan-50"
+                          className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                           onClick={() => toast({ title: 'Edit category', description: `Editing ${c.name}...` })}
                         >
                           <Pencil className="h-3.5 w-3.5" />
@@ -2371,7 +2371,7 @@ function CategoriesTab({ toast }: { toast: any }) {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 w-7 p-0 text-red-700 hover:bg-red-50"
+                          className="h-7 w-7 p-0 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => toast({ title: 'Delete category', description: `${c.name} will be removed.`, variant: 'destructive' })}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -2386,24 +2386,24 @@ function CategoriesTab({ toast }: { toast: any }) {
         </Card>
 
         {/* Summary panel */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-teal-600" />
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-teal-600 dark:text-cyan-400" />
               Top Categories
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-2 space-y-2">
             {[...categories].sort((a, b) => (b.productCount ?? 0) - (a.productCount ?? 0)).slice(0, 5).map((c) => {
-              const max = Math.max(...categories.map((x) => x.productCount ?? 0));
-              const pct = max > 0 ? Math.round(((c.productCount ?? 0) / max) * 100) : 0;
+              const max = Math.max(...categories.map((x) => x.productCount ?? 0), 1);
+              const pct = Math.round(((c.productCount ?? 0) / max) * 100);
               return (
-                <div key={c.id} className="rounded-md p-2 hover:bg-slate-50 transition-colors">
+                <div key={c.id} className="rounded-md p-2 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
                   <div className="flex items-center justify-between mb-1">
-                    <p className="text-xs font-medium text-slate-700 truncate">{c.name}</p>
-                    <span className="text-xs font-semibold text-slate-700 tabular-nums">{c.productCount ?? 0}</span>
+                    <p className="text-xs font-medium text-foreground truncate">{c.name}</p>
+                    <span className="text-xs font-semibold text-foreground tabular-nums">{c.productCount ?? 0}</span>
                   </div>
-                  <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-cyan-500 to-teal-400" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
@@ -2463,10 +2463,10 @@ function AuditTab() {
 
       <FilterPills options={actionOptions} active={actionFilter} onSelect={setActionFilter} />
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border/60 shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50/60 hover:bg-slate-50/60">
+            <TableRow className="bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
               <SortHeader>Timestamp</SortHeader>
               <SortHeader>User</SortHeader>
               <SortHeader>Action</SortHeader>
@@ -2486,21 +2486,21 @@ function AuditTab() {
               const actionKey = Object.keys(AUDIT_ACTION_CONFIG).find((k) => k === l.action) ?? 'DEFAULT';
               const cfg = AUDIT_ACTION_CONFIG[actionKey];
               return (
-                <TableRow key={l.id} className="hover:bg-cyan-50/30">
-                  <TableCell className="text-xs text-slate-600">
+                <TableRow key={l.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
+                  <TableCell className="text-xs text-muted-foreground">
                     <div className="font-mono">{new Date(l.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh' })}</div>
                     <div className="text-[10px] text-slate-400">{timeAgo(l.createdAt)}</div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Avatar className="h-6 w-6 border border-slate-200">
+                      <Avatar className="h-6 w-6 border border-border/60">
                         {l.user?.avatarUrl && <AvatarImage src={l.user.avatarUrl} alt={l.user.name} />}
-                        <AvatarFallback className="bg-slate-100 text-slate-600 text-[9px] font-semibold">
+                        <AvatarFallback className="bg-muted text-muted-foreground text-[9px] font-semibold">
                           {initials(l.user?.name ?? 'U')}
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0">
-                        <p className="text-xs font-medium text-slate-700 truncate">{l.user?.name ?? '—'}</p>
+                        <p className="text-xs font-medium text-foreground truncate">{l.user?.name ?? '—'}</p>
                         <p className="text-[10px] text-slate-400 font-mono truncate">{l.user?.email ?? ''}</p>
                       </div>
                     </div>
@@ -2511,20 +2511,20 @@ function AuditTab() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-xs">
-                    <span className="text-slate-700">{l.entityType ?? '—'}</span>
+                    <span className="text-foreground">{l.entityType ?? '—'}</span>
                     <span className="text-slate-400 font-mono ml-1">#{(l.entityId ?? '').slice(-6)}</span>
                   </TableCell>
-                  <TableCell className="text-[11px] text-slate-600">
+                  <TableCell className="text-[11px] text-muted-foreground">
                     {l.oldValue || l.newValue ? (
                       <div className="flex items-center gap-1.5">
                         {l.oldValue && (
-                          <span className="px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100 font-mono">
+                          <span className="px-1.5 py-0.5 rounded bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-100 dark:border-red-900/50 font-mono">
                             {l.oldValue}
                           </span>
                         )}
                         {l.oldValue && l.newValue && <ChevronRight className="h-3 w-3 text-slate-400" />}
                         {l.newValue && (
-                          <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100 font-mono">
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-900/50 font-mono">
                             {l.newValue}
                           </span>
                         )}
@@ -2596,9 +2596,9 @@ function SettingsTab({ toast }: { toast: any }) {
 
       <div className="grid lg:grid-cols-2 gap-4">
         {/* General settings */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
               <Building2 className="h-4 w-4 text-cyan-600" />
               General
             </CardTitle>
@@ -2628,9 +2628,9 @@ function SettingsTab({ toast }: { toast: any }) {
         </Card>
 
         {/* Finance settings */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
               <Percent className="h-4 w-4 text-teal-600" />
               Finance
             </CardTitle>
@@ -2651,7 +2651,7 @@ function SettingsTab({ toast }: { toast: any }) {
                   className="pl-8 h-8 text-xs font-mono"
                 />
               </div>
-              <p className="text-[10px] text-slate-500">Applied to all seller revenue at order completion.</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">Applied to all seller revenue at order completion.</p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="settlement" className="text-xs">Settlement period (days)</Label>
@@ -2667,24 +2667,24 @@ function SettingsTab({ toast }: { toast: any }) {
                   className="pl-8 h-8 text-xs font-mono"
                 />
               </div>
-              <p className="text-[10px] text-slate-500">Pending balance becomes available after this many days.</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">Pending balance becomes available after this many days.</p>
             </div>
           </CardContent>
         </Card>
 
         {/* Maintenance mode */}
-        <Card className={cn('border-slate-200 shadow-sm', maintenanceMode && 'border-amber-200 bg-amber-50/30')}>
+        <Card className={cn('border-border/60 shadow-sm', maintenanceMode && 'border-amber-200 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20')}>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <AlertCircle className={cn('h-4 w-4', maintenanceMode ? 'text-amber-600' : 'text-cyan-600')} />
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <AlertCircle className={cn('h-4 w-4', maintenanceMode ? 'text-amber-600 dark:text-amber-400' : 'text-cyan-600 dark:text-cyan-400')} />
               Maintenance Mode
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-2">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-medium text-slate-700">Take marketplace offline</p>
-                <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Take marketplace offline</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                   When enabled, all non-admin users see a maintenance banner. Admins can still access the platform.
                 </p>
               </div>
@@ -2694,7 +2694,7 @@ function SettingsTab({ toast }: { toast: any }) {
               />
             </div>
             {maintenanceMode && (
-              <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 p-2.5 text-[11px] text-amber-800">
+              <div className="mt-3 rounded-md border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 p-2.5 text-[11px] text-amber-800 dark:text-amber-300">
                 <p className="font-semibold flex items-center gap-1.5">
                   <AlertCircle className="h-3 w-3" /> Maintenance banner active
                 </p>
@@ -2705,10 +2705,10 @@ function SettingsTab({ toast }: { toast: any }) {
         </Card>
 
         {/* Feature flags */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-cyan-600" />
+            <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               Feature Flags
             </CardTitle>
           </CardHeader>
@@ -2716,8 +2716,8 @@ function SettingsTab({ toast }: { toast: any }) {
             {featureList.map((f) => (
               <div key={f.key} className="flex items-center justify-between gap-3 py-1">
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-slate-700">{f.label}</p>
-                  <p className="text-[11px] text-slate-500">{f.desc}</p>
+                  <p className="text-xs font-medium text-slate-700 dark:text-slate-200">{f.label}</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{f.desc}</p>
                 </div>
                 <Switch
                   checked={(featureFlags as any)[f.key]}
@@ -2732,7 +2732,7 @@ function SettingsTab({ toast }: { toast: any }) {
       <Separator />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
+        <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
           <Clock className="h-3 w-3" />
           Last saved: {timeAgo(new Date(Date.now() - 5 * 3600000).toISOString())}
         </div>
@@ -2816,7 +2816,7 @@ function MobilePill({
       onClick={onClick}
       className={cn(
         'flex-none flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium border transition-colors',
-        active ? 'bg-cyan-500 text-white border-cyan-500' : 'bg-white text-slate-600 border-slate-200',
+        active ? 'bg-cyan-500 text-white border-cyan-500' : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60',
       )}
     >
       <tab.icon className="h-3.5 w-3.5" />
@@ -2858,7 +2858,7 @@ export function AdminCenter() {
   const activeSection = SIDEBAR_SECTIONS.find((s) => s.items.some((i) => i.id === activeTab));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50/30">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50/30 dark:from-background dark:via-background dark:to-background text-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -3036,8 +3036,8 @@ export function AdminCenter() {
         </div>
 
         {/* Mobile: section/tab label footer */}
-        <div className="lg:hidden mt-8 pt-4 border-t border-slate-200 text-xs text-slate-500">
-          <p className="font-semibold text-slate-700 mb-1">
+        <div className="lg:hidden mt-8 pt-4 border-t border-border/60 text-xs text-muted-foreground">
+          <p className="font-semibold text-foreground mb-1">
             {activeTabDef?.label} · {activeSection?.title}
           </p>
           <p>{activeTabDef?.description}</p>

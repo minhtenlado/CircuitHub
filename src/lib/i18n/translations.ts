@@ -165,6 +165,9 @@ export const translations = {
       password: 'Mật khẩu',
       fullName: 'Họ và tên',
       demoAccounts: 'Tài khoản demo',
+      noAccount: 'Chưa có tài khoản?',
+      hasAccount: 'Đã có tài khoản?',
+      or: 'hoặc',
     },
     common: {
       search: 'Tìm kiếm',
@@ -214,6 +217,8 @@ export const translations = {
       markAllRead: 'Đánh dấu đã đọc',
       noNotifications: 'Chưa có thông báo.',
       unreadTotal: '{unread} chưa đọc · {total} tổng',
+      prev: 'Trước',
+      next: 'Tiếp',
     },
     roles: {
       buyer: 'Người mua',
@@ -566,6 +571,9 @@ export const translations = {
       password: 'Password',
       fullName: 'Full Name',
       demoAccounts: 'Demo accounts',
+      noAccount: "Don't have an account?",
+      hasAccount: 'Already have an account?',
+      or: 'or',
     },
     common: {
       search: 'Search',
@@ -615,6 +623,8 @@ export const translations = {
       markAllRead: 'Mark all read',
       noNotifications: 'No notifications yet.',
       unreadTotal: '{unread} unread · {total} total',
+      prev: 'Prev',
+      next: 'Next',
     },
     roles: {
       buyer: 'Buyer',
@@ -965,6 +975,9 @@ export const translations = {
       password: '密码',
       fullName: '全名',
       demoAccounts: '演示账户',
+      noAccount: '还没有账户？',
+      hasAccount: '已有账户？',
+      or: '或',
     },
     common: {
       search: '搜索',
@@ -1013,6 +1026,8 @@ export const translations = {
       markAllRead: '全部标为已读',
       noNotifications: '暂无通知。',
       unreadTotal: '{unread} 未读 · {total} 总共',
+      prev: '上一页',
+      next: '下一页',
     },
     roles: {
       buyer: '买家',
@@ -1364,6 +1379,9 @@ export const translations = {
       password: 'パスワード',
       fullName: '氏名',
       demoAccounts: 'デモアカウント',
+      noAccount: 'アカウントをお持ちでないですか？',
+      hasAccount: 'すでにアカウントをお持ちですか？',
+      or: 'または',
     },
     common: {
       search: '検索',
@@ -1412,6 +1430,8 @@ export const translations = {
       markAllRead: 'すべて既読にする',
       noNotifications: '通知はまだありません。',
       unreadTotal: '{unread} 件未読 · 合計 {total} 件',
+      prev: '前へ',
+      next: '次へ',
     },
     roles: {
       buyer: 'バイヤー',

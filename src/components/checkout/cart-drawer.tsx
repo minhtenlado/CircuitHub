@@ -163,7 +163,7 @@ export function CartDrawer() {
                             <div className="flex items-center border border-border/60 rounded-md">
                               <button
                                 onClick={() => updateQty(item.productId, item.quantity - 1)}
-                                className="p-1.5 hover:bg-cyan-50 text-muted-foreground hover:text-cyan-700 rounded-l-md transition-colors disabled:opacity-30"
+                                className="p-1.5 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 rounded-l-md transition-colors disabled:opacity-30"
                                 disabled={item.quantity <= 1}
                                 aria-label="Decrease quantity"
                               >
@@ -174,13 +174,13 @@ export function CartDrawer() {
                               </span>
                               <button
                                 onClick={() => updateQty(item.productId, item.quantity + 1)}
-                                className="p-1.5 hover:bg-cyan-50 text-muted-foreground hover:text-cyan-700 rounded-r-md transition-colors"
+                                className="p-1.5 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 rounded-r-md transition-colors"
                                 aria-label="Increase quantity"
                               >
                                 <Plus className="h-3 w-3" />
                               </button>
                             </div>
-                            <span className="text-sm font-bold text-cyan-700 tabular-nums">
+                            <span className="text-sm font-bold text-cyan-700 dark:text-cyan-400 tabular-nums">
                               {formatVND(item.price * item.quantity)}
                             </span>
                           </div>

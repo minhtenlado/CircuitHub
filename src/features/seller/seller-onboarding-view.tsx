@@ -177,7 +177,7 @@ export function SellerOnboardingView() {
                 >
                   {isPast ? <CheckCircle2 className="h-5 w-5 text-emerald-500" /> : <Icon className={`h-5 w-5 ${isCurrent ? 'text-cyan-600' : 'text-slate-400'}`} />}
                 </div>
-                <span className={`text-[10px] font-medium hidden sm:block ${isCurrent ? 'text-cyan-700' : isPast ? 'text-emerald-600' : 'text-slate-400'}`}>
+                <span className={`text-[10px] font-medium hidden sm:block ${isCurrent ? 'text-cyan-700 dark:text-cyan-400' : isPast ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
                   {s.label}
                 </span>
               </div>
@@ -234,7 +234,7 @@ export function SellerOnboardingView() {
                   <div>
                     <label className="text-sm font-medium mb-2 block">Front Side</label>
                     <div
-                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-cyan-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60"
+                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-cyan-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60 dark:bg-slate-900/60"
                       onClick={() => document.getElementById('id-front')?.click()}
                     >
                       {idFront ? (
@@ -253,7 +253,7 @@ export function SellerOnboardingView() {
                   <div>
                     <label className="text-sm font-medium mb-2 block">Back Side</label>
                     <div
-                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-cyan-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60"
+                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-cyan-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60 dark:bg-slate-900/60"
                       onClick={() => document.getElementById('id-back')?.click()}
                     >
                       {idBack ? (
@@ -323,7 +323,7 @@ export function SellerOnboardingView() {
 
                     {scanning ? (
                       <div className="text-center">
-                        <p className="text-sm font-medium text-cyan-700 mb-1">Scanning... {scanProgress}%</p>
+                        <p className="text-sm font-medium text-cyan-700 dark:text-cyan-400 mb-1">Scanning... {scanProgress}%</p>
                         <p className="text-xs text-muted-foreground">Keep looking at the camera</p>
                       </div>
                     ) : (

@@ -206,29 +206,29 @@ interface DemoAddress {
 /* ---------------- Status config ---------------- */
 
 const ORDER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  PAID: { label: 'Paid', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  SHIPPED: { label: 'Shipped', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 text-teal-700 border-teal-200', dot: 'bg-teal-500' },
-  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  PAID: { label: 'Paid', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  SHIPPED: { label: 'Shipped', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800', dot: 'bg-teal-500' },
+  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
 
 const PAYMENT_STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-  SUCCESS: { label: 'Paid', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  FAILED: { label: 'Failed', cls: 'bg-red-50 text-red-700 border-red-200' },
-  REFUNDED: { label: 'Refunded', cls: 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:border-slate-800' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800' },
+  SUCCESS: { label: 'Paid', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
+  FAILED: { label: 'Failed', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' },
+  REFUNDED: { label: 'Refunded', cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
 };
 
 const LICENSE_TYPE_CONFIG: Record<string, { label: string; cls: string }> = {
-  PERSONAL: { label: 'Personal', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
-  COMMERCIAL: { label: 'Commercial', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  ENTERPRISE: { label: 'Enterprise', cls: 'bg-violet-50 text-violet-700 border-violet-200' },
-  EXTENDED: { label: 'Extended', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-  EDUCATION: { label: 'Education', cls: 'bg-teal-50 text-teal-700 border-teal-200' },
+  PERSONAL: { label: 'Personal', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800' },
+  COMMERCIAL: { label: 'Commercial', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
+  ENTERPRISE: { label: 'Enterprise', cls: 'bg-violet-50 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800' },
+  EXTENDED: { label: 'Extended', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800' },
+  EDUCATION: { label: 'Education', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800' },
   UNLIMITED: { label: 'Unlimited', cls: 'bg-gradient-to-r from-cyan-500 to-teal-400 text-white border-0' },
 };
 
@@ -798,7 +798,7 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
           {/* Total */}
           <div className="flex flex-col">
             <p className="text-xs text-muted-foreground">Total</p>
-            <p className="text-sm font-semibold text-cyan-700 tabular-nums">{formatVND(order.grandTotal)}</p>
+            <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400 tabular-nums">{formatVND(order.grandTotal)}</p>
           </div>
 
           {/* Status */}
@@ -906,7 +906,7 @@ function OrderCard({ order, toast }: { order: DemoOrder; toast: (t: any) => void
                             <p className="font-medium text-foreground">{sh.provider}</p>
                             <p className="text-xs text-muted-foreground font-mono">{sh.trackingNumber}</p>
                           </div>
-                          <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200">
+                          <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">
                             {sh.status}
                           </Badge>
                         </div>
@@ -1062,14 +1062,14 @@ function WishlistCard({
       <CardContent className="p-4 flex flex-col gap-3 flex-1">
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-foreground line-clamp-2">{item.name}</h3>
-          <p className="mt-1.5 text-lg font-bold text-cyan-700 tabular-nums">{formatVND(item.price)}</p>
+          <p className="mt-1.5 text-lg font-bold text-cyan-700 dark:text-cyan-400 tabular-nums">{formatVND(item.price)}</p>
         </div>
         <div className="flex gap-2">
           <Button size="sm" className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white" onClick={() => onAddCart(item)}>
             <ShoppingBag className="h-3.5 w-3.5" />
             Add to cart
           </Button>
-          <Button size="sm" variant="outline" onClick={() => onRemove(item.productId)} className="text-rose-500 hover:text-rose-600 hover:bg-rose-50">
+          <Button size="sm" variant="outline" onClick={() => onRemove(item.productId)} className="border-border/60 text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40">
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -1097,7 +1097,7 @@ function LicenseCard({ license }: { license: DemoLicense }) {
           </div>
           <div className="flex items-center gap-2">
             <LicenseTypeBadge type={license.licenseType} />
-            <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1">
+            <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 gap-1">
               <CheckCircle2 className="h-3 w-3" />
               Active
             </Badge>
@@ -1120,7 +1120,7 @@ function LicenseCard({ license }: { license: DemoLicense }) {
         <button
           type="button"
           onClick={() => setShowTerms((v) => !v)}
-          className="mt-4 flex items-center gap-1.5 text-sm font-medium text-cyan-700 hover:text-cyan-800"
+          className="mt-4 flex items-center gap-1.5 text-sm font-medium text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300"
         >
           <FileText className="h-4 w-4" />
           {showTerms ? 'Hide' : 'View'} license terms
@@ -1169,7 +1169,7 @@ function AddressCard({
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-sm font-semibold text-foreground">{address.fullName}</h3>
                 {address.isDefault && (
-                  <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1">
+                  <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 gap-1">
                     <CheckCircle2 className="h-3 w-3" />
                     Default
                   </Badge>
@@ -1179,10 +1179,10 @@ function AddressCard({
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-cyan-700 hover:bg-cyan-50" onClick={onEdit} aria-label="Edit address">
+            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50" onClick={onEdit} aria-label="Edit address">
               <Edit2 className="h-3.5 w-3.5" />
             </Button>
-            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-rose-600 hover:bg-rose-50" onClick={onDelete} aria-label="Delete address">
+            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40" onClick={onDelete} aria-label="Delete address">
               <Trash2 className="h-3.5 w-3.5" />
             </Button>
           </div>
@@ -1211,8 +1211,8 @@ function ReviewCard({ review, onGoProduct }: { review: DemoReview; onGoProduct: 
       <CardContent className="p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <button type="button" onClick={() => onGoProduct(review.productSlug)} className="text-left min-w-0">
-            <p className="text-xs font-medium text-cyan-700 uppercase tracking-wide">Reviewed product</p>
-            <h3 className="text-sm font-semibold text-foreground hover:text-cyan-700 transition-colors">{review.productName}</h3>
+            <p className="text-xs font-medium text-cyan-700 dark:text-cyan-400 uppercase tracking-wide">Reviewed product</p>
+            <h3 className="text-sm font-semibold text-foreground hover:text-cyan-700 dark:hover:text-cyan-400 transition-colors">{review.productName}</h3>
           </button>
           <div className="flex items-center gap-2">
             <Rating value={review.rating} showCount={false} size="sm" />
@@ -1224,8 +1224,8 @@ function ReviewCard({ review, onGoProduct }: { review: DemoReview; onGoProduct: 
           Written {formatDate(review.createdAt)} · {timeAgo(review.createdAt)}
         </p>
         {review.sellerReply && (
-          <div className="mt-4 rounded-lg border-l-2 border-cyan-300 bg-cyan-50/40 p-3">
-            <p className="text-xs font-semibold text-cyan-700 mb-1 flex items-center gap-1.5">
+          <div className="mt-4 rounded-lg border-l-2 border-cyan-300 dark:border-cyan-700 bg-cyan-50/40 dark:bg-cyan-950/30 p-3">
+            <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 mb-1 flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5" />
               Seller reply
             </p>
@@ -1251,12 +1251,12 @@ function NotificationItem({ n }: { n: { id: string; type: string; title: string;
     : n.type === 'LICENSE_ISSUED' ? Key
     : Bell;
   const accentCls =
-    n.type === 'ORDER_SHIPPED' ? 'bg-blue-50 text-blue-600'
-    : n.type === 'ORDER_DELIVERED' ? 'bg-emerald-50 text-emerald-600'
-    : n.type === 'PROMOTION' ? 'bg-amber-50 text-amber-600'
-    : n.type === 'DOWNLOAD_READY' ? 'bg-teal-50 text-teal-600'
-    : n.type === 'LICENSE_ISSUED' ? 'bg-cyan-50 text-cyan-600'
-    : 'bg-slate-50 text-slate-600';
+    n.type === 'ORDER_SHIPPED' ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400'
+    : n.type === 'ORDER_DELIVERED' ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400'
+    : n.type === 'PROMOTION' ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400'
+    : n.type === 'DOWNLOAD_READY' ? 'bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400'
+    : n.type === 'LICENSE_ISSUED' ? 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400'
+    : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300';
 
   return (
     <div className="flex gap-3 rounded-lg border border-border/60 bg-card dark:bg-slate-900 p-3">
@@ -1325,7 +1325,7 @@ function OverviewTab({
           {recentOrders.length === 0 ? (
             <Card className="border-border/60">
               <CardContent className="p-6 text-center text-sm text-muted-foreground">
-                No orders yet — <button className="text-cyan-700 font-medium hover:underline" onClick={onGoProducts}>browse products</button> to place your first order.
+                No orders yet — <button className="text-cyan-700 dark:text-cyan-400 font-medium hover:underline" onClick={onGoProducts}>browse products</button> to place your first order.
               </CardContent>
             </Card>
           ) : (
@@ -1333,7 +1333,7 @@ function OverviewTab({
               {recentOrders.map((o) => (
                 <Card key={o.id} className="border-border/60 hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)] transition-shadow">
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan-50 border border-cyan-100 text-cyan-600">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-100 dark:border-cyan-800 text-cyan-600 dark:text-cyan-400">
                       <Package className="h-4 w-4" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -1341,7 +1341,7 @@ function OverviewTab({
                       <p className="text-xs text-muted-foreground">{formatDate(o.createdAt)} · {o.itemsCount} items</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-semibold text-cyan-700 tabular-nums">{formatVND(o.grandTotal)}</p>
+                      <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400 tabular-nums">{formatVND(o.grandTotal)}</p>
                       <OrderStatusBadge status={o.status} />
                     </div>
                   </CardContent>
@@ -1425,7 +1425,7 @@ function OrdersTab({
               'px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
               filter === f.id
                 ? 'bg-cyan-500 text-white border-cyan-500'
-                : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60 hover:border-cyan-300 hover:text-cyan-700',
+                : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60 hover:border-cyan-300 dark:hover:border-cyan-700 hover:text-cyan-700 dark:hover:text-cyan-400',
             )}
           >
             {f.label}
@@ -1525,11 +1525,11 @@ function WishlistTab({
         </div>
         {items.length > 0 && (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setShareOpen(true)} className="border-cyan-200 text-cyan-700 hover:bg-cyan-50">
+            <Button variant="outline" size="sm" onClick={() => setShareOpen(true)} className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50">
               <Share2 className="h-3.5 w-3.5" />
               Share
             </Button>
-            <Button variant="outline" size="sm" onClick={onClear} className="text-rose-600 hover:text-rose-700 hover:bg-rose-50">
+            <Button variant="outline" size="sm" onClick={onClear} className="border-border/60 text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40">
               <Trash2 className="h-3.5 w-3.5" />
               Clear all
             </Button>
@@ -1657,7 +1657,7 @@ function ProfileTab({
         {/* Avatar + summary */}
         <Card className="border-border/60 lg:col-span-1">
           <CardContent className="p-6 flex flex-col items-center text-center">
-            <Avatar className="h-24 w-24 border-4 border-cyan-100">
+            <Avatar className="h-24 w-24 border-4 border-cyan-100 dark:border-cyan-800">
               {form.avatarUrl && <AvatarImage src={form.avatarUrl} alt={form.name} />}
               <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-teal-400 text-white text-2xl font-bold">
                 {initials(form.name || 'Buyer')}
@@ -1665,7 +1665,7 @@ function ProfileTab({
             </Avatar>
             <h3 className="mt-4 text-lg font-semibold text-foreground">{form.name}</h3>
             <p className="text-sm text-muted-foreground">{form.email}</p>
-            <Badge variant="outline" className="mt-3 bg-cyan-50 text-cyan-700 border-cyan-200 gap-1">
+            <Badge variant="outline" className="mt-3 bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 gap-1">
               <ShieldCheck className="h-3 w-3" />
               Verified buyer
             </Badge>
@@ -1824,7 +1824,7 @@ function SidebarTabTrigger({ tab }: { tab: { id: TabId; label: string; icon: typ
   return (
     <TabsTrigger
       value={tab.id}
-      className="justify-start w-full h-auto py-2.5 px-3 gap-3 rounded-lg data-[state=active]:bg-cyan-50 data-[state=active]:text-cyan-700 data-[state=active]:border-cyan-200 data-[state=active]:shadow-sm text-muted-foreground hover:text-cyan-700 hover:bg-cyan-50/50 font-medium text-sm dark:data-[state=active]:bg-cyan-900/40 dark:data-[state=active]:text-cyan-300 dark:hover:bg-cyan-900/30"
+      className="justify-start w-full h-auto py-2.5 px-3 gap-3 rounded-lg data-[state=active]:bg-cyan-50 data-[state=active]:text-cyan-700 data-[state=active]:border-cyan-200 data-[state=active]:shadow-sm text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-300 hover:bg-cyan-50/50 dark:hover:bg-cyan-900/30 font-medium text-sm dark:data-[state=active]:bg-cyan-900/40 dark:data-[state=active]:text-cyan-300"
     >
       <TabIcon id={tab.id} className="h-4 w-4 shrink-0" />
       <span className="truncate text-left">{t(`buyer.tabs.${tab.id}` as any) || tab.label}</span>
@@ -1924,7 +1924,7 @@ export function BuyerDashboard() {
                 Buyer Dashboard
               </p>
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground mt-0.5">
-                Welcome back, <span className="text-cyan-700">{displayName}</span>!
+                Welcome back, <span className="text-cyan-700 dark:text-cyan-400">{displayName}</span>!
               </h1>
               <p className="text-sm text-muted-foreground mt-1 flex flex-wrap items-center gap-2">
                 <span className="flex items-center gap-1">
@@ -1963,8 +1963,8 @@ export function BuyerDashboard() {
                     <SidebarTabTrigger key={tab.id} tab={tab} />
                   ))}
                 </TabsList>
-                <div className="mt-4 rounded-xl border border-cyan-100 bg-cyan-50/60 p-4">
-                  <p className="text-xs font-semibold text-cyan-700 flex items-center gap-1.5">
+                <div className="mt-4 rounded-xl border border-cyan-100 dark:border-cyan-800/60 bg-cyan-50/60 dark:bg-cyan-950/30 p-4">
+                  <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5">
                     <ShieldCheck className="h-3.5 w-3.5" />
                     Buyer protection
                   </p>

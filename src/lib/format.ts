@@ -82,8 +82,8 @@ export function discountPct(price: number, compareAt?: number | null): number {
 
 /** Map icon string to Lucide icon */
 export const productTypeBadge: Record<string, { label: string; cls: string }> = {
-  PHYSICAL: { label: 'Physical', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
-  DIGITAL: { label: 'Digital', cls: 'bg-aqua-50 text-teal-700 border-teal-200' },
-  SERVICE: { label: 'Service', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-  BUNDLE: { label: 'Bundle', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
+  PHYSICAL: { label: 'Physical', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800' },
+  DIGITAL: { label: 'Digital', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800' },
+  SERVICE: { label: 'Service', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800' },
+  BUNDLE: { label: 'Bundle', cls: 'bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800' },
 };

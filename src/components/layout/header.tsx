@@ -427,7 +427,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                           onMouseEnter={() => setActiveIndex(idx)}
                           className={cn(
                             'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
-                            activeIndex === idx ? 'bg-cyan-50' : 'hover:bg-slate-50',
+                            activeIndex === idx ? 'bg-cyan-50 dark:bg-cyan-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
                           )}
                         >
                           <div className="h-9 w-9 flex-shrink-0 overflow-hidden rounded-md bg-muted border border-border/40">
@@ -441,7 +441,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                               {p.brand ? `${p.brand} · ` : ''}{p.shopName ?? 'Shop'}
                             </p>
                           </div>
-                          <span className="text-xs font-bold text-cyan-700 tabular-nums flex-shrink-0">
+                          <span className="text-xs font-bold text-cyan-700 dark:text-cyan-400 tabular-nums flex-shrink-0">
                             {new Intl.NumberFormat('vi-VN').format(p.price)}₫
                           </span>
                         </button>
@@ -465,11 +465,11 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                           onMouseEnter={() => setActiveIndex(idx)}
                           className={cn(
                             'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
-                            activeIndex === idx ? 'bg-cyan-50' : 'hover:bg-slate-50',
+                            activeIndex === idx ? 'bg-cyan-50 dark:bg-cyan-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
                           )}
                         >
-                          <div className="h-8 w-8 flex-shrink-0 rounded-md bg-cyan-50 border border-cyan-100 flex items-center justify-center">
-                            <Package className="h-3.5 w-3.5 text-cyan-600" />
+                          <div className="h-8 w-8 flex-shrink-0 rounded-md bg-cyan-50 dark:bg-cyan-950/50 border border-cyan-100 dark:border-cyan-800 flex items-center justify-center">
+                            <Package className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
                           </div>
                           <span className="text-sm font-medium flex-1">{c.name}</span>
                           <span className="text-[10px] text-muted-foreground">{t('common.categories')}</span>
@@ -494,7 +494,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                           onMouseEnter={() => setActiveIndex(idx)}
                           className={cn(
                             'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
-                            activeIndex === idx ? 'bg-cyan-50' : 'hover:bg-slate-50',
+                            activeIndex === idx ? 'bg-cyan-50 dark:bg-cyan-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
                           )}
                         >
                           <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full bg-muted border border-border/40">
@@ -548,7 +548,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 {/* View all results */}
                 <button
                   onClick={() => submit()}
-                  className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50/40 p-2 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-100/50"
+                  className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg border border-cyan-200 dark:border-cyan-800 bg-cyan-50/40 dark:bg-cyan-950/40 p-2 text-sm font-medium text-cyan-700 dark:text-cyan-300 transition-colors hover:bg-cyan-100/50 dark:hover:bg-cyan-900/50"
                 >
                   <Search className="h-3.5 w-3.5" />
                   {t('common.viewAllResults').replace('{query}', query)}
@@ -559,7 +559,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
             {/* No results */}
             {query.trim().length >= 2 && !loading && !hasResults && (
               <div className="p-6 text-center">
-                <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
+                <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                   <Search className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <p className="text-sm font-medium">{t('common.noResults').replace('{query}', query)}</p>
@@ -697,21 +697,21 @@ function ActionCart() {
 /* ---------- Notifications Bell + dropdown ---------- */
 /* ---------- Notifications Bell with pulse + mark-all-as-read ---------- */
 const NOTIF_ICON_MAP: Record<string, { icon: any; color: string; bg: string }> = {
-  ORDER_CREATED: { icon: Package, color: 'text-cyan-600', bg: 'bg-cyan-50' },
-  ORDER_SHIPPED: { icon: Truck, color: 'text-blue-600', bg: 'bg-blue-50' },
-  PAYMENT_SUCCESS: { icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-  PAYMENT_FAILED: { icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50' },
-  SELLER_APPROVED: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-  SELLER_REJECTED: { icon: XCircle, color: 'text-red-600', bg: 'bg-red-50' },
-  PRODUCT_APPROVED: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-  PRODUCT_REJECTED: { icon: XCircle, color: 'text-red-600', bg: 'bg-red-50' },
-  WITHDRAWAL_REQUEST: { icon: Wallet, color: 'text-amber-600', bg: 'bg-amber-50' },
-  WITHDRAWAL_COMPLETED: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-  WITHDRAWAL_REJECTED: { icon: XCircle, color: 'text-red-600', bg: 'bg-red-50' },
-  PROMOTION: { icon: Sparkles, color: 'text-violet-600', bg: 'bg-violet-50' },
-  NEW_SELLER: { icon: Store, color: 'text-cyan-600', bg: 'bg-cyan-50' },
-  NEW_ORDER: { icon: Package, color: 'text-cyan-600', bg: 'bg-cyan-50' },
-  DEFAULT: { icon: Bell, color: 'text-slate-600', bg: 'bg-slate-50' },
+  ORDER_CREATED: { icon: Package, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/60' },
+  ORDER_SHIPPED: { icon: Truck, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-950/60' },
+  PAYMENT_SUCCESS: { icon: DollarSign, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/60' },
+  PAYMENT_FAILED: { icon: AlertCircle, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
+  SELLER_APPROVED: { icon: CheckCircle2, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/60' },
+  SELLER_REJECTED: { icon: XCircle, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
+  PRODUCT_APPROVED: { icon: CheckCircle2, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/60' },
+  PRODUCT_REJECTED: { icon: XCircle, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
+  WITHDRAWAL_REQUEST: { icon: Wallet, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-950/60' },
+  WITHDRAWAL_COMPLETED: { icon: CheckCircle2, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/60' },
+  WITHDRAWAL_REJECTED: { icon: XCircle, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
+  PROMOTION: { icon: Sparkles, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-50 dark:bg-violet-950/60' },
+  NEW_SELLER: { icon: Store, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/60' },
+  NEW_ORDER: { icon: Package, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/60' },
+  DEFAULT: { icon: Bell, color: 'text-slate-600 dark:text-slate-400', bg: 'bg-slate-50 dark:bg-slate-800' },
 };
 
 function NotificationsBell() {
@@ -823,7 +823,7 @@ function NotificationsBell() {
             <button
               onClick={markAllRead}
               disabled={markingRead}
-              className="text-[11px] font-medium text-cyan-600 hover:text-cyan-700 transition-colors disabled:opacity-50"
+              className="text-[11px] font-medium text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors disabled:opacity-50"
             >
               {markingRead ? t('common.loading') : t('common.markAllRead')}
             </button>

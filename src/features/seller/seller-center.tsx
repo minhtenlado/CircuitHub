@@ -174,35 +174,35 @@ interface SidebarSection {
 /* ---------------- Status config ---------------- */
 
 const ORDER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  PAID: { label: 'Paid', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  PACKING: { label: 'Packing', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  READY_TO_SHIP: { label: 'Ready to ship', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  SHIPPING: { label: 'Shipping', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 text-teal-700 border-teal-200', dot: 'bg-teal-500' },
-  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  PAID: { label: 'Paid', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  PACKING: { label: 'Packing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  READY_TO_SHIP: { label: 'Ready to ship', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  SHIPPING: { label: 'Shipping', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800', dot: 'bg-teal-500' },
+  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
 
 const SHIPMENT_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  PICKED_UP: { label: 'Picked up', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  IN_TRANSIT: { label: 'In transit', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  OUT_FOR_DELIVERY: { label: 'Out for delivery', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  DELIVERED: { label: 'Delivered', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  DELIVERY_FAILED: { label: 'Failed', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
-  RETURNING: { label: 'Returning', cls: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-500' },
-  RETURNED: { label: 'Returned', cls: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  PICKED_UP: { label: 'Picked up', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  IN_TRANSIT: { label: 'In transit', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  OUT_FOR_DELIVERY: { label: 'Out for delivery', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  DELIVERED: { label: 'Delivered', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  DELIVERY_FAILED: { label: 'Failed', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
+  RETURNING: { label: 'Returning', cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' },
+  RETURNED: { label: 'Returned', cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' },
 };
 
 const WITHDRAWAL_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
-  PENDING: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  APPROVED: { label: 'Approved', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-500' },
-  PROCESSING: { label: 'Processing', cls: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  REJECTED: { label: 'Rejected', cls: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-500' },
+  PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
+  APPROVED: { label: 'Approved', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  PROCESSING: { label: 'Processing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
+  COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
+  REJECTED: { label: 'Rejected', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
 
 const WALLET_TX_CONFIG: Record<string, { label: string; cls: string; icon: typeof Banknote }> = {
@@ -579,7 +579,7 @@ function StatusPill({
   status: string;
   config: Record<string, { label: string; cls: string; dot: string }>;
 }) {
-  const cfg = config[status] ?? { label: status, cls: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-400' };
+  const cfg = config[status] ?? { label: status, cls: 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' };
   return (
     <Badge variant="outline" className={cn('gap-1.5 font-medium', cfg.cls)}>
       <span className={cn('h-1.5 w-1.5 rounded-full', cfg.dot)} />
@@ -615,7 +615,7 @@ function StatCard({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative overflow-hidden rounded-2xl border border-cyan-100/70 bg-white/80 backdrop-blur-md p-5 hover:shadow-md transition-shadow"
+      className="relative overflow-hidden rounded-2xl border border-cyan-100/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-5 hover:shadow-md transition-shadow"
     >
       <div
         aria-hidden
@@ -666,7 +666,7 @@ function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 dark:bg-cyan-950/50 text-cyan-600 dark:text-cyan-400">
         <Icon className="h-6 w-6" />
       </div>
       <div className="space-y-1">
@@ -674,7 +674,7 @@ function EmptyState({
         <p className="text-sm text-muted-foreground max-w-md">{description}</p>
       </div>
       {cta && onCta && (
-        <Button size="sm" variant="outline" className="mt-2 border-cyan-200 text-cyan-700 hover:bg-cyan-50" onClick={onCta}>
+        <Button size="sm" variant="outline" className="mt-2 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onCta}>
           {cta}
         </Button>
       )}
@@ -685,7 +685,7 @@ function EmptyState({
 function ChartTooltip({ active, payload, label, valueFormatter }: any) {
   if (!active || !payload || !payload.length) return null;
   return (
-    <div className="rounded-lg border border-cyan-100 bg-white/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
+    <div className="rounded-lg border border-cyan-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
       <p className="font-semibold text-foreground mb-1">{label}</p>
       {payload.map((entry: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
@@ -814,10 +814,10 @@ function OverviewTab({
           <CardContent className="space-y-3">
             {topProducts.slice(0, 5).map((p: any, i: number) => (
               <div key={p.id} className="flex items-center gap-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-cyan-50 text-cyan-700 text-xs font-bold">
+                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-xs font-bold">
                   {i + 1}
                 </div>
-                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-muted">
                   {p.imageUrl ? (
                     <Image src={p.imageUrl} alt={p.name} fill className="object-cover" unoptimized />
                   ) : (
@@ -833,7 +833,7 @@ function OverviewTab({
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-cyan-700">{formatVNDCompact((p.soldCount ?? 0) * (p.price ?? 0))}</p>
+                  <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400">{formatVNDCompact((p.soldCount ?? 0) * (p.price ?? 0))}</p>
                   <p className="text-[10px] text-muted-foreground">revenue</p>
                 </div>
               </div>
@@ -842,25 +842,22 @@ function OverviewTab({
         </Card>
 
         {/* Low stock */}
-        <Card className="border-amber-100/70">
+        <Card className="border-amber-100/70 dark:border-amber-900/40">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
-              Low Stock Alerts
+              <AlertTriangle className="h-4 w-4 text-amber-500" />
+              Low Stock Alert
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2.5">
             {lowStock.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">All products well stocked.</p>
+              <p className="text-xs text-muted-foreground py-2">All physical products have healthy stock.</p>
             ) : (
-              lowStock.map((p: any) => (
-                <div key={p.id} className="flex items-center justify-between gap-2 rounded-lg border border-amber-100 bg-amber-50/50 p-2.5">
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{p.name}</p>
-                    <p className="text-xs text-amber-700">Only {p.stockAvailable} left in stock</p>
-                  </div>
-                  <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-200">
-                    {formatVND(p.price)}
+              lowStock.map((p) => (
+                <div key={p.id} className="flex items-center justify-between gap-2 rounded-lg border border-amber-100 dark:border-amber-900/40 bg-amber-50/40 dark:bg-amber-950/20 p-2.5">
+                  <p className="text-sm font-medium text-foreground truncate">{p.name}</p>
+                  <Badge variant="outline" className="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 font-mono text-xs">
+                    {p.stockAvailable} left
                   </Badge>
                 </div>
               ))
@@ -871,24 +868,24 @@ function OverviewTab({
 
       <div className="grid lg:grid-cols-2 gap-4">
         {/* Recent orders */}
-        <Card className="border-cyan-100/70">
+        <Card className="border-border/60">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <ShoppingCart className="h-4 w-4 text-cyan-600" />
+              <Package className="h-4 w-4 text-cyan-600" />
               Recent Orders
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
-            {recentOrders.slice(0, 5).map((o: any) => (
-              <div key={o.id} className="flex items-center gap-3 rounded-lg border border-border/60 p-2.5">
-                <div className="min-w-0 flex-1">
+          <CardContent className="space-y-2.5">
+            {recentOrders.slice(0, 5).map((o) => (
+              <div key={o.id} className="flex items-center justify-between gap-3 rounded-lg border border-border/60 p-2.5">
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-foreground">{o.code}</p>
                   <p className="text-xs text-muted-foreground">
                     {o.items?.length ?? 0} item(s) · {timeAgo(o.createdAt)}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-cyan-700">{formatVNDCompact(o.sellerRevenue ?? 0)}</p>
+                  <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400">{formatVNDCompact(o.sellerRevenue ?? 0)}</p>
                 </div>
                 <StatusPill status={o.status} config={ORDER_STATUS_CONFIG} />
               </div>
@@ -897,7 +894,7 @@ function OverviewTab({
         </Card>
 
         {/* Recent reviews */}
-        <Card className="border-cyan-100/70">
+        <Card className="border-cyan-100/70 dark:border-cyan-900/40">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Star className="h-4 w-4 text-amber-500" />
@@ -924,7 +921,7 @@ function OverviewTab({
       </div>
 
       <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={goProducts} className="border-cyan-200 text-cyan-700 hover:bg-cyan-50">
+        <Button variant="outline" size="sm" onClick={goProducts} className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50">
           Manage products
           <ChevronRight className="h-3.5 w-3.5" />
         </Button>
@@ -995,14 +992,14 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                 className="pl-8"
               />
             </div>
-            <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white p-1">
+            <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white dark:bg-slate-900 p-1">
               {typeFilters.map((f) => (
                 <button
                   key={f.id}
                   onClick={() => setType(f.id)}
                   className={cn(
                     'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                    type === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 hover:text-cyan-700',
+                    type === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
                   )}
                 >
                   {f.label}
@@ -1030,10 +1027,10 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                 </thead>
                 <tbody>
                   {filtered.map((p) => (
-                    <tr key={p.id} className="border-b border-border/40 hover:bg-cyan-50/30 transition-colors">
+                    <tr key={p.id} className="border-b border-border/40 hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20 transition-colors">
                       <td className="py-2.5 pr-3">
                         <button onClick={() => goProduct(p.slug)} className="flex items-center gap-2.5 text-left">
-                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-slate-100">
+                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
                             {p.images?.[0]?.url ? (
                               <Image src={p.images[0].url} alt={p.name} fill className="object-cover" unoptimized />
                             ) : (
@@ -1060,18 +1057,18 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                         )}
                       </td>
                       <td className="py-2.5 px-3 text-right">
-                        {p.unlimited ? <span className="text-xs text-teal-600">∞</span> : <span className="font-medium">{p.stockAvailable}</span>}
+                        {p.unlimited ? <span className="text-xs text-teal-600 dark:text-teal-400">∞</span> : <span className="font-medium">{p.stockAvailable}</span>}
                       </td>
                       <td className="py-2.5 px-3 text-right text-muted-foreground">{p.soldCount ?? 0}</td>
                       <td className="py-2.5 px-3">
                         {p.status === 'ACTIVE' ? (
-                          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Active</Badge>
+                          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800">Active</Badge>
                         ) : p.status === 'DRAFT' ? (
-                          <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">Draft</Badge>
+                          <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700">Draft</Badge>
                         ) : p.status === 'PENDING_REVIEW' ? (
-                          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">In review</Badge>
+                          <Badge variant="outline" className="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800">In review</Badge>
                         ) : (
-                          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">{p.status}</Badge>
+                          <Badge variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800">{p.status}</Badge>
                         )}
                       </td>
                       <td className="py-2.5 pl-3">
@@ -1079,7 +1076,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                           <Button
                             size="icon"
                             variant="ghost"
-                            className="h-7 w-7 text-cyan-600 hover:bg-cyan-50"
+                            className="h-7 w-7 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                             onClick={() => goProduct(p.slug)}
                             title="View"
                           >
@@ -1088,7 +1085,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                           <Button
                             size="icon"
                             variant="ghost"
-                            className="h-7 w-7 text-slate-600 hover:bg-slate-100"
+                            className="h-7 w-7 text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
                             onClick={() => toast({ title: 'Edit product', description: p.name })}
                             title="Edit"
                           >
@@ -1097,7 +1094,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                           <Button
                             size="icon"
                             variant="ghost"
-                            className="h-7 w-7 text-rose-600 hover:bg-rose-50"
+                            className="h-7 w-7 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40"
                             onClick={() => toast({ title: 'Delete product?', description: 'This action cannot be undone.' })}
                             title="Delete"
                           >
@@ -1168,10 +1165,10 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                     const versions = DEMO_VERSIONS.default;
                     return (
                       <Fragment key={p.id}>
-                        <tr className="border-b border-border/40 hover:bg-cyan-50/30 transition-colors">
+                        <tr className="border-b border-border/40 hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20 transition-colors">
                           <td className="py-2.5 pr-3">
                             <div className="flex items-center gap-2.5">
-                              <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-slate-100">
+                              <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
                                 {p.images?.[0]?.url ? (
                                   <Image src={p.images[0].url} alt={p.name} fill className="object-cover" unoptimized />
                                 ) : (
@@ -1192,7 +1189,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                             <TechBadge label={p.software ?? 'Generic'} />
                           </td>
                           <td className="py-2.5 px-3">
-                            <Badge variant="outline" className="font-mono bg-cyan-50 text-cyan-700 border-cyan-200">
+                            <Badge variant="outline" className="font-mono bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">
                               {p.currentVersion ?? p.softwareVersion ?? 'v1.0.0'}
                             </Badge>
                           </td>
@@ -1207,9 +1204,9 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                           </td>
                           <td className="py-2.5 px-3">
                             {p.status === 'ACTIVE' ? (
-                              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Active</Badge>
+                              <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800">Active</Badge>
                             ) : (
-                              <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">{p.status}</Badge>
+                              <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700">{p.status}</Badge>
                             )}
                           </td>
                           <td className="py-2.5 pl-3">
@@ -1217,7 +1214,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="h-7 px-2 text-cyan-600 hover:bg-cyan-50"
+                                className="h-7 px-2 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                                 onClick={() => toast({ title: 'Upload new version', description: p.name })}
                               >
                                 Upload new version
@@ -1225,7 +1222,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                               <Button
                                 size="icon"
                                 variant="ghost"
-                                className="h-7 w-7 text-slate-600 hover:bg-slate-100"
+                                className="h-7 w-7 text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
                                 onClick={() => setExpanded(isOpen ? null : p.id)}
                                 title="Version history"
                               >
@@ -1235,17 +1232,17 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                           </td>
                         </tr>
                         {isOpen && (
-                          <tr key={`${p.id}-v`} className="bg-slate-50/40">
+                          <tr key={`${p.id}-v`} className="bg-slate-50/40 dark:bg-slate-900/40">
                             <td colSpan={7} className="px-4 pb-3 pt-1">
-                              <div className="rounded-lg border border-border/60 bg-white p-3">
+                              <div className="rounded-lg border border-border/60 bg-white dark:bg-slate-900 p-3">
                                 <p className="text-xs font-semibold text-foreground mb-2 flex items-center gap-1.5">
-                                  <FileText className="h-3.5 w-3.5 text-cyan-600" />
+                                  <FileText className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
                                   Version History
                                 </p>
                                 <div className="space-y-2">
                                   {versions.map((v) => (
                                     <div key={v.version} className="flex items-start gap-3 rounded-md border border-border/50 p-2">
-                                      <Badge variant="outline" className="font-mono bg-cyan-50 text-cyan-700 border-cyan-200 shrink-0">
+                                      <Badge variant="outline" className="font-mono bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 shrink-0">
                                         {v.version}
                                       </Badge>
                                       <div className="min-w-0 flex-1">
@@ -1295,7 +1292,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
           <Button
             size="sm"
             variant="outline"
-            className="border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
             onClick={() => toast({ title: 'Manage revisions', description: 'PCB revision manager will open here.' })}
           >
             <Cog className="h-3.5 w-3.5" />
@@ -1304,7 +1301,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
         }
       />
 
-      <Card className="border-cyan-100/70">
+      <Card className="border-cyan-100/70 dark:border-cyan-900/40">
         <CardContent className="pt-4">
           {pcbs.length === 0 ? (
             <EmptyState icon={Layers} title="No PCB projects yet" description="Physical PCB products with layer/color/dimension specs will appear here." />
@@ -1326,10 +1323,10 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
                 </thead>
                 <tbody>
                   {pcbs.map((p) => (
-                    <tr key={p.id} className="border-b border-border/40 hover:bg-cyan-50/30 transition-colors">
+                    <tr key={p.id} className="border-b border-border/40 hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20 transition-colors">
                       <td className="py-2.5 pr-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-slate-100">
+                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
                             {p.images?.[0]?.url ? (
                               <Image src={p.images[0].url} alt={p.name} fill className="object-cover" unoptimized />
                             ) : (
@@ -1347,7 +1344,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
                         </div>
                       </td>
                       <td className="py-2.5 px-3 text-center">
-                        <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 font-mono">
+                        <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 font-mono">
                           {p.pcbLayers ?? '—'}L
                         </Badge>
                       </td>
@@ -1367,16 +1364,16 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
                       <td className="py-2.5 px-3 text-right font-medium">{p.unlimited ? '∞' : p.stockAvailable}</td>
                       <td className="py-2.5 px-3">
                         {p.status === 'ACTIVE' ? (
-                          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Active</Badge>
+                          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800">Active</Badge>
                         ) : (
-                          <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">{p.status}</Badge>
+                          <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700">{p.status}</Badge>
                         )}
                       </td>
                       <td className="py-2.5 pl-3">
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 px-2 text-cyan-600 hover:bg-cyan-50"
+                          className="h-7 px-2 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
                           onClick={() => toast({ title: 'Manage revisions', description: p.name })}
                         >
                           Revisions
@@ -1451,14 +1448,14 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
     <div className="space-y-4">
       <SectionHeader icon={ShoppingCart} title="Orders" description={`${orders.length} total orders`} />
 
-      <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white p-1 w-fit">
+      <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white dark:bg-slate-900 p-1 w-fit">
         {filters.map((f) => (
           <button
             key={f.id}
             onClick={() => setFilter(f.id)}
             className={cn(
               'rounded-md px-3 py-1 text-xs font-medium transition-colors',
-              filter === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 hover:text-cyan-700',
+              filter === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
             )}
           >
             {f.label}
@@ -1508,7 +1505,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                       <div className="space-y-1.5">
                         {o.items?.map((it: any) => (
                           <div key={it.id} className="flex items-center gap-2.5">
-                            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded bg-slate-100">
+                            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded bg-muted">
                               {it.imageUrl ? (
                                 <Image src={it.imageUrl} alt={it.name} fill className="object-cover" unoptimized />
                               ) : (
@@ -1521,14 +1518,14 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                               <span className="font-medium text-foreground">{it.name}</span>
                               <span className="text-muted-foreground"> × {it.quantity}</span>
                             </p>
-                            <p className="text-xs font-medium text-cyan-700">{formatVND(it.lineTotal ?? it.unitPrice * it.quantity)}</p>
+                            <p className="text-xs font-medium text-cyan-700 dark:text-cyan-400">{formatVND(it.lineTotal ?? it.unitPrice * it.quantity)}</p>
                           </div>
                         ))}
                       </div>
 
                       {/* Shipping address */}
                       {address && (
-                        <div className="rounded-lg border border-border/60 bg-slate-50/50 p-2.5">
+                        <div className="rounded-lg border border-border/60 bg-slate-50/50 dark:bg-slate-800/50 p-2.5">
                           <p className="text-xs font-semibold text-foreground mb-1 flex items-center gap-1.5">
                             <Truck className="h-3.5 w-3.5 text-cyan-600" />
                             Shipping Address
@@ -1543,8 +1540,8 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
 
                       {/* Tracking */}
                       {o.status === 'SHIPPING' && (
-                        <div className="rounded-lg border border-cyan-100 bg-cyan-50/50 p-2.5">
-                          <p className="text-xs font-semibold text-cyan-700 flex items-center gap-1.5">
+                        <div className="rounded-lg border border-cyan-100 dark:border-cyan-800 bg-cyan-50/50 dark:bg-cyan-950/40 p-2.5">
+                          <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5">
                             <Truck className="h-3.5 w-3.5" />
                             Tracking
                           </p>
@@ -1565,15 +1562,15 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                                   <div
                                     className={cn(
                                       'h-2.5 w-2.5 rounded-full',
-                                      done ? 'bg-cyan-500' : current ? 'bg-cyan-500 ring-4 ring-cyan-100' : 'bg-slate-200',
+                                      done ? 'bg-cyan-500' : current ? 'bg-cyan-500 ring-4 ring-cyan-100 dark:ring-cyan-900/40' : 'bg-slate-200 dark:bg-slate-700',
                                     )}
                                   />
-                                  <span className={cn('text-[10px]', done || current ? 'text-cyan-700 font-medium' : 'text-muted-foreground')}>
+                                  <span className={cn('text-[10px]', done || current ? 'text-cyan-700 dark:text-cyan-400 font-medium' : 'text-muted-foreground')}>
                                     {step.label}
                                   </span>
                                 </div>
                                 {i < ORDER_TIMELINE_STEPS.length - 1 && (
-                                  <div className={cn('h-0.5 flex-1 -mt-3.5', done ? 'bg-cyan-500' : 'bg-slate-200')} />
+                                  <div className={cn('h-0.5 flex-1 -mt-3.5', done ? 'bg-cyan-500' : 'bg-slate-200 dark:bg-slate-700')} />
                                 )}
                               </div>
                             );
@@ -1597,7 +1594,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-cyan-200 text-cyan-700 hover:bg-cyan-50 h-7"
+                            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50 h-7"
                             onClick={() => toast({ title: 'Order packed', description: o.code })}
                           >
                             <Package className="h-3.5 w-3.5" />
@@ -1608,7 +1605,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-cyan-200 text-cyan-700 hover:bg-cyan-50 h-7"
+                            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50 h-7"
                             onClick={() => toast({ title: 'Order shipped', description: o.code })}
                           >
                             <Truck className="h-3.5 w-3.5" />
@@ -1652,14 +1649,14 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
     <div className="space-y-4">
       <SectionHeader icon={Truck} title="Shipping" description={`${shipments.length} active shipments`} />
 
-      <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white p-1 w-fit">
+      <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white dark:bg-slate-900 p-1 w-fit">
         {filters.map((f) => (
           <button
             key={f.id}
             onClick={() => setFilter(f.id)}
             className={cn(
               'rounded-md px-3 py-1 text-xs font-medium transition-colors',
-              filter === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 hover:text-cyan-700',
+              filter === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
             )}
           >
             {f.label}
@@ -1685,10 +1682,10 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
                   </div>
                   <StatusPill status={s.status} config={SHIPMENT_STATUS_CONFIG} />
                 </div>
-                <div className="rounded-lg border border-border/60 bg-slate-50/50 p-2.5 space-y-1.5">
+                <div className="rounded-lg border border-border/60 bg-slate-50/50 dark:bg-slate-800/50 p-2.5 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Provider</span>
-                    <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 font-mono">{s.provider}</Badge>
+                    <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 font-mono">{s.provider}</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Tracking #</span>
@@ -1706,7 +1703,7 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="w-full border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+                  className="w-full border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
                   onClick={() => toast({ title: 'Track shipment', description: `Opening tracker for ${s.trackingNumber}` })}
                 >
                   <Truck className="h-3.5 w-3.5" />
@@ -1750,14 +1747,14 @@ function RevenueTab({ data }: { data: any }) {
         title="Revenue"
         description="Revenue, commission and settlement overview"
         action={
-          <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white p-1">
+          <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-white dark:bg-slate-900 p-1">
             {periods.map((p) => (
               <button
                 key={p.id}
                 onClick={() => setPeriod(p.id)}
                 className={cn(
                   'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                  period === p.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 hover:text-cyan-700',
+                  period === p.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
                 )}
               >
                 {p.label}
@@ -1775,7 +1772,7 @@ function RevenueTab({ data }: { data: any }) {
       </div>
 
       {/* Revenue line chart */}
-      <Card className="border-cyan-100/70">
+      <Card className="border-cyan-100/70 dark:border-cyan-900/40">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-cyan-600" />
@@ -1800,7 +1797,7 @@ function RevenueTab({ data }: { data: any }) {
       </Card>
 
       {/* Settlement note */}
-      <Card className="border-cyan-100/70 bg-gradient-to-r from-cyan-50/40 to-teal-50/40">
+      <Card className="border-cyan-100/70 dark:border-cyan-900/40 bg-gradient-to-r from-cyan-50/40 to-teal-50/40 dark:from-cyan-950/30 dark:to-teal-950/30">
         <CardContent className="pt-4 flex items-start gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shrink-0">
             <Clock className="h-5 w-5" />
@@ -1808,7 +1805,7 @@ function RevenueTab({ data }: { data: any }) {
           <div className="space-y-1">
             <p className="text-sm font-semibold text-foreground">Settlement Period</p>
             <p className="text-sm text-muted-foreground">
-              Funds become <span className="font-semibold text-cyan-700">available for withdrawal 7 days</span> after order completion.
+              Funds become <span className="font-semibold text-cyan-700 dark:text-cyan-400">available for withdrawal 7 days</span> after order completion.
               Pending balance reflects recent sales awaiting settlement.
             </p>
           </div>
@@ -1902,7 +1899,7 @@ function WalletTab({
                           {t.amount >= 0 ? '+' : ''}{formatVND(t.amount)}
                         </td>
                         <td className="py-2.5 px-3">
-                          <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">{t.balanceType ?? '—'}</Badge>
+                          <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700">{t.balanceType ?? '—'}</Badge>
                         </td>
                         <td className="py-2.5 px-3 text-muted-foreground text-xs">{t.note ?? '—'}</td>
                         <td className="py-2.5 pl-3 text-right text-xs text-muted-foreground">{formatDate(t.createdAt)}</td>
@@ -1982,7 +1979,7 @@ function WithdrawalsTab({
                     <StatusPill status={w.status} config={WITHDRAWAL_STATUS_CONFIG} />
                   </div>
                   {bank && (
-                    <div className="mt-3 rounded-lg border border-border/60 bg-slate-50/50 p-2.5 space-y-1 text-xs">
+                    <div className="mt-3 rounded-lg border border-border/60 bg-slate-50/50 dark:bg-slate-800/50 p-2.5 space-y-1 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">Bank</span>
                         <span className="font-medium text-foreground">{bank.bankName ?? '—'}</span>
@@ -2044,11 +2041,11 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
       ) : (
         <div className="space-y-3">
           {items.map((r) => (
-            <Card key={r.id} className="border-cyan-100/70">
+            <Card key={r.id} className="border-border/60">
               <CardContent className="pt-4 space-y-3">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-slate-100">
+                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted">
                       {r.user?.avatarUrl ? (
                         <Image src={r.user.avatarUrl} alt={r.user.name ?? 'User'} fill className="object-cover" unoptimized />
                       ) : (
@@ -2060,9 +2057,9 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
                     <div>
                       <p className="text-sm font-semibold text-foreground">{r.user?.name ?? 'Anonymous'}</p>
                       <p className="text-xs text-muted-foreground">
-                        on <span className="font-medium text-cyan-700">{r.product?.name ?? r.productName ?? 'Product'}</span>
+                        on <span className="font-medium text-cyan-700 dark:text-cyan-400">{r.product?.name ?? r.productName ?? 'Product'}</span>
                         {r.verifiedPurchase && (
-                          <Badge variant="outline" className="ml-1.5 bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px]">
+                          <Badge variant="outline" className="ml-1.5 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 text-[10px]">
                             <CheckCircle2 className="h-2.5 w-2.5 mr-1" />
                             Verified
                           </Badge>
@@ -2078,8 +2075,8 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
                 <p className="text-sm text-foreground">{r.comment}</p>
 
                 {r.sellerReply ? (
-                  <div className="rounded-lg border border-cyan-100 bg-cyan-50/40 p-2.5">
-                    <p className="text-xs font-semibold text-cyan-700 flex items-center gap-1.5 mb-1">
+                  <div className="rounded-lg border border-cyan-100 dark:border-cyan-800 bg-cyan-50/40 dark:bg-cyan-950/40 p-2.5">
+                    <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5 mb-1">
                       <MessageSquare className="h-3.5 w-3.5" />
                       Your reply
                     </p>
@@ -2281,7 +2278,7 @@ function AnalyticsTab({ data, products }: { data: any; products: any[] }) {
                   <span className="h-2 w-2 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
                   <span className="text-xs font-medium text-foreground">{s.source}</span>
                 </div>
-                <p className="text-sm font-bold text-cyan-700 mt-0.5">{s.visits.toLocaleString('vi-VN')}</p>
+                <p className="text-sm font-bold text-cyan-700 dark:text-cyan-400 mt-0.5">{s.visits.toLocaleString('vi-VN')}</p>
                 <p className="text-[10px] text-muted-foreground">{s.pct}%</p>
               </div>
             ))}
@@ -2386,12 +2383,12 @@ function SettingsTab({ toast }: { toast: any }) {
           <CardTitle className="text-base">Preview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="relative h-32 w-full overflow-hidden rounded-xl bg-gradient-to-r from-cyan-100 via-white to-teal-100">
+          <div className="relative h-32 w-full overflow-hidden rounded-xl bg-gradient-to-r from-cyan-100 via-white to-teal-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
             {form.bannerUrl && (
               <Image src={form.bannerUrl} alt="Banner" fill className="object-cover opacity-30" unoptimized />
             )}
             <div className="absolute inset-x-0 bottom-0 flex items-end gap-3 p-3">
-              <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white shadow-md bg-white">
+              <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-border shadow-md bg-card dark:bg-slate-900">
                 {form.logoUrl && <Image src={form.logoUrl} alt="Logo" fill className="object-cover" unoptimized />}
               </div>
               <div className="flex-1 min-w-0 pb-1">
@@ -2508,9 +2505,9 @@ function WithdrawalDialog({
 
         <div className="space-y-4">
           {/* Available balance hint */}
-          <div className="rounded-lg border border-cyan-100 bg-cyan-50/50 p-3">
+          <div className="rounded-lg border border-cyan-100 dark:border-cyan-800 bg-cyan-50/50 dark:bg-cyan-950/40 p-3">
             <p className="text-xs text-muted-foreground">Available balance</p>
-            <p className="text-xl font-bold text-cyan-700">{formatVND(available)}</p>
+            <p className="text-xl font-bold text-cyan-700 dark:text-cyan-400">{formatVND(available)}</p>
           </div>
 
           <div className="space-y-1.5">
@@ -2526,7 +2523,7 @@ function WithdrawalDialog({
             />
             {amountNum > 0 && (
               <p className="text-xs text-muted-foreground">
-                You will receive <span className="font-semibold text-cyan-700">{formatVND(amountNum)}</span>
+                You will receive <span className="font-semibold text-cyan-700 dark:text-cyan-400">{formatVND(amountNum)}</span>
               </p>
             )}
           </div>
@@ -2580,7 +2577,7 @@ function SidebarButton({
         'w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors text-left',
         active
           ? 'bg-cyan-500 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]'
-          : 'text-slate-600 hover:bg-cyan-50 hover:text-cyan-700',
+          : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
       )}
     >
       <tab.icon className={cn('h-4 w-4 shrink-0', active ? 'text-white' : 'text-cyan-600')} />
@@ -2603,7 +2600,7 @@ function MobilePill({
       onClick={onClick}
       className={cn(
         'flex-none flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium border transition-colors',
-        active ? 'bg-cyan-500 text-white border-cyan-500' : 'bg-white text-muted-foreground border-border/60',
+        active ? 'bg-cyan-500 text-white border-cyan-500' : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60',
       )}
     >
       <tab.icon className="h-3.5 w-3.5" />
@@ -2687,18 +2684,18 @@ export function SellerCenter() {
             }}
           />
           <div className="relative flex flex-wrap items-center gap-4">
-            <div className="relative h-14 w-14 sm:h-16 sm:w-16 overflow-hidden rounded-2xl border-4 border-white shadow-md bg-white shrink-0">
+            <div className="relative h-14 w-14 sm:h-16 sm:w-16 overflow-hidden rounded-2xl border-4 border-border shadow-md bg-card dark:bg-slate-900 shrink-0">
               <Image src={SHOP_INFO.logoUrl} alt={SHOP_INFO.name} fill className="object-cover" unoptimized />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-cyan-600 uppercase tracking-wide flex items-center gap-1.5">
+              <p className="text-xs font-medium text-cyan-600 dark:text-cyan-400 uppercase tracking-wide flex items-center gap-1.5">
                 <Store className="h-3 w-3" />
                 Seller Center
               </p>
               <div className="flex flex-wrap items-center gap-2 mt-0.5">
                 <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{SHOP_INFO.name}</h1>
                 {SHOP_INFO.verified && <VerifiedBadge />}
-                <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 font-mono">
+                <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 font-mono">
                   {(SHOP_INFO.commissionRate * 100).toFixed(0)}% commission
                 </Badge>
               </div>
@@ -2715,7 +2712,7 @@ export function SellerCenter() {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="border-cyan-200 text-cyan-700 hover:bg-cyan-50" onClick={() => goShop(SHOP_INFO.slug)}>
+              <Button variant="outline" size="sm" className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50" onClick={() => goShop(SHOP_INFO.slug)}>
                 <Eye className="h-3.5 w-3.5" />
                 View shop
               </Button>
@@ -2753,8 +2750,8 @@ export function SellerCenter() {
                 </div>
               ))}
 
-              <div className="mt-2 rounded-xl border border-cyan-100 bg-cyan-50/60 p-4">
-                <p className="text-xs font-semibold text-cyan-700 flex items-center gap-1.5">
+              <div className="mt-2 rounded-xl border border-cyan-100 dark:border-cyan-800/60 bg-cyan-50/60 dark:bg-cyan-950/30 p-4">
+                <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5">
                   <Banknote className="h-3.5 w-3.5" />
                   Settlement Policy
                 </p>

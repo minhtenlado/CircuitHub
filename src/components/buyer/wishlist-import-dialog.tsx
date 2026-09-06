@@ -151,14 +151,14 @@ export function WishlistImportDialog({ open, onOpenChange, slugs }: WishlistImpo
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{p.name}</p>
                       <p className="text-xs text-muted-foreground">{p.shop?.name}</p>
-                      <p className="text-sm font-bold text-cyan-700">{formatVND(p.price)}</p>
+                      <p className="text-sm font-bold text-cyan-700 dark:text-cyan-400">{formatVND(p.price)}</p>
                     </div>
                     <button
                       onClick={() => importOne(p.id, p)}
                       className={`flex-shrink-0 p-2 rounded-full transition-colors ${
                         inWishlist
-                          ? 'bg-rose-100 text-rose-500'
-                          : 'bg-slate-100 text-slate-400 hover:text-rose-500 hover:bg-rose-50'
+                          ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-500 dark:text-rose-400'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40'
                       }`}
                       aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
                     >

@@ -133,7 +133,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
         <div className="flex flex-col gap-1">
           <button
             onClick={() => goShop(shop.slug)}
-            className="text-left text-base font-semibold leading-tight text-foreground hover:text-cyan-700 transition-colors truncate"
+            className="text-left text-base font-semibold leading-tight text-foreground hover:text-cyan-700 dark:hover:text-cyan-400 transition-colors truncate"
             title={shop.name}
           >
             {shop.name}

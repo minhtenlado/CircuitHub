@@ -160,7 +160,7 @@ export function Footer() {
                   <item.icon className="h-4 w-4" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-semibold text-foreground group-hover:text-cyan-700 transition-colors">
+                  <span className="block text-sm font-semibold text-foreground group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors">
                     {item.title}
                   </span>
                   <span className="block truncate text-[11px] text-muted-foreground">
@@ -178,7 +178,7 @@ export function Footer() {
               <Logo size="md" />
 
               {/* Tagline */}
-              <p className="mt-4 font-mono text-[13px] font-medium tracking-tight text-cyan-700/90">
+              <p className="mt-4 font-mono text-[13px] font-medium tracking-tight text-cyan-700/90 dark:text-cyan-400/90">
                 {brand.tagline}
               </p>
 

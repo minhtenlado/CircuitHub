@@ -130,7 +130,7 @@ export function ProductModerationDialog({ open, onOpenChange, product, action }:
         </DialogHeader>
 
         {/* Product summary */}
-        <div className="rounded-lg border border-border/60 p-3 bg-slate-50/50 flex items-center gap-3">
+        <div className="rounded-lg border border-border/60 p-3 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
           <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted border border-border/40">
             {product.images?.[0]?.url && (
               <img src={product.images[0].url} alt={product.name} className="h-full w-full object-cover" />

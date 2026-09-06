@@ -205,13 +205,13 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
               <div key={s.id} className="flex items-center gap-2">
                 <div className={cn(
                   'h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold border-2 transition-colors',
-                  step === s.id ? 'border-cyan-500 bg-cyan-50 text-cyan-700' :
-                  i < currentIdx ? 'border-emerald-500 bg-emerald-50 text-emerald-600' :
+                  step === s.id ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300' :
+                  i < currentIdx ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' :
                   'border-border bg-background text-muted-foreground',
                 )}>
                   {i < currentIdx ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
                 </div>
-                <span className={cn('text-xs font-medium hidden sm:inline', step === s.id ? 'text-cyan-700' : 'text-muted-foreground')}>
+                <span className={cn('text-xs font-medium hidden sm:inline', step === s.id ? 'text-cyan-700 dark:text-cyan-400' : 'text-muted-foreground')}>
                   {s.label}
                 </span>
                 {i < steps.length - 1 && <div className={cn('h-0.5 w-6 sm:w-10', i < currentIdx ? 'bg-emerald-300' : 'bg-border')} />}
@@ -345,7 +345,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
             <div className="space-y-4">
               {productType === 'PHYSICAL' && (
                 <>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-cyan-700">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-cyan-700 dark:text-cyan-400">
                     <Layers className="h-4 w-4" /> PCB Specifications
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -460,14 +460,14 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
           {/* Step 4: Review */}
           {step === 'review' && (
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-cyan-700">
+              <div className="flex items-center gap-2 text-sm font-semibold text-cyan-700 dark:text-cyan-400">
                 <CheckCircle2 className="h-4 w-4" /> Review &amp; Confirm
               </div>
               <div className="rounded-xl border border-border/60 divide-y divide-border/40">
-                <ReviewRow label="Type" value={<Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200">{productType}</Badge>} />
+                <ReviewRow label="Type" value={<Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">{productType}</Badge>} />
                 <ReviewRow label="Name" value={name || '—'} />
                 <ReviewRow label="Category" value={categories.find((c) => c.id === categoryId)?.name ?? '—'} />
-                <ReviewRow label="Price" value={<span className="font-bold text-cyan-700">{price ? formatVND(parseInt(price, 10)) : '—'}</span>} />
+                <ReviewRow label="Price" value={<span className="font-bold text-cyan-700 dark:text-cyan-400">{price ? formatVND(parseInt(price, 10)) : '—'}</span>} />
                 {compareAtPrice && <ReviewRow label="Compare-at" value={<span className="line-through text-muted-foreground">{formatVND(parseInt(compareAtPrice, 10))}</span>} />}
                 {brand && <ReviewRow label="Brand" value={brand} />}
                 {productType !== 'DIGITAL' && <ReviewRow label="Stock" value={unlimited ? 'Unlimited' : (stock || '0')} />}

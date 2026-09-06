@@ -43,12 +43,12 @@ interface SpecRow {
 
 const SPEC_ROWS: SpecRow[] = [
   // General
-  { label: 'Price', icon: Award, section: 'general', getter: (i) => <span className="font-bold text-cyan-700">{formatVND(i.price)}</span> },
+  { label: 'Price', icon: Award, section: 'general', getter: (i) => <span className="font-bold text-cyan-700 dark:text-cyan-400">{formatVND(i.price)}</span> },
   { label: 'Type', section: 'general', getter: (i) => <ProductTypeBadge type={i.productType} className="text-[10px]" /> },
   { label: 'Brand', section: 'general', getter: (i) => i.brand || '—' },
   { label: 'Rating', section: 'general', getter: (i) => <Rating value={i.rating} count={i.ratingCount} size="xs" /> },
   { label: 'Seller', section: 'general', getter: (i) => <span className="flex items-center gap-1">{i.shopName}{i.shopVerified && <span className="text-cyan-500 text-xs">✓</span>}</span> },
-  { label: 'Stock', section: 'general', getter: (i) => i.unlimited ? <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 text-[10px]">Unlimited</Badge> : <span className="tabular-nums">{i.stockAvailable ?? 0}</span> },
+  { label: 'Stock', section: 'general', getter: (i) => i.unlimited ? <Badge variant="outline" className="bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800 text-[10px]">Unlimited</Badge> : <span className="tabular-nums">{i.stockAvailable ?? 0}</span> },
   { label: 'Sold', section: 'general', getter: (i) => <span className="tabular-nums">{(i.soldCount ?? 0).toLocaleString('vi-VN')}</span> },
   // PCB
   { label: 'Layers', icon: Layers, section: 'pcb', getter: (i) => i.pcbLayers ? `${i.pcbLayers}L` : '—' },
@@ -95,11 +95,11 @@ export function CompareDrawer() {
         side="right"
         className="w-full sm:max-w-5xl p-0 flex flex-col gap-0"
       >
-        <SheetHeader className="px-5 py-4 border-b border-border/60 bg-gradient-to-br from-cyan-50/60 to-transparent">
+        <SheetHeader className="px-5 py-4 border-b border-border/60 bg-gradient-to-br from-cyan-50/60 dark:from-cyan-950/40 to-transparent">
           <SheetTitle className="flex items-center gap-2 text-base">
             <GitCompare className="h-4 w-4 text-cyan-600" />
             Product Comparison
-            <Badge variant="secondary" className="ml-1 bg-cyan-100 text-cyan-700">
+            <Badge variant="secondary" className="ml-1 bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300">
               {items.length}/4
             </Badge>
             {items.length > 0 && (
@@ -148,7 +148,7 @@ export function CompareDrawer() {
                       )}
                       <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); remove(item.productId); }}
-                        className="absolute top-1.5 right-1.5 p-1 bg-white/80 backdrop-blur rounded-full text-slate-600 hover:text-red-500 transition-colors"
+                        className="absolute top-1.5 right-1.5 p-1 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-red-500 transition-colors"
                         aria-label="Remove from comparison"
                       >
                         <X className="h-3 w-3" />
@@ -156,7 +156,7 @@ export function CompareDrawer() {
                     </button>
                     <button
                       onClick={() => { close(); goProduct(item.slug); }}
-                      className="text-sm font-semibold text-left line-clamp-2 hover:text-cyan-700 transition-colors"
+                      className="text-sm font-semibold text-left line-clamp-2 hover:text-cyan-700 dark:hover:text-cyan-400 transition-colors"
                     >
                       {item.name}
                     </button>
@@ -174,8 +174,8 @@ export function CompareDrawer() {
               return (
                 <div key={section.id} className="border-b border-border/40">
                   {/* Section header */}
-                  <div className="flex items-center gap-2 px-4 py-2 bg-slate-50/60">
-                    <SectionIcon className="h-3.5 w-3.5 text-cyan-600" />
+                  <div className="flex items-center gap-2 px-4 py-2 bg-slate-50/60 dark:bg-slate-800/60">
+                    <SectionIcon className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
                     <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{section.label}</span>
                   </div>
                   {/* Rows */}
@@ -184,7 +184,7 @@ export function CompareDrawer() {
                       key={row.label}
                       className={cn(
                         'grid gap-0 px-4 py-2.5 items-center border-t border-border/20',
-                        idx % 2 === 1 && 'bg-slate-50/30',
+                        idx % 2 === 1 && 'bg-slate-50/30 dark:bg-slate-800/30',
                       )}
                       style={{ gridTemplateColumns: `140px repeat(${items.length}, minmax(180px, 1fr))` }}
                     >

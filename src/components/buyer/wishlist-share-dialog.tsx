@@ -97,7 +97,7 @@ export function WishlistShareDialog({ open, onOpenChange }: WishlistShareDialogP
                 <Input
                   readOnly
                   value={shareUrl}
-                  className="pl-8 pr-8 text-xs font-mono bg-slate-50"
+                  className="pl-8 pr-8 text-xs font-mono bg-slate-50 dark:bg-slate-900"
                   onClick={(e) => e.currentTarget.select()}
                 />
               </div>
@@ -115,7 +115,7 @@ export function WishlistShareDialog({ open, onOpenChange }: WishlistShareDialogP
             <Button
               variant="outline"
               onClick={shareViaWhatsApp}
-              className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+              className="border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
             >
               <MessageCircle className="h-4 w-4 mr-2" />
               WhatsApp
@@ -123,7 +123,7 @@ export function WishlistShareDialog({ open, onOpenChange }: WishlistShareDialogP
             <Button
               variant="outline"
               onClick={shareViaEmail}
-              className="border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+              className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
             >
               <Mail className="h-4 w-4 mr-2" />
               Email

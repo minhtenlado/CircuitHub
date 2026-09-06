@@ -163,13 +163,12 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
         <div>
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-cyan-500" />
-            Frequently Bought Together
+            {t('productDetail.frequentlyBoughtTogether')}
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Customers who bought this item also bought</p>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-cyan-200/60 bg-gradient-to-br from-cyan-50/40 via-white to-teal-50/30 p-5 sm:p-6">
+      <div className="rounded-2xl border border-cyan-200/60 dark:border-slate-800 bg-gradient-to-br from-cyan-50/40 via-card to-teal-50/30 dark:from-slate-900/90 dark:via-slate-900 dark:to-cyan-950/30 p-5 sm:p-6">
         <div className="grid lg:grid-cols-[1fr_300px] gap-6">
           {/* Products visual */}
           <div className="flex items-center gap-3 flex-wrap">
@@ -187,22 +186,22 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
                   >
                     <div className="aspect-square bg-muted relative">
                       {item.images?.[0]?.url && (
-                        <img src={item.images[0].url} alt={item.name} className="absolute inset-0 w-full h-full object-cover" />
+                        <Image src={item.images[0].url} alt={item.name} fill className="object-cover" sizes="120px" />
                       )}
                       {isMain && (
-                        <span className="absolute top-1 left-1 text-[9px] font-bold bg-cyan-500 text-white px-1.5 py-0.5 rounded">
-                          THIS ITEM
+                        <span className="absolute top-1 left-1 bg-cyan-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                          Item
                         </span>
                       )}
-                      <div className={`absolute top-1 right-1 h-4 w-4 rounded-full border-2 flex items-center justify-center ${
-                        isChecked ? 'bg-cyan-500 border-cyan-500' : 'bg-card dark:bg-slate-900 border-border'
+                      <div className={`absolute top-1 right-1 h-5 w-5 rounded-md flex items-center justify-center ${
+                        isChecked ? 'bg-cyan-500' : 'bg-black/30 border border-white/50'
                       }`}>
                         {isChecked && <CheckCircle2 className="h-3 w-3 text-white" />}
                       </div>
                     </div>
                     <div className="p-2 bg-card dark:bg-slate-900">
                       <p className="text-xs font-medium line-clamp-2 leading-tight">{item.name}</p>
-                      <p className="text-xs font-bold text-cyan-700 mt-1">{formatVND(item.price)}</p>
+                      <p className="text-xs font-bold text-cyan-600 dark:text-cyan-400 mt-1">{formatVND(item.price)}</p>
                     </div>
                   </button>
                 </div>
@@ -214,19 +213,19 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
           <div className="rounded-xl bg-card dark:bg-slate-900 border border-border/60 p-4 flex flex-col gap-3 justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-                Bundle Price ({checkedItems.length} items)
+                {t('productDetail.frequentlyBoughtTogether')} ({checkedItems.length})
               </p>
               <div className="space-y-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-cyan-700">{formatVND(bundleTotal)}</span>
+                  <span className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{formatVND(bundleTotal)}</span>
                   {savings > 0 && (
                     <span className="text-sm text-muted-foreground line-through">{formatVND(bundleOriginal)}</span>
                   )}
                 </div>
                 {savings > 0 && (
-                  <p className="text-xs text-emerald-600 font-medium flex items-center gap-1">
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
                     <Sparkles className="h-3 w-3" />
-                    You save {formatVND(savings)}
+                    {t('productDetail.frequentlyBoughtTogether')} - {formatVND(savings)}
                   </p>
                 )}
               </div>
@@ -236,7 +235,7 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
               className="w-full bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white"
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
-              Add Bundle to Cart
+              {t('productDetail.addToCart')}
             </Button>
           </div>
         </div>
@@ -373,7 +372,7 @@ function ProductDetailContent({ product }: { product: any }) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-cyan-700 font-medium line-clamp-1">
+              <BreadcrumbPage className="text-cyan-700 dark:text-cyan-400 font-medium line-clamp-1">
                 {product.name}
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -475,8 +474,8 @@ function ProductDetailContent({ product }: { product: any }) {
             </div>
 
             {/* Price block */}
-            <div className="flex flex-wrap items-baseline gap-3 rounded-xl bg-cyan-50/60 border border-cyan-100 p-4">
-              <span className="text-3xl font-bold text-cyan-700 tracking-tight">
+            <div className="flex flex-wrap items-baseline gap-3 rounded-xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-800/60 p-4">
+              <span className="text-3xl font-bold text-cyan-700 dark:text-cyan-400 tracking-tight">
                 {formatVND(product.price)}
               </span>
               {product.compareAtPrice && product.compareAtPrice > product.price && (
@@ -487,7 +486,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   <Badge className="bg-gradient-to-r from-rose-500 to-orange-400 text-white border-0 font-semibold">
                     -{pct}%
                   </Badge>
-                  <span className="ml-auto text-sm text-emerald-700 font-medium">
+                  <span className="ml-auto text-sm text-emerald-700 dark:text-emerald-400 font-medium">
                     You save {formatVND(savings)}
                   </span>
                 </>
@@ -504,7 +503,7 @@ function ProductDetailContent({ product }: { product: any }) {
             {/* Seller row */}
             {product.shop && (
               <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/80 dark:bg-slate-900/80 p-3">
-                <div className="relative h-11 w-11 rounded-full overflow-hidden border border-cyan-100 bg-cyan-50">
+                <div className="relative h-11 w-11 rounded-full overflow-hidden border border-cyan-100 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/50">
                   {product.shop.logoUrl && (
                     <Image
                       src={product.shop.logoUrl}
@@ -519,7 +518,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => goShop(product.shop.slug)}
-                      className="font-semibold text-foreground hover:text-cyan-600 truncate"
+                      className="font-semibold text-foreground hover:text-cyan-600 dark:hover:text-cyan-400 truncate"
                     >
                       {product.shop.name}
                     </button>
@@ -534,7 +533,7 @@ function ProductDetailContent({ product }: { product: any }) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+                  className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
                   onClick={() => goShop(product.shop.slug)}
                 >
                   Visit Shop
@@ -550,7 +549,7 @@ function ProductDetailContent({ product }: { product: any }) {
                 <div className="flex items-center rounded-lg border border-border bg-card dark:bg-slate-900 overflow-hidden">
                   <button
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="flex h-9 w-9 items-center justify-center hover:bg-cyan-50 transition-colors text-muted-foreground hover:text-cyan-600"
+                    className="flex h-9 w-9 items-center justify-center hover:bg-cyan-50 dark:hover:bg-slate-800 transition-colors text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400"
                     aria-label="Decrease quantity"
                   >
                     <Minus className="h-4 w-4" />
@@ -564,7 +563,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   />
                   <button
                     onClick={() => setQty((q) => q + 1)}
-                    className="flex h-9 w-9 items-center justify-center hover:bg-cyan-50 transition-colors text-muted-foreground hover:text-cyan-600"
+                    className="flex h-9 w-9 items-center justify-center hover:bg-cyan-50 dark:hover:bg-slate-800 transition-colors text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400"
                     aria-label="Increase quantity"
                   >
                     <Plus className="h-4 w-4" />
@@ -577,19 +576,19 @@ function ProductDetailContent({ product }: { product: any }) {
             {/* Stock + shipping estimate */}
             <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {!isPhysical && (
-                <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 gap-1">
+                <Badge variant="outline" className="bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800 gap-1">
                   <Download className="h-3 w-3" />
                   Digital delivery
                 </Badge>
               )}
               {isPhysical && (
-                <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1">
+                <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 gap-1">
                   <Truck className="h-3 w-3" />
                   Ships in {product.pcbLeadTimeDays ?? 3}–{(product.pcbLeadTimeDays ?? 3) + 2} days
                 </Badge>
               )}
               {isService && (
-                <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 gap-1">
+                <Badge variant="outline" className="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 gap-1">
                   <Clock className="h-3 w-3" />
                   Service · {product.serviceDurationDays ?? 7} days
                 </Badge>
@@ -636,7 +635,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   </div>
                 </label>
                 <Collapsible>
-                  <CollapsibleTrigger className="flex items-center gap-1 text-xs text-cyan-700 hover:text-cyan-800 font-medium">
+                  <CollapsibleTrigger className="flex items-center gap-1 text-xs text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 font-medium">
                     <ChevronRight className="h-3 w-3 [&[data-state=open]>svg]:rotate-90" />
                     View license terms
                   </CollapsibleTrigger>
@@ -659,12 +658,12 @@ function ProductDetailContent({ product }: { product: any }) {
 
             {/* Open Source badge for free digital products */}
             {isDigital && product.licenseType === 'OPEN_SOURCE' && product.price === 0 && (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 space-y-2">
+              <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/30 p-4 space-y-2">
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-400 px-2.5 py-0.5 text-xs font-bold text-white">
                     FREE
                   </span>
-                  <span className="text-sm font-semibold text-emerald-700">Open Source Project</span>
+                  <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">Open Source Project</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   This project is free and open source. You can download, modify, and share it freely.
@@ -688,7 +687,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   }}
                 >
                   <Download className="h-5 w-5" />
-                  Download Free
+                  {t('productDetail.downloadFree')}
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
                   {t('productDetail.noReg')}
@@ -703,16 +702,16 @@ function ProductDetailContent({ product }: { product: any }) {
                   onClick={() => handleAddToCart(false)}
                 >
                   <ShoppingBag className="h-4 w-4" />
-                  Add to Cart
+                  {t('productDetail.addToCart')}
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-cyan-300 text-cyan-700 hover:bg-cyan-50"
+                  className="border-cyan-300 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
                   disabled={isDigital && !licenseAccepted}
                   onClick={() => handleAddToCart(true)}
                 >
-                  Buy Now
+                  {t('productDetail.buyNow')}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
@@ -725,21 +724,23 @@ function ProductDetailContent({ product }: { product: any }) {
                 size="sm"
                 className={cn(
                   'border-border',
-                  inWishlist ? 'text-rose-600 border-rose-200 bg-rose-50 hover:bg-rose-100' : 'hover:bg-cyan-50 hover:border-cyan-200',
+                  inWishlist
+                    ? 'text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50'
+                    : 'hover:bg-cyan-50 dark:hover:bg-slate-800 hover:border-cyan-200 dark:hover:border-slate-700',
                 )}
                 onClick={handleWishlistToggle}
               >
                 <Heart className={cn('h-4 w-4', inWishlist && 'fill-rose-500')} />
-                {inWishlist ? 'In Wishlist' : 'Add to Wishlist'}
+                {inWishlist ? t('productDetail.inWishlist') : t('productDetail.addWishlist')}
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="border-border hover:bg-cyan-50 hover:border-cyan-200"
+                className="border-border hover:bg-cyan-50 dark:hover:bg-slate-800 hover:border-cyan-200 dark:hover:border-slate-700"
                 onClick={handleCompare}
               >
                 <GitCompare className="h-4 w-4" />
-                Compare
+                {t('productDetail.compare')}
               </Button>
             </div>
           </div>
@@ -804,21 +805,21 @@ function DigitalQuickInfo({ product }: { product: any }) {
   ];
 
   return (
-    <div className="rounded-xl border border-teal-200 bg-teal-50/40 p-4">
-      <p className="text-xs font-semibold uppercase tracking-wider text-teal-700 mb-3 flex items-center gap-1.5">
+    <div className="rounded-xl border border-teal-200 dark:border-teal-800/60 bg-teal-50/40 dark:bg-teal-950/30 p-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-300 mb-3 flex items-center gap-1.5">
         <FileCode className="h-3.5 w-3.5" />
-        Digital product details
+        {t('productDetail.digitalDetails')}
       </p>
       <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-sm">
         {items.map((it) => (
           <div key={it.label} className="flex items-center gap-2">
-            <it.icon className="h-3.5 w-3.5 text-teal-600 shrink-0" />
+            <it.icon className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{it.label}:</dt>
             <dd className="font-medium text-foreground truncate">{it.value ?? '—'}</dd>
           </div>
         ))}
       </dl>
-      <p className="mt-3 pt-3 border-t border-teal-200/60 text-xs text-teal-700 flex items-center gap-1.5">
+      <p className="mt-3 pt-3 border-t border-teal-200/60 dark:border-teal-800/60 text-xs text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
         <ShieldCheck className="h-3.5 w-3.5" />
         Secure download with license verification
       </p>
@@ -850,10 +851,10 @@ function PcbQuickSpecs({ product }: { product: any }) {
   if (filtered.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-cyan-200 bg-cyan-50/40 p-4">
-      <p className="text-xs font-semibold uppercase tracking-wider text-cyan-700 mb-3 flex items-center gap-1.5">
+    <div className="rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50/40 dark:bg-cyan-950/30 p-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-cyan-700 dark:text-cyan-400 mb-3 flex items-center gap-1.5">
         <Layers className="h-3.5 w-3.5" />
-        Technical Specifications
+        {t('productDetail.techSpecs')}
       </p>
       <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm">
         {filtered.map((s) => (
@@ -873,33 +874,33 @@ function PcbQuickSpecs({ product }: { product: any }) {
 function ServiceQuickInfo({ product }: { product: any }) {
   const { t } = useI18n();
   return (
-    <div className="rounded-xl border border-amber-200 bg-amber-50/40 p-4 space-y-3">
-      <p className="text-xs font-semibold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
+    <div className="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50/40 dark:bg-amber-950/30 p-4 space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
         <Briefcase className="h-3.5 w-3.5" />
-        Service details
+        {t('productDetail.serviceDetails')}
       </p>
       <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-sm">
         {product.serviceScope && (
           <div className="flex items-start gap-2 sm:col-span-2">
-            <Briefcase className="h-3.5 w-3.5 text-amber-600 mt-0.5 shrink-0" />
+            <Briefcase className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.serviceScope')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceScope}</dd>
           </div>
         )}
         {product.serviceDeliverables && (
           <div className="flex items-start gap-2 sm:col-span-2">
-            <FileCheck2 className="h-3.5 w-3.5 text-amber-600 mt-0.5 shrink-0" />
+            <FileCheck2 className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.deliverables')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceDeliverables}</dd>
           </div>
         )}
         <div className="flex items-center gap-2">
-          <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+          <Clock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
           <dt className="text-muted-foreground">{t('productDetail.duration')}:</dt>
           <dd className="font-medium text-foreground">{product.serviceDurationDays ?? '—'}  {t('productDetail.days')}</dd>
         </div>
         <div className="flex items-center gap-2">
-          <RefreshCw className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+          <RefreshCw className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
           <dt className="text-muted-foreground">{t('productDetail.revisions')}:</dt>
           <dd className="font-medium text-foreground">{product.serviceRevisions ?? 0}  {t('productDetail.included')}</dd>
         </div>
@@ -909,10 +910,10 @@ function ServiceQuickInfo({ product }: { product: any }) {
           href={product.servicePortfolio}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-amber-700 hover:text-amber-800 font-medium"
+          className="inline-flex items-center gap-1.5 text-sm text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 font-medium"
         >
           <Eye className="h-3.5 w-3.5" />
-          View portfolio
+          {t('productDetail.viewPortfolio')}
           <ArrowRight className="h-3 w-3" />
         </a>
       )}
@@ -932,10 +933,11 @@ function ProductTabs({
   activeTab: string;
   onTabChange: (v: string) => void;
 }) {
+  const { t } = useI18n();
   const isDigital = product.productType === 'DIGITAL';
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="mt-12">
-      <TabsList className="bg-cyan-50/60 border border-cyan-100 p-1 flex flex-wrap h-auto">
+      <TabsList className="bg-cyan-50/60 dark:bg-slate-900/80 border border-cyan-100 dark:border-slate-800 p-1 flex flex-wrap h-auto">
         <TabsTrigger value="description" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
           {t('productDetail.description')}
         </TabsTrigger>
@@ -1162,7 +1164,7 @@ function SpecificationsTab({ product }: { product: any }) {
         if (visible.length === 0) return null;
         return (
           <Card key={sec.title} className="p-5">
-            <h3 className="text-sm font-semibold text-cyan-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-cyan-700 dark:text-cyan-400 uppercase tracking-wider mb-3 flex items-center gap-2">
               <Cpu className="h-3.5 w-3.5" />
               {sec.title}
             </h3>
@@ -1195,7 +1197,7 @@ function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVer
   }
   return (
     <div className="space-y-3">
-      <div className="rounded-xl border border-cyan-200 bg-cyan-50/40 p-3 flex items-start gap-2 text-sm text-cyan-700">
+      <div className="rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50/40 dark:bg-cyan-950/30 p-3 flex items-start gap-2 text-sm text-cyan-700 dark:text-cyan-300">
         <RefreshCw className="h-4 w-4 mt-0.5" />
         <p>
           <span className="font-semibold">Update policy:</span> All future updates for this product
@@ -1205,7 +1207,7 @@ function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVer
       {versions.map((v: any, i: number) => {
         const isCurrent = currentVersion && v.version === currentVersion;
         return (
-          <Card key={v.id ?? i} className={`p-5 ${isCurrent ? 'border-cyan-400 ring-2 ring-cyan-100' : ''}`}>
+          <Card key={v.id ?? i} className={`p-5 ${isCurrent ? 'border-cyan-400 ring-2 ring-cyan-100 dark:ring-cyan-900/40' : ''}`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="flex items-start gap-3">
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl text-white ${isCurrent ? 'bg-gradient-to-br from-cyan-500 to-teal-400' : 'bg-slate-400'}`}>
@@ -1335,7 +1337,7 @@ function ReviewsTab({ product }: { product: any }) {
       <Card className="p-5">
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
           <div className="text-center md:border-r md:border-border/60 md:pr-6">
-            <p className="text-5xl font-bold text-cyan-700 tracking-tight">
+            <p className="text-5xl font-bold text-cyan-700 dark:text-cyan-400 tracking-tight">
               {(product.rating ?? 0).toFixed(1)}
             </p>
             <Rating
@@ -1375,7 +1377,7 @@ function ReviewsTab({ product }: { product: any }) {
         {!showForm ? (
           <Button
             variant="outline"
-            className="border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
             onClick={() => setShowForm(true)}
           >
             <StarIcon className="h-4 w-4" />
@@ -1398,7 +1400,7 @@ function ReviewsTab({ product }: { product: any }) {
                         'h-5 w-5 transition-colors',
                         s <= reviewRating
                           ? 'text-amber-400 fill-amber-400'
-                          : 'text-slate-300 fill-slate-200 hover:text-amber-300',
+                          : 'text-slate-300 dark:text-slate-600 fill-slate-200 dark:fill-slate-700 hover:text-amber-300',
                       )}
                     />
                   </button>
@@ -1440,7 +1442,7 @@ function ReviewsTab({ product }: { product: any }) {
                   {r.user?.avatarUrl && (
                     <AvatarImage src={r.user.avatarUrl} alt={r.user?.name ?? 'Reviewer'} />
                   )}
-                  <AvatarFallback className="bg-cyan-100 text-cyan-700 font-semibold text-xs">
+                  <AvatarFallback className="bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 font-semibold text-xs">
                     {initials(r.user?.name ?? 'A')}
                   </AvatarFallback>
                 </Avatar>
@@ -1450,7 +1452,7 @@ function ReviewsTab({ product }: { product: any }) {
                       {r.user?.name ?? 'Anonymous'}
                     </span>
                     {r.verifiedPurchase && (
-                      <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 text-[10px] py-0">
+                      <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 gap-1 text-[10px] py-0">
                         <CheckCircle2 className="h-3 w-3" />
                         Verified purchase
                       </Badge>
@@ -1464,8 +1466,8 @@ function ReviewsTab({ product }: { product: any }) {
                     </p>
                   )}
                   {r.sellerReply && (
-                    <div className="mt-3 ml-3 pl-3 border-l-2 border-cyan-200 text-sm">
-                      <p className="text-xs font-semibold text-cyan-700 mb-1">
+                    <div className="mt-3 ml-3 pl-3 border-l-2 border-cyan-200 dark:border-cyan-800 text-sm">
+                      <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 mb-1">
                         Seller reply
                       </p>
                       <p className="text-muted-foreground">{r.sellerReply}</p>
@@ -1564,11 +1566,11 @@ function ShippingTab({ product }: { product: any }) {
         {providers.map((p) => (
           <div
             key={p.name}
-            className="rounded-lg border border-border/60 p-3 hover:border-cyan-200 hover:bg-cyan-50/40 transition-colors"
+            className="rounded-lg border border-border/60 p-3 hover:border-cyan-200 dark:hover:border-cyan-800 hover:bg-cyan-50/40 dark:hover:bg-cyan-950/30 transition-colors"
           >
             <div className="flex items-center justify-between">
               <span className="font-semibold text-foreground text-sm">{p.name}</span>
-              <span className="text-xs text-cyan-700 font-medium">{p.cost}</span>
+              <span className="text-xs text-cyan-700 dark:text-cyan-400 font-medium">{p.cost}</span>
             </div>
             <p className="text-xs text-muted-foreground mt-1">{p.desc}</p>
           </div>

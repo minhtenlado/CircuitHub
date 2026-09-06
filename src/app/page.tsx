@@ -34,27 +34,26 @@ function ShopView() {
   const slug = useNavStore((s) => s.params.slug);
   const goProducts = useNavStore((s) => s.goProducts);
   const goProduct = useNavStore((s) => s.goProduct);
+  const { t } = useI18n();
   const { data, isLoading } = useShop(slug);
-  if (isLoading) return <div className="max-w-6xl mx-auto px-4 py-20 text-center text-muted-foreground">Loading shop...</div>;
-  if (!data) return <div className="max-w-6xl mx-auto px-4 py-20 text-center">Shop not found</div>;
+  if (isLoading) return <div className="max-w-6xl mx-auto px-4 py-20 text-center text-muted-foreground">{t('shop.loading')}</div>;
+  if (!data) return <div className="max-w-6xl mx-auto px-4 py-20 text-center">{t('shop.notFound')}</div>;
   const shop = data.shop;
   const products = data.products ?? [];
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <button onClick={() => goProducts()} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 mb-4 transition-colors">
-        <ArrowLeft className="h-3.5 w-3.5" /> Back to products
+      <button onClick={() => goProducts()} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 mb-4 transition-colors">
+        <ArrowLeft className="h-3.5 w-3.5" /> {t('shop.backToProducts')}
       </button>
       {/* Banner */}
       <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-100 via-teal-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 mb-6 border border-border/40">
         {shop.bannerUrl && (
-           
           <img src={shop.bannerUrl} alt={shop.name} className="absolute inset-0 w-full h-full object-cover opacity-90" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
         <div className="absolute bottom-4 left-4 right-4 flex items-end gap-4">
           <div className="relative h-20 w-20 rounded-xl overflow-hidden bg-card border-2 border-border shadow-lg flex-shrink-0">
             {shop.logoUrl && (
-               
               <img src={shop.logoUrl} alt={shop.name} className="w-full h-full object-cover" />
             )}
           </div>
@@ -62,15 +61,15 @@ function ShopView() {
             <div className="flex items-center gap-2 mb-1">
               <h1 className="text-2xl font-bold drop-shadow">{shop.name}</h1>
               {shop.verified && (
-                <span className="inline-flex items-center gap-1 bg-cyan-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">✓ Verified</span>
+                <span className="inline-flex items-center gap-1 bg-cyan-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">✓ {t('shop.verified')}</span>
               )}
             </div>
             <p className="text-sm opacity-90 line-clamp-1">{shop.description}</p>
             <div className="flex items-center gap-4 text-xs mt-1">
               <span>★ {shop.rating.toFixed(1)} ({shop.ratingCount})</span>
-              <span>{shop.productCount} products</span>
-              <span>{shop.completedOrders} orders</span>
-              <span>{shop.followersCount} followers</span>
+              <span>{shop.productCount} {t('shop.products')}</span>
+              <span>{shop.completedOrders} {t('shop.orders')}</span>
+              <span>{shop.followersCount} {t('shop.followers')}</span>
             </div>
           </div>
         </div>
@@ -80,7 +79,7 @@ function ShopView() {
       {shop.specializations && (
         <div className="flex flex-wrap gap-2 mb-4">
           {shop.specializations.split(',').map((s: string) => (
-            <span key={s} className="text-xs bg-cyan-50 text-cyan-700 border border-cyan-200 px-2.5 py-1 rounded-full font-medium">
+            <span key={s} className="text-xs bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 px-2.5 py-1 rounded-full font-medium">
               {s.trim()}
             </span>
           ))}
@@ -88,20 +87,19 @@ function ShopView() {
       )}
 
       {/* Products grid */}
-      <h2 className="text-xl font-bold mb-4">Products from this shop</h2>
+      <h2 className="text-xl font-bold mb-4">{t('shop.productsFromShop')}</h2>
       {products.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">No products yet.</div>
+        <div className="text-center py-12 text-muted-foreground">{t('shop.noProducts')}</div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {products.map((p: any, i: number) => (
             <button
               key={p.id}
               onClick={() => goProduct(p.slug)}
-              className="group flex flex-col bg-card border border-border/70 rounded-xl overflow-hidden text-left hover:border-cyan-400/50 hover:shadow-lg transition-all"
+              className="group flex flex-col bg-card border border-border/70 dark:border-slate-800 rounded-xl overflow-hidden text-left hover:border-cyan-400/60 dark:hover:border-cyan-500/60 hover:shadow-lg transition-all"
             >
               <div className="aspect-[4/3] bg-muted relative overflow-hidden">
                 {p.images?.[0]?.url ? (
-                   
                   <img src={p.images[0].url} alt={p.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -110,9 +108,9 @@ function ShopView() {
                 )}
               </div>
               <div className="p-3 space-y-1">
-                <p className="text-sm font-semibold line-clamp-2 group-hover:text-cyan-700">{p.name}</p>
+                <p className="text-sm font-semibold line-clamp-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400">{p.name}</p>
                 <p className="text-xs text-muted-foreground line-clamp-1">{p.category?.name}</p>
-                <p className="text-base font-bold text-cyan-700">{new Intl.NumberFormat('vi-VN').format(p.price)}₫</p>
+                <p className="text-base font-bold text-cyan-600 dark:text-cyan-400">{new Intl.NumberFormat('vi-VN').format(p.price)}₫</p>
               </div>
             </button>
           ))}
@@ -198,7 +196,7 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
         {/* Divider */}
         <div className="flex items-center gap-3 my-5">
           <div className="flex-1 h-px bg-border/60" />
-          <span className="text-xs text-muted-foreground">or</span>
+          <span className="text-xs text-muted-foreground">{t('auth.or')}</span>
           <div className="flex-1 h-px bg-border/60" />
         </div>
 
@@ -227,11 +225,13 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
         </form>
         <div className="mt-4 text-center text-sm text-muted-foreground">
           {mode === 'login' ? (
-            <>Don&apos;t have an account?{' '}
+            <>
+              {t('auth.noAccount')}{' '}
               <button onClick={() => setView('register', {})} className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium">{t('auth.signUp')}</button>
             </>
           ) : (
-            <>Already have an account?{' '}
+            <>
+              {t('auth.hasAccount')}{' '}
               <button onClick={() => setView('login', {})} className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium">{t('auth.signIn')}</button>
             </>
           )}

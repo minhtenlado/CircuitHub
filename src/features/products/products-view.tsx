@@ -261,36 +261,26 @@ export function ProductsView({
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Page header */}
-      <div className="border-b border-border/60 bg-background/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-[60px] z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+      <div className="border-b border-border/50 bg-background/95">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            {hideHeaderTitle ? (
-              <div className="text-xs sm:text-sm font-medium text-muted-foreground tabular-nums">
+            <div className="flex flex-col gap-0.5">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                  {categoryHeaderTitle}
+                </h1>
+                <span className="inline-flex items-center rounded-full border border-cyan-300/50 dark:border-cyan-800/60 bg-cyan-50/60 dark:bg-cyan-950/40 px-2.5 py-0.5 text-xs font-semibold text-cyan-700 dark:text-cyan-300 tabular-nums">
+                  {total.toLocaleString('vi-VN')} {t('categories.countProducts')}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground tabular-nums">
                 {isLoading
                   ? t('common.loading')
                   : total > 0
-                    ? `${t('common.showing')} ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)} ${t('common.of')} ${total.toLocaleString('vi-VN')} ${t('categories.countProducts')}`
+                    ? `${t('common.showing')} ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)}`
                     : t('filter.noProducts')}
-              </div>
-            ) : (
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
-                  <Package className="h-5 w-5" />
-                </div>
-                <div>
-                  <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                    {categoryHeaderTitle}
-                  </h1>
-                  <p className="text-xs sm:text-sm text-muted-foreground tabular-nums mt-0.5">
-                    {isLoading
-                      ? t('common.loading')
-                      : total > 0
-                        ? `${t('common.showing')} ${offset + 1}–${Math.min(offset + (data?.items?.length ?? 0), total)} ${t('common.of')} ${total.toLocaleString('vi-VN')} ${t('categories.countProducts')}`
-                        : t('filter.noProducts')}
-                  </p>
-                </div>
-              </div>
-            )}
+              </p>
+            </div>
             <div className="flex items-center gap-2">
               {/* Mobile filter button */}
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -440,10 +430,10 @@ export function ProductsView({
                   size="sm"
                   disabled={currentPage === 1}
                   onClick={() => goToPage(currentPage - 1)}
-                  className="border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+                  className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800"
                 >
                   <ChevronRight className="h-4 w-4 rotate-180" />
-                  Prev
+                  {t('common.prev') || 'Prev'}
                 </Button>
                 {getPageNumbers(currentPage, totalPages).map((p, idx) =>
                   p === '...' ? (
@@ -458,7 +448,7 @@ export function ProductsView({
                         'h-8 min-w-8 px-2 rounded-md text-sm font-medium transition-colors',
                         p === currentPage
                           ? 'bg-cyan-500 text-white shadow-sm hover:bg-cyan-600'
-                          : 'border border-border bg-white text-foreground hover:bg-cyan-50 hover:border-cyan-200',
+                          : 'border border-border bg-card dark:bg-slate-900 text-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:border-cyan-200 dark:hover:border-cyan-800',
                       )}
                     >
                       {p}
@@ -470,9 +460,9 @@ export function ProductsView({
                   size="sm"
                   disabled={currentPage === totalPages}
                   onClick={() => goToPage(currentPage + 1)}
-                  className="border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+                  className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800"
                 >
-                  Next
+                  {t('common.next') || 'Next'}
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>

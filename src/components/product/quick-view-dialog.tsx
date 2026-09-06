@@ -167,7 +167,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                 {specs.slice(0, 6).map((spec, i) => {
                   const Icon = spec.icon;
                   return (
-                    <div key={i} className="flex items-center gap-1.5 rounded-md bg-slate-50 border border-border/40 px-2 py-1">
+                    <div key={i} className="flex items-center gap-1.5 rounded-md bg-slate-50 dark:bg-slate-900 border border-border/40 px-2 py-1">
                       <Icon className="h-3 w-3 text-cyan-500 flex-shrink-0" />
                       <span className="text-[10px] text-muted-foreground truncate">{spec.label}:</span>
                       <span className="text-[10px] font-semibold text-foreground truncate">{spec.value}</span>
@@ -188,7 +188,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                 {product.compareAtPrice && (
                   <span className="text-xs text-muted-foreground line-through mb-0.5">{formatVND(product.compareAtPrice)}</span>
                 )}
-                <span className="text-2xl font-bold text-cyan-700 tracking-tight">{formatVND(product.price)}</span>
+                <span className="text-2xl font-bold text-cyan-700 dark:text-cyan-400 tracking-tight">{formatVND(product.price)}</span>
                 {pct > 0 && (
                   <Badge className="bg-gradient-to-r from-rose-500 to-orange-400 text-white border-0 text-[10px] mb-1">
                     -{pct}%
@@ -251,7 +251,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                   });
                 }}
                 variant="outline"
-                className="border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+                className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
               >
                 <Heart className={cn('h-4 w-4', inWishlist && 'fill-rose-500 text-rose-500')} />
               </Button>
@@ -260,7 +260,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
             {/* View full details */}
             <button
               onClick={handleViewFullDetails}
-              className="flex items-center justify-center gap-1.5 text-xs font-medium text-cyan-600 hover:text-cyan-700 transition-colors pt-1"
+              className="flex items-center justify-center gap-1.5 text-xs font-medium text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors pt-1"
             >
               <Eye className="h-3.5 w-3.5" />
               View full product details
