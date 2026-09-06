@@ -94,6 +94,8 @@ function TopTicker() {
   const { t } = useI18n();
   const goAuth = useNavStore((s) => s.goAuth);
   const goBuyer = useNavStore((s) => s.goBuyer);
+  const setView = useNavStore((s) => s.setView);
+  const goSeller = useNavStore((s) => s.goSeller);
   const user = useAuthStore((s) => s.user);
 
   return (
@@ -123,7 +125,13 @@ function TopTicker() {
           </a>
           <span className="text-slate-700">|</span>
           <button
-            onClick={() => goAuth('register')}
+            onClick={() => {
+              if (user?.role === 'SELLER') {
+                goSeller('seller');
+              } else {
+                setView('seller-onboarding', {});
+              }
+            }}
             className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors flex items-center gap-1 cursor-pointer"
           >
             <Store className="h-3 w-3" />
@@ -1076,6 +1084,8 @@ function UserMenu() {
   const goShop = useNavStore((s) => s.goShop);
   const goAuth = useNavStore((s) => s.goAuth);
   const goAdmin = useNavStore((s) => s.goAdmin);
+  const goSeller = useNavStore((s) => s.goSeller);
+  const setView = useNavStore((s) => s.setView);
   const { toast } = useToast();
   const { t } = useI18n();
 
@@ -1133,11 +1143,23 @@ function UserMenu() {
         <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
           <Settings className="h-4 w-4" /> {t('common.settings')}
         </DropdownMenuItem>
-        {user.shopSlug && (
+        {user.role === 'SELLER' || user.shopSlug ? (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => goShop(user.shopSlug!)}>
-              <Store className="h-4 w-4" /> {t('common.myShop')}
+            <DropdownMenuItem onClick={() => goSeller()} className="text-cyan-600 font-medium">
+              <Store className="h-4 w-4" /> Kênh Người Bán (Seller Center)
+            </DropdownMenuItem>
+            {user.shopSlug && (
+              <DropdownMenuItem onClick={() => goShop(user.shopSlug!)}>
+                <Store className="h-4 w-4" /> {t('common.myShop')}
+              </DropdownMenuItem>
+            )}
+          </>
+        ) : (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setView('seller-onboarding', {})} className="text-cyan-600 font-medium">
+              <Store className="h-4 w-4" /> Bán hàng & Open Source
             </DropdownMenuItem>
           </>
         )}
@@ -1170,6 +1192,7 @@ function MobileMenu() {
   const goAdmin = useNavStore((s) => s.goAdmin);
   const goShop = useNavStore((s) => s.goShop);
   const goAuth = useNavStore((s) => s.goAuth);
+  const setView = useNavStore((s) => s.setView);
   const wishlistCount = useWishlistStore((s) => s.items.length);
   const { toast } = useToast();
   const { t } = useI18n();
@@ -1257,12 +1280,33 @@ function MobileMenu() {
                   setOpen(false);
                 }}
               />
-              {user.shopSlug && (
+              {user.role === 'SELLER' || user.shopSlug ? (
+                <>
+                  <MobileLink
+                    icon={<Store className="h-4 w-4 text-cyan-500" />}
+                    label="Kênh Người Bán (Seller Center)"
+                    onClick={() => {
+                      goSeller('seller');
+                      setOpen(false);
+                    }}
+                  />
+                  {user.shopSlug && (
+                    <MobileLink
+                      icon={<Store className="h-4 w-4" />}
+                      label={t('common.myShop')}
+                      onClick={() => {
+                        goShop(user.shopSlug!);
+                        setOpen(false);
+                      }}
+                    />
+                  )}
+                </>
+              ) : (
                 <MobileLink
-                  icon={<Store className="h-4 w-4" />}
-                  label={t('common.myShop')}
+                  icon={<Store className="h-4 w-4 text-cyan-500" />}
+                  label="Bán hàng & Open Source"
                   onClick={() => {
-                    goShop(user.shopSlug!);
+                    setView('seller-onboarding', {});
                     setOpen(false);
                   }}
                 />

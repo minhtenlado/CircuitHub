@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,7 @@ import {
   DollarSign,
   Boxes,
   Image as ImageIcon,
+  FolderTree,
   CheckCircle2,
   ChevronRight,
   ChevronLeft,
@@ -39,6 +40,8 @@ interface AddProductDialogProps {
   sellerId: string;
   shopId: string;
   categories: { id: string; name: string; slug: string }[];
+  initialType?: ProductType;
+  initialLicense?: string;
 }
 
 type ProductType = 'PHYSICAL' | 'DIGITAL';
@@ -49,7 +52,7 @@ const PRODUCT_TYPES: { id: ProductType; label: string; desc: string; icon: any; 
   { id: 'DIGITAL', label: 'Mã nguồn mở / Thiết kế số', desc: 'Dự án KiCad/Altium, file Gerber, mã nguồn firmware mở cho cộng đồng', icon: FileCode, color: 'from-teal-500 to-emerald-400' },
 ];
 
-export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categories }: AddProductDialogProps) {
+export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categories, initialType, initialLicense }: AddProductDialogProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [step, setStep] = useState<Step>('type');
@@ -82,10 +85,26 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
   const [currentVersion, setCurrentVersion] = useState('v1.0.0');
   const [fileFormat, setFileFormat] = useState('');
   const [licenseType, setLicenseType] = useState('PERSONAL');
+  const [githubUrl, setGithubUrl] = useState('');
+
+  useEffect(() => {
+    if (open) {
+      if (initialType) {
+        setProductType(initialType);
+        setStep('basic');
+      }
+      if (initialLicense) {
+        setLicenseType(initialLicense);
+        if (initialLicense === 'OPEN_SOURCE') {
+          setPrice('0');
+        }
+      }
+    }
+  }, [open, initialType, initialLicense]);
 
   function reset() {
     setStep('type');
-    setProductType('PHYSICAL');
+    setProductType(initialType || 'PHYSICAL');
     setName('');
     setShortDescription('');
     setDescription('');
@@ -168,6 +187,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
         body.currentVersion = currentVersion;
         body.fileFormat = fileFormat || undefined;
         body.licenseType = licenseType;
+        body.githubUrl = githubUrl || undefined;
       }
 
       const res = await fetch('/api/v1/seller/products', {
@@ -294,12 +314,32 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label htmlFor="price">Price (VND) <span className="text-red-500">*</span></Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="price">Price (VND) <span className="text-red-500">*</span></Label>
+                    {productType === 'DIGITAL' && (
+                      <button
+                        type="button"
+                        onClick={() => setPrice('0')}
+                        className={cn(
+                          'text-xs px-2 py-0.5 rounded border transition-colors cursor-pointer',
+                          price === '0'
+                            ? 'bg-emerald-500/15 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-semibold'
+                            : 'border-border/60 text-muted-foreground hover:border-emerald-400 hover:text-emerald-500'
+                        )}
+                      >
+                        ⚡ 0đ Miễn phí Open-Source
+                      </button>
+                    )}
+                  </div>
                   <div className="relative">
                     <DollarSign className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input id="price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="89000" className="pl-8" />
                   </div>
-                  {price && <p className="text-xs text-cyan-600">{formatVND(parseInt(price, 10) || 0)}</p>}
+                  {price === '0' ? (
+                    <p className="text-xs text-emerald-600 font-medium">0 ₫ — Miễn phí tải về cho cộng đồng</p>
+                  ) : price ? (
+                    <p className="text-xs text-cyan-600">{formatVND(parseInt(price, 10) || 0)}</p>
+                  ) : null}
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="compareAt">Compare-at Price</Label>
@@ -439,12 +479,22 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                     <div className="space-y-1.5 col-span-2">
                       <Label htmlFor="license">License Type</Label>
                       <select id="license" value={licenseType} onChange={(e) => setLicenseType(e.target.value)} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm">
+                        <option value="OPEN_SOURCE">Open Source (MIT, CERN-OHL, Apache 2.0, CC-BY-SA)</option>
                         <option value="PERSONAL">Personal Use</option>
                         <option value="COMMERCIAL">Commercial Use</option>
                         <option value="EDUCATIONAL">Educational</option>
                         <option value="EXTENDED_COMMERCIAL">Extended Commercial</option>
                         <option value="PRIVATE_USE">Private Use Only</option>
                       </select>
+                    </div>
+                    <div className="space-y-1.5 col-span-2">
+                      <Label htmlFor="githubUrl">GitHub / Repository URL (Mã nguồn mở)</Label>
+                      <Input
+                        id="githubUrl"
+                        value={githubUrl}
+                        onChange={(e) => setGithubUrl(e.target.value)}
+                        placeholder="https://github.com/circuithub-maker/esp32-sensor-board"
+                      />
                     </div>
                   </div>
                 </>

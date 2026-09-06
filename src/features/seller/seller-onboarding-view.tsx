@@ -15,18 +15,20 @@ import {
   CameraOff,
   Package,
   ShieldCheck,
+  FileCode,
 } from 'lucide-react';
 import { useNavStore } from '@/stores/nav-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 
 const STEPS = [
-  { id: 'welcome', label: 'Welcome', icon: Store },
-  { id: 'id', label: 'ID Verification', icon: CreditCard },
-  { id: 'biometric', label: 'Biometric', icon: ScanFace },
-  { id: 'shop', label: 'Shop Info', icon: Package },
-  { id: 'address', label: 'Pickup Address', icon: MapPin },
-  { id: 'review', label: 'Review', icon: CheckCircle2 },
+  { id: 'welcome', label: 'Bắt đầu', icon: Store },
+  { id: 'id', label: 'Xác minh CCCD', icon: CreditCard },
+  { id: 'biometric', label: 'eKYC Khuôn mặt', icon: ScanFace },
+  { id: 'shop', label: 'Hồ sơ Gian hàng', icon: Package },
+  { id: 'address', label: 'Kho lấy hàng', icon: MapPin },
+  { id: 'review', label: 'Kích hoạt', icon: CheckCircle2 },
 ];
 
 export function SellerOnboardingView() {
@@ -153,9 +155,28 @@ export function SellerOnboardingView() {
     setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
-      toast({ title: 'Application submitted!', description: 'Your seller application is under review. We will notify you within 24 hours.' });
-      setView('home', {});
-    }, 1500);
+      const auth = useAuthStore.getState();
+      const shopSlugGen = (shopName || 'maker-studio')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+      if (auth.user) {
+        auth.setAuth(
+          {
+            ...auth.user,
+            role: 'SELLER',
+            shopId: auth.user.shopId || `shop-${Date.now()}`,
+            shopSlug: auth.user.shopSlug || shopSlugGen,
+          },
+          auth.token || `demo-token-${Date.now()}`
+        );
+      }
+      toast({
+        title: 'Kích hoạt Kênh Bán & Creator thành công!',
+        description: 'Tài khoản của bạn đã được nâng cấp lên Người bán & Chia sẻ Dự án Mã nguồn mở.',
+      });
+      setView('seller', {});
+    }, 1200);
   }
 
   return (
@@ -200,15 +221,15 @@ export function SellerOnboardingView() {
                 <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-400 flex items-center justify-center mx-auto mb-6 shadow-[0_8px_24px_-6px_rgba(6,182,212,0.5)]">
                   <Store className="h-10 w-10 text-white" />
                 </div>
-                <h1 className="text-3xl font-bold mb-3">Start Selling on CircuitHub</h1>
-                <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                  Join thousands of engineers selling electronics, PCB boards, and components on the leading electronics marketplace.
+                <h1 className="text-2xl sm:text-3xl font-bold mb-3">Thiết lập Bán hàng & Chia sẻ Mã nguồn mở</h1>
+                <p className="text-muted-foreground mb-8 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
+                  Gia nhập cộng đồng hơn 15.000 kỹ sư maker — Đăng bán bo mạch, linh kiện điện tử hoặc chia sẻ thiết kế phần cứng mở (KiCad, Altium, Arduino, ESP-IDF) hoàn toàn miễn phí hoặc có thu phí.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   {[
-                    { icon: Package, title: 'List Products', desc: 'Sell physical and digital products' },
-                    { icon: ShieldCheck, title: 'Verified Trust', desc: 'Biometric ID verification builds trust' },
-                    { icon: MapPin, title: 'Easy Shipping', desc: 'Shipping partners pick up from your address' },
+                    { icon: Package, title: 'Bán linh kiện & bo mạch', desc: 'Đăng bán MCU, module, sensor, nhận đơn COD toàn quốc tự động' },
+                    { icon: FileCode, title: 'Chia sẻ Mã nguồn mở', desc: 'Đăng tải KiCad, Altium, Gerber, firmware với giấy phép MIT / CERN-OHL' },
+                    { icon: ShieldCheck, title: 'Định danh CCCD / eKYC', desc: 'Bảo vệ bản quyền sở hữu trí tuệ và nâng cao uy tín kỹ sư' },
                   ].map((b, i) => {
                     const Icon = b.icon;
                     return (
