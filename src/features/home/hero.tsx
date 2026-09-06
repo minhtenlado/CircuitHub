@@ -7,343 +7,500 @@
    - Right: 2×2 grid of engineering spec cards (Framer Motion)
    ============================================================ */
 
-import { motion } from 'framer-motion';
-import { useCountUp } from '@/hooks/use-count-up';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Sparkles,
   ArrowRight,
-  ArrowUpRight,
-  Cpu,
-  Wifi,
+  ChevronRight,
+  ChevronLeft,
+  Flame,
+  Zap,
+  Shield,
+  Truck,
+  RotateCcw,
+  PackageCheck,
+  ShoppingCart,
+  Star,
+  CircuitBoard,
   Layers,
   Radar,
+  Cpu,
+  Box,
+  Wrench,
   FileCode,
-  Store,
-  Boxes,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useNavStore } from '@/stores/nav-store';
+import { useCartStore } from '@/stores/cart-store';
+import { useToast } from '@/hooks/use-toast';
 import { useI18n } from '@/lib/i18n';
+import { formatVND } from '@/lib/format';
 
-/* Floating specification cards — engineering catalog imagery with interactive discovery */
-const SPEC_CARDS = [
+/* ----------------------------------------------------------------
+   PROMOTIONAL CAROUSEL BANNERS
+   ---------------------------------------------------------------- */
+const BANNERS = [
   {
-    id: 'esp32',
-    name: 'ESP32-WROOM-32',
-    tagKey: 'hero.specCard.devBoard',
-    categorySlug: 'dev-boards',
-    icon: Wifi,
-    rows: [
-      { label: 'Flash', value: '4 MB' },
-      { label: 'Clock', value: '240 MHz' },
-      { label: 'Radio', value: 'WiFi+BLE' },
-    ],
-    accent: 'from-cyan-500 to-cyan-400',
-    delay: 0,
+    id: 'esp32-kit',
+    eyebrow: '⚡ COMBO KHUYẾN MẠI TUẦN NÀY',
+    title: 'Kit Học Tập IoT ESP32-S3 Pro Kèm Màn Hình 1.9" TFT',
+    description:
+      'Đầy đủ cảm biến nhiệt ẩm SHT40, relay 5V, sơ đồ nguyên lý KiCad 9 & mã nguồn mẫu. Ưu đãi 25% cho sinh viên & kỹ sư maker.',
+    priceBadge: 'Chỉ từ ₫285.000',
+    ctaText: 'Mua ngay combo',
+    category: 'dev-boards',
+    query: 'ESP32',
+    accent: 'from-cyan-950/80 via-slate-900 to-slate-950',
+    glowColor: 'bg-cyan-500/20',
+    tag: 'Bán chạy nhất',
   },
   {
-    id: 'kicad',
-    name: 'KiCad 9 Project',
-    tagKey: 'hero.specCard.digitalDesign',
-    categorySlug: 'pcb-boards',
-    icon: Layers,
-    rows: [
-      { label: 'Layers', value: '4-layer' },
-      { label: 'Finish', value: 'ENIG' },
-      { label: 'Version', value: 'v2.1.0' },
-    ],
-    accent: 'from-teal-500 to-cyan-400',
-    delay: 0.4,
+    id: 'pcb-service',
+    eyebrow: '🛠️ DỊCH VỤ GIA CÔNG TRỌN GÓI',
+    title: 'Gia Công Mạch In PCB 4 Lớp & Mua Linh Kiện Trọn Bộ',
+    description:
+      'Kiểm định DFM tự động, chuẩn hóa mã linh kiện theo file BOM. Cam kết bo mạch test 100% E-test trước khi giao hàng.',
+    priceBadge: 'Chỉ từ ₫120.000 / 5 tấm',
+    ctaText: 'Báo giá nhanh PCB',
+    category: 'pcb-boards',
+    query: '',
+    accent: 'from-teal-950/80 via-slate-900 to-slate-950',
+    glowColor: 'bg-teal-500/20',
+    tag: 'Dịch vụ Hot',
   },
   {
-    id: 'bme280',
-    name: 'BME280 Sensor',
-    tagKey: 'hero.specCard.component',
-    categorySlug: 'sensors',
+    id: 'open-source-hub',
+    eyebrow: '🎁 KHO DỰ ÁN CỘNG ĐỒNG KỸ THUẬT',
+    title: '500+ Dự Án KiCad, Gerber & Firmware Miễn Phí',
+    description:
+      'Tải ngay thiết kế mạch nguồn xung, bo điều khiển BLDC, đồng hồ LED RGB... Đã thẩm định thông số, tải file về gia công được ngay.',
+    priceBadge: '100% Miễn phí tải',
+    ctaText: 'Khám phá dự án',
+    category: 'open-source',
+    query: '',
+    accent: 'from-blue-950/80 via-slate-900 to-slate-950',
+    glowColor: 'bg-blue-500/20',
+    tag: 'Mã nguồn mở',
+  },
+];
+
+/* ----------------------------------------------------------------
+   SIDEBAR CATEGORIES
+   ---------------------------------------------------------------- */
+const SIDEBAR_CATEGORIES = [
+  {
+    slug: 'dev-boards',
+    name: 'Bo phát triển & MCU',
+    icon: CircuitBoard,
+    hotTags: ['ESP32-S3', 'STM32F4', 'RP2040'],
+  },
+  {
+    slug: 'sensors',
+    name: 'Module & Cảm biến',
     icon: Radar,
-    rows: [
-      { label: 'Accuracy', value: '±1 °C' },
-      { label: 'Bus', value: 'I²C / SPI' },
-      { label: 'Package', value: 'LGA-8' },
-    ],
-    accent: 'from-sky-500 to-cyan-400',
-    delay: 0.8,
+    hotTags: ['BME280', 'MPU6050', 'SHT40'],
   },
   {
-    id: 'open-source-rp2040',
-    name: 'RP2040 Open Design',
-    tagKey: 'hero.specCard.openSource',
-    categorySlug: 'open-source',
-    icon: FileCode,
-    rows: [
-      { label: 'License', value: 'MIT Open' },
-      { label: 'CAD Tool', value: 'KiCad v9' },
-      { label: 'Firmware', value: 'Open Source' },
-    ],
-    accent: 'from-cyan-500 to-teal-400',
-    delay: 1.2,
+    slug: 'pcb-boards',
+    name: 'Mạch in PCB & KiCad',
+    icon: Layers,
+    hotTags: ['4-Layer', 'Gerber', 'KiCad 9'],
   },
-] as const;
-
-/** Animated stat counter that counts up when scrolled into view. */
-function StatCounter({
-  value,
-  suffix,
-  icon: Icon,
-  label,
-  delay,
-}: {
-  value: number;
-  suffix: string;
-  icon: typeof Cpu;
-  label: string;
-  delay: number;
-}) {
-  const { ref, display } = useCountUp(value, 1500);
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay }}
-      className="flex flex-col"
-    >
-      <span ref={ref} className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground tabular-nums">
-        {display}{suffix}
-      </span>
-      <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Icon className="h-3.5 w-3.5 text-cyan-500" />
-        {label}
-      </span>
-    </motion.div>
-  );
-}
+  {
+    slug: 'components',
+    name: 'Linh kiện & Bán dẫn',
+    icon: Cpu,
+    hotTags: ['IC Nguồn', 'Mosfet', 'Opto'],
+  },
+  {
+    slug: 'modules',
+    name: 'Module chức năng',
+    icon: Box,
+    hotTags: ['OLED 0.96"', 'Relay', 'Sạc pin'],
+  },
+  {
+    slug: 'tools',
+    name: 'Dụng cụ đo kiểm & Hàn',
+    icon: Wrench,
+    hotTags: ['Đồng hồ VOM', 'Mỏ hàn T12'],
+  },
+  {
+    slug: 'open-source',
+    name: 'Dự án mã nguồn mở',
+    icon: FileCode,
+    hotTags: ['Hardware', 'Free KiCad'],
+  },
+];
 
 export function Hero() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 28, seconds: 15 });
   const goProducts = useNavStore((s) => s.goProducts);
   const goCategory = useNavStore((s) => s.goCategory);
-  const goAuth = useNavStore((s) => s.goAuth);
+  const goProduct = useNavStore((s) => s.goProduct);
+  const cart = useCartStore();
+  const { toast } = useToast();
   const { t } = useI18n();
 
-  const stats = [
-    { label: t('hero.stats.products'), value: 2800, suffix: '+', icon: Boxes },
-    { label: t('hero.stats.sellers'), value: 850, suffix: '+', icon: Store },
-    { label: t('hero.stats.engineers'), value: 1200, suffix: '+', icon: Cpu },
-  ];
+  /* Auto-rotate banner every 6s */
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % BANNERS.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  /* Countdown timer simulation */
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
+        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        return { hours: 4, minutes: 0, seconds: 0 };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const slide = BANNERS[currentSlide];
+
+  function handleAddFlashDeal() {
+    cart.addItem({
+      productId: 'flash-deal-esp32',
+      slug: 'esp32-wroom-32-module',
+      name: 'Bo mạch ESP32-WROOM-32E Wi-Fi / BLE 4MB Flash',
+      imageUrl: '/logo.svg',
+      price: 65000,
+      productType: 'PHYSICAL',
+      shopId: 'circuit-official',
+      shopName: 'CircuitHub Official Store',
+    });
+    toast({
+      title: 'Đã thêm vào giỏ hàng!',
+      description: 'Bo mạch ESP32-WROOM-32E (₫65.000) — Deal chớp nhoáng',
+    });
+  }
 
   return (
-    <section
-      aria-label="Hero"
-      className="relative overflow-hidden border-b border-border/60"
-    >
+    <section aria-label="Electronics Marketplace Hero" className="relative border-b border-border/60 bg-background/50">
       {/* Subtle circuit background grid */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#0891b20a_1px,transparent_1px),linear-gradient(to_bottom,#0891b20a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] opacity-70"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#0891b20a_1px,transparent_1px),linear-gradient(to_bottom,#0891b20a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,#000_70%,transparent_100%)] opacity-70"
       />
 
-      {/* Decorative cyan glow (soft and controlled) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 -right-24 h-[320px] w-[320px] rounded-full bg-cyan-500/10 dark:bg-cyan-500/15 blur-[100px]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-40 -left-32 h-[260px] w-[260px] rounded-full bg-teal-400/10 dark:bg-teal-400/12 blur-[90px]"
-      />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 items-center">
-          {/* ---------- Left column ---------- */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-6 flex flex-col gap-5"
-          >
-            {/* Tagline pill */}
-            <motion.span
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50/80 px-3.5 py-1.5 text-xs font-semibold tracking-wider text-cyan-700 backdrop-blur dark:border-cyan-800/50 dark:bg-cyan-950/40 dark:text-cyan-400"
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              {t('hero.tagline')}
-            </motion.span>
-
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-foreground">
-              {t('hero.title1')}{' '}
-              <span className="text-gradient-cyan">{t('hero.title2')}</span>
-            </h1>
-
-            {/* Subtitle - clean, high-contrast and easy to scan */}
-            <p className="max-w-xl text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300 font-normal">
-              {t('hero.subtitle')}
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button
-                  onClick={() => goProducts()}
-                  size="lg"
-                  className="h-11 px-6 bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white font-semibold shadow-[0_8px_24px_-8px_rgba(6,182,212,0.65)] flex items-center gap-2"
-                >
-                  {t('hero.explore')}
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button
-                  onClick={() => goCategory('open-source')}
-                  size="lg"
-                  variant="ghost"
-                  className="h-11 px-5 text-foreground/85 hover:text-foreground hover:bg-accent border border-border/70 hover:border-cyan-400/40 flex items-center gap-2"
-                >
-                  <FileCode className="h-4 w-4 text-cyan-500" />
-                  {t('hero.communityProjects')}
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground flex items-center gap-1.5 flex-wrap pt-0.5">
-                <span>Bạn muốn bán linh kiện & thiết kế?</span>
-                <button
-                  onClick={() => goAuth('register')}
-                  className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium inline-flex items-center gap-0.5"
-                >
-                  {t('hero.sellOnCircuitHub')}
-                  <ArrowRight className="h-3 w-3" />
-                </button>
-              </p>
+      <div className="relative mx-auto max-w-screen-2xl px-3 sm:px-4 lg:px-6 pt-3 sm:pt-4 pb-6 sm:pb-8">
+        {/* ============================================================
+            3-COLUMN COMMERCE HERO GRID
+            ============================================================ */}
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:gap-4 items-stretch">
+          
+          {/* 1. LEFT COLUMN: CATEGORY QUICK MENU (Desktop lg+) */}
+          <div className="hidden lg:col-span-3 lg:flex flex-col rounded-2xl border border-border/70 bg-card p-3 shadow-xs">
+            <div className="flex items-center justify-between pb-2.5 mb-1.5 border-b border-border/50">
+              <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
+                <CircuitBoard className="h-4 w-4 text-cyan-500" />
+                Danh mục linh kiện
+              </span>
+              <button
+                onClick={() => goProducts()}
+                className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline font-medium cursor-pointer"
+              >
+                Tất cả →
+              </button>
             </div>
 
-            {/* Stat row */}
-            <div className="mt-1 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg pt-1">
-              {stats.map((s, i) => (
-                <StatCounter
-                  key={s.label}
-                  value={s.value}
-                  suffix={s.suffix}
-                  icon={s.icon}
-                  label={s.label}
-                  delay={0.3 + i * 0.08}
-                />
-              ))}
-            </div>
-          </motion.div>
+            <ul className="flex flex-col gap-1 flex-1 justify-between">
+              {SIDEBAR_CATEGORIES.map((cat) => {
+                const Icon = cat.icon;
+                return (
+                  <li key={cat.slug}>
+                    <div
+                      onClick={() => goCategory(cat.slug)}
+                      className="group flex flex-col p-2 rounded-xl cursor-pointer hover:bg-cyan-50/80 dark:hover:bg-cyan-950/40 border border-transparent hover:border-cyan-500/20 transition-all"
+                    >
+                      <div className="flex items-center justify-between text-xs font-semibold text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400">
+                        <div className="flex items-center gap-2">
+                          <Icon className="h-3.5 w-3.5 text-muted-foreground group-hover:text-cyan-500" />
+                          <span>{cat.name}</span>
+                        </div>
+                        <ChevronRight className="h-3 w-3 text-muted-foreground/50 group-hover:text-cyan-500 group-hover:translate-x-0.5 transition-all" />
+                      </div>
 
-          {/* ---------- Right column: 2×2 grid of interactive spec cards ---------- */}
-          <div className="lg:col-span-6 relative">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
-            >
-              {/* Glow behind cards */}
-              <div
-                aria-hidden
-                className="absolute inset-0 m-auto h-[220px] w-[220px] rounded-full bg-cyan-400/10 dark:bg-cyan-400/15 blur-[80px]"
-              />
+                      {/* Hot component tags */}
+                      <div className="mt-1 flex flex-wrap gap-1 pl-5.5">
+                        {cat.hotTags.map((tag) => (
+                          <span
+                            key={tag}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              goProducts({ q: tag });
+                            }}
+                            className="text-[10px] text-muted-foreground/80 hover:text-cyan-600 dark:hover:text-cyan-300 font-mono hover:underline cursor-pointer"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
 
-              {/* 2×2 grid of spec cards */}
-              <div className="relative grid grid-cols-2 gap-3 sm:gap-4">
-                {SPEC_CARDS.map((card, i) => (
-                  <SpecCard key={card.id} card={card} index={i} />
+          {/* 2. CENTER COLUMN: PROMOTIONAL HERO BANNER CAROUSEL */}
+          <div className="lg:col-span-6 relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-6 sm:p-8 text-white shadow-md min-h-[360px] sm:min-h-[400px]">
+            {/* Background Glow */}
+            <div
+              aria-hidden
+              className={`pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full blur-[100px] transition-colors duration-1000 ${slide.glowColor}`}
+            />
+
+            {/* Banner Content (Animated via AnimatePresence) */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={slide.id}
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -15 }}
+                transition={{ duration: 0.35 }}
+                className="relative z-10 flex flex-col gap-3.5 flex-1"
+              >
+                {/* Eyebrow badge */}
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300 backdrop-blur-sm">
+                    {slide.eyebrow}
+                  </span>
+                  <Badge className="bg-amber-500/20 border-amber-500/40 text-amber-300 text-[10px] font-bold">
+                    {slide.tag}
+                  </Badge>
+                </div>
+
+                {/* Main Headline */}
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-[1.15] text-white max-w-xl">
+                  {slide.title}
+                </h1>
+
+                {/* Subtitle */}
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg">
+                  {slide.description}
+                </p>
+
+                {/* Price pill & CTA Buttons */}
+                <div className="mt-auto pt-4 flex flex-wrap items-center gap-3">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] uppercase text-slate-400 tracking-wider">Giá ưu đãi</span>
+                    <span className="text-lg sm:text-xl font-bold text-cyan-400 font-mono">
+                      {slide.priceBadge}
+                    </span>
+                  </div>
+
+                  <Button
+                    onClick={() => {
+                      if (slide.category) goCategory(slide.category);
+                      else goProducts({ q: slide.query });
+                    }}
+                    size="lg"
+                    className="h-10 px-5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-[0_8px_20px_-6px_rgba(6,182,212,0.6)] gap-1.5 cursor-pointer"
+                  >
+                    <span>{slide.ctaText}</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+
+                  <Button
+                    onClick={() => goProducts()}
+                    variant="outline"
+                    size="sm"
+                    className="h-10 px-3.5 rounded-xl border-slate-700 bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-white text-xs cursor-pointer"
+                  >
+                    Xem sản phẩm khác
+                  </Button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Slider Controls Bottom */}
+            <div className="relative z-10 mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
+              {/* Slide dots */}
+              <div className="flex items-center gap-1.5">
+                {BANNERS.map((b, i) => (
+                  <button
+                    key={b.id}
+                    onClick={() => setCurrentSlide(i)}
+                    aria-label={`Slide ${i + 1}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      i === currentSlide ? 'w-6 bg-cyan-400' : 'w-2 bg-slate-700 hover:bg-slate-500'
+                    }`}
+                  />
                 ))}
               </div>
-            </motion.div>
+
+              {/* Prev / Next Arrows */}
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev - 1 + BANNERS.length) % BANNERS.length)}
+                  aria-label="Previous slide"
+                  className="h-7 w-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev + 1) % BANNERS.length)}
+                  aria-label="Next slide"
+                  className="h-7 w-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. RIGHT COLUMN: DAILY FLASH DEAL WIDGET */}
+          <div className="lg:col-span-3 flex flex-col justify-between rounded-2xl border border-amber-500/40 bg-gradient-to-b from-amber-500/5 via-card to-card p-4 shadow-xs">
+            {/* Header: Flash deal + countdown */}
+            <div>
+              <div className="flex items-center justify-between pb-2 border-b border-border/60">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-amber-500 uppercase tracking-wider">
+                  <Flame className="h-4 w-4 animate-bounce" />
+                  Deal chớp nhoáng
+                </span>
+                <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                  -24%
+                </span>
+              </div>
+
+              {/* Countdown ticker */}
+              <div className="mt-2.5 flex items-center justify-between bg-amber-500/10 dark:bg-amber-950/30 rounded-lg p-2 border border-amber-500/20">
+                <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400">Kết thúc trong:</span>
+                <div className="flex items-center gap-1 font-mono text-xs font-bold text-amber-500">
+                  <span className="rounded bg-card px-1.5 py-0.5 shadow-xs border border-border/60">
+                    {String(timeLeft.hours).padStart(2, '0')}
+                  </span>
+                  :
+                  <span className="rounded bg-card px-1.5 py-0.5 shadow-xs border border-border/60">
+                    {String(timeLeft.minutes).padStart(2, '0')}
+                  </span>
+                  :
+                  <span className="rounded bg-card px-1.5 py-0.5 shadow-xs border border-border/60">
+                    {String(timeLeft.seconds).padStart(2, '0')}
+                  </span>
+                </div>
+              </div>
+
+              {/* Flash Product Card */}
+              <div
+                onClick={() => goProduct('esp32-wroom-32-module')}
+                className="mt-3 group cursor-pointer"
+              >
+                {/* Product Image */}
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-900/60 border border-border/50 flex items-center justify-center">
+                  <div className="flex flex-col items-center justify-center p-4 text-center">
+                    <CircuitBoard className="h-16 w-16 text-cyan-400 group-hover:scale-105 transition-transform" />
+                    <span className="text-[11px] font-mono text-cyan-300 mt-1">ESP32-WROOM-32E</span>
+                  </div>
+                  <span className="absolute top-2 left-2 rounded-md bg-emerald-500 text-white font-bold text-[10px] px-1.5 py-0.5">
+                    SẴN HÀNG
+                  </span>
+                </div>
+
+                {/* Product Title & Rating */}
+                <h3 className="mt-2.5 text-xs sm:text-sm font-bold text-foreground line-clamp-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                  Bo mạch ESP32-WROOM-32E Wi-Fi / BLE 4MB Flash Chuẩn Công Nghiệp
+                </h3>
+
+                <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                  <span className="flex items-center text-amber-500 font-bold">
+                    <Star className="h-3 w-3 fill-amber-500 mr-0.5" />
+                    4.9
+                  </span>
+                  <span>(182 đánh giá)</span>
+                </div>
+
+                {/* Price block */}
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-base sm:text-lg font-extrabold text-cyan-600 dark:text-cyan-400">
+                    {formatVND(65000)}
+                  </span>
+                  <span className="text-xs text-muted-foreground line-through">
+                    {formatVND(85000)}
+                  </span>
+                </div>
+
+                {/* Inventory progress bar */}
+                <div className="mt-2">
+                  <div className="flex justify-between text-[10px] font-medium text-muted-foreground mb-1">
+                    <span>Đã bán 42 sản phẩm</span>
+                    <span className="text-rose-500 font-semibold">Chỉ còn 8</span>
+                  </div>
+                  <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded-full w-[84%]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Action Button */}
+            <div className="mt-3.5 pt-2 border-t border-border/50">
+              <Button
+                onClick={handleAddFlashDeal}
+                className="w-full h-9 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs gap-1.5 shadow-sm cursor-pointer"
+              >
+                <ShoppingCart className="h-3.5 w-3.5" />
+                Thêm vào giỏ hàng
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* ============================================================
+            4. BOTTOM BAR: E-COMMERCE VALUE ASSURANCE STRIP
+            ============================================================ */}
+        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+          <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+              <Truck className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.shipTitle')}</div>
+              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.shipDesc')}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <Shield className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.qualityTitle')}</div>
+              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.qualityDesc')}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+              <RotateCcw className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.returnTitle')}</div>
+              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.returnDesc')}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <PackageCheck className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.escrowTitle')}</div>
+              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.escrowDesc')}</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-/* ----------------------------------------------------------------
-   SpecCard — an interactive engineering spec card that allows direct
-   discovery of the corresponding category with clear visual affordances.
-   ---------------------------------------------------------------- */
-function SpecCard({
-  card,
-  index,
-}: {
-  card: (typeof SPEC_CARDS)[number];
-  index: number;
-}) {
-  const Icon = card.icon;
-  const goCategory = useNavStore((s) => s.goCategory);
-  const { t } = useI18n();
-
-  return (
-    <motion.div
-      onClick={() => goCategory(card.categorySlug)}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{
-        opacity: 1,
-        y: [0, -4, 0],
-      }}
-      transition={{
-        opacity: { duration: 0.4, delay: card.delay },
-        y: {
-          duration: 4 + card.delay,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: card.delay,
-        },
-      }}
-      whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
-      className="group relative z-10 cursor-pointer rounded-2xl border border-border/70 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 shadow-xs backdrop-blur-sm transition-all duration-200 hover:border-cyan-400/70 dark:hover:border-cyan-500/50 hover:shadow-[0_16px_36px_-12px_rgba(6,182,212,0.35)]"
-    >
-      <div className="p-4 flex flex-col justify-between h-full">
-        <div>
-          {/* Header row */}
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div
-                className={`flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br ${card.accent} text-white shadow-xs shrink-0 transition-transform duration-200 group-hover:scale-105`}
-              >
-                <Icon className="h-5 w-5" />
-              </div>
-              <div className="min-w-0">
-                <div className="text-sm font-semibold text-foreground truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
-                  {card.name}
-                </div>
-                <div className="text-[10px] uppercase tracking-wider text-cyan-600 dark:text-cyan-400 font-medium">
-                  {t(card.tagKey)}
-                </div>
-              </div>
-            </div>
-
-            {/* Subtle discovery arrow on hover */}
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:bg-cyan-100 dark:group-hover:bg-cyan-900/60 transition-all shrink-0">
-              <ArrowUpRight className="h-3.5 w-3.5" />
-            </span>
-          </div>
-
-          {/* Spec rows */}
-          <div className="mt-3 space-y-1.5">
-            {card.rows.map((r) => (
-              <div
-                key={r.label}
-                className="flex items-center justify-between text-[11px] font-mono technical-data text-slate-700 dark:text-slate-300"
-              >
-                <span className="text-muted-foreground">{r.label}</span>
-                <span className="font-semibold text-foreground tabular-nums">
-                  {r.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Action discovery footer */}
-        <div className="mt-3 pt-2.5 border-t border-border/40 flex items-center justify-between text-[11px] font-medium text-cyan-600 dark:text-cyan-400">
-          <span>{t('hero.discoverCard')}</span>
-          <span className="flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
-            <ArrowRight className="h-3 w-3" />
-          </span>
-        </div>
-      </div>
-    </motion.div>
   );
 }
 

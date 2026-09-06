@@ -63,6 +63,9 @@ import {
   CircuitBoard,
   FileCode,
   AlertCircle,
+  Flame,
+  Radar,
+  Tag,
   Layers as LayersIcon,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -86,29 +89,100 @@ interface NavLinkDef {
   go: () => void;
 }
 
-/* ---------- Desktop Nav Pills ---------- */
-function NavPills({ onNavigate }: { onNavigate?: () => void }) {
+/* ---------- Top Commerce Ticker ---------- */
+function TopTicker() {
+  const { t } = useI18n();
+  const goAuth = useNavStore((s) => s.goAuth);
+  const goBuyer = useNavStore((s) => s.goBuyer);
+  const user = useAuthStore((s) => s.user);
+
+  return (
+    <div className="hidden border-b border-border/50 bg-slate-950/90 px-4 py-1.5 text-[11px] text-slate-300 md:block">
+      <div className="mx-auto flex max-w-screen-2xl items-center justify-between">
+        <div className="flex items-center gap-2 font-medium text-slate-200">
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400">
+            <Zap className="h-2.5 w-2.5" />
+          </span>
+          <span>{t('ticker.promo')}</span>
+        </div>
+        <div className="flex items-center gap-4 text-slate-400">
+          <button
+            onClick={() => (user ? goBuyer('buyer-orders') : goAuth('login'))}
+            className="hover:text-cyan-300 transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Truck className="h-3 w-3 text-cyan-400" />
+            {t('ticker.trackOrder')}
+          </button>
+          <span className="text-slate-700">|</span>
+          <a
+            href="mailto:support@circuithub.vn"
+            className="hover:text-cyan-300 transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Clock className="h-3 w-3 text-teal-400" />
+            {t('ticker.techSupport')}
+          </a>
+          <span className="text-slate-700">|</span>
+          <button
+            onClick={() => goAuth('register')}
+            className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Store className="h-3 w-3" />
+            {t('ticker.sellWithUs')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Desktop Commerce Nav ---------- */
+function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
   const view = useNavStore((s) => s.view);
   const params = useNavStore((s) => s.params);
-  const goHome = useNavStore((s) => s.goHome);
   const goProducts = useNavStore((s) => s.goProducts);
   const goCategory = useNavStore((s) => s.goCategory);
   const { t } = useI18n();
 
+  const categories = [
+    { slug: 'dev-boards', labelKey: 'categories.devBoards', icon: CircuitBoard },
+    { slug: 'pcb-boards', labelKey: 'categories.pcbBoards', icon: LayersIcon },
+    { slug: 'sensors', labelKey: 'categories.sensors', icon: Radar },
+    { slug: 'components', labelKey: 'categories.components', icon: Cpu },
+    { slug: 'modules', labelKey: 'categories.modules', icon: Package },
+    { slug: 'tools', labelKey: 'categories.tools', icon: Sparkles },
+    { slug: 'open-source', labelKey: 'categories.openSource', icon: FileCode },
+  ];
+
   const links: NavLinkDef[] = [
-    { label: t('nav.marketplace'), icon: <Cpu className="h-3.5 w-3.5" />, active: (v) => v === 'home', go: goHome },
-    { label: t('nav.products'), icon: <Package className="h-3.5 w-3.5" />, active: (v) => v === 'products', go: goProducts },
     {
-      label: t('nav.pcbBoards'),
-      icon: <LayersIcon className="h-3.5 w-3.5" />,
-      active: (v, p) => v === 'category' && p.slug === 'pcb-boards',
-      go: () => goCategory('pcb-boards'),
+      label: t('nav.flashDeals'),
+      icon: <Flame className="h-3.5 w-3.5 text-amber-500 animate-pulse" />,
+      active: (v, p) => v === 'products' && p.sort === 'trending',
+      go: () => goProducts({ sort: 'trending' }),
+    },
+    {
+      label: t('nav.products'),
+      icon: <Package className="h-3.5 w-3.5" />,
+      active: (v, p) => v === 'products' && !p.sort && !p.category,
+      go: () => goProducts(),
     },
     {
       label: t('nav.devBoards'),
       icon: <CircuitBoard className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'category' && p.slug === 'dev-boards',
       go: () => goCategory('dev-boards'),
+    },
+    {
+      label: t('nav.sensors'),
+      icon: <Radar className="h-3.5 w-3.5" />,
+      active: (v, p) => v === 'category' && p.slug === 'sensors',
+      go: () => goCategory('sensors'),
+    },
+    {
+      label: t('nav.pcbBoards'),
+      icon: <LayersIcon className="h-3.5 w-3.5" />,
+      active: (v, p) => v === 'category' && p.slug === 'pcb-boards',
+      go: () => goCategory('pcb-boards'),
     },
     {
       label: t('nav.components'),
@@ -125,38 +199,93 @@ function NavPills({ onNavigate }: { onNavigate?: () => void }) {
   ];
 
   return (
-    <ul className="flex items-center gap-1">
-      {links.map((l) => {
-        const isActive = l.active(view, params);
-        return (
-          <li key={l.label}>
-            <button
-              onClick={() => {
-                l.go();
-                onNavigate?.();
-              }}
-              aria-current={isActive ? 'page' : undefined}
-              className={cn(
-                'group inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all',
-                isActive
-                  ? 'bg-primary text-primary-foreground shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)]'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent',
-              )}
+    <div className="flex w-full items-center justify-between">
+      <div className="flex items-center gap-2">
+        {/* All Categories Mega-Menu Trigger */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="default"
+              size="sm"
+              className="h-8 rounded-lg bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold text-xs gap-1.5 shadow-sm"
             >
-              <span
-                className={cn(
-                  'transition-colors',
-                  isActive ? 'text-primary-foreground' : 'text-muted-foreground/70 group-hover:text-primary',
-                )}
-              >
-                {l.icon}
-              </span>
-              {l.label}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
+              <Menu className="h-3.5 w-3.5" />
+              <span>{t('nav.allCategories')}</span>
+              <ChevronDown className="h-3 w-3 opacity-80" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-64 p-1.5 shadow-xl border-border/80 bg-card">
+            <DropdownMenuLabel className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider px-2 py-1.5">
+              {t('categories.title')}
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {categories.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <DropdownMenuItem
+                  key={cat.slug}
+                  onClick={() => {
+                    goCategory(cat.slug);
+                    onNavigate?.();
+                  }}
+                  className="cursor-pointer py-2 px-2 rounded-md hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                >
+                  <Icon className="h-4 w-4 mr-2.5 text-cyan-600 dark:text-cyan-400" />
+                  <span className="font-medium text-xs text-foreground">{t(cat.labelKey)}</span>
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Commerce nav pills */}
+        <ul className="flex items-center gap-0.5 overflow-x-auto py-0.5">
+          {links.map((l) => {
+            const isActive = l.active(view, params);
+            return (
+              <li key={l.label}>
+                <button
+                  onClick={() => {
+                    l.go();
+                    onNavigate?.();
+                  }}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={cn(
+                    'group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all whitespace-nowrap',
+                    isActive
+                      ? 'bg-primary text-primary-foreground shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)]'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/80',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'transition-colors',
+                      isActive ? 'text-primary-foreground' : 'text-muted-foreground/70 group-hover:text-primary',
+                    )}
+                  >
+                    {l.icon}
+                  </span>
+                  {l.label}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      {/* Right side commerce assurance */}
+      <div className="hidden xl:flex items-center gap-3 text-[11px] text-muted-foreground">
+        <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+          <Shield className="h-3 w-3" />
+          100% Linh kiện chuẩn
+        </span>
+        <span className="text-border">|</span>
+        <span className="inline-flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-medium">
+          <Truck className="h-3 w-3" />
+          Giao hàng 24-48h
+        </span>
+      </div>
+    </div>
   );
 }
 
@@ -676,20 +805,20 @@ function ActionWishlist() {
 function ActionCart() {
   const count = useCartStore((s) => s.items.length);
   const open = useCartStore((s) => s.open);
+  const { t } = useI18n();
   return (
     <Button
-      variant="ghost"
-      size="icon"
+      variant="outline"
+      size="sm"
       aria-label={`Cart, ${count} items`}
       onClick={open}
-      className="relative text-muted-foreground hover:text-primary hover:bg-accent"
+      className="relative flex items-center gap-1.5 sm:gap-2 h-9 px-2.5 sm:px-3 rounded-full border-cyan-500/40 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500 transition-colors shadow-xs"
     >
-      <ShoppingCart className="h-4 w-4" />
-      {count > 0 && (
-        <Badge className="absolute -right-0.5 -top-0.5 h-4 min-w-4 justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-primary-foreground">
-          {count > 99 ? '99+' : count}
-        </Badge>
-      )}
+      <ShoppingCart className="h-4 w-4 text-cyan-600 dark:text-cyan-400 shrink-0" />
+      <span className="font-semibold text-xs hidden sm:inline">{t('nav.cart')}</span>
+      <Badge className="h-4.5 min-w-4.5 justify-center rounded-full bg-cyan-600 dark:bg-cyan-500 px-1.5 text-[10px] font-bold leading-none text-white">
+        {count > 99 ? '99+' : count}
+      </Badge>
     </Button>
   );
 }
@@ -1288,10 +1417,13 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md transition-shadow',
+        'sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-md transition-shadow',
         scrolled && 'shadow-[0_8px_24px_-12px_rgba(6,182,212,0.35)]',
       )}
     >
+      {/* Top Announcement Bar / Ticker */}
+      <TopTicker />
+
       {/* Main row */}
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-2 px-3 sm:gap-3 sm:px-6">
         {/* Hamburger (mobile/tablet) */}
@@ -1305,7 +1437,7 @@ export function Header() {
         </div>
 
         {/* Search bar (center, prominent) — visible at md and above */}
-        <div className="mx-2 hidden flex-1 md:block md:max-w-xl lg:max-w-md xl:max-w-xl">
+        <div className="mx-2 hidden flex-1 md:block md:max-w-xl lg:max-w-lg xl:max-w-2xl">
           <SearchBar />
         </div>
 
@@ -1313,7 +1445,7 @@ export function Header() {
         <div className="flex-1 md:hidden" />
 
         {/* Right side actions */}
-        <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <div className="hidden md:block">
             <ActionWishlist />
           </div>
@@ -1334,13 +1466,10 @@ export function Header() {
         <SearchBar compact />
       </div>
 
-      {/* Desktop secondary nav row (lg+) */}
-      <div className="hidden border-t border-border/40 bg-background/40 lg:block">
-        <div className="mx-auto flex h-11 max-w-screen-2xl items-center justify-center gap-2 px-6">
-          <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            {t('common.browse')}
-          </span>
-          <NavPills />
+      {/* Desktop secondary commerce nav row (lg+) */}
+      <div className="hidden border-t border-border/40 bg-background/60 lg:block">
+        <div className="mx-auto flex h-11 max-w-screen-2xl items-center px-4 sm:px-6">
+          <CommerceNav />
         </div>
       </div>
     </header>
