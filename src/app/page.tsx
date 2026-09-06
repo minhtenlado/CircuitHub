@@ -143,7 +143,13 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
       if (json.success && json.data?.user) {
         toast({ title: mode === 'login' ? 'Đăng nhập thành công!' : 'Tạo tài khoản thành công!', description: `Xin chào ${json.data.user.name}` });
         useAuthStore.getState().setAuth(json.data.user, json.data.token);
-        setView('home', {});
+        const navParams = useNavStore.getState().params;
+        const returnView = (navParams.returnView as any) || 'home';
+        const returnParams: Record<string, string> = {};
+        Object.entries(navParams).forEach(([k, v]) => {
+          if (k.startsWith('rp_')) returnParams[k.slice(3)] = v;
+        });
+        setView(returnView, returnParams);
       } else {
         toast({ title: 'Đăng nhập thất bại', description: json.message || 'Vui lòng kiểm tra lại thông tin', variant: 'destructive' });
       }
@@ -152,6 +158,21 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleQuickDemo(role: 'buyer' | 'seller' | 'admin') {
+    useAuthStore.getState().demoLogin(role);
+    toast({
+      title: 'Đăng nhập thành công!',
+      description: `Đăng nhập dưới vai trò ${role.toUpperCase()}`,
+    });
+    const navParams = useNavStore.getState().params;
+    const returnView = (navParams.returnView as any) || 'home';
+    const returnParams: Record<string, string> = {};
+    Object.entries(navParams).forEach(([k, v]) => {
+      if (k.startsWith('rp_')) returnParams[k.slice(3)] = v;
+    });
+    setView(returnView, returnParams);
   }
 
   function googleLogin() {
@@ -223,6 +244,7 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
             {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : mode === 'login' ? t('auth.signIn') : t('auth.signUp')}
           </button>
         </form>
+
         <div className="mt-4 text-center text-sm text-muted-foreground">
           {mode === 'login' ? (
             <>
@@ -235,6 +257,36 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
               <button onClick={() => setView('login', {})} className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium">{t('auth.signIn')}</button>
             </>
           )}
+        </div>
+
+        {/* Quick Demo Login options */}
+        <div className="mt-6 pt-5 border-t border-border/60">
+          <p className="text-xs font-semibold text-muted-foreground text-center mb-3">
+            {t('auth.demoAccounts')}
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => handleQuickDemo('buyer')}
+              className="py-1.5 px-2 rounded-lg border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 text-xs font-semibold transition-colors cursor-pointer text-center"
+            >
+              Buyer 1
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickDemo('seller')}
+              className="py-1.5 px-2 rounded-lg border border-border/60 bg-muted/70 hover:bg-muted text-foreground text-xs font-semibold transition-colors cursor-pointer text-center"
+            >
+              Seller
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickDemo('admin')}
+              className="py-1.5 px-2 rounded-lg border border-border/60 bg-muted/70 hover:bg-muted text-foreground text-xs font-semibold transition-colors cursor-pointer text-center"
+            >
+              Admin
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -269,7 +321,12 @@ function PageRouter() {
       content = <CartView />;
       break;
     case 'checkout':
-      content = <CheckoutView />;
+      if (!user) {
+        content = <AuthView mode="login" />;
+        key = 'auth-login';
+      } else {
+        content = <CheckoutView />;
+      }
       break;
     case 'bom':
       content = <ProductsView />;

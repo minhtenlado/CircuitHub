@@ -5,6 +5,7 @@ import { Heart, ShoppingBag, Eye, GitCompare } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useNavStore } from '@/stores/nav-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { useWishlistStore } from '@/stores/wishlist-store';
 import { useCartStore } from '@/stores/cart-store';
 import { useCompareStore } from '@/stores/compare-store';
@@ -21,6 +22,8 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
   const { t } = useI18n();
   const goProduct = useNavStore((s) => s.goProduct);
   const goShop = useNavStore((s) => s.goShop);
+  const goAuth = useNavStore((s) => s.goAuth);
+  const user = useAuthStore((s) => s.user);
   const wishlist = useWishlistStore();
   const cart = useCartStore();
   const compare = useCompareStore();
@@ -126,6 +129,14 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              if (!user) {
+                toast({
+                  title: t('auth.loginRequired'),
+                  description: t('auth.loginRequiredWishlist'),
+                });
+                goAuth('login', 'product-detail', { slug: product.slug });
+                return;
+              }
               wishlist.toggle({
                 productId: product.id,
                 slug: product.slug,
@@ -237,6 +248,14 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (!user) {
+                    toast({
+                      title: t('auth.loginRequired'),
+                      description: t('auth.loginRequiredToBuy') || 'Vui lòng đăng nhập để tải dự án này',
+                    });
+                    goAuth('login', 'product-detail', { slug: product.slug });
+                    return;
+                  }
                   toast({ title: 'Download started', description: `${product.name} — Free open source download` });
                 }}
                 className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white text-xs font-semibold px-2.5 py-1.5 transition-colors shadow-sm"
@@ -257,6 +276,14 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (!user) {
+                    toast({
+                      title: t('auth.loginRequired'),
+                      description: t('auth.loginRequiredToAddCart'),
+                    });
+                    goAuth('login', 'product-detail', { slug: product.slug });
+                    return;
+                  }
                   if (product.productType === 'SERVICE') {
                     goProduct(product.slug);
                     return;

@@ -27,6 +27,7 @@ import {
   GitCompare,
   Truck,
   Download,
+  Lock,
   ShieldCheck,
   Minus,
   Plus,
@@ -120,6 +121,8 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
   const { t } = useI18n();
   const { toast } = useToast();
   const cart = useCartStore();
+  const user = useAuthStore((s) => s.user);
+  const goAuth = useNavStore((s) => s.goAuth);
   const [selected, setSelected] = useState<Set<string>>(new Set(related.map((r) => r.id)));
 
   const items = [mainProduct, ...related];
@@ -139,6 +142,14 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
   }
 
   function addBundleToCart() {
+    if (!user) {
+      toast({
+        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+        description: t('auth.loginRequiredToAddCart') || 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',
+      });
+      goAuth('login', 'product-detail', { slug: mainProduct.slug });
+      return;
+    }
     checkedItems.forEach((item) => {
       cart.addItem({
         productId: item.id,
@@ -266,6 +277,8 @@ function ProductDetailContent({ product }: { product: any }) {
   const goCategory = useNavStore((s) => s.goCategory);
   const goShop = useNavStore((s) => s.goShop);
   const goCheckout = useNavStore((s) => s.goCheckout);
+  const goAuth = useNavStore((s) => s.goAuth);
+  const user = useAuthStore((s) => s.user);
   const cart = useCartStore();
   const wishlist = useWishlistStore();
   const { toast } = useToast();
@@ -291,6 +304,16 @@ function ProductDetailContent({ product }: { product: any }) {
   const effectiveQty = isPhysical ? qty : 1;
 
   function handleAddToCart(buyNow = false) {
+    if (!user) {
+      toast({
+        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+        description: buyNow
+          ? (t('auth.loginRequiredToBuy') || 'Vui lòng đăng nhập để tiến hành mua hàng')
+          : (t('auth.loginRequiredToAddCart') || 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng'),
+      });
+      goAuth('login', 'product-detail', { slug: product.slug });
+      return;
+    }
     if (isDigital && !licenseAccepted) {
       toast({
         title: 'License acceptance required',
@@ -317,6 +340,14 @@ function ProductDetailContent({ product }: { product: any }) {
   }
 
   function handleWishlistToggle() {
+    if (!user) {
+      toast({
+        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+        description: t('auth.loginRequiredWishlist') || 'Vui lòng đăng nhập để lưu vào danh sách yêu thích',
+      });
+      goAuth('login', 'product-detail', { slug: product.slug });
+      return;
+    }
     wishlist.toggle({
       productId: product.id,
       slug: product.slug,
@@ -672,14 +703,36 @@ function ProductDetailContent({ product }: { product: any }) {
               </div>
             )}
 
+            {/* Guest login reminder banner */}
+            {!user && (
+              <div className="flex items-center gap-2.5 rounded-xl border border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-950/40 p-3 text-xs text-cyan-900 dark:text-cyan-200">
+                <Lock className="h-4 w-4 shrink-0 text-cyan-600 dark:text-cyan-400" />
+                <span className="flex-1 font-medium">{t('auth.loginPromptBanner')}</span>
+                <button
+                  onClick={() => goAuth('login', 'product-detail', { slug: product.slug })}
+                  className="shrink-0 font-bold underline hover:text-cyan-600 dark:hover:text-cyan-100 cursor-pointer"
+                >
+                  {t('auth.signIn')}
+                </button>
+              </div>
+            )}
+
             {/* CTAs */}
             {isDigital && product.price === 0 && product.licenseType === 'OPEN_SOURCE' ? (
               /* Free download button for open source */
               <div className="space-y-3">
                 <Button
                   size="lg"
-                  className="w-full bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.5)] border-0"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.5)] border-0 cursor-pointer"
                   onClick={() => {
+                    if (!user) {
+                      toast({
+                        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+                        description: t('auth.loginRequiredToBuy') || 'Vui lòng đăng nhập để tải dự án này',
+                      });
+                      goAuth('login', 'product-detail', { slug: product.slug });
+                      return;
+                    }
                     toast({
                       title: 'Download started',
                       description: `${product.name} — Free open source download`,
@@ -690,7 +743,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   {t('productDetail.downloadFree')}
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
-                  {t('productDetail.noReg')}
+                  {user ? t('productDetail.noReg') : 'Vui lòng đăng nhập để tải về dự án'}
                 </p>
               </div>
             ) : (

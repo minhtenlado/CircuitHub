@@ -10,9 +10,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useNavStore } from '@/stores/nav-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { useCartStore } from '@/stores/cart-store';
 import { useWishlistStore } from '@/stores/wishlist-store';
 import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/lib/i18n';
 import { formatVND, discountPct as calcPct } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
 import {
@@ -51,8 +53,11 @@ interface QuickViewDialogProps {
 }
 
 export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialogProps) {
+  const { t } = useI18n();
   const goProduct = useNavStore((s) => s.goProduct);
   const goShop = useNavStore((s) => s.goShop);
+  const goAuth = useNavStore((s) => s.goAuth);
+  const user = useAuthStore((s) => s.user);
   const cart = useCartStore();
   const wishlist = useWishlistStore();
   const { toast } = useToast();
@@ -64,6 +69,15 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
   const inWishlist = wishlist.has(product.id);
 
   function handleAddToCart() {
+    if (!user) {
+      toast({
+        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+        description: t('auth.loginRequiredToAddCart') || 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',
+      });
+      onOpenChange(false);
+      goAuth('login', 'product-detail', { slug: product.slug });
+      return;
+    }
     cart.addItem({
       productId: product.id,
       slug: product.slug,
@@ -218,10 +232,19 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
               {product.price === 0 && product.productType === 'DIGITAL' ? (
                 <Button
                   onClick={() => {
+                    if (!user) {
+                      toast({
+                        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+                        description: t('auth.loginRequiredToBuy') || 'Vui lòng đăng nhập để tải dự án này',
+                      });
+                      onOpenChange(false);
+                      goAuth('login', 'product-detail', { slug: product.slug });
+                      return;
+                    }
                     toast({ title: 'Download started', description: `${product.name} — Free open source download` });
                     onOpenChange(false);
                   }}
-                  className="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white"
+                  className="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white cursor-pointer"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download Free
@@ -229,7 +252,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
               ) : (
                 <Button
                   onClick={handleAddToCart}
-                  className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white"
+                  className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white cursor-pointer"
                   disabled={product.productType === 'SERVICE'}
                 >
                   <ShoppingCart className="h-4 w-4 mr-2" />
@@ -238,6 +261,15 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
               )}
               <Button
                 onClick={() => {
+                  if (!user) {
+                    toast({
+                      title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+                      description: t('auth.loginRequiredWishlist') || 'Vui lòng đăng nhập để lưu vào danh sách yêu thích',
+                    });
+                    onOpenChange(false);
+                    goAuth('login', 'product-detail', { slug: product.slug });
+                    return;
+                  }
                   wishlist.toggle({
                     productId: product.id,
                     slug: product.slug,
@@ -251,7 +283,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                   });
                 }}
                 variant="outline"
-                className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
+                className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50 cursor-pointer"
               >
                 <Heart className={cn('h-4 w-4', inWishlist && 'fill-rose-500 text-rose-500')} />
               </Button>

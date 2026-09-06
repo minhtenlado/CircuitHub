@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCartStore, cartTotals } from '@/stores/cart-store';
 import { useNavStore } from '@/stores/nav-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { useToast } from '@/hooks/use-toast';
 import { formatVND } from '@/lib/format';
 import { ProductTypeBadge } from '@/components/common/badges';
@@ -18,7 +19,8 @@ import { useI18n } from '@/lib/i18n';
 
 export function CartView() {
   const { items, removeItem, updateQty, clear } = useCartStore();
-  const { goCheckout, goProducts } = useNavStore();
+  const { goCheckout, goProducts, goAuth } = useNavStore();
+  const user = useAuthStore((s) => s.user);
   const { toast } = useToast();
   const { t } = useI18n();
   const [voucherCode, setVoucherCode] = useState('');
@@ -173,7 +175,20 @@ export function CartView() {
                 </div>
               )}
 
-              <Button onClick={() => goCheckout()} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white dark:bg-cyan-700 dark:hover:bg-cyan-600">
+              <Button
+                onClick={() => {
+                  if (!user) {
+                    toast({
+                      title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+                      description: t('auth.loginRequiredToBuy') || 'Vui lòng đăng nhập để tiến hành mua hàng',
+                    });
+                    goAuth('login', 'cart');
+                    return;
+                  }
+                  goCheckout();
+                }}
+                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white dark:bg-cyan-700 dark:hover:bg-cyan-600 cursor-pointer"
+              >
                 <Lock className="h-4 w-4 mr-2" />
                 {t('cart.checkout')}
               </Button>

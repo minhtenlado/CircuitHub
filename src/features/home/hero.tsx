@@ -32,6 +32,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNavStore } from '@/stores/nav-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { useCartStore } from '@/stores/cart-store';
 import { useToast } from '@/hooks/use-toast';
 import { useI18n } from '@/lib/i18n';
@@ -139,6 +140,8 @@ export function Hero() {
   const goProducts = useNavStore((s) => s.goProducts);
   const goCategory = useNavStore((s) => s.goCategory);
   const goProduct = useNavStore((s) => s.goProduct);
+  const goAuth = useNavStore((s) => s.goAuth);
+  const user = useAuthStore((s) => s.user);
   const cart = useCartStore();
   const { toast } = useToast();
   const { t } = useI18n();
@@ -167,6 +170,14 @@ export function Hero() {
   const slide = BANNERS[currentSlide];
 
   function handleAddFlashDeal() {
+    if (!user) {
+      toast({
+        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+        description: t('auth.loginRequiredToAddCart') || 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',
+      });
+      goAuth('login', 'home');
+      return;
+    }
     cart.addItem({
       productId: 'flash-deal-esp32',
       slug: 'esp32-wroom-32-module',

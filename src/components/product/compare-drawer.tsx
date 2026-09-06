@@ -12,7 +12,9 @@ import { Separator } from '@/components/ui/separator';
 import { useCompareStore, type CompareItem } from '@/stores/compare-store';
 import { useCartStore } from '@/stores/cart-store';
 import { useNavStore } from '@/stores/nav-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/lib/i18n';
 import { formatVND } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
 import { ProductTypeBadge, VerifiedBadge } from '@/components/common/badges';
@@ -78,6 +80,7 @@ export function CompareDrawer() {
   const { items, isOpen, close, remove, clear } = useCompareStore();
   const { goProduct, goCart, setView } = useNavStore();
   const { toast } = useToast();
+  const { t } = useI18n();
 
   // Determine which sections to show based on items' types
   const types = new Set(items.map((i) => i.productType));
@@ -214,6 +217,16 @@ export function CompareDrawer() {
                   <Button
                     size="sm"
                     onClick={() => {
+                      const user = useAuthStore.getState().user;
+                      if (!user) {
+                        toast({
+                          title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+                          description: t('auth.loginRequiredToAddCart') || 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',
+                        });
+                        close();
+                        useNavStore.getState().goAuth('login', 'product-detail', { slug: item.slug });
+                        return;
+                      }
                       toast({ title: 'Added to cart', description: item.name });
                       useCartStore.getState().addItem({
                         productId: item.productId,
@@ -226,7 +239,7 @@ export function CompareDrawer() {
                         shopName: item.shopName,
                       });
                     }}
-                    className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+                    className="w-full bg-cyan-600 hover:bg-cyan-700 text-white cursor-pointer"
                   >
                     <ShoppingCart className="h-3 w-3 mr-1" />
                     Add to Cart

@@ -55,7 +55,7 @@ interface NavState {
   goBuyer: (view: 'buyer-orders' | 'buyer-downloads' | 'buyer-wishlist' | 'buyer-profile') => void;
   goSeller: (view?: 'seller' | 'seller-products' | 'seller-orders' | 'seller-wallet' | 'seller-analytics') => void;
   goAdmin: (view?: 'admin' | 'admin-users' | 'admin-sellers' | 'admin-products' | 'admin-orders' | 'admin-withdrawals' | 'admin-analytics' | 'admin-audit-logs') => void;
-  goAuth: (mode: 'login' | 'register') => void;
+  goAuth: (mode: 'login' | 'register', returnView?: AppView, returnParams?: Record<string, string>) => void;
 }
 
 /** Parse the URL hash into { view, params }.
@@ -138,7 +138,18 @@ export const useNavStore = create<NavState>((set, get) => ({
   goBuyer: (view) => get().setView(view, {}),
   goSeller: (view = 'seller') => get().setView(view, {}),
   goAdmin: (view = 'admin') => get().setView(view, {}),
-  goAuth: (mode) => get().setView(mode, {}),
+  goAuth: (mode, returnView, returnParams) => {
+    const params: Record<string, string> = {};
+    if (returnView) {
+      params.returnView = returnView;
+      if (returnParams) {
+        Object.entries(returnParams).forEach(([k, v]) => {
+          params[`rp_${k}`] = v;
+        });
+      }
+    }
+    get().setView(mode, params);
+  },
 }));
 
 /** Setup hash-change listener for browser back/forward navigation.

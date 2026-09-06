@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useCartStore, cartTotals } from '@/stores/cart-store';
 import { useNavStore } from '@/stores/nav-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { useToast } from '@/hooks/use-toast';
 import { formatVND } from '@/lib/format';
 import { ProductTypeBadge } from '@/components/common/badges';
@@ -36,7 +37,8 @@ import { useI18n } from '@/lib/i18n';
 
 export function CartDrawer() {
   const { items, isOpen, close, removeItem, updateQty } = useCartStore();
-  const { goCheckout, goProducts } = useNavStore();
+  const { goCheckout, goProducts, goAuth } = useNavStore();
+  const user = useAuthStore((s) => s.user);
   const { toast } = useToast();
   const { t } = useI18n();
   const [voucherCode, setVoucherCode] = useState('');
@@ -76,6 +78,14 @@ export function CartDrawer() {
 
   function handleCheckout() {
     close();
+    if (!user) {
+      toast({
+        title: t('auth.loginRequired') || 'Yêu cầu đăng nhập',
+        description: t('auth.loginRequiredToBuy') || 'Vui lòng đăng nhập để tiến hành mua hàng',
+      });
+      goAuth('login', 'cart');
+      return;
+    }
     goCheckout();
   }
 
