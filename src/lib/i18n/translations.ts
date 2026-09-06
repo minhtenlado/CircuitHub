@@ -18,7 +18,7 @@ export const DEFAULT_LANG: Lang = 'vi';
 export const translations = {
   vi: {
     nav: {
-      marketplace: 'Chợ điện tử',
+      marketplace: 'Khám phá',
       products: 'Sản phẩm',
       pcbBoards: 'Mạch PCB',
       openSource: 'Mã nguồn mở',
@@ -31,13 +31,16 @@ export const translations = {
       title1: 'Mua linh kiện điện tử.',
       title2: 'Tạo mọi thứ.',
       subtitle:
-        'Chợ điện tử hiện đại cho mạch PCB, bo mạch phát triển, linh kiện, cảm biến, module và dụng cụ — kèm dự án KiCad, file Gerber và firmware mã nguồn mở miễn phí cho cộng đồng.',
-      explore: 'Khám phá',
+        'Mua linh kiện, bo phát triển và module. Khám phá mạch PCB, dự án KiCad và mã nguồn mở từ cộng đồng kỹ thuật.',
+      explore: 'Khám phá sản phẩm',
+      communityProjects: 'Xem dự án cộng đồng',
+      sellOnCircuitHub: 'Bán trên CircuitHub',
       becomeSeller: 'Trở thành người bán',
+      discoverCard: 'Khám phá',
       stats: {
         products: 'Sản phẩm',
         sellers: 'Người bán đã xác minh',
-        engineers: 'Kỹ sư',
+        engineers: 'Dự án phần cứng',
       },
       specCard: {
         devBoard: 'Bo phát triển',
@@ -172,7 +175,7 @@ export const translations = {
     common: {
       search: 'Tìm kiếm',
       searchPlaceholder:
-        'Tìm theo sản phẩm, bo mạch, dự án KiCad, mã nguồn mở, linh kiện...',
+        'Tìm kiếm ESP32, Arduino, cảm biến, bo mạch, KiCad, module...',
       popularSearches: 'Tìm kiếm phổ biến',
       recentSearches: 'Tìm kiếm gần đây',
       clear: 'Xóa',
@@ -424,7 +427,7 @@ export const translations = {
 
   en: {
     nav: {
-      marketplace: 'Marketplace',
+      marketplace: 'Explore',
       products: 'Products',
       pcbBoards: 'PCB Boards',
       openSource: 'Open Source',
@@ -437,13 +440,16 @@ export const translations = {
       title1: 'Buy electronics.',
       title2: 'Build anything.',
       subtitle:
-        'The modern electronics marketplace for PCB boards, dev boards, components, sensors, modules, and tools — plus free open source KiCad projects, Gerber files, and firmware for the community.',
-      explore: 'Explore Marketplace',
+        'Source components, dev boards, and modules. Explore verified PCB designs, KiCad projects, and open-source hardware.',
+      explore: 'Explore Products',
+      communityProjects: 'Community Projects',
+      sellOnCircuitHub: 'Sell on CircuitHub',
       becomeSeller: 'Become a Seller',
+      discoverCard: 'Explore',
       stats: {
         products: 'Products',
         sellers: 'Verified Sellers',
-        engineers: 'Engineers',
+        engineers: 'Hardware Projects',
       },
       specCard: {
         devBoard: 'Dev Board',
@@ -578,7 +584,7 @@ export const translations = {
     common: {
       search: 'Search',
       searchPlaceholder:
-        'Search products, dev boards, KiCad projects, open source, components...',
+        'Search ESP32, Arduino, sensors, dev boards, KiCad, modules...',
       popularSearches: 'Popular searches',
       recentSearches: 'Recent searches',
       clear: 'Clear',
@@ -830,7 +836,7 @@ export const translations = {
 
   zh: {
     nav: {
-      marketplace: '商城',
+      marketplace: '探索',
       products: '产品',
       pcbBoards: 'PCB板',
       openSource: '开源',
@@ -843,13 +849,16 @@ export const translations = {
       title1: '购买电子元件.',
       title2: '创造一切.',
       subtitle:
-        '现代化的电子元件商城,提供 PCB 板、开发板、元器件、传感器、模块和工具 —— 还有免费开源的 KiCad 项目、Gerber 文件和固件供社区使用。',
-      explore: '探索商城',
+        '采购电子元件、开发板与模块。探索经过工程师验证的 PCB 设计、KiCad 项目及开源硬件。',
+      explore: '探索产品',
+      communityProjects: '查看社区项目',
+      sellOnCircuitHub: '在 CircuitHub 开店',
       becomeSeller: '成为卖家',
+      discoverCard: '探索',
       stats: {
         products: '产品',
         sellers: '认证卖家',
-        engineers: '工程师',
+        engineers: '硬件项目',
       },
       specCard: {
         devBoard: '开发板',
@@ -981,7 +990,7 @@ export const translations = {
     },
     common: {
       search: '搜索',
-      searchPlaceholder: '搜索产品、MPN、KiCad 项目、元件、服务...',
+      searchPlaceholder: '搜索 ESP32、Arduino、传感器、开发板、KiCad、模块...',
       popularSearches: '热门搜索',
       recentSearches: '最近搜索',
       clear: '清除',
@@ -1233,7 +1242,7 @@ export const translations = {
 
   ja: {
     nav: {
-      marketplace: 'マーケットプレイス',
+      marketplace: '探索',
       products: '製品',
       pcbBoards: 'PCB基板',
       openSource: 'オープンソース',
@@ -1246,13 +1255,16 @@ export const translations = {
       title1: '電子部品を購入.',
       title2: 'なんでも作ろう.',
       subtitle:
-        'PCB基板、開発ボード、部品、センサー、モジュール、ツールのためのモダンな電子部品マーケットプレイス — コミュニティのための無料オープンソース KiCad プロジェクト、Gerber ファイル、ファームウェアも。',
-      explore: '探索する',
+        '電子部品、開発ボード、モジュールを調達。エンジニア検証済みのPCB設計、KiCadプロジェクト、オープンソースハードウェアを探索。',
+      explore: '製品を探索',
+      communityProjects: 'コミュニティプロジェクト',
+      sellOnCircuitHub: 'CircuitHubで出品',
       becomeSeller: '出品者になる',
+      discoverCard: '探索',
       stats: {
         products: '製品',
         sellers: '認証出品者',
-        engineers: 'エンジニア',
+        engineers: 'ハードウェア設計',
       },
       specCard: {
         devBoard: '開発ボード',
@@ -1385,7 +1397,7 @@ export const translations = {
     },
     common: {
       search: '検索',
-      searchPlaceholder: '製品、MPN、KiCad プロジェクト、部品、サービスを検索...',
+      searchPlaceholder: 'ESP32、Arduino、センサー、開発ボード、KiCad、モジュールを検索...',
       popularSearches: '人気の検索',
       recentSearches: '最近の検索',
       clear: 'クリア',

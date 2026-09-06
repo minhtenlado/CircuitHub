@@ -64,7 +64,7 @@ export function CategoriesSection() {
   }
 
   return (
-    <section className="relative py-12 sm:py-16 lg:py-20">
+    <section className="relative pt-8 pb-12 sm:pt-10 sm:pb-16 lg:pt-12 lg:pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <SectionHeader
@@ -74,7 +74,7 @@ export function CategoriesSection() {
         />
 
         {/* Grid */}
-        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+        <div className="mt-8 sm:mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
           {CATEGORIES.map((cat, i) => {
             const Icon = cat.icon;
             const count = countMap.get(cat.slug);

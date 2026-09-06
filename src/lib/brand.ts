@@ -21,7 +21,7 @@ export const brand = {
 };
 
 export const navLinks = [
-  { label: 'Marketplace', view: 'home', icon: 'LayoutGrid' },
+  { label: 'Explore', view: 'home', icon: 'LayoutGrid' },
   { label: 'Products', view: 'products', icon: 'Package' },
   { label: 'PCB Boards', view: 'category', params: { slug: 'pcb-boards' }, icon: 'Layers' },
   { label: 'KiCad Projects', view: 'category', params: { slug: 'kicad-projects' }, icon: 'FileCode' },

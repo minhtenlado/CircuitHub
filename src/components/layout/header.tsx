@@ -1275,6 +1275,7 @@ function MobileLink({
 /* ---------- Main Header ---------- */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const user = useAuthStore((s) => s.user);
   const { t } = useI18n();
 
   useEffect(() => {
@@ -1317,9 +1318,11 @@ export function Header() {
             <ActionWishlist />
           </div>
           <ActionCart />
-          <div className="hidden md:block">
-            <NotificationsBell />
-          </div>
+          {user && (
+            <div className="hidden md:block">
+              <NotificationsBell />
+            </div>
+          )}
           <ThemeToggle />
           <LanguageSwitcher />
           <UserMenu />
