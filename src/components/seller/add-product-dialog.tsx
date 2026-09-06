@@ -197,15 +197,18 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
       });
       const json = await res.json();
       if (json.success) {
-        toast({ title: 'Product created!', description: name });
-        queryClient.invalidateQueries({ queryKey: ['seller-products', sellerId] });
-        queryClient.invalidateQueries({ queryKey: ['seller-analytics', sellerId] });
+        toast({
+          title: productType === 'DIGITAL' ? 'Dự án Mã nguồn mở đã xuất bản thành công!' : 'Sản phẩm linh kiện đã tạo thành công!',
+          description: name,
+        });
+        queryClient.invalidateQueries({ queryKey: ['seller-products'] });
+        queryClient.invalidateQueries({ queryKey: ['products'] });
         close();
       } else {
-        toast({ title: 'Failed to create product', description: json.message, variant: 'destructive' });
+        toast({ title: 'Không thể tạo sản phẩm / dự án', description: json.message, variant: 'destructive' });
       }
     } catch {
-      toast({ title: 'Network error', variant: 'destructive' });
+      toast({ title: 'Lỗi kết nối mạng', variant: 'destructive' });
     } finally {
       setSubmitting(false);
     }
@@ -216,9 +219,23 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
         <DialogHeader className="px-6 pt-6 pb-4 border-b border-border/60 sticky top-0 bg-background z-10">
           <DialogTitle className="flex items-center gap-2 text-lg">
-            <Package className="h-5 w-5 text-cyan-600" />
-            Add New Product
+            {productType === 'DIGITAL' ? (
+              <>
+                <FileCode className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <span>Chia Sẻ Dự Án Mã Nguồn Mở (Open Source)</span>
+              </>
+            ) : (
+              <>
+                <Package className="h-5 w-5 text-cyan-600" />
+                <span>Đăng Sản Phẩm Linh Kiện / Bo Mạch Mới</span>
+              </>
+            )}
           </DialogTitle>
+          {productType === 'DIGITAL' && (
+            <p className="text-xs text-muted-foreground mt-1">
+              🟢 Hoàn toàn mở: Không yêu cầu xác minh CCCD hay hồ sơ người bán. Tự do chia sẻ KiCad, Altium, Gerber, Firmware cho cộng đồng.
+            </p>
+          )}
           {/* Step indicator */}
           <div className="flex items-center gap-2 mt-3">
             {steps.map((s, i) => (

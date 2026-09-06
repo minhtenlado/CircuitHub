@@ -182,6 +182,30 @@ export function SellerOnboardingView() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="max-w-2xl mx-auto px-4 py-8">
+        {/* Open Source Zero KYC Notice Banner */}
+        <div className="mb-6 rounded-2xl border border-emerald-300 dark:border-emerald-800 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/30 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 items-center justify-center font-bold">
+                <FileCode className="h-4 w-4" />
+              </span>
+              <p className="font-bold text-sm text-foreground">
+                Bạn chỉ muốn chia sẻ Dự án Mã nguồn mở (KiCad / Altium / Firmware)?
+              </p>
+            </div>
+            <p className="text-xs text-muted-foreground sm:pl-9 leading-relaxed">
+              Chia sẻ mã nguồn mở <strong className="text-emerald-700 dark:text-emerald-300">hoàn toàn KHÔNG CẦN</strong> xác minh CCCD, không cần quét khuôn mặt hay tạo gian hàng/kho hàng. Đăng tải miễn phí tức thì!
+            </p>
+          </div>
+          <Button
+            onClick={() => setView('buyer-profile', { tab: 'seller-setup', action: 'add-open-source' })}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shrink-0 gap-1.5 cursor-pointer shadow-sm"
+          >
+            <FileCode className="h-3.5 w-3.5" />
+            Đăng Open Source ngay ➔
+          </Button>
+        </div>
+
         {/* Step indicator */}
         <div className="flex items-center justify-between mb-8">
           {STEPS.map((s, i) => {
@@ -221,15 +245,15 @@ export function SellerOnboardingView() {
                 <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-400 flex items-center justify-center mx-auto mb-6 shadow-[0_8px_24px_-6px_rgba(6,182,212,0.5)]">
                   <Store className="h-10 w-10 text-white" />
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-bold mb-3">Thiết lập Bán hàng & Chia sẻ Mã nguồn mở</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold mb-3">Xác Minh Mở Gian Hàng Bán Linh Kiện</h1>
                 <p className="text-muted-foreground mb-8 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
-                  Gia nhập cộng đồng hơn 15.000 kỹ sư maker — Đăng bán bo mạch, linh kiện điện tử hoặc chia sẻ thiết kế phần cứng mở (KiCad, Altium, Arduino, ESP-IDF) hoàn toàn miễn phí hoặc có thu phí.
+                  Đăng ký gian hàng thương mại để bán bo mạch, MCU, cảm biến có thu phí, tự động gọi bưu tá lấy hàng tận nơi và thanh toán COD an toàn.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   {[
                     { icon: Package, title: 'Bán linh kiện & bo mạch', desc: 'Đăng bán MCU, module, sensor, nhận đơn COD toàn quốc tự động' },
-                    { icon: FileCode, title: 'Chia sẻ Mã nguồn mở', desc: 'Đăng tải KiCad, Altium, Gerber, firmware với giấy phép MIT / CERN-OHL' },
-                    { icon: ShieldCheck, title: 'Định danh CCCD / eKYC', desc: 'Bảo vệ bản quyền sở hữu trí tuệ và nâng cao uy tín kỹ sư' },
+                    { icon: CreditCard, title: 'Định danh CCCD an toàn', desc: 'Xác minh danh tính đảm bảo trách nhiệm người bán thương mại' },
+                    { icon: ShieldCheck, title: 'Bảo vệ thanh toán & ví', desc: 'Nhận tiền bán hàng ký quỹ và rút về tài khoản ngân hàng 24/7' },
                   ].map((b, i) => {
                     const Icon = b.icon;
                     return (
@@ -247,8 +271,10 @@ export function SellerOnboardingView() {
             {/* Step 1: ID Verification */}
             {step === 1 && (
               <div className="py-4">
-                <h2 className="text-xl font-bold mb-2">Citizen ID Verification</h2>
-                <p className="text-sm text-muted-foreground mb-6">Upload both sides of your Citizen ID Card (CCCD)</p>
+                <h2 className="text-xl font-bold mb-2">Xác minh Căn cước công dân (CCCD)</h2>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Tải lên 2 mặt CCCD để xác thực mở gian hàng thương mại bán linh kiện. (Nếu bạn chia sẻ dự án mã nguồn mở, hãy bấm nút ở banner trên để đăng ngay).
+                </p>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   {/* Front side */}

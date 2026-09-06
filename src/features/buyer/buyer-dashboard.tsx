@@ -86,7 +86,7 @@ import {
   Check,
 } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { AddProductDialog } from '@/components/seller/add-product-dialog';
 import { useCategories } from '@/lib/api/hooks';
@@ -1296,6 +1296,7 @@ function OverviewTab({
   onGoProducts,
   onGoTab,
   isSeller,
+  onOpenAddOpenSource,
 }: {
   orders: DemoOrder[];
   wishlistCount: number;
@@ -1304,6 +1305,7 @@ function OverviewTab({
   onGoProducts: () => void;
   onGoTab: (t: TabId) => void;
   isSeller?: boolean;
+  onOpenAddOpenSource?: () => void;
 }) {
   const { t } = useI18n();
   const totalSpent = orders.reduce((s, o) => s + o.grandTotal, 0);
@@ -1311,33 +1313,65 @@ function OverviewTab({
 
   return (
     <div className="space-y-6">
-      {/* Stat cards */}
+      {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard icon={Package} label={t('buyer.overview.totalOrders')} value={String(orders.length)} hint={`${orders.filter((o) => o.status === 'COMPLETED').length} completed`} accent="cyan" />
-        <StatCard icon={Wallet} label={t('buyer.overview.totalSpent')} value={formatVND(totalSpent)} hint="All-time spending" accent="aqua" />
-        <StatCard icon={Heart} label={t('buyer.overview.wishlistItems')} value={String(wishlistCount)} hint={wishlistCount === 0 ? 'Add favorites' : 'Saved products'} accent="rose" />
-        <StatCard icon={Download} label={t('buyer.tabs.downloads')} value={String(downloads.length)} hint="Digital purchases" accent="amber" />
+        <StatCard
+          icon={Package}
+          label={t('buyer.overview.totalOrders')}
+          value={String(orders.length)}
+          hint={`${orders.filter((o) => o.status === 'COMPLETED').length} completed`}
+          accent="cyan"
+        />
+        <StatCard
+          icon={Wallet}
+          label={t('buyer.overview.totalSpent')}
+          value={formatVND(totalSpent)}
+          hint="All-time spending"
+          accent="aqua"
+        />
+        <StatCard
+          icon={Heart}
+          label={t('buyer.overview.wishlistItems')}
+          value={String(wishlistCount)}
+          hint={wishlistCount === 0 ? 'Add favorites' : 'Saved products'}
+          accent="rose"
+        />
+        <StatCard
+          icon={Download}
+          label={t('buyer.tabs.downloads')}
+          value={String(downloads.length)}
+          hint="Digital deliverables"
+          accent="amber"
+        />
       </div>
 
       {/* Seller & Open Source Callout Banner */}
-      <div className="rounded-xl border border-cyan-200 dark:border-cyan-800/80 bg-gradient-to-r from-cyan-50/80 via-white to-teal-50/60 dark:from-cyan-950/30 dark:via-slate-900 dark:to-teal-950/20 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+      <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/80 bg-gradient-to-r from-emerald-50/70 via-white to-cyan-50/50 dark:from-emerald-950/30 dark:via-slate-900 dark:to-cyan-950/20 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 rounded-lg bg-cyan-100 dark:bg-cyan-900/60 text-cyan-600 dark:text-cyan-400 items-center justify-center">
-              <Store className="h-4 w-4" />
+            <span className="flex h-7 w-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 items-center justify-center font-semibold">
+              <Code2 className="h-4 w-4" />
             </span>
             <p className="font-semibold text-sm text-foreground">
-              Bạn muốn thiết lập bán hàng hoặc chia sẻ dự án mã nguồn mở?
+              Chia sẻ Dự án Mã nguồn mở (KiCad / Altium / Firmware) hoặc Bán Linh kiện
             </p>
           </div>
-          <p className="text-xs text-muted-foreground sm:pl-9">
-            Đăng bán linh kiện điện tử, nhận gia công bo mạch PCB hoặc phát hành miễn phí các thiết kế KiCad, Altium, firmware cho cộng đồng kỹ sư maker.
+          <p className="text-xs text-muted-foreground sm:pl-9 leading-relaxed">
+            Chia sẻ mã nguồn mở <strong className="text-emerald-700 dark:text-emerald-400">hoàn toàn miễn phí & không cần xác minh CCCD</strong>. Chỉ người bán linh kiện thương mại mới cần xác thực.
           </p>
         </div>
-        <Button size="sm" onClick={() => onGoTab('seller-setup')} className="bg-cyan-600 hover:bg-cyan-700 text-white text-xs shrink-0 gap-1 cursor-pointer">
-          {isSeller ? 'Quản lý Kênh Bán & Open Source' : 'Tìm hiểu & Thiết lập ngay'}
-          <ChevronRight className="h-3.5 w-3.5" />
-        </Button>
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          {onOpenAddOpenSource && (
+            <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1.5 cursor-pointer font-semibold shadow-sm">
+              <Code2 className="h-3.5 w-3.5" />
+              Đăng Open Source ngay (0đ)
+            </Button>
+          )}
+          <Button size="sm" variant="outline" onClick={() => onGoTab('seller-setup')} className="text-xs gap-1 cursor-pointer">
+            {isSeller ? 'Quản lý Gian hàng' : 'Bán linh kiện'}
+            <ChevronRight className="h-3.5 w-3.5" />
+          </Button>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -1859,26 +1893,30 @@ function ProfileTab({
               <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border/50">
                 {isSeller ? (
                   <>
-                    <Button size="sm" onClick={onGoSeller} className="bg-cyan-600 hover:bg-cyan-700 text-white gap-1.5 cursor-pointer">
+                    <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 cursor-pointer font-semibold shadow-sm">
+                      <Code2 className="h-3.5 w-3.5" />
+                      Đăng Dự án Open Source (0đ)
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={onGoSeller} className="text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 gap-1.5 cursor-pointer">
                       <Store className="h-3.5 w-3.5" />
                       Vào Kênh Người Bán (Seller Center)
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={onOpenAddOpenSource} className="text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 gap-1.5 cursor-pointer">
-                      <Code2 className="h-3.5 w-3.5" />
-                      Đăng Dự án Open Source
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button size="sm" onClick={onStartOnboarding} className="bg-cyan-600 hover:bg-cyan-700 text-white gap-1.5 cursor-pointer">
-                      <Store className="h-3.5 w-3.5" />
-                      Kích hoạt Kênh Bán & Chia Sẻ Ngay
+                    <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 cursor-pointer font-semibold shadow-sm">
+                      <Code2 className="h-3.5 w-3.5" />
+                      Đăng Dự án Open Source (Không cần CCCD)
                     </Button>
-                    <Button size="sm" variant="outline" onClick={onGoSellerSetupTab} className="text-xs cursor-pointer">
-                      Xem Chi Tiết Kênh Creator
+                    <Button size="sm" variant="outline" onClick={onStartOnboarding} className="text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 gap-1.5 cursor-pointer">
+                      <Store className="h-3.5 w-3.5" />
+                      Xác minh CCCD để Bán Linh Kiện
                     </Button>
                   </>
                 )}
+                <Button size="sm" variant="ghost" onClick={onGoSellerSetupTab} className="text-xs cursor-pointer">
+                  Xem Chi Tiết Kênh
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -2037,10 +2075,15 @@ function SellerSetupTab({
                   Đăng sản phẩm linh kiện mới
                 </Button>
               ) : (
-                <Button size="sm" variant="outline" className="w-full gap-1.5 cursor-pointer" onClick={onStartOnboarding}>
-                  Đăng ký gian hàng phần cứng
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
+                <div className="space-y-1.5">
+                  <Button size="sm" variant="outline" className="w-full gap-1.5 text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 cursor-pointer" onClick={onStartOnboarding}>
+                    Xác minh CCCD để Bán Linh Kiện
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                  <p className="text-[11px] text-center text-muted-foreground">
+                    Yêu cầu CCCD / eKYC để bật bưu tá lấy hàng & thanh toán COD
+                  </p>
+                </div>
               )}
             </div>
           </CardContent>
@@ -2055,7 +2098,7 @@ function SellerSetupTab({
             <CardTitle className="text-lg font-bold flex items-center justify-between">
               <span>Chia Sẻ Dự Án Mã Nguồn Mở</span>
               <Badge variant="outline" className="text-emerald-700 dark:text-emerald-300 border-emerald-300/80 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/40 text-[11px]">
-                Open Source
+                Open Source (0đ)
               </Badge>
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
@@ -2082,18 +2125,14 @@ function SellerSetupTab({
               </li>
             </ul>
 
-            <div className="pt-2 border-t border-border/60">
-              {isSeller ? (
-                <Button size="sm" className="w-full gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer" onClick={onOpenAddOpenSource}>
-                  <Code2 className="h-4 w-4" />
-                  Đăng tải dự án Open Source mới
-                </Button>
-              ) : (
-                <Button size="sm" variant="outline" className="w-full gap-1.5 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 cursor-pointer" onClick={onStartOnboarding}>
-                  Kích hoạt để chia sẻ dự án mở
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              )}
+            <div className="pt-2 border-t border-border/60 space-y-1.5">
+              <Button size="sm" className="w-full gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold cursor-pointer shadow-sm" onClick={onOpenAddOpenSource}>
+                <Code2 className="h-4 w-4" />
+                Đăng Tải Dự Án Open Source Ngay
+              </Button>
+              <p className="text-[11px] text-center text-emerald-600 dark:text-emerald-400 font-medium">
+                ✓ Hoàn toàn mở: Không cần CCCD · Không cần eKYC · Đăng tải tức thì
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -2113,9 +2152,9 @@ function SellerSetupTab({
                 Đã kích hoạt Seller & Creator
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/40 gap-1">
-                <Clock className="h-3 w-3" />
-                Chưa kích hoạt kênh bán
+              <Badge variant="outline" className="text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/40 gap-1">
+                <CheckCircle2 className="h-3 w-3" />
+                Open Source Creator: Đang mở
               </Badge>
             )}
           </CardTitle>
@@ -2163,7 +2202,7 @@ function SellerSetupTab({
                   <Store className="h-3.5 w-3.5" />
                   Mở Trung tâm Quản trị (Seller Center)
                 </Button>
-                <Button size="sm" variant="outline" onClick={onOpenAddOpenSource} className="gap-1.5 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 cursor-pointer">
+                <Button size="sm" variant="outline" onClick={onOpenAddOpenSource} className="gap-1.5 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 cursor-pointer font-semibold">
                   <Code2 className="h-3.5 w-3.5" />
                   Đăng dự án Open Source mới
                 </Button>
@@ -2175,43 +2214,38 @@ function SellerSetupTab({
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Tài khoản hiện tại của bạn đang ở chế độ <strong>Khách mua hàng (Buyer)</strong>. Để bắt đầu bán linh kiện, nhận đơn gia công mạch PCB hoặc đăng tải và chia sẻ các thiết kế phần cứng mở, vui lòng hoàn tất đăng ký thông tin người bán.
-              </p>
-
-              {/* Steps timeline preview */}
-              <div className="grid sm:grid-cols-3 gap-3">
-                <div className="rounded-xl border border-border/60 p-3 bg-muted/20">
-                  <div className="flex items-center gap-2 text-cyan-600 font-semibold text-xs mb-1">
-                    <span className="flex h-5 w-5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 items-center justify-center text-[10px]">1</span>
-                    Hồ sơ & Tên Shop
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">Đặt tên gian hàng, chọn lĩnh vực chuyên môn (KiCad, PCB, MCU, Module...).</p>
+              <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/20 p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  <p className="text-sm font-semibold text-foreground">
+                    Bạn có thể chia sẻ Dự án Mã nguồn mở (KiCad / Altium / Firmware) ngay bây giờ!
+                  </p>
                 </div>
-                <div className="rounded-xl border border-border/60 p-3 bg-muted/20">
-                  <div className="flex items-center gap-2 text-cyan-600 font-semibold text-xs mb-1">
-                    <span className="flex h-5 w-5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 items-center justify-center text-[10px]">2</span>
-                    Định danh eKYC CCCD
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">Xác thực CCCD nhanh chóng bảo vệ bản quyền tác giả và chống hàng giả.</p>
-                </div>
-                <div className="rounded-xl border border-border/60 p-3 bg-muted/20">
-                  <div className="flex items-center gap-2 text-cyan-600 font-semibold text-xs mb-1">
-                    <span className="flex h-5 w-5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 items-center justify-center text-[10px]">3</span>
-                    Bán hàng & Chia sẻ
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">Bắt đầu đăng tải sản phẩm phần cứng hoặc chia sẻ dự án open-source miễn phí.</p>
+                <p className="text-xs text-muted-foreground leading-relaxed pl-6">
+                  CircuitHub mở cửa cho mọi kỹ sư và tác giả đóng góp cho cộng đồng mã nguồn mở. Bạn <strong>không cần xác minh CCCD</strong>, không cần eKYC hay mở gian hàng thương mại.
+                </p>
+                <div className="pt-2 pl-6">
+                  <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 cursor-pointer font-semibold shadow-sm">
+                    <Code2 className="h-3.5 w-3.5" />
+                    Đăng Dự Án Open Source Ngay (0đ)
+                  </Button>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Button onClick={onStartOnboarding} className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 font-medium cursor-pointer">
-                  <Store className="h-4 w-4" />
-                  Bắt đầu Đăng ký Kênh Bán & Creator (3 phút)
-                </Button>
-                <Button variant="outline" onClick={onDemoSeller} className="text-muted-foreground hover:text-foreground text-xs cursor-pointer">
-                  Thử nghiệm nhanh quyền Seller (Demo Mode)
-                </Button>
+              {/* Seller notice */}
+              <div className="pt-2 border-t border-border/60">
+                <p className="text-xs text-muted-foreground mb-3">
+                  <strong>Bạn muốn bán linh kiện hoặc nhận đơn gia công bo mạch có thu phí?</strong> Khi đó bạn mới cần xác minh CCCD và eKYC theo quy định thương mại điện tử để bật tính năng bưu tá lấy hàng tận nơi và thanh toán COD.
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button size="sm" variant="outline" onClick={onStartOnboarding} className="text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 gap-1.5 font-medium cursor-pointer">
+                    <Store className="h-4 w-4" />
+                    Xác minh CCCD để Bán Linh Kiện
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={onDemoSeller} className="text-muted-foreground hover:text-foreground text-xs cursor-pointer">
+                    Thử nghiệm nhanh quyền Seller (Demo Mode)
+                  </Button>
+                </div>
               </div>
             </div>
           )}
@@ -2316,6 +2350,7 @@ export function BuyerDashboard() {
     navView === 'buyer-wishlist' ? 'wishlist' :
     navView === 'buyer-profile' ? 'profile' : 'overview';
 
+  const navParams = useNavStore((s) => s.params);
   const [activeTab, setActiveTab] = useState<TabId>(initialTab);
 
   function handleStartOnboarding() {
@@ -2333,6 +2368,18 @@ export function BuyerDashboard() {
     setAddProductLicense('OPEN_SOURCE');
     setAddProductOpen(true);
   }
+
+  useEffect(() => {
+    if (navParams?.tab === 'seller-setup') {
+      setActiveTab('seller-setup');
+    }
+    if (navParams?.action === 'add-open-source') {
+      setActiveTab('seller-setup');
+      setAddProductType('DIGITAL');
+      setAddProductLicense('OPEN_SOURCE');
+      setAddProductOpen(true);
+    }
+  }, [navParams]);
 
   function handleDemoSeller() {
     demoLogin('seller');
@@ -2494,6 +2541,7 @@ export function BuyerDashboard() {
                       onGoProducts={() => goProducts()}
                       onGoTab={(t) => setActiveTab(t)}
                       isSeller={isSeller}
+                      onOpenAddOpenSource={handleOpenAddOpenSource}
                     />
                   </motion.div>
                 )}

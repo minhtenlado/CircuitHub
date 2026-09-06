@@ -1143,25 +1143,28 @@ function UserMenu() {
         <DropdownMenuItem onClick={() => goBuyer('buyer-profile')}>
           <Settings className="h-4 w-4" /> {t('common.settings')}
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => setView('buyer-profile', { tab: 'seller-setup', action: 'add-open-source' })}
+          className="text-emerald-600 dark:text-emerald-400 font-medium cursor-pointer"
+        >
+          <FileCode className="h-4 w-4 text-emerald-500" /> Chia sẻ Dự án Open Source (0đ)
+        </DropdownMenuItem>
         {user.role === 'SELLER' || user.shopSlug ? (
           <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => goSeller()} className="text-cyan-600 font-medium">
+            <DropdownMenuItem onClick={() => goSeller()} className="text-cyan-600 font-medium cursor-pointer">
               <Store className="h-4 w-4" /> Kênh Người Bán (Seller Center)
             </DropdownMenuItem>
             {user.shopSlug && (
-              <DropdownMenuItem onClick={() => goShop(user.shopSlug!)}>
+              <DropdownMenuItem onClick={() => goShop(user.shopSlug!)} className="cursor-pointer">
                 <Store className="h-4 w-4" /> {t('common.myShop')}
               </DropdownMenuItem>
             )}
           </>
         ) : (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setView('seller-onboarding', {})} className="text-cyan-600 font-medium">
-              <Store className="h-4 w-4" /> Bán hàng & Open Source
-            </DropdownMenuItem>
-          </>
+          <DropdownMenuItem onClick={() => setView('seller-onboarding', {})} className="text-cyan-600 font-medium cursor-pointer">
+            <Store className="h-4 w-4" /> Mở Gian Hàng Bán Linh Kiện (CCCD)
+          </DropdownMenuItem>
         )}
         {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
           <>
@@ -1280,6 +1283,14 @@ function MobileMenu() {
                   setOpen(false);
                 }}
               />
+              <MobileLink
+                icon={<FileCode className="h-4 w-4 text-emerald-500" />}
+                label="Chia sẻ Dự án Open Source (0đ)"
+                onClick={() => {
+                  setView('buyer-profile', { tab: 'seller-setup', action: 'add-open-source' });
+                  setOpen(false);
+                }}
+              />
               {user.role === 'SELLER' || user.shopSlug ? (
                 <>
                   <MobileLink
@@ -1304,7 +1315,7 @@ function MobileMenu() {
               ) : (
                 <MobileLink
                   icon={<Store className="h-4 w-4 text-cyan-500" />}
-                  label="Bán hàng & Open Source"
+                  label="Mở Gian Hàng Bán Linh Kiện (CCCD)"
                   onClick={() => {
                     setView('seller-onboarding', {});
                     setOpen(false);

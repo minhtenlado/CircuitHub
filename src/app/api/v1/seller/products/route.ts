@@ -27,40 +27,84 @@ export async function GET(req: NextRequest) {
   return ok({ items });
 }
 
-/** POST /api/v1/seller/products — create a new product (seller onboarding) */
+/** POST /api/v1/seller/products — create a new product or open source project */
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
-  if (!body?.sellerId || !body?.shopId || !body?.name || !body?.price)
-    return fail('sellerId, shopId, name, price required', 'VALIDATION_ERROR', 422);
+  if (!body?.sellerId || !body?.name)
+    return fail('sellerId and name required', 'VALIDATION_ERROR', 422);
 
   // Resolve demo seller ID to a real DB user
   const sellerId = await resolveDemoUserId(body.sellerId);
-  // Resolve shopId: if it's not a real shop, find the seller's shop
+
+  // Resolve shopId: if seller doesn't have a shop yet (e.g. open source creator), auto-provision a creator shop
   let shopId = body.shopId;
-  if (shopId === 'demo-shop' || shopId === sellerId) {
-    const shop = await db.shop.findUnique({ where: { sellerId } });
-    shopId = shop?.id ?? body.shopId;
+  if (!shopId || shopId === 'demo-shop' || shopId === sellerId || shopId === 'creator-shop') {
+    let shop = await db.shop.findUnique({ where: { sellerId } });
+    if (!shop) {
+      const user = await db.user.findUnique({ where: { id: sellerId } });
+      const shopName = user?.name ? `${user.name}'s Studio` : 'Community Creator';
+      const baseSlug = (user?.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'creator');
+      const shopSlug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
+      shop = await db.shop.create({
+        data: {
+          sellerId,
+          name: shopName,
+          slug: shopSlug,
+          description: 'Open source hardware, KiCad designs & firmware',
+          status: 'ACTIVE',
+        },
+      });
+    }
+    shopId = shop.id;
   }
 
+  // Auto-fallback category if not provided
+  let categoryId = body.categoryId;
+  if (!categoryId) {
+    const defaultCat = await db.category.findFirst({
+      where: {
+        OR: [
+          { slug: 'open-source' },
+          { slug: 'dev-boards' },
+          { slug: 'components' },
+        ],
+      },
+    });
+    categoryId = defaultCat?.id;
+  }
+
+  // Parse price (0 is valid for free open source)
+  const rawPrice = body.price;
+  const parsedPrice = (rawPrice !== undefined && rawPrice !== null && rawPrice !== '')
+    ? Math.max(0, parseInt(String(rawPrice), 10) || 0)
+    : 0;
+
   const slug = (body.slug ?? String(body.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')) + '-' + Math.random().toString(36).slice(2, 6);
+
+  // Combine githubUrl into description if present
+  let description = body.description || '';
+  if (body.githubUrl && !description.includes(body.githubUrl)) {
+    description = description ? `${description}\n\n**GitHub Repository:** ${body.githubUrl}` : `**GitHub Repository:** ${body.githubUrl}`;
+  }
+
   const product = await db.product.create({
     data: {
       sellerId,
       shopId,
-      categoryId: body.categoryId,
+      categoryId,
       name: body.name,
       slug,
       productType: body.productType ?? 'PHYSICAL',
       shortDescription: body.shortDescription,
-      description: body.description,
+      description,
       sku: body.sku,
       mpn: body.mpn,
       brand: body.brand,
-      price: parseInt(body.price, 10),
+      price: parsedPrice,
       compareAtPrice: body.compareAtPrice ? parseInt(body.compareAtPrice, 10) : null,
       stockTotal: parseInt(body.stock ?? '0', 10),
       stockAvailable: parseInt(body.stock ?? '0', 10),
-      unlimited: body.unlimited ?? false,
+      unlimited: body.unlimited ?? (parsedPrice === 0 || body.productType === 'DIGITAL'),
       status: 'ACTIVE',
       // PCB
       pcbLayers: body.pcbLayers,
