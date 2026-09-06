@@ -22,14 +22,12 @@ import {
   FileCode,
   Layers,
   Cpu,
-  Tag,
-  DollarSign,
   Boxes,
-  Image as ImageIcon,
-  FolderTree,
+  Sparkles,
+  Github,
   CheckCircle2,
-  ChevronRight,
-  ChevronLeft,
+  ShieldCheck,
+  Eye,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatVND } from '@/lib/format';
@@ -45,24 +43,41 @@ interface AddProductDialogProps {
 }
 
 type ProductType = 'PHYSICAL' | 'DIGITAL';
-type Step = 'type' | 'basic' | 'specs' | 'review';
 
-const PRODUCT_TYPES: { id: ProductType; label: string; desc: string; icon: any; color: string }[] = [
-  { id: 'PHYSICAL', label: 'Sản phẩm phần cứng (Bán hàng)', desc: 'Bo mạch phát triển, linh kiện, cảm biến, module, mạch PCB hoàn thiện', icon: Package, color: 'from-cyan-500 to-teal-400' },
-  { id: 'DIGITAL', label: 'Mã nguồn mở / Thiết kế số', desc: 'Dự án KiCad/Altium, file Gerber, mã nguồn firmware mở cho cộng đồng', icon: FileCode, color: 'from-teal-500 to-emerald-400' },
+const SAMPLE_PRESETS = [
+  {
+    name: 'KiCad 3D PCB',
+    url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&auto=format&fit=crop&q=80',
+    tag: 'KiCad 9',
+  },
+  {
+    name: 'ESP32 IoT Node',
+    url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80',
+    tag: 'ESP-IDF',
+  },
+  {
+    name: 'Cảm biến Sensor',
+    url: 'https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?w=600&auto=format&fit=crop&q=80',
+    tag: 'Altium',
+  },
 ];
 
 export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categories, initialType, initialLicense }: AddProductDialogProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [step, setStep] = useState<Step>('type');
   const [submitting, setSubmitting] = useState(false);
 
+  // Mode state: 'DIGITAL' = Open Source Project Studio, 'PHYSICAL' = Hardware Product
+  const [productType, setProductType] = useState<ProductType>(initialType || 'DIGITAL');
+
   // Form state
-  const [productType, setProductType] = useState<ProductType>('PHYSICAL');
   const [name, setName] = useState('');
   const [shortDescription, setShortDescription] = useState('');
   const [description, setDescription] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+
+  // Physical fields
   const [brand, setBrand] = useState('');
   const [sku, setSku] = useState('');
   const [mpn, setMpn] = useState('');
@@ -70,32 +85,30 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
   const [compareAtPrice, setCompareAtPrice] = useState('');
   const [stock, setStock] = useState('10');
   const [unlimited, setUnlimited] = useState(false);
-  const [categoryId, setCategoryId] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  // Physical specs
   const [pcbLayers, setPcbLayers] = useState('');
   const [pcbThickness, setPcbThickness] = useState('');
   const [pcbMaterial, setPcbMaterial] = useState('FR4');
   const [pcbSurfaceFinish, setPcbSurfaceFinish] = useState('HASL');
   const [pcbColor, setPcbColor] = useState('Blue');
   const [pcbDimensions, setPcbDimensions] = useState('');
-  // Digital
+
+  // Digital / Open Source fields
   const [software, setSoftware] = useState('KiCad');
   const [softwareVersion, setSoftwareVersion] = useState('');
   const [currentVersion, setCurrentVersion] = useState('v1.0.0');
   const [fileFormat, setFileFormat] = useState('');
-  const [licenseType, setLicenseType] = useState('PERSONAL');
+  const [licenseType, setLicenseType] = useState('OPEN_SOURCE');
   const [githubUrl, setGithubUrl] = useState('');
 
   useEffect(() => {
     if (open) {
       if (initialType) {
         setProductType(initialType);
-        setStep('basic');
       }
       if (initialLicense) {
         setLicenseType(initialLicense);
         if (initialLicense === 'OPEN_SOURCE') {
+          setProductType('DIGITAL');
           setPrice('0');
         }
       }
@@ -103,8 +116,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
   }, [open, initialType, initialLicense]);
 
   function reset() {
-    setStep('type');
-    setProductType(initialType || 'PHYSICAL');
+    setProductType(initialType || 'DIGITAL');
     setName('');
     setShortDescription('');
     setDescription('');
@@ -127,7 +139,8 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
     setSoftwareVersion('');
     setCurrentVersion('v1.0.0');
     setFileFormat('');
-    setLicenseType('PERSONAL');
+    setLicenseType('OPEN_SOURCE');
+    setGithubUrl('');
   }
 
   function close() {
@@ -135,59 +148,59 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
     setTimeout(reset, 300);
   }
 
-  const steps: { id: Step; label: string }[] = [
-    { id: 'type', label: 'Type' },
-    { id: 'basic', label: 'Basic Info' },
-    { id: 'specs', label: 'Specifications' },
-    { id: 'review', label: 'Review' },
-  ];
-  const currentIdx = steps.findIndex((s) => s.id === step);
-
-  function canProceed(): boolean {
-    if (step === 'type') return !!productType;
-    if (step === 'basic') return !!name && !!price && !!categoryId;
-    if (step === 'specs') {
-      if (productType === 'PHYSICAL') return true;
-      if (productType === 'DIGITAL') return !!software && !!currentVersion;
-    }
-    return true;
-  }
-
   async function submit() {
+    if (!name.trim()) {
+      toast({ title: 'Vui lòng nhập tên dự án / sản phẩm', variant: 'destructive' });
+      return;
+    }
+    if (productType === 'PHYSICAL') {
+      if (!price || isNaN(parseInt(price, 10))) {
+        toast({ title: 'Vui lòng nhập giá bán hợp lệ', variant: 'destructive' });
+        return;
+      }
+      if (!categoryId) {
+        toast({ title: 'Vui lòng chọn danh mục sản phẩm', variant: 'destructive' });
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
       const body: any = {
         sellerId,
         shopId,
-        categoryId,
-        name,
+        categoryId: categoryId || undefined,
+        name: name.trim(),
         productType,
-        shortDescription,
-        description,
-        sku: sku || undefined,
-        mpn: mpn || undefined,
-        brand: brand || undefined,
-        price: parseInt(price, 10),
-        compareAtPrice: compareAtPrice ? parseInt(compareAtPrice, 10) : undefined,
-        stock: stock ? parseInt(stock, 10) : 0,
-        unlimited,
-        imageUrl: imageUrl || undefined,
+        shortDescription: shortDescription.trim() || undefined,
+        description: description.trim() || undefined,
+        imageUrl: imageUrl.trim() || undefined,
       };
+
       if (productType === 'PHYSICAL') {
+        body.sku = sku.trim() || undefined;
+        body.mpn = mpn.trim() || undefined;
+        body.brand = brand.trim() || undefined;
+        body.price = parseInt(price, 10);
+        body.compareAtPrice = compareAtPrice ? parseInt(compareAtPrice, 10) : undefined;
+        body.stock = stock ? parseInt(stock, 10) : 0;
+        body.unlimited = unlimited;
         body.pcbLayers = pcbLayers ? parseInt(pcbLayers, 10) : undefined;
         body.pcbThickness = pcbThickness ? parseFloat(pcbThickness) : undefined;
         body.pcbMaterial = pcbMaterial;
         body.pcbSurfaceFinish = pcbSurfaceFinish;
         body.pcbColor = pcbColor;
-        body.pcbDimensions = pcbDimensions || undefined;
-      }
-      if (productType === 'DIGITAL') {
+        body.pcbDimensions = pcbDimensions.trim() || undefined;
+      } else {
+        // DIGITAL / OPEN SOURCE
+        body.price = 0;
+        body.unlimited = true;
         body.software = software;
-        body.softwareVersion = softwareVersion || undefined;
-        body.currentVersion = currentVersion;
-        body.fileFormat = fileFormat || undefined;
-        body.licenseType = licenseType;
-        body.githubUrl = githubUrl || undefined;
+        body.softwareVersion = softwareVersion.trim() || undefined;
+        body.currentVersion = currentVersion.trim() || 'v1.0.0';
+        body.fileFormat = fileFormat.trim() || undefined;
+        body.licenseType = licenseType || 'OPEN_SOURCE';
+        body.githubUrl = githubUrl.trim() || undefined;
       }
 
       const res = await fetch('/api/v1/seller/products', {
@@ -198,17 +211,23 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
       const json = await res.json();
       if (json.success) {
         toast({
-          title: productType === 'DIGITAL' ? 'Dự án Mã nguồn mở đã xuất bản thành công!' : 'Sản phẩm linh kiện đã tạo thành công!',
+          title: productType === 'DIGITAL'
+            ? '🚀 Dự án Mã nguồn mở đã xuất bản thành công!'
+            : '📦 Sản phẩm linh kiện đã được tạo thành công!',
           description: name,
         });
         queryClient.invalidateQueries({ queryKey: ['seller-products'] });
         queryClient.invalidateQueries({ queryKey: ['products'] });
         close();
       } else {
-        toast({ title: 'Không thể tạo sản phẩm / dự án', description: json.message, variant: 'destructive' });
+        toast({
+          title: 'Không thể tạo sản phẩm / dự án',
+          description: json.message,
+          variant: 'destructive',
+        });
       }
     } catch {
-      toast({ title: 'Lỗi kết nối mạng', variant: 'destructive' });
+      toast({ title: 'Lỗi kết nối mạng, vui lòng thử lại', variant: 'destructive' });
     } finally {
       setSubmitting(false);
     }
@@ -216,357 +235,733 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && close()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
-        <DialogHeader className="px-6 pt-6 pb-4 border-b border-border/60 sticky top-0 bg-background z-10">
-          <DialogTitle className="flex items-center gap-2 text-lg">
-            {productType === 'DIGITAL' ? (
-              <>
-                <FileCode className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                <span>Chia Sẻ Dự Án Mã Nguồn Mở (Open Source)</span>
-              </>
-            ) : (
-              <>
-                <Package className="h-5 w-5 text-cyan-600" />
-                <span>Đăng Sản Phẩm Linh Kiện / Bo Mạch Mới</span>
-              </>
-            )}
-          </DialogTitle>
-          {productType === 'DIGITAL' && (
-            <p className="text-xs text-muted-foreground mt-1">
-              🟢 Hoàn toàn mở: Không yêu cầu xác minh CCCD hay hồ sơ người bán. Tự do chia sẻ KiCad, Altium, Gerber, Firmware cho cộng đồng.
-            </p>
-          )}
-          {/* Step indicator */}
-          <div className="flex items-center gap-2 mt-3">
-            {steps.map((s, i) => (
-              <div key={s.id} className="flex items-center gap-2">
-                <div className={cn(
-                  'h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold border-2 transition-colors',
-                  step === s.id ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300' :
-                  i < currentIdx ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' :
-                  'border-border bg-background text-muted-foreground',
-                )}>
-                  {i < currentIdx ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
-                </div>
-                <span className={cn('text-xs font-medium hidden sm:inline', step === s.id ? 'text-cyan-700 dark:text-cyan-400' : 'text-muted-foreground')}>
-                  {s.label}
-                </span>
-                {i < steps.length - 1 && <div className={cn('h-0.5 w-6 sm:w-10', i < currentIdx ? 'bg-emerald-300' : 'bg-border')} />}
-              </div>
-            ))}
-          </div>
-        </DialogHeader>
-
-        <div className="px-6 py-5 space-y-5">
-          {/* Step 1: Type */}
-          {step === 'type' && (
-            <div className="space-y-3">
-              <Label className="text-sm font-semibold">Select product type</Label>
-              <div className="grid gap-3">
-                {PRODUCT_TYPES.map((t) => {
-                  const Icon = t.icon;
-                  return (
-                    <button
-                      key={t.id}
-                      onClick={() => setProductType(t.id)}
-                      className={cn(
-                        'flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all',
-                        productType === t.id ? 'border-cyan-500 bg-cyan-50/50 shadow-sm' : 'border-border hover:border-cyan-300 hover:bg-cyan-50/20',
-                      )}
-                    >
-                      <div className={cn('h-10 w-10 rounded-lg bg-gradient-to-br flex items-center justify-center flex-shrink-0', t.color)}>
-                        <Icon className="h-5 w-5 text-white" />
+      <DialogContent className="sm:max-w-4xl max-w-[96vw] max-h-[90vh] flex flex-col p-0 overflow-hidden rounded-2xl border-border/80 bg-background shadow-2xl">
+        {/* Header */}
+        <div className="px-6 pt-5 pb-4 border-b border-border/60 bg-muted/20">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <DialogTitle className="text-xl font-bold flex items-center gap-2.5">
+                {productType === 'DIGITAL' ? (
+                  <>
+                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+                      <FileCode className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span>Chia Sẻ Dự Án Mã Nguồn Mở</span>
+                        <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[11px] font-semibold">
+                          0 ₫ Miễn phí
+                        </Badge>
                       </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm">{t.label}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{t.desc}</p>
+                      <p className="text-xs text-muted-foreground font-normal mt-0.5">
+                        Tự do chia sẻ thiết kế KiCad, Altium, Gerber &amp; Firmware cho cộng đồng. Không cần CCCD.
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20">
+                      <Package className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span>Đăng Bán Linh Kiện / Bo Mạch Mới</span>
+                        <Badge className="bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/30 text-[11px] font-semibold">
+                          Thương mại
+                        </Badge>
                       </div>
-                      {productType === t.id && <CheckCircle2 className="h-5 w-5 text-cyan-500 flex-shrink-0" />}
-                    </button>
-                  );
-                })}
-              </div>
+                      <p className="text-xs text-muted-foreground font-normal mt-0.5">
+                        Thiết lập sản phẩm thương mại vào gian hàng phần cứng của bạn.
+                      </p>
+                    </div>
+                  </>
+                )}
+              </DialogTitle>
             </div>
-          )}
 
-          {/* Step 2: Basic Info */}
-          {step === 'basic' && (
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="name">Product Name <span className="text-red-500">*</span></Label>
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. ESP32-WROOM-32 DevKit V1" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="shortDesc">Short Description</Label>
-                <Input id="shortDesc" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} placeholder="One-line summary" maxLength={120} />
-                <p className="text-xs text-muted-foreground">{shortDescription.length}/120 characters</p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
+            {/* Mode Switcher */}
+            <div className="flex items-center bg-muted/60 p-1 rounded-xl border border-border/60 self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => {
+                  setProductType('DIGITAL');
+                  setLicenseType('OPEN_SOURCE');
+                  setPrice('0');
+                }}
+                className={cn(
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer',
+                  productType === 'DIGITAL'
+                    ? 'bg-emerald-600 text-white shadow-sm font-semibold'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
+                )}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                Mã Nguồn Mở (0 ₫)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setProductType('PHYSICAL');
+                  if (price === '0') setPrice('');
+                }}
+                className={cn(
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer',
+                  productType === 'PHYSICAL'
+                    ? 'bg-cyan-600 text-white shadow-sm font-semibold'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
+                )}
+              >
+                <Package className="h-3.5 w-3.5" />
+                Bán Hàng
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Scrollable Form Body */}
+        <div className="flex-1 overflow-y-auto">
+          {productType === 'DIGITAL' ? (
+            /* Open Source Hardware Studio */
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6">
+              {/* Left Column: Form Details (7 cols) */}
+              <div className="lg:col-span-7 space-y-4">
+                {/* Project Name */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+                    <span>Tên Dự Án Mã Nguồn Mở <span className="text-red-500">*</span></span>
+                    <span className="text-[11px] font-normal lowercase text-emerald-600 dark:text-emerald-400">công khai cộng đồng</span>
+                  </Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Ví dụ: ESP32-S3 Voice Assistant Node (KiCad 9)"
+                    className="h-10 text-sm focus-visible:ring-emerald-500"
+                  />
+                </div>
+
+                {/* Short Description */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="shortDesc" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+                    <span>Tóm Tắt Tính Năng</span>
+                    <span className="text-[11px] font-normal text-muted-foreground">{shortDescription.length}/120 ký tự</span>
+                  </Label>
+                  <Input
+                    id="shortDesc"
+                    value={shortDescription}
+                    onChange={(e) => setShortDescription(e.target.value)}
+                    placeholder="Mô tả 1 câu ngắn gọn về tính năng, chip sử dụng và ứng dụng thực tế"
+                    maxLength={120}
+                    className="h-9 text-sm"
+                  />
+                </div>
+
+                {/* Category & EDA Software */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="category" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Danh Mục Phần Cứng
+                    </Label>
+                    <select
+                      id="category"
+                      value={categoryId}
+                      onChange={(e) => setCategoryId(e.target.value)}
+                      className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                    >
+                      <option value="">Chọn danh mục phù hợp...</option>
+                      {categories.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="software" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Phần Mềm Thiết Kế (EDA)
+                    </Label>
+                    <select
+                      id="software"
+                      value={software}
+                      onChange={(e) => setSoftware(e.target.value)}
+                      className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                    >
+                      <option value="KiCad">KiCad (Mã nguồn mở)</option>
+                      <option value="Altium">Altium Designer</option>
+                      <option value="EasyEDA">EasyEDA</option>
+                      <option value="Gerber">File Gerber (.zip)</option>
+                      <option value="ESP-IDF">Firmware ESP-IDF / FreeRTOS</option>
+                      <option value="Arduino">Mã nguồn Arduino</option>
+                      <option value="STM32CubeIDE">STM32CubeIDE / HAL</option>
+                      <option value="Proteus">Proteus Design Suite</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Version & File Format */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="version" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Phiên Bản Phát Hành
+                    </Label>
+                    <Input
+                      id="version"
+                      value={currentVersion}
+                      onChange={(e) => setCurrentVersion(e.target.value)}
+                      placeholder="v1.0.0 hoặc Rev B"
+                      className="h-9 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="format" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Định Dạng Tệp Tin
+                    </Label>
+                    <Input
+                      id="format"
+                      value={fileFormat}
+                      onChange={(e) => setFileFormat(e.target.value)}
+                      placeholder=".kicad_pcb, .zip Gerber, .hex"
+                      className="h-9 text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* GitHub repo URL */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="githubUrl" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <Github className="h-3.5 w-3.5 text-foreground" />
+                    <span>Kho Lưu Trữ GitHub / GitLab (Mã nguồn mở)</span>
+                  </Label>
+                  <Input
+                    id="githubUrl"
+                    value={githubUrl}
+                    onChange={(e) => setGithubUrl(e.target.value)}
+                    placeholder="https://github.com/maker/esp32-project"
+                    className="h-9 text-xs font-mono focus-visible:ring-emerald-500"
+                  />
+                </div>
+
+                {/* License */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="license" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Giấy Phép Bản Quyền Mở (Open Source License)
+                  </Label>
                   <select
-                    id="category"
-                    value={categoryId}
-                    onChange={(e) => setCategoryId(e.target.value)}
-                    className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none"
+                    id="license"
+                    value={licenseType}
+                    onChange={(e) => setLicenseType(e.target.value)}
+                    className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
                   >
-                    <option value="">Select category...</option>
-                    {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    <option value="OPEN_SOURCE">CERN Open Hardware Licence (CERN-OHL-P)</option>
+                    <option value="PERSONAL">MIT License (Tự do, phổ biến nhất)</option>
+                    <option value="COMMERCIAL">Apache License 2.0 (Bảo hộ sáng chế)</option>
+                    <option value="EDUCATIONAL">Creative Commons BY-SA 4.0</option>
+                    <option value="PRIVATE_USE">GNU General Public License (GPL-3.0)</option>
                   </select>
                 </div>
+
+                {/* Description */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="brand">Brand</Label>
-                  <Input id="brand" value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="e.g. Espressif" />
+                  <Label htmlFor="description" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Mô Tả Kỹ Thuật &amp; Hướng Dẫn Thi Công
+                  </Label>
+                  <Textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Mô tả sơ đồ nguyên lý mạch (Schematic), hướng dẫn nạp firmware, danh sách linh kiện BOM cần mua, lưu ý hàn dán SMD..."
+                    rows={4}
+                    className="text-sm resize-none"
+                  />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="sku">SKU</Label>
-                  <Input id="sku" value={sku} onChange={(e) => setSku(e.target.value)} placeholder="BF-ESP32-DK" />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="mpn">MPN</Label>
-                  <Input id="mpn" value={mpn} onChange={(e) => setMpn(e.target.value)} placeholder="Manufacturer Part Number" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="price">Price (VND) <span className="text-red-500">*</span></Label>
-                    {productType === 'DIGITAL' && (
+
+              {/* Right Column: Visual Preview & Live Card (5 cols) */}
+              <div className="lg:col-span-5 space-y-4">
+                {/* Image URL & Presets */}
+                <div className="space-y-2">
+                  <Label htmlFor="imageUrl" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+                    <span>Ảnh Đại Diện Bo Mạch</span>
+                    <span className="text-[11px] font-normal text-muted-foreground">URL hình ảnh</span>
+                  </Label>
+                  <Input
+                    id="imageUrl"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="https://... hoặc bấm ảnh mẫu bên dưới"
+                    className="h-9 text-xs"
+                  />
+                  {/* Sample presets */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[11px] text-muted-foreground">Ảnh mẫu:</span>
+                    {SAMPLE_PRESETS.map((preset) => (
                       <button
+                        key={preset.name}
                         type="button"
-                        onClick={() => setPrice('0')}
-                        className={cn(
-                          'text-xs px-2 py-0.5 rounded border transition-colors cursor-pointer',
-                          price === '0'
-                            ? 'bg-emerald-500/15 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-semibold'
-                            : 'border-border/60 text-muted-foreground hover:border-emerald-400 hover:text-emerald-500'
-                        )}
+                        onClick={() => {
+                          setImageUrl(preset.url);
+                          setSoftware(preset.tag.includes('KiCad') ? 'KiCad' : preset.tag.includes('ESP') ? 'ESP-IDF' : 'Altium');
+                        }}
+                        className="text-[11px] px-2 py-0.5 rounded-md border border-border/80 bg-muted/40 hover:bg-emerald-500/10 hover:border-emerald-500/50 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer"
                       >
-                        ⚡ 0đ Miễn phí Open-Source
+                        + {preset.name}
                       </button>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <DollarSign className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input id="price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="89000" className="pl-8" />
-                  </div>
-                  {price === '0' ? (
-                    <p className="text-xs text-emerald-600 font-medium">0 ₫ — Miễn phí tải về cho cộng đồng</p>
-                  ) : price ? (
-                    <p className="text-xs text-cyan-600">{formatVND(parseInt(price, 10) || 0)}</p>
-                  ) : null}
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="compareAt">Compare-at Price</Label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input id="compareAt" type="number" value={compareAtPrice} onChange={(e) => setCompareAtPrice(e.target.value)} placeholder="120000" className="pl-8" />
+                    ))}
                   </div>
                 </div>
-              </div>
-              {productType !== 'DIGITAL' && (
-                <div className="space-y-1.5">
-                  <Label htmlFor="stock">Stock Quantity</Label>
-                  <div className="flex items-center gap-3">
-                    <div className="relative flex-1">
-                      <Boxes className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input id="stock" type="number" value={stock} onChange={(e) => setStock(e.target.value)} placeholder="100" className="pl-8" disabled={unlimited} />
+
+                {/* Live Card Preview */}
+                <div className="space-y-2">
+                  <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <Eye className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span>Xem Trước Thẻ Dự Án (Live Preview)</span>
+                  </Label>
+                  <div className="rounded-xl border border-border/80 bg-card overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div className="relative aspect-video bg-muted/60 flex items-center justify-center overflow-hidden border-b border-border/60">
+                      {imageUrl ? (
+                        <img
+                          src={imageUrl}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center text-muted-foreground p-4 text-center">
+                          <Cpu className="h-10 w-10 text-muted-foreground/40 mb-1" />
+                          <span className="text-xs">Chưa có ảnh (sẽ dùng ảnh vi mạch mẫu)</span>
+                        </div>
+                      )}
+                      <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                        <Badge className="bg-emerald-600/90 text-white hover:bg-emerald-600 text-[10px] shadow-sm backdrop-blur-sm">
+                          MÃ NGUỒN MỞ
+                        </Badge>
+                        <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-[10px] font-mono border-border/80">
+                          {software} {currentVersion}
+                        </Badge>
+                      </div>
+                      <div className="absolute bottom-2.5 right-2.5">
+                        <Badge className="bg-background/90 text-foreground text-[10px] font-bold shadow-sm backdrop-blur-sm">
+                          0 ₫ Miễn Phí
+                        </Badge>
+                      </div>
                     </div>
-                    <label className="flex items-center gap-2 text-sm whitespace-nowrap">
-                      <input type="checkbox" checked={unlimited} onChange={(e) => setUnlimited(e.target.checked)} className="rounded" />
-                      Unlimited
-                    </label>
+
+                    <div className="p-3.5 space-y-2">
+                      <h4 className="font-semibold text-sm line-clamp-1 text-foreground">
+                        {name.trim() || 'Tên dự án mã nguồn mở của bạn'}
+                      </h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {shortDescription.trim() || 'Mô tả ngắn gọn về phần cứng, vi điều khiển, tính năng và mục đích của bo mạch...'}
+                      </p>
+
+                      <div className="pt-2 border-t border-border/60 flex items-center justify-between text-xs">
+                        <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                          <ShieldCheck className="h-3.5 w-3.5" />
+                          {licenseType === 'OPEN_SOURCE' ? 'CERN-OHL' : licenseType}
+                        </span>
+                        {githubUrl ? (
+                          <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-mono">
+                            <Github className="h-3 w-3" />
+                            GitHub Repo
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+                            File Release (.zip)
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
-              {productType === 'DIGITAL' && (
-                <div className="flex items-center gap-2 p-3 rounded-lg bg-teal-50 border border-teal-200">
-                  <Boxes className="h-4 w-4 text-teal-600 flex-shrink-0" />
-                  <span className="text-xs text-teal-800">Digital products have unlimited inventory. License keys are issued per purchase.</span>
-                </div>
-              )}
-              <div className="space-y-1.5">
-                <Label htmlFor="image">Image URL</Label>
-                <div className="relative">
-                  <ImageIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input id="image" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." className="pl-8" />
+
+                {/* Community notice */}
+                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                    <Sparkles className="h-4 w-4 text-emerald-600" />
+                    <span>Quyền lợi cộng đồng Maker</span>
+                  </div>
+                  <p className="text-[11px] text-emerald-800/80 dark:text-emerald-200/80 leading-relaxed">
+                    Dự án của bạn sẽ xuất hiện công khai trên chuyên mục <strong>Mã Nguồn Mở CircuitHub</strong>. Kỹ sư và sinh viên có thể tải về file thiết kế, xem schematic và đóng góp cho bạn trên GitHub.
+                  </p>
                 </div>
               </div>
             </div>
-          )}
+          ) : (
+            /* Physical Hardware Product Form */
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6">
+              {/* Left Column: Product Info & Pricing (7 cols) */}
+              <div className="lg:col-span-7 space-y-4">
+                {/* Product Name */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="phys-name" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Tên Linh Kiện / Bo Mạch <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="phys-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Ví dụ: Bo Mạch Phát Triển STM32F407VET6 Black Board"
+                    className="h-10 text-sm focus-visible:ring-cyan-500"
+                  />
+                </div>
 
-          {/* Step 3: Specs (type-specific) */}
-          {step === 'specs' && (
-            <div className="space-y-4">
-              {productType === 'PHYSICAL' && (
-                <>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-cyan-700 dark:text-cyan-400">
-                    <Layers className="h-4 w-4" /> PCB Specifications
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="layers">Layers</Label>
-                      <select id="layers" value={pcbLayers} onChange={(e) => setPcbLayers(e.target.value)} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm">
-                        <option value="">Select...</option>
-                        <option value="1">1 layer</option>
-                        <option value="2">2 layers</option>
-                        <option value="4">4 layers</option>
-                        <option value="6">6 layers</option>
-                        <option value="8">8 layers</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="thickness">Thickness (mm)</Label>
-                      <Input id="thickness" type="number" step="0.1" value={pcbThickness} onChange={(e) => setPcbThickness(e.target.value)} placeholder="1.6" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="material">Material</Label>
-                      <select id="material" value={pcbMaterial} onChange={(e) => setPcbMaterial(e.target.value)} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm">
-                        <option value="FR4">FR4</option>
-                        <option value="FR408">FR408 (High-Frequency)</option>
-                        <option value="Rogers">Rogers</option>
-                        <option value="Aluminum">Aluminum (MCPCB)</option>
-                        <option value="Polyimide">Polyimide (Flexible)</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="finish">Surface Finish</Label>
-                      <select id="finish" value={pcbSurfaceFinish} onChange={(e) => setPcbSurfaceFinish(e.target.value)} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm">
-                        <option value="HASL">HASL (Lead)</option>
-                        <option value="HASL-RoHS">HASL Lead-Free</option>
-                        <option value="ENIG">ENIG (Gold)</option>
-                        <option value="OSP">OSP</option>
-                        <option value="Immersion Silver">Immersion Silver</option>
-                        <option value="Immersion Tin">Immersion Tin</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="color">Solder Mask Color</Label>
-                      <select id="color" value={pcbColor} onChange={(e) => setPcbColor(e.target.value)} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm">
-                        <option value="Blue">Blue</option>
-                        <option value="Green">Green</option>
-                        <option value="Red">Red</option>
-                        <option value="Black">Black</option>
-                        <option value="White">White</option>
-                        <option value="Yellow">Yellow</option>
-                        <option value="Purple">Purple</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="dims">Dimensions</Label>
-                      <Input id="dims" value={pcbDimensions} onChange={(e) => setPcbDimensions(e.target.value)} placeholder="50x80mm" />
-                    </div>
-                  </div>
-                </>
-              )}
+                {/* Short Description */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="phys-short" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+                    <span>Tóm Tắt Ngắn</span>
+                    <span className="text-[11px] font-normal text-muted-foreground">{shortDescription.length}/120 ký tự</span>
+                  </Label>
+                  <Input
+                    id="phys-short"
+                    value={shortDescription}
+                    onChange={(e) => setShortDescription(e.target.value)}
+                    placeholder="Mô tả tóm tắt tính năng chính của sản phẩm"
+                    maxLength={120}
+                    className="h-9 text-sm"
+                  />
+                </div>
 
-              {productType === 'DIGITAL' && (
-                <>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-teal-700">
-                    <FileCode className="h-4 w-4" /> Digital Asset Details
+                {/* Category & Brand */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phys-category" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Danh Mục <span className="text-red-500">*</span>
+                    </Label>
+                    <select
+                      id="phys-category"
+                      value={categoryId}
+                      onChange={(e) => setCategoryId(e.target.value)}
+                      className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none"
+                    >
+                      <option value="">Chọn danh mục sản phẩm...</option>
+                      {categories.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="software">Software <span className="text-red-500">*</span></Label>
-                      <select id="software" value={software} onChange={(e) => setSoftware(e.target.value)} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm">
-                        <option value="KiCad">KiCad</option>
-                        <option value="Altium">Altium Designer</option>
-                        <option value="Proteus">Proteus</option>
-                        <option value="Eagle">Eagle</option>
-                        <option value="Gerber">Gerber (Universal)</option>
-                        <option value="ESP-IDF">ESP-IDF (Firmware)</option>
-                        <option value="STM32CubeIDE">STM32CubeIDE</option>
-                        <option value="Arduino">Arduino IDE</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="swVersion">Software Version</Label>
-                      <Input id="swVersion" value={softwareVersion} onChange={(e) => setSoftwareVersion(e.target.value)} placeholder="KiCad 9" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="version">Current Version</Label>
-                      <Input id="version" value={currentVersion} onChange={(e) => setCurrentVersion(e.target.value)} placeholder="v1.0.0" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="format">File Format</Label>
-                      <Input id="format" value={fileFormat} onChange={(e) => setFileFormat(e.target.value)} placeholder=".kicad_pro,.kicad_pcb,.zip" />
-                    </div>
-                    <div className="space-y-1.5 col-span-2">
-                      <Label htmlFor="license">License Type</Label>
-                      <select id="license" value={licenseType} onChange={(e) => setLicenseType(e.target.value)} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm">
-                        <option value="OPEN_SOURCE">Open Source (MIT, CERN-OHL, Apache 2.0, CC-BY-SA)</option>
-                        <option value="PERSONAL">Personal Use</option>
-                        <option value="COMMERCIAL">Commercial Use</option>
-                        <option value="EDUCATIONAL">Educational</option>
-                        <option value="EXTENDED_COMMERCIAL">Extended Commercial</option>
-                        <option value="PRIVATE_USE">Private Use Only</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1.5 col-span-2">
-                      <Label htmlFor="githubUrl">GitHub / Repository URL (Mã nguồn mở)</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phys-brand" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Thương Hiệu / Nhà Sản Xuất
+                    </Label>
+                    <Input
+                      id="phys-brand"
+                      value={brand}
+                      onChange={(e) => setBrand(e.target.value)}
+                      placeholder="Ví dụ: STMicroelectronics, Espressif..."
+                      className="h-9 text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Price & Compare-at Price */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phys-price" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Giá Bán (₫) <span className="text-red-500">*</span>
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">
+                        ₫
+                      </span>
                       <Input
-                        id="githubUrl"
-                        value={githubUrl}
-                        onChange={(e) => setGithubUrl(e.target.value)}
-                        placeholder="https://github.com/circuithub-maker/esp32-sensor-board"
+                        id="phys-price"
+                        type="number"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        placeholder="120000"
+                        className="pl-8 h-9 text-sm"
+                      />
+                    </div>
+                    {price && !isNaN(parseInt(price, 10)) && (
+                      <p className="text-xs font-medium text-cyan-600 dark:text-cyan-400">
+                        {formatVND(parseInt(price, 10))}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phys-compare" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Giá Gốc Niêm Yết (₫)
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">
+                        ₫
+                      </span>
+                      <Input
+                        id="phys-compare"
+                        type="number"
+                        value={compareAtPrice}
+                        onChange={(e) => setCompareAtPrice(e.target.value)}
+                        placeholder="150000"
+                        className="pl-8 h-9 text-sm"
                       />
                     </div>
                   </div>
-                </>
-              )}
+                </div>
 
-              <div className="space-y-1.5">
-                <Label htmlFor="description">Full Description</Label>
-                <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Detailed product description..." rows={4} />
-              </div>
-            </div>
-          )}
+                {/* Stock & Unlimited */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phys-stock" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Số Lượng Tồn Kho
+                    </Label>
+                    <div className="relative">
+                      <Boxes className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="phys-stock"
+                        type="number"
+                        value={stock}
+                        onChange={(e) => setStock(e.target.value)}
+                        placeholder="50"
+                        className="pl-9 h-9 text-sm"
+                        disabled={unlimited}
+                      />
+                    </div>
+                  </div>
+                  <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground h-9 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={unlimited}
+                      onChange={(e) => setUnlimited(e.target.checked)}
+                      className="rounded border-border text-cyan-600 focus:ring-cyan-500"
+                    />
+                    <span>Không giới hạn số lượng tồn kho</span>
+                  </label>
+                </div>
 
-          {/* Step 4: Review */}
-          {step === 'review' && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-cyan-700 dark:text-cyan-400">
-                <CheckCircle2 className="h-4 w-4" /> Review &amp; Confirm
+                {/* SKU & MPN */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phys-sku" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Mã SKU Quản Lý
+                    </Label>
+                    <Input
+                      id="phys-sku"
+                      value={sku}
+                      onChange={(e) => setSku(e.target.value)}
+                      placeholder="CH-STM32-407"
+                      className="h-9 text-sm font-mono"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phys-mpn" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Mã Linh Kiện Gốc (MPN)
+                    </Label>
+                    <Input
+                      id="phys-mpn"
+                      value={mpn}
+                      onChange={(e) => setMpn(e.target.value)}
+                      placeholder="STM32F407VET6"
+                      className="h-9 text-sm font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="phys-desc" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Mô Tả Chi Tiết Sản Phẩm
+                  </Label>
+                  <Textarea
+                    id="phys-desc"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Thông tin chi tiết về sản phẩm, quy cách đóng gói, chính sách bảo hành, tài liệu kỹ thuật..."
+                    rows={3}
+                    className="text-sm resize-none"
+                  />
+                </div>
               </div>
-              <div className="rounded-xl border border-border/60 divide-y divide-border/40">
-                <ReviewRow label="Type" value={<Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">{productType}</Badge>} />
-                <ReviewRow label="Name" value={name || '—'} />
-                <ReviewRow label="Category" value={categories.find((c) => c.id === categoryId)?.name ?? '—'} />
-                <ReviewRow label="Price" value={<span className="font-bold text-cyan-700 dark:text-cyan-400">{price ? formatVND(parseInt(price, 10)) : '—'}</span>} />
-                {compareAtPrice && <ReviewRow label="Compare-at" value={<span className="line-through text-muted-foreground">{formatVND(parseInt(compareAtPrice, 10))}</span>} />}
-                {brand && <ReviewRow label="Brand" value={brand} />}
-                {productType !== 'DIGITAL' && <ReviewRow label="Stock" value={unlimited ? 'Unlimited' : (stock || '0')} />}
-                {productType === 'PHYSICAL' && pcbLayers && <ReviewRow label="PCB Layers" value={`${pcbLayers} layers`} />}
-                {productType === 'DIGITAL' && <ReviewRow label="Software" value={`${software} ${softwareVersion}`} />}
+
+              {/* Right Column: Media & PCB Specs (5 cols) */}
+              <div className="lg:col-span-5 space-y-4">
+                {/* Product Image */}
+                <div className="space-y-2">
+                  <Label htmlFor="phys-img" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+                    <span>Ảnh Sản Phẩm</span>
+                    <span className="text-[11px] font-normal text-muted-foreground">URL hình ảnh</span>
+                  </Label>
+                  <Input
+                    id="phys-img"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="https://... hoặc chọn ảnh mẫu bên dưới"
+                    className="h-9 text-xs"
+                  />
+                  {/* Sample images */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[11px] text-muted-foreground">Ảnh mẫu:</span>
+                    {SAMPLE_PRESETS.map((preset) => (
+                      <button
+                        key={preset.name}
+                        type="button"
+                        onClick={() => setImageUrl(preset.url)}
+                        className="text-[11px] px-2 py-0.5 rounded-md border border-border/80 bg-muted/40 hover:bg-cyan-500/10 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors cursor-pointer"
+                      >
+                        + {preset.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Image preview */}
+                {imageUrl && (
+                  <div className="relative aspect-video rounded-xl overflow-hidden border border-border/80 bg-muted">
+                    <img
+                      src={imageUrl}
+                      alt="Product Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* PCB Specs (Optional) */}
+                <div className="p-4 rounded-xl border border-border/80 bg-muted/20 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-cyan-700 dark:text-cyan-400">
+                    <Layers className="h-4 w-4" />
+                    <span>Thông Số Kỹ Thuật PCB (Nếu Có)</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5 text-xs">
+                    <div className="space-y-1">
+                      <Label className="text-[11px] text-muted-foreground">Số lớp (Layers)</Label>
+                      <select
+                        value={pcbLayers}
+                        onChange={(e) => setPcbLayers(e.target.value)}
+                        className="w-full h-8 px-2 rounded-md border border-border bg-background text-xs"
+                      >
+                        <option value="">Không áp dụng</option>
+                        <option value="1">1 lớp</option>
+                        <option value="2">2 lớp</option>
+                        <option value="4">4 lớp</option>
+                        <option value="6">6 lớp</option>
+                        <option value="8">8 lớp</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-[11px] text-muted-foreground">Độ dày PCB (mm)</Label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={pcbThickness}
+                        onChange={(e) => setPcbThickness(e.target.value)}
+                        placeholder="1.6"
+                        className="h-8 text-xs"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-[11px] text-muted-foreground">Vật liệu bo mạch</Label>
+                      <select
+                        value={pcbMaterial}
+                        onChange={(e) => setPcbMaterial(e.target.value)}
+                        className="w-full h-8 px-2 rounded-md border border-border bg-background text-xs"
+                      >
+                        <option value="FR4">FR4 tiêu chuẩn</option>
+                        <option value="FR408">FR408 (Tần số cao)</option>
+                        <option value="Rogers">Rogers RF</option>
+                        <option value="Aluminum">Nhôm tản nhiệt (MCPCB)</option>
+                        <option value="Polyimide">Polyimide (Dẻo Flex)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-[11px] text-muted-foreground">Bề mặt mạ</Label>
+                      <select
+                        value={pcbSurfaceFinish}
+                        onChange={(e) => setPcbSurfaceFinish(e.target.value)}
+                        className="w-full h-8 px-2 rounded-md border border-border bg-background text-xs"
+                      >
+                        <option value="HASL">HASL chì</option>
+                        <option value="HASL-RoHS">HASL không chì RoHS</option>
+                        <option value="ENIG">Mạ vàng ENIG</option>
+                        <option value="OSP">Màng bảo vệ OSP</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-[11px] text-muted-foreground">Màu phủ hàn</Label>
+                      <select
+                        value={pcbColor}
+                        onChange={(e) => setPcbColor(e.target.value)}
+                        className="w-full h-8 px-2 rounded-md border border-border bg-background text-xs"
+                      >
+                        <option value="Blue">Xanh dương (Blue)</option>
+                        <option value="Green">Xanh lá (Green)</option>
+                        <option value="Black">Đen nhám (Black)</option>
+                        <option value="Red">Đỏ (Red)</option>
+                        <option value="White">Trắng (White)</option>
+                        <option value="Purple">Tím OSH Park (Purple)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-[11px] text-muted-foreground">Kích thước</Label>
+                      <Input
+                        value={pcbDimensions}
+                        onChange={(e) => setPcbDimensions(e.target.value)}
+                        placeholder="50x80 mm"
+                        className="h-8 text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground">By clicking &quot;Create Product&quot;, your product will be published immediately. Admin may moderate it later.</p>
             </div>
           )}
         </div>
 
-        <DialogFooter className="px-6 py-4 border-t border-border/60 sticky bottom-0 bg-background">
+        {/* Sticky Footer */}
+        <DialogFooter className="px-6 py-4 border-t border-border/60 bg-muted/20 sticky bottom-0 z-10">
           <div className="flex items-center justify-between w-full">
-            <Button variant="ghost" onClick={close} disabled={submitting}>
-              Cancel
+            <Button variant="ghost" onClick={close} disabled={submitting} className="text-sm">
+              Hủy bỏ
             </Button>
-            <div className="flex gap-2">
-              {step !== 'type' && (
-                <Button variant="outline" onClick={() => setStep(steps[currentIdx - 1].id)} disabled={submitting}>
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  Back
-                </Button>
-              )}
-              {step !== 'review' ? (
-                <Button onClick={() => setStep(steps[currentIdx + 1].id)} disabled={!canProceed()} className="bg-cyan-600 hover:bg-cyan-700 text-white">
-                  Next
-                  <ChevronRight className="h-4 w-4 ml-1" />
+
+            <div>
+              {productType === 'DIGITAL' ? (
+                <Button
+                  onClick={submit}
+                  disabled={submitting || !name.trim()}
+                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold shadow-md px-6 h-10 cursor-pointer"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Đang xuất bản...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Xuất Bản Dự Án Ngay (0 ₫)
+                    </>
+                  )}
                 </Button>
               ) : (
-                <Button onClick={submit} disabled={submitting} className="bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white">
-                  {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
-                  {submitting ? 'Creating...' : 'Create Product'}
+                <Button
+                  onClick={submit}
+                  disabled={submitting || !name.trim() || !price || !categoryId}
+                  className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold shadow-md px-6 h-10 cursor-pointer"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Đang lưu...
+                    </>
+                  ) : (
+                    <>
+                      <Package className="h-4 w-4 mr-2" />
+                      Lưu &amp; Đăng Bán Sản Phẩm
+                    </>
+                  )}
                 </Button>
               )}
             </div>
@@ -574,14 +969,5 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function ReviewRow({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="flex items-center justify-between px-4 py-2.5">
-      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</span>
-      <span className="text-sm text-right">{value}</span>
-    </div>
   );
 }
