@@ -288,7 +288,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                       <span className="text-sm text-muted-foreground line-through">
                         {formatVND(product.compareAtPrice)}
                       </span>
-                      <Badge className="bg-gradient-to-r from-rose-500 to-orange-400 text-white border-0 text-xs font-bold px-1.5 py-0.5">
+                      <Badge className="bg-red-500 text-white border-0 text-xs font-bold px-1.5 py-0.5">
                         -{pct}%
                       </Badge>
                     </>

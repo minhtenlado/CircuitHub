@@ -164,7 +164,7 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
   const links: NavLinkDef[] = [
     {
       label: t('nav.flashDeals'),
-      icon: <Flame className="h-3.5 w-3.5 text-amber-500 animate-pulse" />,
+      icon: <Flame className="h-3.5 w-3.5 text-cyan-500" />,
       active: (v, p) => v === 'products' && p.sort === 'trending',
       go: () => goProducts({ sort: 'trending' }),
     },

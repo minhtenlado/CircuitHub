@@ -44,7 +44,7 @@ import { formatVND } from '@/lib/format';
 const BANNERS = [
   {
     id: 'esp32-kit',
-    eyebrow: '⚡ COMBO KHUYẾN MẠI TUẦN NÀY',
+    eyebrow: 'COMBO KHUYẾN MẠI TUẦN NÀY',
     title: 'Kit Học Tập IoT ESP32-S3 Pro Kèm Màn Hình 1.9" TFT',
     description:
       'Đầy đủ cảm biến nhiệt ẩm SHT40, relay 5V, sơ đồ nguyên lý KiCad 9 & mã nguồn mẫu. Ưu đãi 25% cho sinh viên & kỹ sư maker.',
@@ -58,7 +58,7 @@ const BANNERS = [
   },
   {
     id: 'pcb-service',
-    eyebrow: '🛠️ DỊCH VỤ GIA CÔNG TRỌN GÓI',
+    eyebrow: 'DỊCH VỤ GIA CÔNG TRỌN GÓI',
     title: 'Gia Công Mạch In PCB 4 Lớp & Mua Linh Kiện Trọn Bộ',
     description:
       'Kiểm định DFM tự động, chuẩn hóa mã linh kiện theo file BOM. Cam kết bo mạch test 100% E-test trước khi giao hàng.',
@@ -72,7 +72,7 @@ const BANNERS = [
   },
   {
     id: 'open-source-hub',
-    eyebrow: '🎁 KHO DỰ ÁN CỘNG ĐỒNG KỸ THUẬT',
+    eyebrow: 'KHO DỰ ÁN CỘNG ĐỒNG KỸ THUẬT',
     title: '500+ Dự Án KiCad, Gerber & Firmware Miễn Phí',
     description:
       'Tải ngay thiết kế mạch nguồn xung, bo điều khiển BLDC, đồng hồ LED RGB... Đã thẩm định thông số, tải file về gia công được ngay.',
@@ -136,7 +136,6 @@ const SIDEBAR_CATEGORIES = [
 
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 28, seconds: 15 });
   const goProducts = useNavStore((s) => s.goProducts);
   const goCategory = useNavStore((s) => s.goCategory);
   const goProduct = useNavStore((s) => s.goProduct);
@@ -151,19 +150,6 @@ export function Hero() {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % BANNERS.length);
     }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  /* Countdown timer simulation */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        return { hours: 4, minutes: 0, seconds: 0 };
-      });
-    }, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -285,7 +271,7 @@ export function Hero() {
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300 backdrop-blur-sm">
                     {slide.eyebrow}
                   </span>
-                  <Badge className="bg-amber-500/20 border-amber-500/40 text-amber-300 text-[10px] font-bold">
+                  <Badge className="bg-cyan-500/20 border-cyan-500/40 text-cyan-300 text-[10px] font-bold">
                     {slide.tag}
                   </Badge>
                 </div>
@@ -370,35 +356,22 @@ export function Hero() {
           </div>
 
           {/* 3. RIGHT COLUMN: DAILY FLASH DEAL WIDGET */}
-          <div className="lg:col-span-3 flex flex-col justify-between rounded-2xl border border-amber-500/40 bg-gradient-to-b from-amber-500/5 via-card to-card p-4 shadow-xs">
-            {/* Header: Flash deal + countdown */}
+          <div className="lg:col-span-3 flex flex-col justify-between rounded-2xl border border-cyan-500/30 bg-gradient-to-b from-cyan-500/5 via-card to-card p-4 shadow-xs">
+            {/* Header: Flash deal */}
             <div>
               <div className="flex items-center justify-between pb-2 border-b border-border/60">
-                <span className="flex items-center gap-1.5 text-xs font-bold text-amber-500 uppercase tracking-wider">
-                  <Flame className="h-4 w-4 animate-bounce" />
+                <span className="flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">
+                  <Flame className="h-4 w-4 text-cyan-500" />
                   Deal chớp nhoáng
                 </span>
-                <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                <span className="text-[10px] font-bold rounded px-1.5 py-0.5 bg-red-500 text-white">
                   -24%
                 </span>
               </div>
 
-              {/* Countdown ticker */}
-              <div className="mt-2.5 flex items-center justify-between bg-amber-500/10 dark:bg-amber-950/30 rounded-lg p-2 border border-amber-500/20">
-                <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400">Kết thúc trong:</span>
-                <div className="flex items-center gap-1 font-mono text-xs font-bold text-amber-500">
-                  <span className="rounded bg-card px-1.5 py-0.5 shadow-xs border border-border/60">
-                    {String(timeLeft.hours).padStart(2, '0')}
-                  </span>
-                  :
-                  <span className="rounded bg-card px-1.5 py-0.5 shadow-xs border border-border/60">
-                    {String(timeLeft.minutes).padStart(2, '0')}
-                  </span>
-                  :
-                  <span className="rounded bg-card px-1.5 py-0.5 shadow-xs border border-border/60">
-                    {String(timeLeft.seconds).padStart(2, '0')}
-                  </span>
-                </div>
+              {/* Subtitle */}
+              <div className="mt-2 text-[11px] text-muted-foreground">
+                Linh kiện nổi bật ưu đãi trong ngày
               </div>
 
               {/* Flash Product Card */}
@@ -444,10 +417,10 @@ export function Hero() {
                 <div className="mt-2">
                   <div className="flex justify-between text-[10px] font-medium text-muted-foreground mb-1">
                     <span>Đã bán 42 sản phẩm</span>
-                    <span className="text-rose-500 font-semibold">Chỉ còn 8</span>
+                    <span className="text-red-500 font-semibold">Chỉ còn 8</span>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded-full w-[84%]" />
+                    <div className="h-full bg-cyan-500 rounded-full w-[84%]" />
                   </div>
                 </div>
               </div>
@@ -457,7 +430,7 @@ export function Hero() {
             <div className="mt-3.5 pt-2 border-t border-border/50">
               <Button
                 onClick={handleAddFlashDeal}
-                className="w-full h-9 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs gap-1.5 shadow-sm cursor-pointer"
+                className="w-full h-9 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-bold text-xs gap-1.5 shadow-sm cursor-pointer"
               >
                 <ShoppingCart className="h-3.5 w-3.5" />
                 Thêm vào giỏ hàng
@@ -481,7 +454,7 @@ export function Hero() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
               <Shield className="h-5 w-5" />
             </div>
             <div className="min-w-0">
@@ -491,7 +464,7 @@ export function Hero() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
               <RotateCcw className="h-5 w-5" />
             </div>
             <div className="min-w-0">
@@ -501,7 +474,7 @@ export function Hero() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
               <PackageCheck className="h-5 w-5" />
             </div>
             <div className="min-w-0">

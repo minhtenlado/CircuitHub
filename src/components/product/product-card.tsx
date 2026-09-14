@@ -15,7 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useI18n } from '@/lib/i18n';
 import { formatVND, discountPct as calcPct } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
-import { ProductTypeBadge, StockBadge, DiscountBadge, NewBadge, TrendingBadge, TechBadge, OpenSourceBadge, FreeBadge } from '@/components/common/badges';
+import { StockBadge, DiscountBadge, NewBadge, TrendingBadge, TechBadge, OpenSourceBadge, FreeBadge } from '@/components/common/badges';
 import { Cpu, Layers, FileCode, Download } from 'lucide-react';
 
 export function ProductCard({ product, index = 0 }: { product: any; index?: number }) {
@@ -117,14 +117,14 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {/* Top-left badges */}
-        <div className="absolute top-2 left-2 flex flex-col items-start gap-1.5">
+        {/* Top-left badges (Max 2 badges per card; Trending hidden if discount exists) */}
+        <div className="absolute top-2.5 left-2.5 flex flex-col items-start gap-2">
           {pct > 0 && <DiscountBadge pct={pct} />}
           {product.isNew && <NewBadge />}
-          {product.isTrending && <TrendingBadge />}
+          {pct <= 0 && product.isTrending && <TrendingBadge />}
         </div>
-        {/* Top-right action buttons */}
-        <div className="absolute top-2 right-2 flex flex-col gap-1.5">
+        {/* Top-right action buttons (Compare visible on hover only) */}
+        <div className="absolute top-2.5 right-2.5 flex flex-col gap-2">
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -149,22 +149,34 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
                 description: product.name,
               });
             }}
-            className="p-1.5 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-rose-500 transition-colors"
+            className="p-1.5 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-rose-500 transition-colors shadow-xs"
             aria-label="Toggle wishlist"
           >
             <Heart className={inWishlist ? 'h-4 w-4 fill-rose-500 text-rose-500' : 'h-4 w-4'} />
           </button>
           <button
             onClick={handleToggleCompare}
-            className={`p-1.5 backdrop-blur rounded-full transition-colors ${inCompare ? 'bg-cyan-500 text-white' : 'bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-cyan-600'}`}
+            className={`p-1.5 backdrop-blur rounded-full transition-all shadow-xs ${
+              inCompare
+                ? 'bg-cyan-500 text-white opacity-100'
+                : 'bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-cyan-600 opacity-0 group-hover:opacity-100'
+            }`}
             aria-label="Toggle compare"
           >
             <GitCompare className="h-4 w-4" />
           </button>
         </div>
-        {/* Bottom-left product type */}
-        <div className="absolute bottom-2 left-2">
-          <ProductTypeBadge type={product.productType} />
+        {/* Bottom-left product type (Small text without colored background) */}
+        <div className="absolute bottom-2.5 left-2.5">
+          <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 bg-background/80 backdrop-blur-xs px-1.5 py-0.5 rounded border border-border/50">
+            {product.productType === 'PHYSICAL'
+              ? (t('productType.physical') !== 'productType.physical' ? t('productType.physical') : 'Sản phẩm vật lý')
+              : product.productType === 'DIGITAL'
+              ? (t('productType.digital') !== 'productType.digital' ? t('productType.digital') : 'Thiết kế số')
+              : product.productType === 'SERVICE'
+              ? (t('productType.service') !== 'productType.service' ? t('productType.service') : 'Dịch vụ kỹ thuật')
+              : (t('productType.bundle') !== 'productType.bundle' ? t('productType.bundle') : 'Combo')}
+          </span>
         </div>
         {/* Quick View hover overlay */}
         <button
@@ -184,7 +196,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
       </div>
 
       {/* Body */}
-      <div className="flex flex-col gap-2 p-3 flex-1">
+      <div className="flex flex-col gap-2 p-3.5 flex-1">
         {/* Shop + rating */}
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <button

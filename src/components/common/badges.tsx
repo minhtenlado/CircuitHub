@@ -1,14 +1,14 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { Package, FileCode, Wrench, Cpu, Layers, Cog } from 'lucide-react';
+import { Package, FileCode, Wrench, Cpu, Layers, Cog, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/i18n';
 
 const typeConfig: Record<string, { labelKey: string; fallback: string; cls: string; icon: any }> = {
   PHYSICAL: { labelKey: 'productType.physical', fallback: 'Physical', cls: 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800/60', icon: Package },
   DIGITAL: { labelKey: 'productType.digital', fallback: 'Digital', cls: 'bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800/60', icon: FileCode },
-  SERVICE: { labelKey: 'productType.service', fallback: 'Service', cls: 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60', icon: Wrench },
+  SERVICE: { labelKey: 'productType.service', fallback: 'Service', cls: 'bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700/60', icon: Wrench },
   BUNDLE: { labelKey: 'productType.bundle', fallback: 'Bundle', cls: 'bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800/60', icon: Package },
 };
 
@@ -57,7 +57,7 @@ export function StockBadge({ stock, unlimited }: { stock: number; unlimited: boo
 export function DiscountBadge({ pct }: { pct: number }) {
   if (pct <= 0) return null;
   return (
-    <Badge className="bg-gradient-to-r from-rose-500 to-orange-400 text-white border-0 font-semibold tracking-tight">
+    <Badge className="bg-red-500 text-white border-0 font-semibold tracking-tight">
       -{pct}%
     </Badge>
   );
@@ -75,7 +75,8 @@ export function TrendingBadge({ className }: { className?: string }) {
   const { t } = useI18n();
   return (
     <Badge variant="outline" className={cn('gap-1 bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800/60 font-semibold', className)}>
-      🔥 {t('sort.trending') !== 'sort.trending' ? t('sort.trending') : 'Trending'}
+      <TrendingUp className="h-3 w-3" />
+      {t('sort.trending') !== 'sort.trending' ? t('sort.trending') : 'Trending'}
     </Badge>
   );
 }

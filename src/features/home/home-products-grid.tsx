@@ -3,7 +3,7 @@
 /* ============================================================
    CircuitHub — Home Products Multi-Tab Grid
    Marketplace-style category & merchandising shelf with live tabs:
-   [🔥 Bán chạy] [⚡ Giá sốc] [✨ Hàng mới] [🛠️ Bo MCU] [📡 Cảm biến] [📄 KiCad]
+   [Bán chạy] [Giá tốt] [Hàng mới] [Bo MCU] [Cảm biến] [KiCad]
    ============================================================ */
 
 import { useState } from 'react';

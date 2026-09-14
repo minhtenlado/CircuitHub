@@ -212,8 +212,8 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
       if (json.success) {
         toast({
           title: productType === 'DIGITAL'
-            ? '🚀 Dự án Mã nguồn mở đã xuất bản thành công!'
-            : '📦 Sản phẩm linh kiện đã được tạo thành công!',
+            ? 'Dự án Mã nguồn mở đã xuất bản thành công!'
+            : 'Sản phẩm linh kiện đã được tạo thành công!',
           description: name,
         });
         queryClient.invalidateQueries({ queryKey: ['seller-products'] });

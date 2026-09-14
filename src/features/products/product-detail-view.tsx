@@ -514,7 +514,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   <span className="text-base text-muted-foreground line-through">
                     {formatVND(product.compareAtPrice)}
                   </span>
-                  <Badge className="bg-gradient-to-r from-rose-500 to-orange-400 text-white border-0 font-semibold">
+                  <Badge className="bg-red-500 text-white border-0 font-semibold">
                     -{pct}%
                   </Badge>
                   <span className="ml-auto text-sm text-emerald-700 dark:text-emerald-400 font-medium">
@@ -619,7 +619,7 @@ function ProductDetailContent({ product }: { product: any }) {
                 </Badge>
               )}
               {isService && (
-                <Badge variant="outline" className="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 gap-1">
+                <Badge variant="outline" className="bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800 gap-1">
                   <Clock className="h-3 w-3" />
                   Service · {product.serviceDurationDays ?? 7} days
                 </Badge>
@@ -645,7 +645,7 @@ function ProductDetailContent({ product }: { product: any }) {
 
             {/* License acceptance for digital (not for open source) */}
             {isDigital && product.licenseType !== 'OPEN_SOURCE' && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-4 space-y-3">
+              <div className="rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50/50 dark:bg-cyan-950/20 p-4 space-y-3">
                 <label
                   htmlFor="license-accept"
                   className="flex items-start gap-2.5 cursor-pointer"
@@ -927,33 +927,33 @@ function PcbQuickSpecs({ product }: { product: any }) {
 function ServiceQuickInfo({ product }: { product: any }) {
   const { t } = useI18n();
   return (
-    <div className="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50/40 dark:bg-amber-950/30 p-4 space-y-3">
-      <p className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+    <div className="rounded-xl border border-teal-200 dark:border-teal-800/60 bg-teal-50/40 dark:bg-teal-950/30 p-4 space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
         <Briefcase className="h-3.5 w-3.5" />
         {t('productDetail.serviceDetails')}
       </p>
       <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-sm">
         {product.serviceScope && (
           <div className="flex items-start gap-2 sm:col-span-2">
-            <Briefcase className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+            <Briefcase className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 mt-0.5 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.serviceScope')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceScope}</dd>
           </div>
         )}
         {product.serviceDeliverables && (
           <div className="flex items-start gap-2 sm:col-span-2">
-            <FileCheck2 className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+            <FileCheck2 className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 mt-0.5 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.deliverables')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceDeliverables}</dd>
           </div>
         )}
         <div className="flex items-center gap-2">
-          <Clock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+          <Clock className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
           <dt className="text-muted-foreground">{t('productDetail.duration')}:</dt>
           <dd className="font-medium text-foreground">{product.serviceDurationDays ?? '—'}  {t('productDetail.days')}</dd>
         </div>
         <div className="flex items-center gap-2">
-          <RefreshCw className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+          <RefreshCw className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
           <dt className="text-muted-foreground">{t('productDetail.revisions')}:</dt>
           <dd className="font-medium text-foreground">{product.serviceRevisions ?? 0}  {t('productDetail.included')}</dd>
         </div>
@@ -963,7 +963,7 @@ function ServiceQuickInfo({ product }: { product: any }) {
           href={product.servicePortfolio}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 font-medium"
+          className="inline-flex items-center gap-1.5 text-sm text-teal-700 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-200 font-medium"
         >
           <Eye className="h-3.5 w-3.5" />
           {t('productDetail.viewPortfolio')}
@@ -1577,7 +1577,7 @@ function ShippingTab({ product }: { product: any }) {
     return (
       <Card className="p-6">
         <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-          <Briefcase className="h-4 w-4 text-amber-600" />
+          <Briefcase className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
           Service delivery
         </h3>
         <ul className="space-y-3 text-sm text-muted-foreground">
@@ -1586,7 +1586,7 @@ function ShippingTab({ product }: { product: any }) {
             <span>{t('productDetail.serviceStarts')}</span>
           </li>
           <li className="flex items-start gap-2">
-            <Clock className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+            <Clock className="h-4 w-4 text-cyan-600 dark:text-cyan-400 mt-0.5 shrink-0" />
             <span>Estimated duration: <strong className="text-foreground">{product.serviceDurationDays ?? 7} days</strong> from kick-off.</span>
           </li>
           <li className="flex items-start gap-2">
@@ -1640,7 +1640,7 @@ function ShippingTab({ product }: { product: any }) {
         </p>
         {product.warranty && (
           <p className="flex items-center gap-2">
-            <ThumbsUp className="h-4 w-4 text-amber-500" />
+            <ThumbsUp className="h-4 w-4 text-cyan-500" />
             Warranty: <strong className="text-foreground">{product.warranty}</strong>
           </p>
         )}
