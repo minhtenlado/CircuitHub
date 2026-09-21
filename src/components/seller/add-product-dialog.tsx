@@ -212,7 +212,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
       if (json.success) {
         toast({
           title: productType === 'DIGITAL'
-            ? 'Dự án Mã nguồn mở đã xuất bản thành công!'
+            ? 'Tài liệu / Thiết kế số đã xuất bản thành công!'
             : 'Sản phẩm linh kiện đã được tạo thành công!',
           description: name,
         });
@@ -248,13 +248,13 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span>Chia Sẻ Dự Án Mã Nguồn Mở</span>
+                        <span>Tải Lên Tài Liệu / Thiết Kế Số</span>
                         <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[11px] font-semibold">
                           0 ₫ Miễn phí
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground font-normal mt-0.5">
-                        Tự do chia sẻ thiết kế KiCad, Altium, Gerber &amp; Firmware cho cộng đồng. Không cần CCCD.
+                        Tải lên sơ đồ nguyên lý KiCad, Altium, Gerber &amp; Firmware đính kèm sản phẩm.
                       </p>
                     </div>
                   </>
@@ -296,7 +296,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 )}
               >
                 <Sparkles className="h-3.5 w-3.5" />
-                Mã Nguồn Mở (0 ₫)
+                Tài Liệu / File (0 ₫)
               </button>
               <button
                 type="button"
@@ -328,14 +328,14 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 {/* Project Name */}
                 <div className="space-y-1.5">
                   <Label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
-                    <span>Tên Dự Án Mã Nguồn Mở <span className="text-red-500">*</span></span>
-                    <span className="text-[11px] font-normal lowercase text-emerald-600 dark:text-emerald-400">công khai cộng đồng</span>
+                    <span>Tên Tài Liệu / Thiết Kế Số <span className="text-red-500">*</span></span>
+                    <span className="text-[11px] font-normal lowercase text-emerald-600 dark:text-emerald-400">công khai đính kèm</span>
                   </Label>
                   <Input
                     id="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Ví dụ: ESP32-S3 Voice Assistant Node (KiCad 9)"
+                    placeholder="Ví dụ: Tài liệu & Sơ đồ nguyên lý ESP32-S3 (KiCad 9)"
                     className="h-10 text-sm focus-visible:ring-emerald-500"
                   />
                 </div>
@@ -387,7 +387,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                       onChange={(e) => setSoftware(e.target.value)}
                       className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
                     >
-                      <option value="KiCad">KiCad (Mã nguồn mở)</option>
+                      <option value="KiCad">KiCad</option>
                       <option value="Altium">Altium Designer</option>
                       <option value="EasyEDA">EasyEDA</option>
                       <option value="Gerber">File Gerber (.zip)</option>
@@ -431,7 +431,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 <div className="space-y-1.5">
                   <Label htmlFor="githubUrl" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                     <Github className="h-3.5 w-3.5 text-foreground" />
-                    <span>Kho Lưu Trữ GitHub / GitLab (Mã nguồn mở)</span>
+                    <span>Kho Lưu Trữ GitHub / GitLab (Nếu có)</span>
                   </Label>
                   <Input
                     id="githubUrl"
@@ -536,7 +536,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                       )}
                       <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
                         <Badge className="bg-emerald-600/90 text-white hover:bg-emerald-600 text-[10px] shadow-sm backdrop-blur-sm">
-                          MÃ NGUỒN MỞ
+                          TÀI LIỆU KỸ THUẬT
                         </Badge>
                         <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-[10px] font-mono border-border/80">
                           {software} {currentVersion}
@@ -551,7 +551,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
 
                     <div className="p-3.5 space-y-2">
                       <h4 className="font-semibold text-sm line-clamp-1 text-foreground">
-                        {name.trim() || 'Tên dự án mã nguồn mở của bạn'}
+                        {name.trim() || 'Tên tài liệu / thiết kế số của bạn'}
                       </h4>
                       <p className="text-xs text-muted-foreground line-clamp-2">
                         {shortDescription.trim() || 'Mô tả ngắn gọn về phần cứng, vi điều khiển, tính năng và mục đích của bo mạch...'}
@@ -581,10 +581,10 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1.5">
                   <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                     <Sparkles className="h-4 w-4 text-emerald-600" />
-                    <span>Quyền lợi cộng đồng Maker</span>
+                    <span>Tài liệu đính kèm miễn phí</span>
                   </div>
                   <p className="text-[11px] text-emerald-800/80 dark:text-emerald-200/80 leading-relaxed">
-                    Dự án của bạn sẽ xuất hiện công khai trên chuyên mục <strong>Mã Nguồn Mở CircuitHub</strong>. Kỹ sư và sinh viên có thể tải về file thiết kế, xem schematic và đóng góp cho bạn trên GitHub.
+                    Tài liệu và file thiết kế sẽ được lưu trữ công khai để khách hàng có thể tải về tham khảo sơ đồ nguyên lý, pinout và code mẫu.
                   </p>
                 </div>
               </div>

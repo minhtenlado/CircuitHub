@@ -145,7 +145,6 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
     { slug: 'components', labelKey: 'categories.components', icon: Cpu },
     { slug: 'modules', labelKey: 'categories.modules', icon: Package },
     { slug: 'tools', labelKey: 'categories.tools', icon: Sparkles },
-    { slug: 'open-source', labelKey: 'categories.openSource', icon: FileCode },
   ];
 
   const links: NavLinkDef[] = [
@@ -186,10 +185,10 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
       go: () => goCategory('components'),
     },
     {
-      label: t('nav.openSource'),
-      icon: <FileCode className="h-3.5 w-3.5" />,
-      active: (v, p) => v === 'category' && p.slug === 'open-source',
-      go: () => goCategory('open-source'),
+      label: t('categories.modules'),
+      icon: <Package className="h-3.5 w-3.5" />,
+      active: (v, p) => v === 'category' && p.slug === 'modules',
+      go: () => goCategory('modules'),
     },
   ];
 
@@ -1335,10 +1334,10 @@ function MobileNavList({ onNavigate }: { onNavigate: () => void }) {
       go: () => goCategory('components'),
     },
     {
-      label: t('nav.openSource'),
-      icon: <FileCode className="h-4 w-4" />,
-      active: (v, p) => v === 'category' && p.slug === 'open-source',
-      go: () => goCategory('open-source'),
+      label: t('categories.modules'),
+      icon: <Package className="h-4 w-4" />,
+      active: (v, p) => v === 'category' && p.slug === 'modules',
+      go: () => goCategory('modules'),
     },
   ];
 

@@ -71,18 +71,18 @@ const BANNERS = [
     tag: 'Dành cho Robot',
   },
   {
-    id: 'open-source-hub',
-    eyebrow: 'MẠCH IN CHẾ TÁC BỞI MAKER',
+    id: 'power-module',
+    eyebrow: 'MẠCH NGUỒN CHẤT LƯỢNG CAO',
     title: 'Mạch Sạc Pin Li-ion Tích Hợp Nguồn Boost 5V/3A Siêu Gọn',
     description:
-      'Thiết kế mạch nguồn nhỏ gọn, linh kiện chuẩn chịu tải cao. Tải kèm miễn phí file sơ đồ nguyên lý KiCad 9 để tự làm đồ án hoặc gia công theo ý muốn.',
+      'Thiết kế mạch nguồn nhỏ gọn, linh kiện chuẩn chịu tải cao. Hiệu suất chuyển đổi > 92%, tích hợp bảo vệ quá áp, quá dòng và ngắn mạch an toàn.',
     priceBadge: 'Chỉ từ ₫45.000',
     ctaText: 'Khám phá ngay',
-    category: 'open-source',
-    query: '',
+    category: 'modules',
+    query: 'mạch sạc',
     accent: 'from-blue-950/80 via-slate-900 to-slate-950',
     glowColor: 'bg-blue-500/20',
-    tag: 'Thiết kế DIY',
+    tag: 'Mạch Nguồn',
   },
 ];
 
@@ -125,12 +125,6 @@ const SIDEBAR_CATEGORIES = [
     name: 'Dụng cụ đo kiểm & Hàn',
     icon: Wrench,
     hotTags: ['Đồng hồ VOM', 'Mỏ hàn T12'],
-  },
-  {
-    slug: 'open-source',
-    name: 'Dự án mã nguồn mở',
-    icon: FileCode,
-    hotTags: ['Hardware', 'Free KiCad'],
   },
 ];
 

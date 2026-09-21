@@ -80,7 +80,7 @@ const SORT_OPTIONS = [
 
 const PRODUCT_TYPES = [
   { value: 'PHYSICAL', labelKey: 'productType.physical', fallback: 'Sản phẩm vật lý', icon: Package },
-  { value: 'DIGITAL', labelKey: 'productType.digital', fallback: 'Mã nguồn mở / Thiết kế số', icon: FileCode },
+  { value: 'DIGITAL', labelKey: 'productType.digital', fallback: 'Tài liệu / Thiết kế số', icon: FileCode },
   { value: 'BUNDLE', labelKey: 'productType.bundle', fallback: 'Combo / Kit', icon: Box },
 ];
 

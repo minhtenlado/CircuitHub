@@ -1345,35 +1345,6 @@ function OverviewTab({
         />
       </div>
 
-      {/* Seller & Open Source Callout Banner */}
-      <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/80 bg-gradient-to-r from-emerald-50/70 via-white to-cyan-50/50 dark:from-emerald-950/30 dark:via-slate-900 dark:to-cyan-950/20 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 items-center justify-center font-semibold">
-              <Code2 className="h-4 w-4" />
-            </span>
-            <p className="font-semibold text-sm text-foreground">
-              Chia sẻ Dự án Mã nguồn mở (KiCad / Altium / Firmware) hoặc Bán Linh kiện
-            </p>
-          </div>
-          <p className="text-xs text-muted-foreground sm:pl-9 leading-relaxed">
-            Chia sẻ mã nguồn mở <strong className="text-emerald-700 dark:text-emerald-400">hoàn toàn miễn phí & không cần xác minh CCCD</strong>. Chỉ người bán linh kiện thương mại mới cần xác thực.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          {onOpenAddOpenSource && (
-            <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1.5 cursor-pointer font-semibold shadow-sm">
-              <Code2 className="h-3.5 w-3.5" />
-              Đăng Open Source ngay (0đ)
-            </Button>
-          )}
-          <Button size="sm" variant="outline" onClick={() => onGoTab('seller-setup')} className="text-xs gap-1 cursor-pointer">
-            {isSeller ? 'Quản lý Gian hàng' : 'Bán linh kiện'}
-            <ChevronRight className="h-3.5 w-3.5" />
-          </Button>
-        </div>
-      </div>
-
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Recent orders (2 cols) */}
         <div className="lg:col-span-2 space-y-4">
@@ -1855,13 +1826,13 @@ function ProfileTab({
             </CardContent>
           </Card>
 
-          {/* Seller & Open Source Creator Card */}
+          {/* Seller & Shop Management Card */}
           <Card className="border-cyan-200 dark:border-cyan-800/80 bg-gradient-to-r from-cyan-50/70 via-white to-teal-50/50 dark:from-cyan-950/20 dark:via-slate-900 dark:to-teal-950/20 shadow-sm">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Store className="h-4 w-4 text-cyan-600" />
-                  Thiết lập Bán hàng & Chia sẻ Mã nguồn mở
+                  Kênh Quản Lý Cửa Hàng & Bán Linh Kiện
                 </CardTitle>
                 {isSeller ? (
                   <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-xs">
@@ -1869,12 +1840,12 @@ function ProfileTab({
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-cyan-700 dark:text-cyan-300 border-cyan-300 dark:border-cyan-800 text-xs">
-                    100% Miễn phí
+                    Dành cho Quản Trị / Bán Hàng
                   </Badge>
                 )}
               </div>
               <CardDescription className="text-xs text-muted-foreground mt-1">
-                Mở gian hàng kinh doanh linh kiện, bo mạch PCB hoặc chia sẻ miễn phí thiết kế KiCad, Altium, firmware tới cộng đồng kỹ sư maker.
+                Kênh quản lý sản phẩm, tồn kho linh kiện, đơn hàng và vận chuyển COD dành cho chủ cửa hàng.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 pt-0">
@@ -1882,37 +1853,22 @@ function ProfileTab({
                 <span className="px-2 py-0.5 rounded-full bg-cyan-100/70 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300">
                   ✓ Bán linh kiện & bo mạch (COD toàn quốc)
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-100/70 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">
-                  ✓ Chia sẻ Open Source (KiCad / Firmware 0đ)
-                </span>
                 <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-muted-foreground">
-                  ✓ Xác thực CCCD / eKYC an toàn
+                  ✓ Xác thực tài khoản quản trị
                 </span>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border/50">
                 {isSeller ? (
-                  <>
-                    <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 cursor-pointer font-semibold shadow-sm">
-                      <Code2 className="h-3.5 w-3.5" />
-                      Đăng Dự án Open Source (0đ)
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={onGoSeller} className="text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 gap-1.5 cursor-pointer">
-                      <Store className="h-3.5 w-3.5" />
-                      Vào Kênh Người Bán (Seller Center)
-                    </Button>
-                  </>
+                  <Button size="sm" onClick={onGoSeller} className="bg-cyan-600 hover:bg-cyan-700 text-white gap-1.5 cursor-pointer shadow-sm">
+                    <Store className="h-3.5 w-3.5" />
+                    Vào Kênh Quản Lý Cửa Hàng (Seller Center)
+                  </Button>
                 ) : (
-                  <>
-                    <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 cursor-pointer font-semibold shadow-sm">
-                      <Code2 className="h-3.5 w-3.5" />
-                      Đăng Dự án Open Source (Không cần CCCD)
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={onStartOnboarding} className="text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 gap-1.5 cursor-pointer">
-                      <Store className="h-3.5 w-3.5" />
-                      Xác minh CCCD để Bán Linh Kiện
-                    </Button>
-                  </>
+                  <Button size="sm" variant="outline" onClick={onStartOnboarding} className="text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 gap-1.5 cursor-pointer">
+                    <Store className="h-3.5 w-3.5" />
+                    Xác minh để Kích hoạt Bán Hàng
+                  </Button>
                 )}
                 <Button size="sm" variant="ghost" onClick={onGoSellerSetupTab} className="text-xs cursor-pointer">
                   Xem Chi Tiết Kênh
@@ -2006,10 +1962,10 @@ function SellerSetupTab({
               Creator & Hardware Seller Studio
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-              Thiết Lập Bán Hàng & Chia Sẻ Mã Nguồn Mở
+              Thiết Lập Kênh Bán Hàng Linh Kiện
             </h2>
             <p className="text-sm text-muted-foreground max-w-2xl">
-              Nền tảng thương mại & mở dành riêng cho kỹ sư: Vừa kinh doanh linh kiện, bo mạch PCB, vừa đóng góp và lan toả các dự án phần cứng mở (KiCad, Altium, Arduino, ESP-IDF).
+              Quản lý sản phẩm phần cứng, bo mạch MCU, module cảm biến và tiếp cận hàng nghìn khách hàng kỹ sư và sinh viên trên toàn quốc.
             </p>
           </div>
           {isSeller ? (
@@ -2030,113 +1986,62 @@ function SellerSetupTab({
         </div>
       </div>
 
-      {/* 2 Main Value Pillars */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Pillar 1: Hardware Marketplace */}
-        <Card className="border-border/70 hover:border-cyan-400/60 transition-colors shadow-sm bg-card">
-          <CardHeader className="pb-3">
-            <div className="h-10 w-10 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/80 dark:border-cyan-800 flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-2">
-              <Package className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-lg font-bold flex items-center justify-between">
-              <span>Bán Linh Kiện & Bo Mạch</span>
-              <Badge variant="outline" className="text-cyan-700 dark:text-cyan-300 border-cyan-300/80 dark:border-cyan-800 bg-cyan-50/50 dark:bg-cyan-950/40 text-[11px]">
-                Hardware Shop
-              </Badge>
-            </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground">
-              Kinh doanh các sản phẩm phần cứng, linh kiện, cảm biến và module điện tử.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0">
-            <ul className="space-y-2 text-xs text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Đăng bán không giới hạn: MCU ESP32/STM32/RP2040, IC vi mạch, cảm biến IoT, module relay, nguồn xung.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Dịch vụ PCB Custom: Nhận thiết kế theo yêu cầu hoặc bán kit bo mạch tự phát triển (PCBA).</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Vận chuyển tự động: Tích hợp bưu tá GHN / Viettel Post đến tận nhà lấy hàng, hỗ trợ COD toàn quốc.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Thanh toán ký quỹ bảo mật: Khách nhận hàng kiểm tra ok, tiền về ví seller và rút về ngân hàng 24/7.</span>
-              </li>
-            </ul>
+      {/* Hardware Shop Pillar */}
+      <Card className="border-border/70 hover:border-cyan-400/60 transition-colors shadow-sm bg-card">
+        <CardHeader className="pb-3">
+          <div className="h-10 w-10 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/80 dark:border-cyan-800 flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-2">
+            <Package className="h-5 w-5" />
+          </div>
+          <CardTitle className="text-lg font-bold flex items-center justify-between">
+            <span>Quản Lý Bán Linh Kiện & Bo Mạch</span>
+            <Badge variant="outline" className="text-cyan-700 dark:text-cyan-300 border-cyan-300/80 dark:border-cyan-800 bg-cyan-50/50 dark:bg-cyan-950/40 text-[11px]">
+              Hardware Shop
+            </Badge>
+          </CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">
+            Kinh doanh các sản phẩm phần cứng, linh kiện, cảm biến và module điện tử.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3 pt-0">
+          <ul className="grid sm:grid-cols-2 gap-3 text-xs text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+              <span>Đăng bán không giới hạn: MCU ESP32/STM32/RP2040, IC vi mạch, cảm biến IoT, module relay, nguồn xung.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+              <span>Dịch vụ PCB Custom: Nhận thiết kế theo yêu cầu hoặc bán kit bo mạch tự phát triển (PCBA).</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+              <span>Vận chuyển tự động: Tích hợp bưu tá GHN / Viettel Post đến tận nhà lấy hàng, hỗ trợ COD toàn quốc.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+              <span>Thanh toán ký quỹ bảo mật: Khách nhận hàng kiểm tra ok, tiền về ví seller và rút về ngân hàng 24/7.</span>
+            </li>
+          </ul>
 
-            <div className="pt-2 border-t border-border/60">
-              {isSeller ? (
-                <Button size="sm" variant="outline" className="w-full gap-1.5 text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 cursor-pointer" onClick={onOpenAddProduct}>
-                  <Plus className="h-4 w-4" />
-                  Đăng sản phẩm linh kiện mới
-                </Button>
-              ) : (
-                <div className="space-y-1.5">
-                  <Button size="sm" variant="outline" className="w-full gap-1.5 text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 cursor-pointer" onClick={onStartOnboarding}>
-                    Xác minh CCCD để Bán Linh Kiện
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                  <p className="text-[11px] text-center text-muted-foreground">
-                    Yêu cầu CCCD / eKYC để bật bưu tá lấy hàng & thanh toán COD
-                  </p>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Pillar 2: Open Source Hardware & Firmware */}
-        <Card className="border-border/70 hover:border-emerald-400/60 transition-colors shadow-sm bg-card">
-          <CardHeader className="pb-3">
-            <div className="h-10 w-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-2">
-              <Code2 className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-lg font-bold flex items-center justify-between">
-              <span>Chia Sẻ Dự Án Mã Nguồn Mở</span>
-              <Badge variant="outline" className="text-emerald-700 dark:text-emerald-300 border-emerald-300/80 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/40 text-[11px]">
-                Open Source (0đ)
-              </Badge>
-            </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground">
-              Phát hành file thiết kế KiCad, Altium, Gerber và mã nguồn firmware cho cộng đồng maker.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0">
-            <ul className="space-y-2 text-xs text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Định dạng hỗ trợ: KiCad 8/9 (.kicad_pro, .kicad_pcb), Altium Designer, Gerber (.zip), firmware Arduino/ESP-IDF.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Giấy phép mở chuẩn quốc tế: MIT, CERN Open Hardware License, Apache 2.0, GNU GPL, Creative Commons.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Miễn phí 100% hoặc có phí: Cho phép người dùng tải về hoàn toàn miễn phí (0đ) hoặc trả phí ủng hộ tác giả.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Liên kết GitHub / GitLab: Hiển thị repo, số lượt star, commit và đính kèm hướng dẫn nạp chương trình.</span>
-              </li>
-            </ul>
-
-            <div className="pt-2 border-t border-border/60 space-y-1.5">
-              <Button size="sm" className="w-full gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold cursor-pointer shadow-sm" onClick={onOpenAddOpenSource}>
-                <Code2 className="h-4 w-4" />
-                Đăng Tải Dự Án Open Source Ngay
+          <div className="pt-3 border-t border-border/60">
+            {isSeller ? (
+              <Button size="sm" variant="outline" className="gap-1.5 text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 cursor-pointer" onClick={onOpenAddProduct}>
+                <Plus className="h-4 w-4" />
+                Đăng sản phẩm linh kiện mới
               </Button>
-              <p className="text-[11px] text-center text-emerald-600 dark:text-emerald-400 font-medium">
-                ✓ Hoàn toàn mở: Không cần CCCD · Không cần eKYC · Đăng tải tức thì
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <Button size="sm" variant="outline" className="gap-1.5 text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 cursor-pointer" onClick={onStartOnboarding}>
+                  Xác minh CCCD để Bán Linh Kiện
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+                <p className="text-[11px] text-muted-foreground">
+                  Yêu cầu CCCD / eKYC để bật bưu tá lấy hàng & thanh toán COD
+                </p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Account Status / Control Panel */}
       <Card className="border-border/70 bg-card">
@@ -2202,11 +2107,7 @@ function SellerSetupTab({
                   <Store className="h-3.5 w-3.5" />
                   Mở Trung tâm Quản trị (Seller Center)
                 </Button>
-                <Button size="sm" variant="outline" onClick={onOpenAddOpenSource} className="gap-1.5 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 cursor-pointer font-semibold">
-                  <Code2 className="h-3.5 w-3.5" />
-                  Đăng dự án Open Source mới
-                </Button>
-                <Button size="sm" variant="outline" onClick={onOpenAddProduct} className="gap-1.5 cursor-pointer">
+                <Button size="sm" variant="outline" onClick={onOpenAddProduct} className="gap-1.5 cursor-pointer text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800">
                   <Plus className="h-3.5 w-3.5" />
                   Đăng sản phẩm linh kiện
                 </Button>
@@ -2214,33 +2115,15 @@ function SellerSetupTab({
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/20 p-4 space-y-2">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                  <p className="text-sm font-semibold text-foreground">
-                    Bạn có thể chia sẻ Dự án Mã nguồn mở (KiCad / Altium / Firmware) ngay bây giờ!
-                  </p>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed pl-6">
-                  CircuitHub mở cửa cho mọi kỹ sư và tác giả đóng góp cho cộng đồng mã nguồn mở. Bạn <strong>không cần xác minh CCCD</strong>, không cần eKYC hay mở gian hàng thương mại.
-                </p>
-                <div className="pt-2 pl-6">
-                  <Button size="sm" onClick={onOpenAddOpenSource} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 cursor-pointer font-semibold shadow-sm">
-                    <Code2 className="h-3.5 w-3.5" />
-                    Đăng Dự Án Open Source Ngay (0đ)
-                  </Button>
-                </div>
-              </div>
-
               {/* Seller notice */}
-              <div className="pt-2 border-t border-border/60">
+              <div>
                 <p className="text-xs text-muted-foreground mb-3">
-                  <strong>Bạn muốn bán linh kiện hoặc nhận đơn gia công bo mạch có thu phí?</strong> Khi đó bạn mới cần xác minh CCCD và eKYC theo quy định thương mại điện tử để bật tính năng bưu tá lấy hàng tận nơi và thanh toán COD.
+                  <strong>Bạn muốn bán linh kiện hoặc mở gian hàng phụ tùng điện tử?</strong> Bạn cần hoàn tất xác minh tài khoản theo quy định thương mại điện tử để kích hoạt tính năng bưu tá lấy hàng tận nơi và thanh toán COD toàn quốc.
                 </p>
                 <div className="flex flex-wrap items-center gap-3">
                   <Button size="sm" variant="outline" onClick={onStartOnboarding} className="text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800 gap-1.5 font-medium cursor-pointer">
                     <Store className="h-4 w-4" />
-                    Xác minh CCCD để Bán Linh Kiện
+                    Xác minh để Bán Linh Kiện
                   </Button>
                   <Button size="sm" variant="ghost" onClick={onDemoSeller} className="text-muted-foreground hover:text-foreground text-xs cursor-pointer">
                     Thử nghiệm nhanh quyền Seller (Demo Mode)
@@ -2257,21 +2140,21 @@ function SellerSetupTab({
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <HelpCircle className="h-4 w-4 text-cyan-600" />
-            Câu hỏi thường gặp về Bán hàng & Chia sẻ Mã nguồn mở
+            Câu hỏi thường gặp về Bán hàng & Vận hành Cửa hàng
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-xs leading-relaxed text-muted-foreground">
           <div className="rounded-lg bg-muted/30 p-3">
-            <p className="font-semibold text-foreground mb-1">Q: CircuitHub có thu phí khi tôi chia sẻ dự án mã nguồn mở miễn phí (0đ) không?</p>
-            <p>Hoàn toàn KHÔNG. CircuitHub hỗ trợ miễn phí 100% dung lượng lưu trữ, băng thông tải file và hệ thống phân phối giấy phép mở để thúc đẩy cộng đồng kỹ sư Maker Việt Nam phát triển.</p>
-          </div>
-          <div className="rounded-lg bg-muted/30 p-3">
-            <p className="font-semibold text-foreground mb-1">Q: Giấy phép nào được khuyên dùng cho thiết kế phần cứng mã nguồn mở?</p>
-            <p>Đối với sơ đồ mạch và thiết kế PCB, <strong>CERN-OHL (CERN Open Hardware Licence)</strong> hoặc <strong>CC-BY-SA</strong> là chuẩn mực quốc tế. Đối với firmware và mã nguồn đi kèm, bạn có thể chọn <strong>MIT</strong> hoặc <strong>Apache 2.0</strong>.</p>
-          </div>
-          <div className="rounded-lg bg-muted/30 p-3">
             <p className="font-semibold text-foreground mb-1">Q: Khi có người đặt mua linh kiện phần cứng, việc giao hàng diễn ra thế nào?</p>
             <p>Hệ thống tự động liên kết với GHN / Viettel Post. Bưu tá sẽ đến lấy hàng tận địa chỉ kho bạn đăng ký. Tiền thu hộ COD sẽ được chuyển thẳng vào ví người bán ngay khi đơn hàng hoàn tất.</p>
+          </div>
+          <div className="rounded-lg bg-muted/30 p-3">
+            <p className="font-semibold text-foreground mb-1">Q: Quy định về việc kiểm tra chất lượng linh kiện trước khi giao ra sao?</p>
+            <p>Mọi bo mạch MCU, module cảm biến cần được đo kiểm tra nguồn và nạp test cơ bản để đảm bảo khách hàng nhận được sản phẩm hoạt động tốt, hạn chế tối đa rủi ro đổi trả.</p>
+          </div>
+          <div className="rounded-lg bg-muted/30 p-3">
+            <p className="font-semibold text-foreground mb-1">Q: Chính sách bảo hành và hỗ trợ khách hàng như thế nào?</p>
+            <p>Cửa hàng áp dụng chính sách 1 đổi 1 trong vòng 7 ngày cho các sản phẩm có lỗi từ nhà sản xuất, đồng thời cung cấp tài liệu kỹ thuật và hỗ trợ đấu nối trực tiếp.</p>
           </div>
         </CardContent>
       </Card>

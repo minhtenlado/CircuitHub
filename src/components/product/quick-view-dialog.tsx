@@ -255,13 +255,13 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
               </div>
             )}
 
-            {/* Price Block / Free Open Source Project */}
+            {/* Price Block / Free Digital File */}
             {product.price === 0 && product.productType === 'DIGITAL' ? (
               <div className="flex items-center justify-between rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 p-3.5">
                 <div className="flex items-center gap-2.5">
                   <FreeBadge />
                   <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">
-                    Dự án Mã nguồn mở (Free)
+                    Tài liệu kỹ thuật (Free)
                   </span>
                 </div>
                 <span className="text-xs text-muted-foreground font-medium">
@@ -316,7 +316,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                     }
                     toast({
                       title: 'Bắt đầu tải về',
-                      description: `${product.name} — Tải dự án mã nguồn mở`,
+                      description: `${product.name} — Tải tài liệu kỹ thuật`,
                     });
                     onOpenChange(false);
                   }}

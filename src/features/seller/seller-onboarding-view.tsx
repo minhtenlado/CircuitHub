@@ -172,8 +172,8 @@ export function SellerOnboardingView() {
         );
       }
       toast({
-        title: 'Kích hoạt Kênh Bán & Creator thành công!',
-        description: 'Tài khoản của bạn đã được nâng cấp lên Người bán & Chia sẻ Dự án Mã nguồn mở.',
+        title: 'Kích hoạt Kênh Bán Hàng thành công!',
+        description: 'Tài khoản của bạn đã được nâng cấp lên Người Bán Hàng.',
       });
       setView('seller', {});
     }, 1200);
@@ -182,30 +182,6 @@ export function SellerOnboardingView() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="max-w-2xl mx-auto px-4 py-8">
-        {/* Open Source Zero KYC Notice Banner */}
-        <div className="mb-6 rounded-2xl border border-emerald-300 dark:border-emerald-800 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/30 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 items-center justify-center font-bold">
-                <FileCode className="h-4 w-4" />
-              </span>
-              <p className="font-bold text-sm text-foreground">
-                Bạn chỉ muốn chia sẻ Dự án Mã nguồn mở (KiCad / Altium / Firmware)?
-              </p>
-            </div>
-            <p className="text-xs text-muted-foreground sm:pl-9 leading-relaxed">
-              Chia sẻ mã nguồn mở <strong className="text-emerald-700 dark:text-emerald-300">hoàn toàn KHÔNG CẦN</strong> xác minh CCCD, không cần quét khuôn mặt hay tạo gian hàng/kho hàng. Đăng tải miễn phí tức thì!
-            </p>
-          </div>
-          <Button
-            onClick={() => setView('buyer-profile', { tab: 'seller-setup', action: 'add-open-source' })}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shrink-0 gap-1.5 cursor-pointer shadow-sm"
-          >
-            <FileCode className="h-3.5 w-3.5" />
-            Đăng Open Source ngay ➔
-          </Button>
-        </div>
-
         {/* Step indicator */}
         <div className="flex items-center justify-between mb-8">
           {STEPS.map((s, i) => {
@@ -273,7 +249,7 @@ export function SellerOnboardingView() {
               <div className="py-4">
                 <h2 className="text-xl font-bold mb-2">Xác minh Căn cước công dân (CCCD)</h2>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Tải lên 2 mặt CCCD để xác thực mở gian hàng thương mại bán linh kiện. (Nếu bạn chia sẻ dự án mã nguồn mở, hãy bấm nút ở banner trên để đăng ngay).
+                  Tải lên 2 mặt CCCD để xác thực tài khoản quản lý và bán linh kiện.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">

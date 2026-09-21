@@ -41,7 +41,6 @@ const CATEGORIES: CatEntry[] = [
   { slug: 'sensors', labelKey: 'categories.sensors', icon: Radar, accent: 'from-sky-500 to-cyan-400', hotTags: ['BME280', 'MPU6050', 'SHT40'] },
   { slug: 'modules', labelKey: 'categories.modules', icon: Box, accent: 'from-cyan-500 to-aqua-400', hotTags: ['OLED 0.96"', 'Relay', 'Sạc pin'] },
   { slug: 'tools', labelKey: 'categories.tools', icon: Wrench, accent: 'from-teal-500 to-aqua-400', hotTags: ['Đồng hồ VOM', 'Mỏ hàn T12'] },
-  { slug: 'open-source', labelKey: 'categories.openSource', icon: FileCode, accent: 'from-cyan-500 to-teal-400', hotTags: ['Hardware', 'Open Design'] },
   { slug: 'gerber-files', labelKey: 'categories.gerberFiles', icon: FileArchive, accent: 'from-teal-500 to-cyan-400', hotTags: ['Bo sạc', 'Nguồn xung'] },
   { slug: 'firmware', labelKey: 'categories.firmware', icon: Binary, accent: 'from-cyan-500 to-cyan-400', hotTags: ['ESP-IDF', 'MicroPython'] },
 ];

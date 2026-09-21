@@ -26,7 +26,7 @@ export const navLinks = [
   { label: 'Sản phẩm', view: 'products', icon: 'Package' },
   { label: 'Bo MCU & IoT', view: 'category', params: { slug: 'dev-boards' }, icon: 'Layers' },
   { label: 'Cảm biến', view: 'category', params: { slug: 'sensors' }, icon: 'Radar' },
-  { label: 'Mã nguồn mở', view: 'category', params: { slug: 'open-source' }, icon: 'FileCode' },
+  { label: 'Module chức năng', view: 'category', params: { slug: 'modules' }, icon: 'Box' },
 ] as const;
 
 export const footerLinks = {
@@ -35,7 +35,7 @@ export const footerLinks = {
     { label: 'Bo phát triển MCU', view: 'category', params: { slug: 'dev-boards' } },
     { label: 'Module & Cảm biến', view: 'category', params: { slug: 'sensors' } },
     { label: 'Mạch in PCB & KiCad', view: 'category', params: { slug: 'pcb-boards' } },
-    { label: 'Dự án mã nguồn mở', view: 'category', params: { slug: 'open-source' } },
+    { label: 'Module chức năng & Nguồn', view: 'category', params: { slug: 'modules' } },
   ],
   'Hỗ trợ khách hàng': [
     { label: 'Về chủ shop & Cam kết', view: 'home' },

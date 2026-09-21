@@ -204,11 +204,11 @@ export function FeaturedProducts() {
       />
 
       <ProductCarousel
-        eyebrow={t('featured.freeOpenSource')}
-        title={t('featured.openSourceTitle')}
-        subtitle={t('featured.openSourceSubtitle')}
-        hookParams={{ category: 'open-source' }}
-        viewAllFilters={{ category: 'open-source' }}
+        eyebrow={t('featured.modulesEyebrow')}
+        title={t('featured.modulesTitle')}
+        subtitle={t('featured.modulesSubtitle')}
+        hookParams={{ category: 'modules' }}
+        viewAllFilters={{ category: 'modules' }}
       />
     </section>
   );

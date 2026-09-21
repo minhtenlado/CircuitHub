@@ -950,7 +950,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
   const typeFilters: { id: 'ALL' | 'PHYSICAL' | 'DIGITAL'; label: string }[] = [
     { id: 'ALL', label: 'Tất cả' },
     { id: 'PHYSICAL', label: 'Sản phẩm vật lý' },
-    { id: 'DIGITAL', label: 'Mã nguồn mở' },
+    { id: 'DIGITAL', label: 'Tài liệu kỹ thuật / File' },
   ];
 
   return (

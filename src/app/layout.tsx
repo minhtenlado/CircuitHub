@@ -19,38 +19,34 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CircuitHub — Buy Electronics. Build Anything.",
+  title: "CircuitHub — Cửa Hàng Linh Kiện & Dự Án Maker Cá Nhân",
   description:
-    "The modern electronics marketplace for hardware creators. Buy & sell dev boards, PCB modules, electronic components, sensors, and explore free open-source KiCad projects, Gerber packages, and firmware.",
+    "Cửa hàng cung cấp vi điều khiển ESP32, STM32, module cảm biến, mạch nguồn và kit điện tử tự phát triển. Kiểm tra kỹ thuật 100% trước khi giao, hỗ trợ kỹ thuật 1-1 tận tình.",
   keywords: [
     "CircuitHub",
-    "electronics marketplace",
-    "open source hardware",
-    "KiCad 9 projects",
-    "Altium",
-    "Gerber files",
+    "linh kiện điện tử",
     "ESP32",
     "STM32",
-    "Raspberry Pi",
-    "electronics components",
-    "sensors",
-    "embedded engineering",
-    "firmware",
-    "open hardware",
+    "Arduino",
+    "cảm biến IoT",
+    "bo mạch phát triển",
+    "mạch nguồn",
+    "DIY electronics",
+    "maker Vietnam",
   ],
   authors: [{ name: "CircuitHub" }],
   icons: { icon: "/favicon.png" },
   openGraph: {
-    title: "CircuitHub — Buy Electronics. Build Anything.",
+    title: "CircuitHub — Cửa Hàng Linh Kiện & Dự Án Maker Cá Nhân",
     description:
-      "The modern electronics marketplace for hardware creators. Buy components, boards & share open-source hardware designs.",
+      "Cửa hàng linh kiện điện tử, vi điều khiển ESP32, STM32, module cảm biến đã kiểm tra kỹ thuật 100%. Giao hàng COD toàn quốc.",
     siteName: "CircuitHub",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CircuitHub",
-    description: "Electronics marketplace and open-source hardware community",
+    title: "CircuitHub — Cửa Hàng Linh Kiện & Dự Án Maker Cá Nhân",
+    description: "Cửa hàng linh kiện điện tử & bo mạch IoT cho Maker và Kỹ sư",
   },
 };
 
