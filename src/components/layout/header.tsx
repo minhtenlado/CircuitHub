@@ -98,20 +98,20 @@ function TopTicker() {
   const user = useAuthStore((s) => s.user);
 
   return (
-    <div className="hidden border-b border-border/50 bg-slate-950/90 px-4 py-1.5 text-[11px] text-slate-300 md:block">
+    <div className="hidden border-b border-border/50 bg-slate-950/95 px-4 py-1.5 text-[11px] text-slate-300 md:block">
       <div className="mx-auto flex max-w-screen-2xl items-center justify-between">
         <div className="flex items-center gap-2 font-medium text-slate-200">
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400">
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-500/20 text-red-400">
             <Zap className="h-2.5 w-2.5" />
           </span>
-          <span>⚡ Giao hàng COD toàn quốc — Miễn phí ship đơn từ 300.000₫ | Hotline: 0987.654.321</span>
+          <span>⚡ Hotline/Zalo: <strong className="text-white font-bold">0987.654.321</strong> (T2-T7: 8h00 - 18h30) | Giao hàng COD toàn quốc — Kiểm tra hàng trước khi thanh toán</span>
         </div>
         <div className="flex items-center gap-4 text-slate-400">
           <button
             onClick={() => (user ? goBuyer('buyer-orders') : goAuth('login'))}
-            className="hover:text-cyan-300 transition-colors flex items-center gap-1 cursor-pointer"
+            className="hover:text-white transition-colors flex items-center gap-1 cursor-pointer"
           >
-            <Truck className="h-3 w-3 text-cyan-400" />
+            <Truck className="h-3 w-3 text-red-400" />
             {t('ticker.trackOrder')}
           </button>
           <span className="text-slate-700">|</span>
@@ -119,7 +119,7 @@ function TopTicker() {
             href="https://zalo.me"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors flex items-center gap-1"
+            className="text-red-400 hover:text-red-300 font-semibold transition-colors flex items-center gap-1"
           >
             <MessageSquare className="h-3 w-3" />
             Tư vấn kỹ thuật Zalo
@@ -149,13 +149,13 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
 
   const links: NavLinkDef[] = [
     {
-      label: t('nav.flashDeals'),
-      icon: <Flame className="h-3.5 w-3.5 text-cyan-500" />,
+      label: 'Sản phẩm Hot',
+      icon: <Flame className="h-3.5 w-3.5 text-red-500" />,
       active: (v, p) => v === 'products' && p.sort === 'trending',
       go: () => goProducts({ sort: 'trending' }),
     },
     {
-      label: t('nav.products'),
+      label: 'Tất cả sản phẩm',
       icon: <Package className="h-3.5 w-3.5" />,
       active: (v, p) => v === 'products' && !p.sort && !p.category,
       go: () => goProducts(),
@@ -201,10 +201,10 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
             <Button
               variant="default"
               size="sm"
-              className="h-8 rounded-lg bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold text-xs gap-1.5 shadow-sm"
+              className="h-8 rounded-lg bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-bold text-xs gap-1.5 shadow-xs uppercase tracking-wide cursor-pointer"
             >
               <Menu className="h-3.5 w-3.5" />
-              <span>{t('nav.allCategories')}</span>
+              <span>DANH MỤC SẢN PHẨM</span>
               <ChevronDown className="h-3 w-3 opacity-80" />
             </Button>
           </DropdownMenuTrigger>
@@ -222,9 +222,9 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
                     goCategory(cat.slug);
                     onNavigate?.();
                   }}
-                  className="cursor-pointer py-2 px-2 rounded-md hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                  className="cursor-pointer py-2 px-2 rounded-md hover:bg-red-50 dark:hover:bg-red-950/40"
                 >
-                  <Icon className="h-4 w-4 mr-2.5 text-cyan-600 dark:text-cyan-400" />
+                  <Icon className="h-4 w-4 mr-2.5 text-red-600 dark:text-red-400" />
                   <span className="font-medium text-xs text-foreground">{t(cat.labelKey)}</span>
                 </DropdownMenuItem>
               );
@@ -247,8 +247,8 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
                   className={cn(
                     'group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all whitespace-nowrap',
                     isActive
-                      ? 'bg-primary text-primary-foreground shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)]'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/80',
+                      ? 'bg-red-600 text-white font-semibold shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted',
                   )}
                 >
                   <span
@@ -806,11 +806,11 @@ function ActionCart() {
       size="sm"
       aria-label={`Cart, ${count} items`}
       onClick={open}
-      className="relative flex items-center gap-1.5 sm:gap-2 h-9 px-2.5 sm:px-3 rounded-full border-cyan-500/40 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500 transition-colors shadow-xs"
+      className="relative flex items-center gap-1.5 sm:gap-2 h-9 px-2.5 sm:px-3 rounded-full border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-300 hover:bg-red-500/20 hover:border-red-500 transition-colors shadow-xs cursor-pointer"
     >
-      <ShoppingCart className="h-4 w-4 text-cyan-600 dark:text-cyan-400 shrink-0" />
+      <ShoppingCart className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" />
       <span className="font-semibold text-xs hidden sm:inline">{t('nav.cart')}</span>
-      <Badge className="h-4.5 min-w-4.5 justify-center rounded-full bg-cyan-600 dark:bg-cyan-500 px-1.5 text-[10px] font-bold leading-none text-white">
+      <Badge className="h-4.5 min-w-4.5 justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold leading-none text-white">
         {count > 99 ? '99+' : count}
       </Badge>
     </Button>

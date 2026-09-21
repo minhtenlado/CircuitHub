@@ -88,7 +88,7 @@ import {
   TrendingBadge,
   FeaturedBadge,
 } from '@/components/common/badges';
-import { ProductCard } from '@/components/product/product-card';
+import { ProductCard, sanitizeProductImage } from '@/components/product/product-card';
 import {
   formatVND,
   formatFileSize,
@@ -294,7 +294,11 @@ function ProductDetailContent({ product }: { product: any }) {
   const isPhysical = product.productType === 'PHYSICAL';
   const isPcb = isPhysical && product.category?.slug === 'pcb-boards';
 
-  const images = (product.images ?? []).length > 0 ? product.images : [{ url: '/logo.svg', alt: product.name }];
+  const rawImages = (product.images ?? []).length > 0 ? product.images : [{ url: product.imageUrl || '/logo.svg', alt: product.name }];
+  const images = rawImages.map((img: any) => ({
+    ...img,
+    url: sanitizeProductImage(img.url, product.id || product.slug),
+  }));
   const mainImage = images[selectedImage]?.url ?? images[0]?.url;
   const pct = product.compareAtPrice ? calcPct(product.price, product.compareAtPrice) : 0;
   const savings = product.compareAtPrice ? product.compareAtPrice - product.price : 0;
@@ -404,27 +408,20 @@ function ProductDetailContent({ product }: { product: any }) {
         <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-6 lg:gap-10">
           {/* Image gallery */}
           <div className="space-y-3">
-            <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-cyan-50/40 border border-border/60">
+            <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-900/60 p-4 border border-border/70 flex items-center justify-center">
               <Image
                 src={mainImage}
                 alt={product.name}
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
-                className="object-cover"
+                className="object-contain p-2"
                 priority
               />
-              {isDigital && (
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-cyan-900/80 to-transparent px-5 py-4 flex items-center gap-2 text-white">
-                  <Download className="h-5 w-5" />
-                  <div>
-                    <p className="text-sm font-semibold">Digital Product — Preview</p>
-                    <p className="text-xs text-cyan-100">Instant download after payment</p>
-                  </div>
-                </div>
-              )}
               {pct > 0 && (
-                <div className="absolute top-3 left-3">
-                  <DiscountBadge pct={pct} />
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="bg-red-600 text-white font-bold text-xs px-2.5 py-1 rounded shadow-xs">
+                    -{pct}%
+                  </span>
                 </div>
               )}
             </div>
@@ -436,10 +433,10 @@ function ProductDetailContent({ product }: { product: any }) {
                     key={i}
                     onClick={() => setSelectedImage(i)}
                     className={cn(
-                      'relative aspect-square rounded-lg overflow-hidden border-2 transition-all',
+                      'relative aspect-square rounded-lg overflow-hidden border-2 transition-all p-1 bg-white dark:bg-slate-900',
                       selectedImage === i
-                        ? 'border-cyan-500 shadow-[0_4px_12px_-4px_rgba(6,182,212,0.5)]'
-                        : 'border-transparent hover:border-cyan-200',
+                        ? 'border-red-600 ring-2 ring-red-600/20 shadow-xs'
+                        : 'border-border/60 hover:border-red-400/60',
                     )}
                   >
                     <Image
@@ -447,7 +444,7 @@ function ProductDetailContent({ product }: { product: any }) {
                       alt={img.alt ?? product.name}
                       fill
                       sizes="80px"
-                      className="object-cover"
+                      className="object-contain p-1"
                     />
                   </button>
                 ))}
@@ -457,16 +454,25 @@ function ProductDetailContent({ product }: { product: any }) {
 
           {/* Right column */}
           <div className="flex flex-col gap-4">
-            {/* Badges row */}
-            <div className="flex flex-wrap items-center gap-2">
-              <ProductTypeBadge type={product.productType} />
-              {product.isFeatured && <FeaturedBadge />}
-              {product.isTrending && <TrendingBadge />}
-              {product.isNew && <NewBadge />}
+            {/* SKU and Stock status row */}
+            <div className="flex flex-wrap items-center gap-2.5 text-xs">
+              <span className="font-mono text-xs text-slate-500 dark:text-slate-400 bg-muted/70 px-2.5 py-1 rounded">
+                Mã SP: <span className="font-bold text-foreground">{product.sku || product.id?.slice(0, 7).toUpperCase() || 'SP-01'}</span>
+              </span>
+              {product.stockAvailable > 0 || product.unlimited ? (
+                <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  Còn hàng ({product.unlimited ? 'Sẵn tại kho' : `${product.stockAvailable} sản phẩm`})
+                </span>
+              ) : (
+                <span className="font-semibold text-rose-500 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 px-2.5 py-1 rounded">
+                  Tạm hết hàng
+                </span>
+              )}
               {pct > 0 && (
-                <Badge className="bg-rose-50 text-rose-700 border-rose-200 border">
-                  Save {pct}%
-                </Badge>
+                <span className="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-xs">
+                  Giảm {pct}%
+                </span>
               )}
             </div>
 
@@ -480,35 +486,35 @@ function ProductDetailContent({ product }: { product: any }) {
               <Rating value={product.rating ?? 0} count={product.ratingCount ?? 0} size="sm" />
               <span className="flex items-center gap-1">
                 <ShoppingBag className="h-3.5 w-3.5" />
-                {(product.soldCount ?? 0).toLocaleString('vi-VN')} sold
+                {(product.soldCount ?? 0).toLocaleString('vi-VN')} đã bán
               </span>
               <span className="flex items-center gap-1">
                 <Eye className="h-3.5 w-3.5" />
-                {(product.viewCount ?? 0).toLocaleString('vi-VN')} views
+                {(product.viewCount ?? 0).toLocaleString('vi-VN')} lượt xem
               </span>
               {product.brand && (
                 <span className="flex items-center gap-1">
                   <Package className="h-3.5 w-3.5" />
-                  {product.brand}
+                  Thương hiệu: <span className="font-medium text-foreground">{product.brand}</span>
                 </span>
               )}
             </div>
 
             {/* Price block */}
-            <div className="flex flex-wrap items-baseline gap-3 rounded-xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-800/60 p-4">
-              <span className="text-3xl font-bold text-cyan-700 dark:text-cyan-400 tracking-tight">
+            <div className="flex flex-wrap items-baseline gap-3 rounded-xl bg-red-50/40 dark:bg-red-950/20 border border-red-100 dark:border-red-900/40 p-4">
+              <span className="text-3xl sm:text-4xl font-black text-red-600 dark:text-red-500 tracking-tight tabular-nums">
                 {formatVND(product.price)}
               </span>
               {product.compareAtPrice && product.compareAtPrice > product.price && (
                 <>
-                  <span className="text-base text-muted-foreground line-through">
+                  <span className="text-base text-muted-foreground line-through tabular-nums">
                     {formatVND(product.compareAtPrice)}
                   </span>
-                  <Badge className="bg-red-500 text-white border-0 font-semibold">
+                  <Badge className="bg-red-600 text-white border-0 font-bold">
                     -{pct}%
                   </Badge>
                   <span className="ml-auto text-sm text-emerald-700 dark:text-emerald-400 font-medium">
-                    You save {formatVND(savings)}
+                    Tiết kiệm {formatVND(savings)}
                   </span>
                 </>
               )}
@@ -522,10 +528,10 @@ function ProductDetailContent({ product }: { product: any }) {
             )}
 
             {/* Maker Store Guarantee Box */}
-            <div className="rounded-xl border border-cyan-500/30 bg-cyan-50/40 dark:bg-cyan-950/30 p-3.5 space-y-2.5">
+            <div className="rounded-xl border border-red-200/80 dark:border-red-900/50 bg-red-50/30 dark:bg-red-950/20 p-3.5 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500 text-white font-bold text-xs shadow-xs">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-600 text-white font-bold text-xs shadow-xs">
                     CH
                   </span>
                   <div>
@@ -533,31 +539,31 @@ function ProductDetailContent({ product }: { product: any }) {
                       CircuitHub Maker Shop
                       <VerifiedBadge />
                     </span>
-                    <span className="text-[11px] text-muted-foreground block">Tuyển chọn & nạp test 100% trước khi giao</span>
+                    <span className="text-[11px] text-muted-foreground block">Tuyển chọn linh kiện & nạp test 100% trước khi giao</span>
                   </div>
                 </div>
                 <a
                   href="https://zalo.me"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-700 dark:text-cyan-300 hover:text-cyan-800 dark:hover:text-cyan-200 px-2.5 py-1 rounded-lg border border-cyan-500/30 bg-white/80 dark:bg-slate-900/80 transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 dark:text-red-300 hover:text-red-800 dark:hover:text-red-200 px-2.5 py-1 rounded-lg border border-red-200 dark:border-red-900/50 bg-background transition-colors"
                 >
                   <MessageSquare className="h-3 w-3" />
-                  Chat Zalo
+                  Chat Zalo tư vấn
                 </a>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground pt-2 border-t border-cyan-500/20">
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground pt-2 border-t border-border/60">
                 <span className="flex items-center gap-1 text-foreground font-medium">
-                  ✓ Nạp code & đo áp thực tế
+                  ✓ Kỹ sư đo kiểm & nạp test trước khi giao
                 </span>
                 <span className="flex items-center gap-1 text-foreground font-medium">
-                  ✓ Kèm sơ đồ chân & code mẫu
+                  ✓ Sơ đồ nối chân & code mẫu đi kèm
                 </span>
                 <span className="flex items-center gap-1 text-foreground font-medium">
-                  ✓ Đổi mới 7 ngày nếu lỗi
+                  ✓ Đổi mới trong 7 ngày nếu lỗi phần cứng
                 </span>
                 <span className="flex items-center gap-1 text-foreground font-medium">
-                  ✓ Ship COD kiểm hàng tận nơi
+                  ✓ Ship COD kiểm hàng trước khi thanh toán
                 </span>
               </div>
             </div>
@@ -739,22 +745,21 @@ function ProductDetailContent({ product }: { product: any }) {
               <div className="grid grid-cols-2 gap-3">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white shadow-[0_8px_20px_-8px_rgba(6,182,212,0.5)] border-0"
+                  className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-bold h-12 shadow-xs cursor-pointer"
                   disabled={isDigital && !licenseAccepted}
                   onClick={() => handleAddToCart(false)}
                 >
-                  <ShoppingBag className="h-4 w-4" />
-                  {t('productDetail.addToCart')}
+                  <ShoppingBag className="h-5 w-5" />
+                  THÊM VÀO GIỎ
                 </Button>
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="border-cyan-300 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
+                  className="bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-bold h-12 shadow-xs cursor-pointer"
                   disabled={isDigital && !licenseAccepted}
                   onClick={() => handleAddToCart(true)}
                 >
-                  {t('productDetail.buyNow')}
-                  <ArrowRight className="h-4 w-4" />
+                  MUA NGAY
+                  <ArrowRight className="h-5 w-5" />
                 </Button>
               </div>
             )}

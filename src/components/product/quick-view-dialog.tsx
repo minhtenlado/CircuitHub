@@ -18,6 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useI18n } from '@/lib/i18n';
 import { formatVND, discountPct as calcPct } from '@/lib/format';
 import { Rating } from '@/components/common/rating';
+import { sanitizeProductImage } from '@/components/product/product-card';
 import {
   ProductTypeBadge,
   StockBadge,
@@ -72,11 +73,16 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
   const pct = product.compareAtPrice ? calcPct(product.price, product.compareAtPrice) : 0;
   const inWishlist = wishlist.has(product.id);
 
-  // Normalize images
-  const images: { url: string; alt?: string }[] =
+  // Normalize images with hardware fallback
+  const rawImages: { url: string; alt?: string }[] =
     product.images && product.images.length > 0
       ? product.images
       : [{ url: product.imageUrl || '/logo.svg', alt: product.name }];
+
+  const images = rawImages.map((img) => ({
+    ...img,
+    url: sanitizeProductImage(img.url, product.id || product.slug),
+  }));
 
   const currentImage = images[selectedImage]?.url ?? images[0]?.url ?? '/logo.svg';
 
@@ -157,13 +163,12 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
 
                 {/* Overlaid Badges */}
                 <div className="absolute top-3.5 left-3.5 flex flex-col items-start gap-1.5 z-10">
-                  {pct > 0 && <DiscountBadge pct={pct} />}
+                  {pct > 0 && (
+                    <span className="bg-red-600 text-white font-bold text-xs px-2 py-0.5 rounded shadow-xs">
+                      -{pct}%
+                    </span>
+                  )}
                   {product.isNew && <NewBadge />}
-                  {product.isTrending && <TrendingBadge />}
-                </div>
-
-                <div className="absolute bottom-3.5 left-3.5 z-10">
-                  <ProductTypeBadge type={product.productType} />
                 </div>
               </div>
 
@@ -177,8 +182,8 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                       className={cn(
                         'relative h-16 w-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer',
                         selectedImage === idx
-                          ? 'border-cyan-500 ring-2 ring-cyan-500/20 shadow-xs scale-105'
-                          : 'border-border/60 hover:border-cyan-400/60 opacity-70 hover:opacity-100',
+                          ? 'border-red-600 ring-2 ring-red-600/20 shadow-xs scale-105'
+                          : 'border-border/60 hover:border-red-400/60 opacity-70 hover:opacity-100',
                       )}
                       aria-label={`Thumbnail ${idx + 1}`}
                     >
@@ -192,12 +197,12 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
             {/* Quality & Trust Indicator */}
             <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
-                <span>100% Thông số kiểm định</span>
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>100% Linh kiện chuẩn</span>
               </span>
               <span className="flex items-center gap-1.5">
-                <Truck className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
-                <span>Giao hàng toàn quốc</span>
+                <Truck className="h-3.5 w-3.5 text-slate-600 dark:text-slate-400" />
+                <span>Giao hàng COD toàn quốc</span>
               </span>
             </div>
           </div>
@@ -206,13 +211,14 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
               RIGHT COLUMN: Product Info, Specs, Price, and Actions
               ============================================================ */}
           <div className="md:col-span-6 p-5 sm:p-7 flex flex-col justify-between gap-4 overflow-y-auto">
-            {/* Header: Category / Maker Shop Badge + Rating */}
-            <div className="flex items-center justify-between text-xs text-muted-foreground pr-10">
-              <div className="flex items-center gap-2 truncate max-w-[65%]">
-                <span className="inline-flex items-center gap-1 font-semibold text-xs text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-200/50 dark:border-cyan-800/50 truncate">
-                  {product.category?.name || 'Linh kiện Maker'}
+            {/* Header: SKU, Brand & Rating */}
+            <div className="flex items-center justify-between text-xs text-muted-foreground pr-8">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-mono text-xs text-slate-500 dark:text-slate-400">
+                  Mã: <span className="font-bold text-foreground">{product.sku || product.id?.slice(0, 7).toUpperCase() || 'SP-01'}</span>
                 </span>
-                <span className="text-[10px] text-muted-foreground hidden sm:inline">CircuitHub Test 100%</span>
+                <span>•</span>
+                <span className="font-medium text-foreground">{product.brand || product.category?.name || 'Hshop Maker'}</span>
               </div>
 
               <Rating value={product.rating ?? 0} count={product.ratingCount ?? 0} size="xs" showCount={true} />
@@ -220,7 +226,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
 
             {/* Product Title */}
             <div>
-              <h2 className="text-xl sm:text-2xl font-black leading-snug text-foreground tracking-tight line-clamp-2">
+              <h2 className="text-xl sm:text-2xl font-bold leading-snug text-foreground tracking-tight line-clamp-2">
                 {product.name}
               </h2>
 
@@ -269,28 +275,37 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                 </span>
               </div>
             ) : (
-              <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl bg-cyan-50/50 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-900/50 p-3.5">
+              <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl bg-red-50/40 dark:bg-red-950/20 border border-red-100 dark:border-red-900/40 p-4">
                 <div className="flex items-baseline gap-2.5">
-                  <span className="text-2xl sm:text-3xl font-black text-cyan-600 dark:text-cyan-400 tracking-tight tabular-nums">
+                  <span className="text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-500 tracking-tight tabular-nums">
                     {formatVND(product.price)}
                   </span>
                   {product.compareAtPrice && product.compareAtPrice > product.price && (
                     <>
-                      <span className="text-sm text-muted-foreground line-through">
+                      <span className="text-sm text-muted-foreground line-through tabular-nums">
                         {formatVND(product.compareAtPrice)}
                       </span>
-                      <Badge className="bg-red-500 text-white border-0 text-xs font-bold px-1.5 py-0.5">
+                      <span className="bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded">
                         -{pct}%
-                      </Badge>
+                      </span>
                     </>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
+                  {product.stockAvailable > 0 || product.unlimited ? (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-full">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      Còn hàng ({product.unlimited ? 'Sẵn' : product.stockAvailable})
+                    </span>
+                  ) : (
+                    <span className="text-xs font-semibold text-rose-500 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 px-2.5 py-1 rounded-full">
+                      Hết hàng
+                    </span>
+                  )}
                   {product.soldCount > 0 && (
                     <span className="text-xs text-muted-foreground font-medium">
-                      {product.soldCount.toLocaleString('vi-VN')} {t('product.sold')}
+                      Đã bán {product.soldCount.toLocaleString('vi-VN')}
                     </span>
                   )}
                 </div>
@@ -320,7 +335,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                     });
                     onOpenChange(false);
                   }}
-                  className="flex-1 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold text-sm shadow-md cursor-pointer"
+                  className="flex-1 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-sm shadow-md cursor-pointer"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   {t('productDetail.downloadFree')}
@@ -329,11 +344,11 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                 <Button
                   size="lg"
                   onClick={handleAddToCart}
-                  className="flex-1 h-12 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm shadow-md cursor-pointer"
+                  className="flex-1 h-12 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-bold text-sm shadow-md cursor-pointer"
                   disabled={product.productType === 'SERVICE'}
                 >
                   <ShoppingCart className="h-4 w-4 mr-2" />
-                  {product.productType === 'SERVICE' ? 'Yêu cầu báo giá' : t('product.addToCart')}
+                  {product.productType === 'SERVICE' ? 'Yêu cầu báo giá' : 'THÊM VÀO GIỎ HÀNG'}
                 </Button>
               )}
 

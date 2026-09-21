@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Heart, ShoppingBag, Eye, GitCompare } from 'lucide-react';
+import { Heart, ShoppingBag, ShoppingCart, Eye, GitCompare, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useNavStore } from '@/stores/nav-store';
@@ -18,6 +18,25 @@ import { Rating } from '@/components/common/rating';
 import { StockBadge, DiscountBadge, NewBadge, TrendingBadge, TechBadge, OpenSourceBadge, FreeBadge } from '@/components/common/badges';
 import { Cpu, Layers, FileCode, Download } from 'lucide-react';
 
+/* Curated high quality electronics images for realistic hardware display */
+const HARDWARE_IMAGES = [
+  'https://images.unsplash.com/photo-1553406830-ef2513450d76?w=800&q=80&auto=format&fit=crop', // Arduino
+  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80&auto=format&fit=crop', // PCB microchip
+  'https://images.unsplash.com/photo-1608564697071-ddf911d81370?w=800&q=80&auto=format&fit=crop', // Blue circuit board
+  'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&q=80&auto=format&fit=crop', // Soldered board
+  'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80&auto=format&fit=crop', // Chip
+];
+
+export function sanitizeProductImage(rawUrl: string | undefined, id: string = ''): string {
+  if (!rawUrl || rawUrl === '/logo.svg') return HARDWARE_IMAGES[0];
+  // Replace photos of HTML/CSS code on monitors or laptops with real hardware photos
+  if (rawUrl.includes('photo-1542831371') || rawUrl.includes('photo-1498050108023') || rawUrl.includes('photo-1551033406')) {
+    const hash = (id || 'default').split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return HARDWARE_IMAGES[hash % HARDWARE_IMAGES.length];
+  }
+  return rawUrl;
+}
+
 export function ProductCard({ product, index = 0 }: { product: any; index?: number }) {
   const { t } = useI18n();
   const goProduct = useNavStore((s) => s.goProduct);
@@ -33,7 +52,8 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
   const inWishlist = wishlist.has(product.id);
   const inCompare = compare.has(product.id);
   const pct = product.compareAtPrice ? calcPct(product.price, product.compareAtPrice) : 0;
-  const image = product.images?.[0]?.url ?? '/logo.svg';
+  const rawImage = product.images?.[0]?.url ?? '/logo.svg';
+  const image = sanitizeProductImage(rawImage, product.id || product.slug);
 
   function handleOpenProduct() {
     // Track recently viewed
@@ -98,15 +118,15 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.025, 0.4) }}
-      className="group relative flex flex-col bg-card border border-border/70 dark:border-slate-800 rounded-xl overflow-hidden hover:border-cyan-400/60 dark:hover:border-cyan-500/60 hover:shadow-[0_10px_40px_-12px_rgba(6,182,212,0.35)] transition-all duration-300"
+      className="group relative flex flex-col bg-card border border-border/80 dark:border-slate-800 rounded-xl overflow-hidden hover:border-red-500/60 dark:hover:border-red-500/60 hover:shadow-md transition-all duration-300"
     >
-      {/* Image */}
+      {/* Image Block */}
       <div
         role="button"
         tabIndex={0}
         onClick={handleOpenProduct}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleOpenProduct(); } }}
-        className="relative block aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-50 to-cyan-50/40 cursor-pointer"
+        className="relative block aspect-square bg-white dark:bg-slate-900/60 p-3 border-b border-border/40 cursor-pointer overflow-hidden flex items-center justify-center"
         aria-label={product.name}
       >
         <Image
@@ -114,16 +134,21 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
           alt={product.name}
           fill
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
         />
-        {/* Top-left badges (Max 2 badges per card; Trending hidden if discount exists) */}
-        <div className="absolute top-2.5 left-2.5 flex flex-col items-start gap-2">
-          {pct > 0 && <DiscountBadge pct={pct} />}
+
+        {/* Top-left badges: Discount */}
+        <div className="absolute top-2.5 left-2.5 flex flex-col items-start gap-1.5 z-10">
+          {pct > 0 && (
+            <span className="bg-red-600 text-white font-bold text-[11px] px-2 py-0.5 rounded shadow-xs">
+              -{pct}%
+            </span>
+          )}
           {product.isNew && <NewBadge />}
-          {pct <= 0 && product.isTrending && <TrendingBadge />}
         </div>
-        {/* Top-right action buttons (Compare visible on hover only) */}
-        <div className="absolute top-2.5 right-2.5 flex flex-col gap-2">
+
+        {/* Top-right action buttons */}
+        <div className="absolute top-2.5 right-2.5 flex flex-col gap-1.5 z-10">
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -148,7 +173,7 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
                 description: product.name,
               });
             }}
-            className="p-1.5 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-rose-500 transition-colors shadow-xs"
+            className="p-1.5 bg-white/90 dark:bg-slate-800/90 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-rose-500 transition-colors shadow-xs"
             aria-label="Toggle wishlist"
           >
             <Heart className={inWishlist ? 'h-4 w-4 fill-rose-500 text-rose-500' : 'h-4 w-4'} />
@@ -157,26 +182,15 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
             onClick={handleToggleCompare}
             className={`p-1.5 backdrop-blur rounded-full transition-all shadow-xs ${
               inCompare
-                ? 'bg-cyan-500 text-white opacity-100'
-                : 'bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-cyan-600 opacity-0 group-hover:opacity-100'
+                ? 'bg-red-500 text-white opacity-100'
+                : 'bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 hover:text-red-600 opacity-0 group-hover:opacity-100'
             }`}
             aria-label="Toggle compare"
           >
             <GitCompare className="h-4 w-4" />
           </button>
         </div>
-        {/* Bottom-left product type (Small text without colored background) */}
-        <div className="absolute bottom-2.5 left-2.5">
-          <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 bg-background/80 backdrop-blur-xs px-1.5 py-0.5 rounded border border-border/50">
-            {product.productType === 'PHYSICAL'
-              ? (t('productType.physical') !== 'productType.physical' ? t('productType.physical') : 'Sản phẩm vật lý')
-              : product.productType === 'DIGITAL'
-              ? (t('productType.digital') !== 'productType.digital' ? t('productType.digital') : 'Thiết kế số')
-              : product.productType === 'SERVICE'
-              ? (t('productType.service') !== 'productType.service' ? t('productType.service') : 'Dịch vụ kỹ thuật')
-              : (t('productType.bundle') !== 'productType.bundle' ? t('productType.bundle') : 'Combo')}
-          </span>
-        </div>
+
         {/* Quick View hover overlay */}
         <button
           onClick={(e) => {
@@ -184,146 +198,91 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
             e.stopPropagation();
             quickView.open(product);
           }}
-          className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3 cursor-pointer"
+          className="absolute inset-x-0 bottom-0 bg-slate-950/70 backdrop-blur-xs py-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-1.5 text-white text-xs font-medium cursor-pointer z-10"
           aria-label="Quick view"
         >
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-slate-800/95 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cyan-700 dark:text-cyan-300 shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300 border border-border/40">
-            <Eye className="h-3.5 w-3.5" />
-            {t('product.quickView')}
-          </span>
+          <Eye className="h-3.5 w-3.5" />
+          {t('product.quickView')}
         </button>
       </div>
 
       {/* Body */}
-      <div className="flex flex-col gap-2 p-3.5 flex-1">
-        {/* Category tag + rating */}
+      <div className="flex flex-col gap-2 p-3 flex-1">
+        {/* SKU code + Stock status */}
         <div className="flex items-center justify-between text-xs">
-          <span className="text-[11px] font-medium text-cyan-700 dark:text-cyan-300 bg-cyan-50/80 dark:bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-200/50 dark:border-cyan-800/50 truncate max-w-[170px]">
-            {product.category?.name || product.brand || 'Linh kiện Maker'}
+          <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
+            Mã: <span className="font-semibold text-foreground">{product.sku || product.id?.slice(0, 7).toUpperCase() || 'SP-01'}</span>
           </span>
-          <Rating value={product.rating} count={product.ratingCount} size="xs" showCount={true} />
+          {product.stockAvailable > 0 || product.unlimited ? (
+            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Còn hàng
+            </span>
+          ) : (
+            <span className="text-[11px] font-medium text-rose-500">Hết hàng</span>
+          )}
         </div>
 
         {/* Name */}
         <button
           onClick={handleOpenProduct}
-          className="text-sm font-semibold leading-snug text-foreground text-left line-clamp-2 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+          className="text-sm font-semibold leading-snug text-foreground text-left line-clamp-2 min-h-[2.5rem] hover:text-red-600 dark:hover:text-red-400 transition-colors"
         >
           {product.name}
         </button>
 
-        {/* Short description */}
-        {product.shortDescription && (
-          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{product.shortDescription}</p>
-        )}
-
-        {/* Tech badges */}
-        <div className="flex flex-wrap gap-1 mt-auto">
-          {product.productType === 'DIGITAL' && product.licenseType === 'OPEN_SOURCE' && (
-            <OpenSourceBadge className="text-[10px]" />
-          )}
-          {product.productType === 'DIGITAL' && product.software && (
-            <TechBadge icon={FileCode} label={`${product.software} ${product.softwareVersion ?? ''}`.trim()} />
-          )}
-          {product.productType === 'DIGITAL' && product.currentVersion && (
-            <TechBadge icon={Download} label={product.currentVersion} />
-          )}
-          {product.productType === 'PHYSICAL' && product.pcbLayers && (
-            <TechBadge icon={Layers} label={`${product.pcbLayers}L`} />
-          )}
-          {product.productType === 'PHYSICAL' && product.pcbColor && (
-            <TechBadge icon={Cpu} label={product.pcbColor} />
-          )}
-          {product.productType === 'SERVICE' && product.serviceDurationDays && (
-            <TechBadge icon={Layers} label={`${product.serviceDurationDays} days`} />
-          )}
+        {/* Brand / Category & Rating */}
+        <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+          <span className="truncate max-w-[120px]">{product.brand || product.category?.name || 'Linh kiện Maker'}</span>
+          <Rating value={product.rating} count={product.ratingCount} size="xs" showCount={true} />
         </div>
 
-        {/* Price + cart / Free download */}
-        <div className="flex items-end justify-between pt-2 mt-1 border-t border-border/60">
-          {product.price === 0 && product.productType === 'DIGITAL' ? (
-            <>
-              <div className="flex items-center gap-1.5">
-                <FreeBadge className="text-[11px]" />
-                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{t('product.openSource')}</span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (!user) {
-                    toast({
-                      title: t('auth.loginRequired'),
-                      description: t('auth.loginRequiredToBuy') || 'Vui lòng đăng nhập để tải dự án này',
-                    });
-                    goAuth('login', 'product-detail', { slug: product.slug });
-                    return;
-                  }
-                  toast({ title: 'Download started', description: `${product.name} — Free open source download` });
-                }}
-                className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white text-xs font-semibold px-2.5 py-1.5 transition-colors shadow-sm"
-                aria-label="Download free"
-              >
-                <Download className="h-3.5 w-3.5" />
-                {t('product.get')}
-              </button>
-            </>
-          ) : (
-            <>
-              <div className="flex flex-col">
-                {product.compareAtPrice && (
-                  <span className="text-[11px] text-muted-foreground line-through">{formatVND(product.compareAtPrice)}</span>
-                )}
-                <span className="text-base font-bold text-cyan-600 dark:text-cyan-400 tracking-tight">{formatVND(product.price)}</span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (!user) {
-                    toast({
-                      title: t('auth.loginRequired'),
-                      description: t('auth.loginRequiredToAddCart'),
-                    });
-                    goAuth('login', 'product-detail', { slug: product.slug });
-                    return;
-                  }
-                  if (product.productType === 'SERVICE') {
-                    goProduct(product.slug);
-                    return;
-                  }
-                  cart.addItem({
-                    productId: product.id,
-                    slug: product.slug,
-                    name: product.name,
-                    imageUrl: image,
-                    price: product.price,
-                    productType: product.productType,
-                    shopId: product.shop.id,
-                    shopName: product.shop.name,
-                  });
-                  toast({ title: 'Added to cart', description: product.name });
-                }}
-                className="flex items-center gap-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold px-2.5 py-1.5 transition-colors shadow-sm"
-                aria-label="Add to cart"
-              >
-                <ShoppingBag className="h-3.5 w-3.5" />
-                {t('product.addToCart')}
-              </button>
-            </>
-          )}
-        </div>
+        {/* Price + cart row */}
+        <div className="flex items-center justify-between pt-2 mt-auto border-t border-border/50">
+          <div className="flex flex-col">
+            {product.compareAtPrice && product.compareAtPrice > product.price ? (
+              <span className="text-[11px] text-muted-foreground line-through tabular-nums">
+                {formatVND(product.compareAtPrice)}
+              </span>
+            ) : null}
+            <span className="text-base sm:text-lg font-bold text-red-600 dark:text-red-500 tabular-nums">
+              {formatVND(product.price)}
+            </span>
+          </div>
 
-        {/* Stock footer */}
-        <div className="flex items-center justify-between pt-1">
-          {product.price === 0 && product.productType === 'DIGITAL' ? (
-            <span className="text-[10px] text-muted-foreground">{(product.downloadCount ?? product.soldCount ?? 0).toLocaleString('vi-VN')} {t('product.downloads')}</span>
-          ) : (
-            <>
-              <StockBadge stock={product.stockAvailable} unlimited={product.unlimited} />
-              {product.soldCount > 0 && (
-                <span className="text-[10px] text-muted-foreground">{product.soldCount.toLocaleString('vi-VN')} {t('product.sold')}</span>
-              )}
-            </>
-          )}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!user) {
+                toast({
+                  title: t('auth.loginRequired'),
+                  description: t('auth.loginRequiredToAddCart'),
+                });
+                goAuth('login', 'product-detail', { slug: product.slug });
+                return;
+              }
+              if (product.productType === 'SERVICE') {
+                goProduct(product.slug);
+                return;
+              }
+              cart.addItem({
+                productId: product.id,
+                slug: product.slug,
+                name: product.name,
+                imageUrl: image,
+                price: product.price,
+                productType: product.productType,
+                shopId: product.shop?.id,
+                shopName: product.shop?.name,
+              });
+              toast({ title: 'Đã thêm vào giỏ hàng', description: product.name });
+            }}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 active:bg-red-800 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+            aria-label="Thêm vào giỏ"
+          >
+            <ShoppingCart className="h-3.5 w-3.5" />
+            <span className="hidden xs:inline sm:inline">Thêm giỏ</span>
+          </button>
         </div>
       </div>
     </motion.article>
@@ -333,14 +292,14 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
 export function ProductCardSkeleton() {
   return (
     <div className="flex flex-col bg-card border border-border/70 rounded-xl overflow-hidden">
-      <div className="aspect-[4/3] bg-muted shimmer" />
+      <div className="aspect-square bg-muted shimmer" />
       <div className="p-3 space-y-2">
         <div className="h-3 w-1/2 bg-muted rounded shimmer" />
         <div className="h-4 w-3/4 bg-muted rounded shimmer" />
         <div className="h-3 w-full bg-muted rounded shimmer" />
         <div className="flex justify-between pt-2">
           <div className="h-5 w-20 bg-muted rounded shimmer" />
-          <div className="h-7 w-12 bg-muted rounded shimmer" />
+          <div className="h-7 w-16 bg-muted rounded shimmer" />
         </div>
       </div>
     </div>

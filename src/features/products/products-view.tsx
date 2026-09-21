@@ -69,6 +69,15 @@ import { cn } from '@/lib/utils';
 const PAGE_SIZE = 12;
 const PRICE_MAX = 5_000_000; // 5M VND cap
 
+export const PRICE_PRESETS = [
+  { label: 'Tất cả', min: 0, max: PRICE_MAX },
+  { label: '< 50k', min: 0, max: 50_000 },
+  { label: '50k - 100k', min: 50_000, max: 100_000 },
+  { label: '100k - 200k', min: 100_000, max: 200_000 },
+  { label: '200k - 500k', min: 200_000, max: 500_000 },
+  { label: '> 500k', min: 500_000, max: PRICE_MAX },
+];
+
 const SORT_OPTIONS = [
   { value: 'popular', labelKey: 'sort.popular', fallback: 'Popular' },
   { value: 'newest', labelKey: 'sort.newest', fallback: 'Newest' },
@@ -269,7 +278,7 @@ export function ProductsView({
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
                   {categoryHeaderTitle}
                 </h1>
-                <span className="inline-flex items-center rounded-full border border-cyan-300/50 dark:border-cyan-800/60 bg-cyan-50/60 dark:bg-cyan-950/40 px-2.5 py-0.5 text-xs font-semibold text-cyan-700 dark:text-cyan-300 tabular-nums">
+                <span className="inline-flex items-center rounded-full border border-border bg-muted/70 px-2.5 py-0.5 text-xs font-semibold text-foreground tabular-nums">
                   {total.toLocaleString('vi-VN')} {t('categories.countProducts')}
                 </span>
               </div>
@@ -285,15 +294,15 @@ export function ProductsView({
               {/* Mobile filter button */}
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <DrawerTrigger asChild>
-                  <Button variant="outline" size="sm" className="lg:hidden border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800">
+                  <Button variant="outline" size="sm" className="lg:hidden border-border text-foreground hover:bg-muted">
                     <SlidersHorizontal className="h-4 w-4" />
                     {t('filter.filters')}
                   </Button>
                 </DrawerTrigger>
                 <DrawerContent className="max-w-[85vw] sm:max-w-[400px]">
                   <DrawerHeader className="border-b border-border/60">
-                    <DrawerTitle className="flex items-center gap-2 text-cyan-700 dark:text-cyan-400">
-                      <SlidersHorizontal className="h-4 w-4" />
+                    <DrawerTitle className="flex items-center gap-2 text-foreground font-bold">
+                      <SlidersHorizontal className="h-4 w-4 text-red-600" />
                       {t('filter.filters')}
                     </DrawerTitle>
                   </DrawerHeader>
@@ -331,7 +340,7 @@ export function ProductsView({
                       {t('filter.reset')}
                     </Button>
                     <Button
-                      className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white"
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white"
                       onClick={() => setDrawerOpen(false)}
                     >
                       {t('filter.apply')}
@@ -430,7 +439,7 @@ export function ProductsView({
                   size="sm"
                   disabled={currentPage === 1}
                   onClick={() => goToPage(currentPage - 1)}
-                  className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800"
+                  className="border-border text-foreground hover:bg-muted"
                 >
                   <ChevronRight className="h-4 w-4 rotate-180" />
                   {t('common.prev') || 'Prev'}
@@ -438,7 +447,7 @@ export function ProductsView({
                 {getPageNumbers(currentPage, totalPages).map((p, idx) =>
                   p === '...' ? (
                     <span key={`e-${idx}`} className="px-2 text-muted-foreground text-sm">
-                      …
+                       …
                     </span>
                   ) : (
                     <button
@@ -447,8 +456,8 @@ export function ProductsView({
                       className={cn(
                         'h-8 min-w-8 px-2 rounded-md text-sm font-medium transition-colors',
                         p === currentPage
-                          ? 'bg-cyan-500 text-white shadow-sm hover:bg-cyan-600'
-                          : 'border border-border bg-card dark:bg-slate-900 text-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:border-cyan-200 dark:hover:border-cyan-800',
+                          ? 'bg-red-600 text-white shadow-xs hover:bg-red-700'
+                          : 'border border-border bg-card dark:bg-slate-900 text-foreground hover:bg-muted',
                       )}
                     >
                       {p}
@@ -460,7 +469,7 @@ export function ProductsView({
                   size="sm"
                   disabled={currentPage === totalPages}
                   onClick={() => goToPage(currentPage + 1)}
-                  className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800"
+                  className="border-border text-foreground hover:bg-muted"
                 >
                   {t('common.next') || 'Next'}
                   <ChevronRight className="h-4 w-4" />
@@ -558,30 +567,6 @@ function FiltersPanel(props: FiltersPanelProps) {
         </div>
       </FilterCard>
 
-      {/* Product Type */}
-      <FilterCard title={t('filter.productType')} icon={Package}>
-        <div className="space-y-0.5">
-          <RadioRow
-            label={t('filter.allTypes')}
-            checked={!productType}
-            onCheck={() => onProductTypeChange('')}
-          />
-          {PRODUCT_TYPES.map((pt) => {
-            const Icon = pt.icon;
-            const label = t(pt.labelKey) !== pt.labelKey ? t(pt.labelKey) : pt.fallback;
-            return (
-              <RadioRow
-                key={pt.value}
-                label={label}
-                checked={productType === pt.value}
-                onCheck={() => onProductTypeChange(productType === pt.value ? '' : pt.value)}
-                icon={<Icon className="h-3.5 w-3.5" />}
-              />
-            );
-          })}
-        </div>
-      </FilterCard>
-
       {/* Category tree */}
       <FilterCard title={t('filter.category')} icon={LayersIcon}>
         <div className="space-y-0.5">
@@ -613,9 +598,48 @@ function FiltersPanel(props: FiltersPanelProps) {
         </div>
       </FilterCard>
 
+      {/* In stock toggle */}
+      <FilterCard title={t('filter.inStock')} icon={Check}>
+        <label
+          htmlFor="in-stock-only"
+          className="flex items-center justify-between gap-2 cursor-pointer rounded-md px-1.5 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        >
+          <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Chỉ sản phẩm còn hàng</span>
+          </div>
+          <Switch id="in-stock-only" checked={inStockOnly} onCheckedChange={onInStockChange} />
+        </label>
+      </FilterCard>
+
       {/* Price range */}
       <FilterCard title={t('filter.price')} icon={Cpu}>
         <div className="space-y-3">
+          {/* Quick presets */}
+          <div className="grid grid-cols-3 gap-1.5 pb-1">
+            {PRICE_PRESETS.map((preset) => {
+              const isSelected = priceRange[0] === preset.min && priceRange[1] === preset.max;
+              return (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => {
+                    onPriceRangeChange([preset.min, preset.max]);
+                    onPriceRangeCommit([preset.min, preset.max]);
+                  }}
+                  className={cn(
+                    'text-[11px] py-1 px-1.5 rounded text-center transition-colors border font-medium cursor-pointer truncate',
+                    isSelected
+                      ? 'bg-red-600 text-white border-red-600 shadow-2xs font-semibold'
+                      : 'bg-background hover:bg-muted text-muted-foreground hover:text-foreground border-border/70'
+                  )}
+                >
+                  {preset.label}
+                </button>
+              );
+            })}
+          </div>
+
           <div className="flex items-center justify-between text-xs text-muted-foreground tabular-nums">
             <span>{formatVND(priceRange[0])}</span>
             <span>{priceRange[1] >= PRICE_MAX ? `${formatVND(PRICE_MAX)}+` : formatVND(priceRange[1])}</span>
@@ -627,11 +651,11 @@ function FiltersPanel(props: FiltersPanelProps) {
             value={priceRange}
             onValueChange={(v) => onPriceRangeChange([v[0], v[1]] as [number, number])}
             onValueCommit={(v) => onPriceRangeCommit([v[0], v[1]] as [number, number])}
-            className="[&_[data-slot=slider-range]]:bg-gradient-to-r [&_[data-slot=slider-range]]:from-cyan-500 [&_[data-slot=slider-range]]:to-teal-400 [&_[data-slot=slider-thumb]]:border-cyan-500"
+            className="[&_[data-slot=slider-range]]:bg-red-600 [&_[data-slot=slider-thumb]]:border-red-600"
           />
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <Label className="text-[10px] text-muted-foreground">Min</Label>
+              <Label className="text-[10px] text-muted-foreground">Từ (VNĐ)</Label>
               <Input
                 type="number"
                 value={priceRange[0] || ''}
@@ -642,13 +666,13 @@ function FiltersPanel(props: FiltersPanelProps) {
               />
             </div>
             <div>
-              <Label className="text-[10px] text-muted-foreground">Max</Label>
+              <Label className="text-[10px] text-muted-foreground">Đến (VNĐ)</Label>
               <Input
                 type="number"
                 value={priceRange[1] >= PRICE_MAX ? '' : priceRange[1]}
                 onChange={(e) => onPriceRangeChange([priceRange[0], parseInt(e.target.value, 10) || PRICE_MAX])}
                 onBlur={() => onPriceRangeCommit(priceRange)}
-                placeholder="Any"
+                placeholder="Tối đa"
                 className="h-7 text-xs bg-background"
               />
             </div>
@@ -740,19 +764,8 @@ function FiltersPanel(props: FiltersPanelProps) {
         </div>
       </FilterCard>
 
-      {/* In stock toggle */}
-      <FilterCard title={t('filter.inStock')} icon={Check}>
-        <label
-          htmlFor="in-stock-only"
-          className="flex items-center justify-between gap-2 cursor-pointer rounded-md px-1.5 py-1.5 hover:bg-cyan-50 dark:hover:bg-slate-800 transition-colors"
-        >
-          <span className="text-sm text-foreground">{t('filter.inStock')}</span>
-          <Switch id="in-stock-only" checked={inStockOnly} onCheckedChange={onInStockChange} />
-        </label>
-      </FilterCard>
-
       {/* Reset button */}
-      <Button variant="outline" className="w-full border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onReset}>
+      <Button variant="outline" className="w-full border-border hover:bg-muted text-foreground" onClick={onReset}>
         <RotateCcw className="h-3.5 w-3.5" />
         {t('filter.reset')}
       </Button>
