@@ -206,23 +206,14 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
               RIGHT COLUMN: Product Info, Specs, Price, and Actions
               ============================================================ */}
           <div className="md:col-span-6 p-5 sm:p-7 flex flex-col justify-between gap-4 overflow-y-auto">
-            {/* Header: Shop Info + Rating (pr-10 leaves room for Dialog close button) */}
+            {/* Header: Category / Maker Shop Badge + Rating */}
             <div className="flex items-center justify-between text-xs text-muted-foreground pr-10">
-              <button
-                onClick={() => {
-                  onOpenChange(false);
-                  goShop(product.shop?.slug ?? '');
-                }}
-                className="flex items-center gap-2 hover:text-cyan-600 transition-colors truncate max-w-[65%]"
-              >
-                <span className="relative h-6 w-6 rounded-full overflow-hidden bg-cyan-50 dark:bg-cyan-950 border border-cyan-200 dark:border-cyan-800 shrink-0">
-                  {product.shop?.logoUrl && (
-                    <Image src={product.shop.logoUrl} alt={product.shop.name} fill className="object-cover" sizes="24px" />
-                  )}
+              <div className="flex items-center gap-2 truncate max-w-[65%]">
+                <span className="inline-flex items-center gap-1 font-semibold text-xs text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-200/50 dark:border-cyan-800/50 truncate">
+                  {product.category?.name || 'Linh kiện Maker'}
                 </span>
-                <span className="font-semibold text-foreground truncate">{product.shop?.name}</span>
-                {product.shop?.verified && <span className="text-cyan-500 font-bold shrink-0">✓</span>}
-              </button>
+                <span className="text-[10px] text-muted-foreground hidden sm:inline">CircuitHub Test 100%</span>
+              </div>
 
               <Rating value={product.rating ?? 0} count={product.ratingCount ?? 0} size="xs" showCount={true} />
             </div>

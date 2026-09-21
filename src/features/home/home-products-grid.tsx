@@ -48,7 +48,7 @@ export function HomeProductsGrid() {
           <div>
             <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 mb-1">
               <Sparkles className="h-3.5 w-3.5" />
-              SÀN GIAO DỊCH LINH KIỆN
+              CỬA HÀNG LINH KIỆN & KIT MAKER
             </div>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-foreground">
               {t('homeGrid.title')}

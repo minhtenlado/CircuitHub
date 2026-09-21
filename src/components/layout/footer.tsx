@@ -95,10 +95,10 @@ export function Footer() {
   const [submitting, setSubmitting] = useState(false);
 
   const TRUST_ITEMS = [
-    { icon: Lock, title: t('footer.securePayments'), subtitle: t('footer.securePaymentsSub') },
-    { icon: ShieldCheck, title: t('footer.verifiedSellers'), subtitle: t('footer.verifiedSellersSub') },
-    { icon: Cpu, title: t('footer.engineeringQuality'), subtitle: t('footer.engineeringQualitySub') },
-    { icon: RefreshCw, title: t('footer.returns'), subtitle: t('footer.returnsSub') },
+    { icon: Lock, title: 'Giao Hàng COD Toàn Quốc', subtitle: 'Kiểm tra hàng trước khi thanh toán' },
+    { icon: ShieldCheck, title: 'Test Kỹ Thuật 100%', subtitle: 'Nạp thử code & kiểm tra ngoại vi' },
+    { icon: RefreshCw, title: 'Đổi Trả 7 Ngày Uy Tín', subtitle: '1 đổi 1 nhanh chóng nếu có lỗi' },
+    { icon: Cpu, title: 'Hỗ Trợ Kỹ Thuật 1-1', subtitle: 'Chat Zalo hướng dẫn đấu nối trực tiếp' },
   ];
 
   const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
@@ -173,8 +173,8 @@ export function Footer() {
 
           {/* ---------- Main columns ---------- */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-10">
-            {/* Column 1 — Brand */}
-            <div className="col-span-2 lg:col-span-2">
+            {/* Column 1 — Brand & Contact */}
+            <div className="col-span-2 lg:col-span-3">
               <Logo size="md" />
 
               {/* Tagline */}
@@ -183,9 +183,29 @@ export function Footer() {
               </p>
 
               {/* Short description */}
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
                 {brand.description}
               </p>
+
+              {/* Direct Shop Contact */}
+              <div className="mt-4 space-y-1.5 text-xs text-muted-foreground">
+                <p className="flex items-center gap-2">
+                  <span className="font-semibold text-foreground">Hotline / Zalo:</span>
+                  <a href={`tel:${brand.phone}`} className="text-cyan-600 dark:text-cyan-400 font-bold hover:underline">
+                    {brand.phone}
+                  </a>
+                </p>
+                <p className="flex items-center gap-2">
+                  <span className="font-semibold text-foreground">Email hỗ trợ:</span>
+                  <a href={`mailto:${brand.email}`} className="hover:underline">
+                    {brand.email}
+                  </a>
+                </p>
+                <p className="flex items-center gap-2">
+                  <span className="font-semibold text-foreground">Khu vực:</span>
+                  <span>{brand.address}</span>
+                </p>
+              </div>
 
               {/* Social icons */}
               <div className="mt-5 flex items-center gap-2">

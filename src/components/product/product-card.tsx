@@ -21,7 +21,6 @@ import { Cpu, Layers, FileCode, Download } from 'lucide-react';
 export function ProductCard({ product, index = 0 }: { product: any; index?: number }) {
   const { t } = useI18n();
   const goProduct = useNavStore((s) => s.goProduct);
-  const goShop = useNavStore((s) => s.goShop);
   const goAuth = useNavStore((s) => s.goAuth);
   const user = useAuthStore((s) => s.user);
   const wishlist = useWishlistStore();
@@ -197,21 +196,12 @@ export function ProductCard({ product, index = 0 }: { product: any; index?: numb
 
       {/* Body */}
       <div className="flex flex-col gap-2 p-3.5 flex-1">
-        {/* Shop + rating */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <button
-            onClick={() => goShop(product.shop.slug)}
-            className="flex items-center gap-1.5 hover:text-cyan-600 truncate"
-          >
-            <span className="relative h-4 w-4 rounded overflow-hidden bg-cyan-50 dark:bg-slate-800 border border-cyan-100 dark:border-slate-700">
-              {product.shop.logoUrl && (
-                <Image src={product.shop.logoUrl} alt={product.shop.name} fill className="object-cover" sizes="16px" />
-              )}
-            </span>
-            <span className="font-medium truncate max-w-[200px]">{product.shop.name}</span>
-            {product.shop.verified && <span className="text-cyan-500">✓</span>}
-          </button>
-          <Rating value={product.rating} count={product.ratingCount} size="xs" showCount={false} />
+        {/* Category tag + rating */}
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-[11px] font-medium text-cyan-700 dark:text-cyan-300 bg-cyan-50/80 dark:bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-200/50 dark:border-cyan-800/50 truncate max-w-[170px]">
+            {product.category?.name || product.brand || 'Linh kiện Maker'}
+          </span>
+          <Rating value={product.rating} count={product.ratingCount} size="xs" showCount={true} />
         </div>
 
         {/* Name */}

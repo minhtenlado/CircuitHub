@@ -67,6 +67,7 @@ import {
   Radar,
   Tag,
   Layers as LayersIcon,
+  MessageSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQueryClient } from '@tanstack/react-query';
@@ -94,8 +95,6 @@ function TopTicker() {
   const { t } = useI18n();
   const goAuth = useNavStore((s) => s.goAuth);
   const goBuyer = useNavStore((s) => s.goBuyer);
-  const setView = useNavStore((s) => s.setView);
-  const goSeller = useNavStore((s) => s.goSeller);
   const user = useAuthStore((s) => s.user);
 
   return (
@@ -105,7 +104,7 @@ function TopTicker() {
           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400">
             <Zap className="h-2.5 w-2.5" />
           </span>
-          <span>{t('ticker.promo')}</span>
+          <span>⚡ Giao hàng COD toàn quốc — Miễn phí ship đơn từ 300.000₫ | Hotline: 0987.654.321</span>
         </div>
         <div className="flex items-center gap-4 text-slate-400">
           <button
@@ -117,26 +116,14 @@ function TopTicker() {
           </button>
           <span className="text-slate-700">|</span>
           <a
-            href="mailto:support@circuithub.vn"
-            className="hover:text-cyan-300 transition-colors flex items-center gap-1 cursor-pointer"
+            href="https://zalo.me"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors flex items-center gap-1"
           >
-            <Clock className="h-3 w-3 text-teal-400" />
-            {t('ticker.techSupport')}
+            <MessageSquare className="h-3 w-3" />
+            Tư vấn kỹ thuật Zalo
           </a>
-          <span className="text-slate-700">|</span>
-          <button
-            onClick={() => {
-              if (user?.role === 'SELLER') {
-                goSeller('seller');
-              } else {
-                setView('seller-onboarding', {});
-              }
-            }}
-            className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Store className="h-3 w-3" />
-            {t('ticker.sellWithUs')}
-          </button>
         </div>
       </div>
     </div>
@@ -1144,26 +1131,9 @@ function UserMenu() {
           <Settings className="h-4 w-4" /> {t('common.settings')}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => setView('buyer-profile', { tab: 'seller-setup', action: 'add-open-source' })}
-          className="text-emerald-600 dark:text-emerald-400 font-medium cursor-pointer"
-        >
-          <FileCode className="h-4 w-4 text-emerald-500" /> Chia sẻ Dự án Open Source (0đ)
-        </DropdownMenuItem>
-        {user.role === 'SELLER' || user.shopSlug ? (
-          <>
-            <DropdownMenuItem onClick={() => goSeller()} className="text-cyan-600 font-medium cursor-pointer">
-              <Store className="h-4 w-4" /> Kênh Người Bán (Seller Center)
-            </DropdownMenuItem>
-            {user.shopSlug && (
-              <DropdownMenuItem onClick={() => goShop(user.shopSlug!)} className="cursor-pointer">
-                <Store className="h-4 w-4" /> {t('common.myShop')}
-              </DropdownMenuItem>
-            )}
-          </>
-        ) : (
-          <DropdownMenuItem onClick={() => setView('seller-onboarding', {})} className="text-cyan-600 font-medium cursor-pointer">
-            <Store className="h-4 w-4" /> Mở Gian Hàng Bán Linh Kiện (CCCD)
+        {(user.role === 'SELLER' || user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
+          <DropdownMenuItem onClick={() => goSeller()} className="text-cyan-600 font-medium cursor-pointer">
+            <Store className="h-4 w-4" /> Quản Lý Cửa Hàng (Shop Admin)
           </DropdownMenuItem>
         )}
         {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
@@ -1283,41 +1253,12 @@ function MobileMenu() {
                   setOpen(false);
                 }}
               />
-              <MobileLink
-                icon={<FileCode className="h-4 w-4 text-emerald-500" />}
-                label="Chia sẻ Dự án Open Source (0đ)"
-                onClick={() => {
-                  setView('buyer-profile', { tab: 'seller-setup', action: 'add-open-source' });
-                  setOpen(false);
-                }}
-              />
-              {user.role === 'SELLER' || user.shopSlug ? (
-                <>
-                  <MobileLink
-                    icon={<Store className="h-4 w-4 text-cyan-500" />}
-                    label="Kênh Người Bán (Seller Center)"
-                    onClick={() => {
-                      goSeller('seller');
-                      setOpen(false);
-                    }}
-                  />
-                  {user.shopSlug && (
-                    <MobileLink
-                      icon={<Store className="h-4 w-4" />}
-                      label={t('common.myShop')}
-                      onClick={() => {
-                        goShop(user.shopSlug!);
-                        setOpen(false);
-                      }}
-                    />
-                  )}
-                </>
-              ) : (
+              {(user.role === 'SELLER' || user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
                 <MobileLink
                   icon={<Store className="h-4 w-4 text-cyan-500" />}
-                  label="Mở Gian Hàng Bán Linh Kiện (CCCD)"
+                  label="Quản Lý Cửa Hàng (Shop Admin)"
                   onClick={() => {
-                    setView('seller-onboarding', {});
+                    goSeller('seller');
                     setOpen(false);
                   }}
                 />

@@ -25,33 +25,33 @@ export function TrustSection() {
   const { t } = useI18n();
 
   const STATS = [
-    { label: t('trust.gmv'), value: '₫8.2B+', icon: TrendingUp, sub: t('trust.gmvSub') },
-    { label: t('trust.downloads'), value: '1.2M+', icon: Download, sub: t('trust.downloadsSub') },
-    { label: t('trust.avgRating'), value: '4.9/5', icon: Star, sub: t('trust.avgRatingSub') },
-    { label: t('trust.onTime'), value: '97%', icon: Clock, sub: t('trust.onTimeSub') },
+    { label: 'Kiểm định chất lượng', value: '100%', icon: Cpu, sub: 'Nạp test cổng USB & IO thực tế' },
+    { label: 'Khách hàng tin tưởng', value: '1.500+', icon: Download, sub: 'Anh em kỹ sư, maker & sinh viên' },
+    { label: 'Đánh giá hài lòng', value: '4.9/5', icon: Star, sub: 'Hỗ trợ kỹ thuật 1-1 tận tình' },
+    { label: 'Giao hàng hỏa tốc', value: '24h', icon: Clock, sub: 'Đóng gói túi ESD & hộp carton' },
   ] as const;
 
   const PILLARS = [
     {
       icon: Cpu,
-      title: t('trust.techVerification'),
-      body: t('trust.techVerificationBody'),
+      title: 'Kiểm Tra Kỹ Thuật 100%',
+      body: 'Trước khi gửi đi, mọi bo mạch đều được cấp nguồn, đo điện áp 3.3V/5V và nạp firmware kiểm tra cổng giao tiếp.',
       accent: 'from-cyan-500 to-cyan-400',
-      points: [t('trust.point1'), t('trust.point2'), t('trust.point3')],
+      points: ['Đo kiểm áp & chống ngược cực', 'Test cổng nạp Type-C / MicroUSB', 'Kiểm tra kết nối Wi-Fi / Bluetooth'],
     },
     {
       icon: ShieldCheck,
-      title: t('trust.secureLicense'),
-      body: t('trust.secureLicenseBody'),
+      title: 'Kèm Sơ Đồ & Mã Nguồn Mẫu',
+      body: 'Không lo mua về không biết dùng. Shop luôn cung cấp sơ đồ nguyên lý chân (pinout) và repository code mẫu cho bạn.',
       accent: 'from-teal-500 to-aqua-400',
-      points: [t('trust.point4'), t('trust.point5'), t('trust.point6')],
+      points: ['Code mẫu Arduino IDE & ESP-IDF', 'Sơ đồ đấu nối chân linh kiện', 'Thư viện Driver cảm biến sẵn có'],
     },
     {
       icon: Award,
-      title: t('trust.quality'),
-      body: t('trust.qualityBody'),
+      title: 'Hỗ Trợ Kỹ Thuật Trực Tiếp',
+      body: 'Gặp lỗi nạp code hay mạch không nhận thiết bị? Chỉ cần nhắn qua Zalo, chủ shop sẽ trực tiếp hướng dẫn bạn gỡ lỗi.',
       accent: 'from-sky-500 to-cyan-400',
-      points: [t('trust.point7'), t('trust.point8'), t('trust.point9')],
+      points: ['Tư vấn chọn linh kiện phù hợp', 'Hỗ trợ debug lỗi cơ bản qua Zalo', 'Bảo hành 1 đổi 1 trong 7 ngày'],
     },
   ] as const;
 

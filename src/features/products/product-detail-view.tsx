@@ -54,6 +54,7 @@ import {
   ThumbsUp,
   Star as StarIcon,
   Sparkles,
+  MessageSquare,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -392,17 +393,6 @@ function ProductDetailContent({ product }: { product: any }) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <button
-                  onClick={() => product.shop?.slug && goShop(product.shop.slug)}
-                  className="hover:text-cyan-600"
-                >
-                  {product.shop?.name ?? 'Shop'}
-                </button>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
               <BreadcrumbPage className="text-cyan-700 dark:text-cyan-400 font-medium line-clamp-1">
                 {product.name}
               </BreadcrumbPage>
@@ -531,47 +521,46 @@ function ProductDetailContent({ product }: { product: any }) {
               </p>
             )}
 
-            {/* Seller row */}
-            {product.shop && (
-              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/80 dark:bg-slate-900/80 p-3">
-                <div className="relative h-11 w-11 rounded-full overflow-hidden border border-cyan-100 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/50">
-                  {product.shop.logoUrl && (
-                    <Image
-                      src={product.shop.logoUrl}
-                      alt={product.shop.name}
-                      fill
-                      sizes="44px"
-                      className="object-cover"
-                    />
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => goShop(product.shop.slug)}
-                      className="font-semibold text-foreground hover:text-cyan-600 dark:hover:text-cyan-400 truncate"
-                    >
-                      {product.shop.name}
-                    </button>
-                    {product.shop.verified && <VerifiedBadge />}
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-                    <Rating value={product.shop.rating ?? 0} size="xs" showCount={false} />
-                    <span>·</span>
-                    <span>{(product.shop.productCount ?? 0).toLocaleString('vi-VN')} products</span>
+            {/* Maker Store Guarantee Box */}
+            <div className="rounded-xl border border-cyan-500/30 bg-cyan-50/40 dark:bg-cyan-950/30 p-3.5 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500 text-white font-bold text-xs shadow-xs">
+                    CH
+                  </span>
+                  <div>
+                    <span className="font-bold text-sm text-foreground flex items-center gap-1.5">
+                      CircuitHub Maker Shop
+                      <VerifiedBadge />
+                    </span>
+                    <span className="text-[11px] text-muted-foreground block">Tuyển chọn & nạp test 100% trước khi giao</span>
                   </div>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
-                  onClick={() => goShop(product.shop.slug)}
+                <a
+                  href="https://zalo.me"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-700 dark:text-cyan-300 hover:text-cyan-800 dark:hover:text-cyan-200 px-2.5 py-1 rounded-lg border border-cyan-500/30 bg-white/80 dark:bg-slate-900/80 transition-colors"
                 >
-                  Visit Shop
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Button>
+                  <MessageSquare className="h-3 w-3" />
+                  Chat Zalo
+                </a>
               </div>
-            )}
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground pt-2 border-t border-cyan-500/20">
+                <span className="flex items-center gap-1 text-foreground font-medium">
+                  ✓ Nạp code & đo áp thực tế
+                </span>
+                <span className="flex items-center gap-1 text-foreground font-medium">
+                  ✓ Kèm sơ đồ chân & code mẫu
+                </span>
+                <span className="flex items-center gap-1 text-foreground font-medium">
+                  ✓ Đổi mới 7 ngày nếu lỗi
+                </span>
+                <span className="flex items-center gap-1 text-foreground font-medium">
+                  ✓ Ship COD kiểm hàng tận nơi
+                </span>
+              </div>
+            </div>
 
             {/* Quantity (physical only) */}
             {isPhysical && (

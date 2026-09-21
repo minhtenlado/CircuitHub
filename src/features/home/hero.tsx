@@ -44,11 +44,11 @@ import { formatVND } from '@/lib/format';
 const BANNERS = [
   {
     id: 'esp32-kit',
-    eyebrow: 'COMBO KHUYẾN MẠI TUẦN NÀY',
+    eyebrow: 'COMBO HOT CHO MAKER & SINH VIÊN',
     title: 'Kit Học Tập IoT ESP32-S3 Pro Kèm Màn Hình 1.9" TFT',
     description:
-      'Đầy đủ cảm biến nhiệt ẩm SHT40, relay 5V, sơ đồ nguyên lý KiCad 9 & mã nguồn mẫu. Ưu đãi 25% cho sinh viên & kỹ sư maker.',
-    priceBadge: 'Chỉ từ ₫285.000',
+      'Trọn bộ gồm ESP32-S3 Dual Type-C, cảm biến nhiệt ẩm SHT40, relay 5V, sơ đồ đấu nối & code mẫu Arduino / ESP-IDF. Đã được mình nạp test sẵn 100%.',
+    priceBadge: 'Chỉ ₫285.000',
     ctaText: 'Mua ngay combo',
     category: 'dev-boards',
     query: 'ESP32',
@@ -57,32 +57,32 @@ const BANNERS = [
     tag: 'Bán chạy nhất',
   },
   {
-    id: 'pcb-service',
-    eyebrow: 'DỊCH VỤ GIA CÔNG TRỌN GÓI',
-    title: 'Gia Công Mạch In PCB 4 Lớp & Mua Linh Kiện Trọn Bộ',
+    id: 'stm32-robot',
+    eyebrow: 'BO MẠCH ĐIỀU KHIỂN ĐỘNG CƠ',
+    title: 'Bo Mạch STM32F401 BlackPill Kèm Driver Động Cơ L298N',
     description:
-      'Kiểm định DFM tự động, chuẩn hóa mã linh kiện theo file BOM. Cam kết bo mạch test 100% E-test trước khi giao hàng.',
-    priceBadge: 'Chỉ từ ₫120.000 / 5 tấm',
-    ctaText: 'Báo giá nhanh PCB',
-    category: 'pcb-boards',
-    query: '',
+      'Lựa chọn lý tưởng cho xe robot tự hành, cánh tay robot & máy vẽ mini. Nguồn xung tích hợp chống sụt áp, tặng kèm project mẫu KeilC / STM32CubeIDE.',
+    priceBadge: 'Chỉ ₫145.000',
+    ctaText: 'Xem bo mạch',
+    category: 'dev-boards',
+    query: 'STM32',
     accent: 'from-teal-950/80 via-slate-900 to-slate-950',
     glowColor: 'bg-teal-500/20',
-    tag: 'Dịch vụ Hot',
+    tag: 'Dành cho Robot',
   },
   {
     id: 'open-source-hub',
-    eyebrow: 'KHO DỰ ÁN CỘNG ĐỒNG KỸ THUẬT',
-    title: '500+ Dự Án KiCad, Gerber & Firmware Miễn Phí',
+    eyebrow: 'MẠCH IN CHẾ TÁC BỞI MAKER',
+    title: 'Mạch Sạc Pin Li-ion Tích Hợp Nguồn Boost 5V/3A Siêu Gọn',
     description:
-      'Tải ngay thiết kế mạch nguồn xung, bo điều khiển BLDC, đồng hồ LED RGB... Đã thẩm định thông số, tải file về gia công được ngay.',
-    priceBadge: '100% Miễn phí tải',
-    ctaText: 'Khám phá dự án',
+      'Thiết kế mạch nguồn nhỏ gọn, linh kiện chuẩn chịu tải cao. Tải kèm miễn phí file sơ đồ nguyên lý KiCad 9 để tự làm đồ án hoặc gia công theo ý muốn.',
+    priceBadge: 'Chỉ từ ₫45.000',
+    ctaText: 'Khám phá ngay',
     category: 'open-source',
     query: '',
     accent: 'from-blue-950/80 via-slate-900 to-slate-950',
     glowColor: 'bg-blue-500/20',
-    tag: 'Mã nguồn mở',
+    tag: 'Thiết kế DIY',
   },
 ];
 
@@ -448,8 +448,8 @@ export function Hero() {
               <Truck className="h-5 w-5" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.shipTitle')}</div>
-              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.shipDesc')}</div>
+              <div className="text-xs font-bold text-foreground truncate">Giao Hàng COD Toàn Quốc</div>
+              <div className="text-[11px] text-muted-foreground truncate">Nhận hàng, kiểm tra rồi thanh toán</div>
             </div>
           </div>
 
@@ -458,8 +458,8 @@ export function Hero() {
               <Shield className="h-5 w-5" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.qualityTitle')}</div>
-              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.qualityDesc')}</div>
+              <div className="text-xs font-bold text-foreground truncate">Test Kỹ Thuật 100%</div>
+              <div className="text-[11px] text-muted-foreground truncate">Nạp code & đo kiểm nguồn trước khi ship</div>
             </div>
           </div>
 
@@ -468,8 +468,8 @@ export function Hero() {
               <RotateCcw className="h-5 w-5" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.returnTitle')}</div>
-              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.returnDesc')}</div>
+              <div className="text-xs font-bold text-foreground truncate">Đổi Trả 7 Ngày</div>
+              <div className="text-[11px] text-muted-foreground truncate">1 đổi 1 nhanh chóng nếu lỗi kỹ thuật</div>
             </div>
           </div>
 
@@ -478,8 +478,8 @@ export function Hero() {
               <PackageCheck className="h-5 w-5" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-bold text-foreground truncate">{t('commerceTrust.escrowTitle')}</div>
-              <div className="text-[11px] text-muted-foreground truncate">{t('commerceTrust.escrowDesc')}</div>
+              <div className="text-xs font-bold text-foreground truncate">Hỗ Trợ Kỹ Thuật 1-1</div>
+              <div className="text-[11px] text-muted-foreground truncate">Tư vấn đấu nối mạch & code qua Zalo</div>
             </div>
           </div>
         </div>
