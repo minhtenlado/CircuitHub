@@ -174,13 +174,13 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
       <div className="flex items-center justify-between mb-5">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-cyan-500" />
+            <Sparkles className="h-5 w-5 text-red-500" />
             {t('productDetail.frequentlyBoughtTogether')}
           </h2>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-cyan-200/60 dark:border-slate-800 bg-gradient-to-br from-cyan-50/40 via-card to-teal-50/30 dark:from-slate-900/90 dark:via-slate-900 dark:to-cyan-950/30 p-5 sm:p-6">
+      <div className="rounded-2xl border border-red-200/60 dark:border-slate-800 bg-gradient-to-br from-red-50/40 via-card to-rose-50/30 dark:from-slate-900/90 dark:via-slate-900 dark:to-red-950/30 p-5 sm:p-6">
         <div className="grid lg:grid-cols-[1fr_300px] gap-6">
           {/* Products visual */}
           <div className="flex items-center gap-3 flex-wrap">
@@ -193,7 +193,7 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
                   <button
                     onClick={() => toggle(item.id)}
                     className={`relative w-28 sm:w-32 rounded-xl overflow-hidden border-2 transition-all text-left ${
-                      isChecked ? 'border-cyan-500 shadow-md' : 'border-border opacity-60 hover:opacity-100'
+                      isChecked ? 'border-red-500 shadow-md' : 'border-border opacity-60 hover:opacity-100'
                     }`}
                   >
                     <div className="aspect-square bg-muted relative">
@@ -201,19 +201,19 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
                         <Image src={item.images[0].url} alt={item.name} fill className="object-cover" sizes="120px" />
                       )}
                       {isMain && (
-                        <span className="absolute top-1 left-1 bg-cyan-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                        <span className="absolute top-1 left-1 bg-red-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
                           Item
                         </span>
                       )}
                       <div className={`absolute top-1 right-1 h-5 w-5 rounded-md flex items-center justify-center ${
-                        isChecked ? 'bg-cyan-500' : 'bg-black/30 border border-white/50'
+                        isChecked ? 'bg-red-500' : 'bg-black/30 border border-white/50'
                       }`}>
                         {isChecked && <CheckCircle2 className="h-3 w-3 text-white" />}
                       </div>
                     </div>
                     <div className="p-2 bg-card dark:bg-slate-900">
                       <p className="text-xs font-medium line-clamp-2 leading-tight">{item.name}</p>
-                      <p className="text-xs font-bold text-cyan-600 dark:text-cyan-400 mt-1">{formatVND(item.price)}</p>
+                      <p className="text-xs font-bold text-red-600 dark:text-red-400 mt-1">{formatVND(item.price)}</p>
                     </div>
                   </button>
                 </div>
@@ -229,7 +229,7 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
               </p>
               <div className="space-y-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{formatVND(bundleTotal)}</span>
+                  <span className="text-2xl font-bold text-red-600 dark:text-red-400">{formatVND(bundleTotal)}</span>
                   {savings > 0 && (
                     <span className="text-sm text-muted-foreground line-through">{formatVND(bundleOriginal)}</span>
                   )}
@@ -244,7 +244,7 @@ function FrequentlyBoughtTogether({ mainProduct, related }: { mainProduct: any; 
             </div>
             <Button
               onClick={addBundleToCart}
-              className="w-full bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white"
+              className="w-full bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 text-white"
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
               {t('productDetail.addToCart')}
@@ -381,7 +381,7 @@ function ProductDetailContent({ product }: { product: any }) {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <button onClick={goHome} className="hover:text-cyan-600">Home</button>
+                <button onClick={goHome} className="hover:text-red-600">Home</button>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -389,7 +389,7 @@ function ProductDetailContent({ product }: { product: any }) {
               <BreadcrumbLink asChild>
                 <button
                   onClick={() => product.category?.slug && goCategory(product.category.slug)}
-                  className="hover:text-cyan-600"
+                  className="hover:text-red-600"
                 >
                   {product.category?.name ?? 'Category'}
                 </button>
@@ -397,7 +397,7 @@ function ProductDetailContent({ product }: { product: any }) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-cyan-700 dark:text-cyan-400 font-medium line-clamp-1">
+              <BreadcrumbPage className="text-red-700 dark:text-red-400 font-medium line-clamp-1">
                 {product.name}
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -575,7 +575,7 @@ function ProductDetailContent({ product }: { product: any }) {
                 <div className="flex items-center rounded-lg border border-border bg-card dark:bg-slate-900 overflow-hidden">
                   <button
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="flex h-9 w-9 items-center justify-center hover:bg-cyan-50 dark:hover:bg-slate-800 transition-colors text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400"
+                    className="flex h-9 w-9 items-center justify-center hover:bg-red-50 dark:hover:bg-slate-800 transition-colors text-muted-foreground hover:text-red-600 dark:hover:text-red-400"
                     aria-label="Decrease quantity"
                   >
                     <Minus className="h-4 w-4" />
@@ -589,7 +589,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   />
                   <button
                     onClick={() => setQty((q) => q + 1)}
-                    className="flex h-9 w-9 items-center justify-center hover:bg-cyan-50 dark:hover:bg-slate-800 transition-colors text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400"
+                    className="flex h-9 w-9 items-center justify-center hover:bg-red-50 dark:hover:bg-slate-800 transition-colors text-muted-foreground hover:text-red-600 dark:hover:text-red-400"
                     aria-label="Increase quantity"
                   >
                     <Plus className="h-4 w-4" />
@@ -602,19 +602,19 @@ function ProductDetailContent({ product }: { product: any }) {
             {/* Stock + shipping estimate */}
             <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {!isPhysical && (
-                <Badge variant="outline" className="bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800 gap-1">
+                <Badge variant="outline" className="bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 gap-1">
                   <Download className="h-3 w-3" />
                   Digital delivery
                 </Badge>
               )}
               {isPhysical && (
-                <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 gap-1">
+                <Badge variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 gap-1">
                   <Truck className="h-3 w-3" />
                   Ships in {product.pcbLeadTimeDays ?? 3}–{(product.pcbLeadTimeDays ?? 3) + 2} days
                 </Badge>
               )}
               {isService && (
-                <Badge variant="outline" className="bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800 gap-1">
+                <Badge variant="outline" className="bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 gap-1">
                   <Clock className="h-3 w-3" />
                   Service · {product.serviceDurationDays ?? 7} days
                 </Badge>
@@ -640,7 +640,7 @@ function ProductDetailContent({ product }: { product: any }) {
 
             {/* License acceptance for digital (not for open source) */}
             {isDigital && product.licenseType !== 'OPEN_SOURCE' && (
-              <div className="rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50/50 dark:bg-cyan-950/20 p-4 space-y-3">
+              <div className="rounded-xl border border-red-200 dark:border-red-800/60 bg-red-50/50 dark:bg-red-950/20 p-4 space-y-3">
                 <label
                   htmlFor="license-accept"
                   className="flex items-start gap-2.5 cursor-pointer"
@@ -649,7 +649,7 @@ function ProductDetailContent({ product }: { product: any }) {
                     id="license-accept"
                     checked={licenseAccepted}
                     onCheckedChange={(v) => setLicenseAccepted(!!v)}
-                    className="mt-0.5 data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500"
+                    className="mt-0.5 data-[state=checked]:bg-red-500 data-[state=checked]:border-red-500"
                   />
                   <div className="text-sm">
                     <span className="font-medium text-foreground">
@@ -661,7 +661,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   </div>
                 </label>
                 <Collapsible>
-                  <CollapsibleTrigger className="flex items-center gap-1 text-xs text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 font-medium">
+                  <CollapsibleTrigger className="flex items-center gap-1 text-xs text-red-700 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium">
                     <ChevronRight className="h-3 w-3 [&[data-state=open]>svg]:rotate-90" />
                     View license terms
                   </CollapsibleTrigger>
@@ -686,7 +686,7 @@ function ProductDetailContent({ product }: { product: any }) {
             {isDigital && product.licenseType === 'OPEN_SOURCE' && product.price === 0 && (
               <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/30 p-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-400 px-2.5 py-0.5 text-xs font-bold text-white">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-500 to-red-400 px-2.5 py-0.5 text-xs font-bold text-white">
                     FREE
                   </span>
                   <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">Open Source Project</span>
@@ -700,12 +700,12 @@ function ProductDetailContent({ product }: { product: any }) {
 
             {/* Guest login reminder banner */}
             {!user && (
-              <div className="flex items-center gap-2.5 rounded-xl border border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-950/40 p-3 text-xs text-cyan-900 dark:text-cyan-200">
-                <Lock className="h-4 w-4 shrink-0 text-cyan-600 dark:text-cyan-400" />
+              <div className="flex items-center gap-2.5 rounded-xl border border-red-500/40 bg-red-500/10 dark:bg-red-950/40 p-3 text-xs text-red-900 dark:text-red-200">
+                <Lock className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
                 <span className="flex-1 font-medium">{t('auth.loginPromptBanner')}</span>
                 <button
                   onClick={() => goAuth('login', 'product-detail', { slug: product.slug })}
-                  className="shrink-0 font-bold underline hover:text-cyan-600 dark:hover:text-cyan-100 cursor-pointer"
+                  className="shrink-0 font-bold underline hover:text-red-600 dark:hover:text-red-100 cursor-pointer"
                 >
                   {t('auth.signIn')}
                 </button>
@@ -718,7 +718,7 @@ function ProductDetailContent({ product }: { product: any }) {
               <div className="space-y-3">
                 <Button
                   size="lg"
-                  className="w-full bg-gradient-to-r from-emerald-500 to-cyan-400 hover:from-emerald-600 hover:to-cyan-500 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.5)] border-0 cursor-pointer"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-red-400 hover:from-emerald-600 hover:to-red-600 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.5)] border-0 cursor-pointer"
                   onClick={() => {
                     if (!user) {
                       toast({
@@ -773,7 +773,7 @@ function ProductDetailContent({ product }: { product: any }) {
                   'border-border',
                   inWishlist
                     ? 'text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50'
-                    : 'hover:bg-cyan-50 dark:hover:bg-slate-800 hover:border-cyan-200 dark:hover:border-slate-700',
+                    : 'hover:bg-red-50 dark:hover:bg-slate-800 hover:border-red-200 dark:hover:border-slate-700',
                 )}
                 onClick={handleWishlistToggle}
               >
@@ -783,7 +783,7 @@ function ProductDetailContent({ product }: { product: any }) {
               <Button
                 variant="outline"
                 size="sm"
-                className="border-border hover:bg-cyan-50 dark:hover:bg-slate-800 hover:border-cyan-200 dark:hover:border-slate-700"
+                className="border-border hover:bg-red-50 dark:hover:bg-slate-800 hover:border-red-200 dark:hover:border-slate-700"
                 onClick={handleCompare}
               >
                 <GitCompare className="h-4 w-4" />
@@ -852,21 +852,21 @@ function DigitalQuickInfo({ product }: { product: any }) {
   ];
 
   return (
-    <div className="rounded-xl border border-teal-200 dark:border-teal-800/60 bg-teal-50/40 dark:bg-teal-950/30 p-4">
-      <p className="text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-300 mb-3 flex items-center gap-1.5">
+    <div className="rounded-xl border border-rose-200 dark:border-rose-800/60 bg-rose-50/40 dark:bg-rose-950/30 p-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-300 mb-3 flex items-center gap-1.5">
         <FileCode className="h-3.5 w-3.5" />
         {t('productDetail.digitalDetails')}
       </p>
       <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-sm">
         {items.map((it) => (
           <div key={it.label} className="flex items-center gap-2">
-            <it.icon className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+            <it.icon className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{it.label}:</dt>
             <dd className="font-medium text-foreground truncate">{it.value ?? '—'}</dd>
           </div>
         ))}
       </dl>
-      <p className="mt-3 pt-3 border-t border-teal-200/60 dark:border-teal-800/60 text-xs text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
+      <p className="mt-3 pt-3 border-t border-rose-200/60 dark:border-rose-800/60 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-1.5">
         <ShieldCheck className="h-3.5 w-3.5" />
         Secure download with license verification
       </p>
@@ -898,8 +898,8 @@ function PcbQuickSpecs({ product }: { product: any }) {
   if (filtered.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50/40 dark:bg-cyan-950/30 p-4">
-      <p className="text-xs font-semibold uppercase tracking-wider text-cyan-700 dark:text-cyan-400 mb-3 flex items-center gap-1.5">
+    <div className="rounded-xl border border-red-200 dark:border-red-800/60 bg-red-50/40 dark:bg-red-950/30 p-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-red-700 dark:text-red-400 mb-3 flex items-center gap-1.5">
         <Layers className="h-3.5 w-3.5" />
         {t('productDetail.techSpecs')}
       </p>
@@ -921,33 +921,33 @@ function PcbQuickSpecs({ product }: { product: any }) {
 function ServiceQuickInfo({ product }: { product: any }) {
   const { t } = useI18n();
   return (
-    <div className="rounded-xl border border-teal-200 dark:border-teal-800/60 bg-teal-50/40 dark:bg-teal-950/30 p-4 space-y-3">
-      <p className="text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
+    <div className="rounded-xl border border-rose-200 dark:border-rose-800/60 bg-rose-50/40 dark:bg-rose-950/30 p-4 space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-300 flex items-center gap-1.5">
         <Briefcase className="h-3.5 w-3.5" />
         {t('productDetail.serviceDetails')}
       </p>
       <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-sm">
         {product.serviceScope && (
           <div className="flex items-start gap-2 sm:col-span-2">
-            <Briefcase className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 mt-0.5 shrink-0" />
+            <Briefcase className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 mt-0.5 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.serviceScope')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceScope}</dd>
           </div>
         )}
         {product.serviceDeliverables && (
           <div className="flex items-start gap-2 sm:col-span-2">
-            <FileCheck2 className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 mt-0.5 shrink-0" />
+            <FileCheck2 className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 mt-0.5 shrink-0" />
             <dt className="text-muted-foreground min-w-[100px]">{t('productDetail.deliverables')}:</dt>
             <dd className="font-medium text-foreground">{product.serviceDeliverables}</dd>
           </div>
         )}
         <div className="flex items-center gap-2">
-          <Clock className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+          <Clock className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
           <dt className="text-muted-foreground">{t('productDetail.duration')}:</dt>
           <dd className="font-medium text-foreground">{product.serviceDurationDays ?? '—'}  {t('productDetail.days')}</dd>
         </div>
         <div className="flex items-center gap-2">
-          <RefreshCw className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+          <RefreshCw className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
           <dt className="text-muted-foreground">{t('productDetail.revisions')}:</dt>
           <dd className="font-medium text-foreground">{product.serviceRevisions ?? 0}  {t('productDetail.included')}</dd>
         </div>
@@ -957,7 +957,7 @@ function ServiceQuickInfo({ product }: { product: any }) {
           href={product.servicePortfolio}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-teal-700 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-200 font-medium"
+          className="inline-flex items-center gap-1.5 text-sm text-rose-700 dark:text-rose-300 hover:text-rose-800 dark:hover:text-rose-200 font-medium"
         >
           <Eye className="h-3.5 w-3.5" />
           {t('productDetail.viewPortfolio')}
@@ -984,22 +984,22 @@ function ProductTabs({
   const isDigital = product.productType === 'DIGITAL';
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="mt-12">
-      <TabsList className="bg-cyan-50/60 dark:bg-slate-900/80 border border-cyan-100 dark:border-slate-800 p-1 flex flex-wrap h-auto">
-        <TabsTrigger value="description" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+      <TabsList className="bg-red-50/60 dark:bg-slate-900/80 border border-red-100 dark:border-slate-800 p-1 flex flex-wrap h-auto">
+        <TabsTrigger value="description" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-red-700 dark:data-[state=active]:text-red-300">
           {t('productDetail.description')}
         </TabsTrigger>
-        <TabsTrigger value="specifications" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+        <TabsTrigger value="specifications" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-red-700 dark:data-[state=active]:text-red-300">
           {t('productDetail.specifications')}
         </TabsTrigger>
         {isDigital && (
-          <TabsTrigger value="versions" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+          <TabsTrigger value="versions" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-red-700 dark:data-[state=active]:text-red-300">
             {t('productDetail.versions')}
           </TabsTrigger>
         )}
-        <TabsTrigger value="reviews" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+        <TabsTrigger value="reviews" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-red-700 dark:data-[state=active]:text-red-300">
           {t('productDetail.reviews')} ({product.reviews?.length ?? 0})
         </TabsTrigger>
-        <TabsTrigger value="shipping" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-cyan-700 dark:data-[state=active]:text-cyan-300">
+        <TabsTrigger value="shipping" className="data-[state=active]:bg-card dark:data-[state=active]:bg-slate-800 data-[state=active]:text-red-700 dark:data-[state=active]:text-red-300">
           {t('productDetail.shipping')}
         </TabsTrigger>
       </TabsList>
@@ -1211,7 +1211,7 @@ function SpecificationsTab({ product }: { product: any }) {
         if (visible.length === 0) return null;
         return (
           <Card key={sec.title} className="p-5">
-            <h3 className="text-sm font-semibold text-cyan-700 dark:text-cyan-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wider mb-3 flex items-center gap-2">
               <Cpu className="h-3.5 w-3.5" />
               {sec.title}
             </h3>
@@ -1244,7 +1244,7 @@ function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVer
   }
   return (
     <div className="space-y-3">
-      <div className="rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50/40 dark:bg-cyan-950/30 p-3 flex items-start gap-2 text-sm text-cyan-700 dark:text-cyan-300">
+      <div className="rounded-xl border border-red-200 dark:border-red-800/60 bg-red-50/40 dark:bg-red-950/30 p-3 flex items-start gap-2 text-sm text-red-700 dark:text-red-300">
         <RefreshCw className="h-4 w-4 mt-0.5" />
         <p>
           <span className="font-semibold">Update policy:</span> All future updates for this product
@@ -1254,17 +1254,17 @@ function VersionsTab({ versions, currentVersion }: { versions: any[]; currentVer
       {versions.map((v: any, i: number) => {
         const isCurrent = currentVersion && v.version === currentVersion;
         return (
-          <Card key={v.id ?? i} className={`p-5 ${isCurrent ? 'border-cyan-400 ring-2 ring-cyan-100 dark:ring-cyan-900/40' : ''}`}>
+          <Card key={v.id ?? i} className={`p-5 ${isCurrent ? 'border-red-400 ring-2 ring-red-100 dark:ring-red-900/40' : ''}`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="flex items-start gap-3">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl text-white ${isCurrent ? 'bg-gradient-to-br from-cyan-500 to-teal-400' : 'bg-slate-400'}`}>
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl text-white ${isCurrent ? 'bg-gradient-to-br from-red-600 to-rose-500' : 'bg-slate-400'}`}>
                   <Download className="h-5 w-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="font-semibold text-foreground">Version {v.version}</h3>
                     {isCurrent && (
-                      <Badge className="bg-gradient-to-r from-cyan-500 to-teal-400 text-white border-0 text-[10px]">
+                      <Badge className="bg-gradient-to-r from-red-600 to-rose-500 text-white border-0 text-[10px]">
                         <CheckCircle2 className="h-2.5 w-2.5 mr-0.5" />
                         CURRENT
                       </Badge>
@@ -1384,7 +1384,7 @@ function ReviewsTab({ product }: { product: any }) {
       <Card className="p-5">
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
           <div className="text-center md:border-r md:border-border/60 md:pr-6">
-            <p className="text-5xl font-bold text-cyan-700 dark:text-cyan-400 tracking-tight">
+            <p className="text-5xl font-bold text-red-700 dark:text-red-400 tracking-tight">
               {(product.rating ?? 0).toFixed(1)}
             </p>
             <Rating
@@ -1424,7 +1424,7 @@ function ReviewsTab({ product }: { product: any }) {
         {!showForm ? (
           <Button
             variant="outline"
-            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
+            className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
             onClick={() => setShowForm(true)}
           >
             <StarIcon className="h-4 w-4" />
@@ -1458,11 +1458,11 @@ function ReviewsTab({ product }: { product: any }) {
               value={reviewComment}
               onChange={(e) => setReviewComment(e.target.value)}
               placeholder={t('productDetail.shareExp')}
-              className="w-full min-h-[100px] rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus-visible:border-cyan-500 focus-visible:ring-cyan-500/30 outline-none"
+              className="w-full min-h-[100px] rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus-visible:border-red-500 focus-visible:ring-red-500/30 outline-none"
             />
             <div className="flex items-center gap-2">
               <Button
-                className="bg-cyan-500 hover:bg-cyan-600 text-white"
+                className="bg-red-500 hover:bg-red-700 text-white"
                 onClick={submitReview}
                 disabled={submitting}
               >
@@ -1489,7 +1489,7 @@ function ReviewsTab({ product }: { product: any }) {
                   {r.user?.avatarUrl && (
                     <AvatarImage src={r.user.avatarUrl} alt={r.user?.name ?? 'Reviewer'} />
                   )}
-                  <AvatarFallback className="bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 font-semibold text-xs">
+                  <AvatarFallback className="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 font-semibold text-xs">
                     {initials(r.user?.name ?? 'A')}
                   </AvatarFallback>
                 </Avatar>
@@ -1513,8 +1513,8 @@ function ReviewsTab({ product }: { product: any }) {
                     </p>
                   )}
                   {r.sellerReply && (
-                    <div className="mt-3 ml-3 pl-3 border-l-2 border-cyan-200 dark:border-cyan-800 text-sm">
-                      <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 mb-1">
+                    <div className="mt-3 ml-3 pl-3 border-l-2 border-red-200 dark:border-red-800 text-sm">
+                      <p className="text-xs font-semibold text-red-700 dark:text-red-400 mb-1">
                         Seller reply
                       </p>
                       <p className="text-muted-foreground">{r.sellerReply}</p>
@@ -1542,7 +1542,7 @@ function ShippingTab({ product }: { product: any }) {
     return (
       <Card className="p-6">
         <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-          <Download className="h-4 w-4 text-cyan-600" />
+          <Download className="h-4 w-4 text-red-600" />
           Digital delivery
         </h3>
         <ul className="space-y-3 text-sm text-muted-foreground">
@@ -1559,7 +1559,7 @@ function ShippingTab({ product }: { product: any }) {
             <span>{t('productDetail.downloadLogged')}</span>
           </li>
           <li className="flex items-start gap-2">
-            <ShieldCheck className="h-4 w-4 text-cyan-500 mt-0.5 shrink-0" />
+            <ShieldCheck className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
             <span>{t('productDetail.securityScanned')}</span>
           </li>
         </ul>
@@ -1571,7 +1571,7 @@ function ShippingTab({ product }: { product: any }) {
     return (
       <Card className="p-6">
         <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-          <Briefcase className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+          <Briefcase className="h-4 w-4 text-red-600 dark:text-red-400" />
           Service delivery
         </h3>
         <ul className="space-y-3 text-sm text-muted-foreground">
@@ -1580,15 +1580,15 @@ function ShippingTab({ product }: { product: any }) {
             <span>{t('productDetail.serviceStarts')}</span>
           </li>
           <li className="flex items-start gap-2">
-            <Clock className="h-4 w-4 text-cyan-600 dark:text-cyan-400 mt-0.5 shrink-0" />
+            <Clock className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
             <span>Estimated duration: <strong className="text-foreground">{product.serviceDurationDays ?? 7} days</strong> from kick-off.</span>
           </li>
           <li className="flex items-start gap-2">
-            <RefreshCw className="h-4 w-4 text-cyan-500 mt-0.5 shrink-0" />
+            <RefreshCw className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
             <span>Includes <strong className="text-foreground">{product.serviceRevisions ?? 0} revision(s)</strong>. Additional revisions available at extra cost.</span>
           </li>
           <li className="flex items-start gap-2">
-            <FileCheck2 className="h-4 w-4 text-cyan-500 mt-0.5 shrink-0" />
+            <FileCheck2 className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
             <span>{t('productDetail.deliverables')}: <strong className="text-foreground">{product.serviceDeliverables ?? 'As agreed in scope'}</strong>.</span>
           </li>
         </ul>
@@ -1606,18 +1606,18 @@ function ShippingTab({ product }: { product: any }) {
   return (
     <Card className="p-6">
       <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-        <Truck className="h-4 w-4 text-cyan-600" />
+        <Truck className="h-4 w-4 text-red-600" />
         Shipping information
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {providers.map((p) => (
           <div
             key={p.name}
-            className="rounded-lg border border-border/60 p-3 hover:border-cyan-200 dark:hover:border-cyan-800 hover:bg-cyan-50/40 dark:hover:bg-cyan-950/30 transition-colors"
+            className="rounded-lg border border-border/60 p-3 hover:border-red-200 dark:hover:border-red-800 hover:bg-red-50/40 dark:hover:bg-red-950/30 transition-colors"
           >
             <div className="flex items-center justify-between">
               <span className="font-semibold text-foreground text-sm">{p.name}</span>
-              <span className="text-xs text-cyan-700 dark:text-cyan-400 font-medium">{p.cost}</span>
+              <span className="text-xs text-red-700 dark:text-red-400 font-medium">{p.cost}</span>
             </div>
             <p className="text-xs text-muted-foreground mt-1">{p.desc}</p>
           </div>
@@ -1625,7 +1625,7 @@ function ShippingTab({ product }: { product: any }) {
       </div>
       <div className="mt-4 pt-4 border-t border-border/60 text-sm text-muted-foreground space-y-1.5">
         <p className="flex items-center gap-2">
-          <Clock className="h-4 w-4 text-cyan-500" />
+          <Clock className="h-4 w-4 text-red-500" />
           Estimated delivery: <strong className="text-foreground">{product.pcbLeadTimeDays ?? 3}–{(product.pcbLeadTimeDays ?? 3) + 5} business days</strong> (including processing)
         </p>
         <p className="flex items-center gap-2">
@@ -1634,7 +1634,7 @@ function ShippingTab({ product }: { product: any }) {
         </p>
         {product.warranty && (
           <p className="flex items-center gap-2">
-            <ThumbsUp className="h-4 w-4 text-cyan-500" />
+            <ThumbsUp className="h-4 w-4 text-red-500" />
             Warranty: <strong className="text-foreground">{product.warranty}</strong>
           </p>
         )}
@@ -1691,7 +1691,7 @@ function ProductNotFound() {
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center space-y-4 max-w-md">
-        <div className="flex h-20 w-20 mx-auto items-center justify-center rounded-3xl bg-cyan-50 text-cyan-500 border border-cyan-100">
+        <div className="flex h-20 w-20 mx-auto items-center justify-center rounded-3xl bg-red-50 text-red-500 border border-red-100">
           <PackageSearch className="h-10 w-10" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">{t('productDetail.notFound')}</h1>
@@ -1702,7 +1702,7 @@ function ProductNotFound() {
           <Button variant="outline" onClick={goHome}>
             Back to Home
           </Button>
-          <Button className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={() => goProducts()}>
+          <Button className="bg-red-500 hover:bg-red-700 text-white" onClick={() => goProducts()}>
             Browse Products
           </Button>
         </div>

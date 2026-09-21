@@ -42,11 +42,11 @@ function ShopView() {
   const products = data.products ?? [];
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <button onClick={() => goProducts()} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 mb-4 transition-colors">
+      <button onClick={() => goProducts()} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-red-600 dark:hover:text-red-400 mb-4 transition-colors">
         <ArrowLeft className="h-3.5 w-3.5" /> {t('shop.backToProducts')}
       </button>
       {/* Banner */}
-      <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-100 via-teal-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 mb-6 border border-border/40">
+      <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-red-100 via-rose-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 mb-6 border border-border/40">
         {shop.bannerUrl && (
           <img src={shop.bannerUrl} alt={shop.name} className="absolute inset-0 w-full h-full object-cover opacity-90" />
         )}
@@ -61,7 +61,7 @@ function ShopView() {
             <div className="flex items-center gap-2 mb-1">
               <h1 className="text-2xl font-bold drop-shadow">{shop.name}</h1>
               {shop.verified && (
-                <span className="inline-flex items-center gap-1 bg-cyan-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">✓ {t('shop.verified')}</span>
+                <span className="inline-flex items-center gap-1 bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">✓ {t('shop.verified')}</span>
               )}
             </div>
             <p className="text-sm opacity-90 line-clamp-1">{shop.description}</p>
@@ -79,7 +79,7 @@ function ShopView() {
       {shop.specializations && (
         <div className="flex flex-wrap gap-2 mb-4">
           {shop.specializations.split(',').map((s: string) => (
-            <span key={s} className="text-xs bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 px-2.5 py-1 rounded-full font-medium">
+            <span key={s} className="text-xs bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 px-2.5 py-1 rounded-full font-medium">
               {s.trim()}
             </span>
           ))}
@@ -96,7 +96,7 @@ function ShopView() {
             <button
               key={p.id}
               onClick={() => goProduct(p.slug)}
-              className="group flex flex-col bg-card border border-border/70 dark:border-slate-800 rounded-xl overflow-hidden text-left hover:border-cyan-400/60 dark:hover:border-cyan-500/60 hover:shadow-lg transition-all"
+              className="group flex flex-col bg-card border border-border/70 dark:border-slate-800 rounded-xl overflow-hidden text-left hover:border-red-400/60 dark:hover:border-red-500/60 hover:shadow-lg transition-all"
             >
               <div className="aspect-[4/3] bg-muted relative overflow-hidden">
                 {p.images?.[0]?.url ? (
@@ -108,9 +108,9 @@ function ShopView() {
                 )}
               </div>
               <div className="p-3 space-y-1">
-                <p className="text-sm font-semibold line-clamp-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400">{p.name}</p>
+                <p className="text-sm font-semibold line-clamp-2 group-hover:text-red-600 dark:group-hover:text-red-400">{p.name}</p>
                 <p className="text-xs text-muted-foreground line-clamp-1">{p.category?.name}</p>
-                <p className="text-base font-bold text-cyan-600 dark:text-cyan-400">{new Intl.NumberFormat('vi-VN').format(p.price)}₫</p>
+                <p className="text-base font-bold text-red-600 dark:text-red-400">{new Intl.NumberFormat('vi-VN').format(p.price)}₫</p>
               </div>
             </button>
           ))}
@@ -202,7 +202,7 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
           className="w-full h-11 rounded-lg border border-border/60 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-center gap-3 font-medium text-sm text-foreground transition-colors disabled:opacity-50"
         >
           {googleLoading ? (
-            <Loader2 className="h-5 w-5 animate-spin text-cyan-500" />
+            <Loader2 className="h-5 w-5 animate-spin text-red-600" />
           ) : (
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -225,21 +225,21 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
           {mode === 'register' && (
             <div className="space-y-1.5">
               <label className="text-sm font-medium text-foreground">{t('auth.fullName')}</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:focus:ring-cyan-950 outline-none" />
+              <input value={name} onChange={(e) => setName(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-950 outline-none" />
             </div>
           )}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-foreground">{t('auth.email')}</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:focus:ring-cyan-950 outline-none" />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-950 outline-none" />
           </div>
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-foreground">{t('auth.password')}</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:focus:ring-cyan-950 outline-none" />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full h-10 px-3 rounded-md border border-border/60 bg-background text-foreground focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-950 outline-none" />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-10 rounded-md bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white font-semibold disabled:opacity-50"
+            className="w-full h-10 rounded-md bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 text-white font-semibold disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : mode === 'login' ? t('auth.signIn') : t('auth.signUp')}
           </button>
@@ -249,12 +249,12 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
           {mode === 'login' ? (
             <>
               {t('auth.noAccount')}{' '}
-              <button onClick={() => setView('register', {})} className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium">{t('auth.signUp')}</button>
+              <button onClick={() => setView('register', {})} className="text-red-600 dark:text-red-400 hover:underline font-medium">{t('auth.signUp')}</button>
             </>
           ) : (
             <>
               {t('auth.hasAccount')}{' '}
-              <button onClick={() => setView('login', {})} className="text-cyan-600 dark:text-cyan-400 hover:underline font-medium">{t('auth.signIn')}</button>
+              <button onClick={() => setView('login', {})} className="text-red-600 dark:text-red-400 hover:underline font-medium">{t('auth.signIn')}</button>
             </>
           )}
         </div>
@@ -268,7 +268,7 @@ function AuthView({ mode }: { mode: 'login' | 'register' }) {
             <button
               type="button"
               onClick={() => handleQuickDemo('buyer')}
-              className="py-1.5 px-2 rounded-lg border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 text-xs font-semibold transition-colors cursor-pointer text-center"
+              className="py-1.5 px-2 rounded-lg border border-red-500/40 bg-red-600/10 hover:bg-red-600/20 text-red-700 dark:text-red-300 text-xs font-semibold transition-colors cursor-pointer text-center"
             >
               Buyer 1
             </button>
@@ -522,7 +522,7 @@ export default function Home() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
       </div>
     );
   }

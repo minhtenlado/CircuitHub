@@ -243,7 +243,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
               <DialogTitle className="text-xl font-bold flex items-center gap-2.5">
                 {productType === 'DIGITAL' ? (
                   <>
-                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-rose-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
                       <FileCode className="h-5 w-5" />
                     </div>
                     <div>
@@ -260,13 +260,13 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                   </>
                 ) : (
                   <>
-                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20">
+                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-red-600 to-rose-600 flex items-center justify-center text-white shadow-md shadow-red-600/20">
                       <Package className="h-5 w-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <span>Đăng Bán Linh Kiện / Bo Mạch Mới</span>
-                        <Badge className="bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/30 text-[11px] font-semibold">
+                        <Badge className="bg-red-600/15 text-red-600 dark:text-red-400 border-red-600/30 text-[11px] font-semibold">
                           Thương mại
                         </Badge>
                       </div>
@@ -307,7 +307,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 className={cn(
                   'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer',
                   productType === 'PHYSICAL'
-                    ? 'bg-cyan-600 text-white shadow-sm font-semibold'
+                    ? 'bg-red-600 text-white shadow-sm font-semibold'
                     : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
                 )}
               >
@@ -604,7 +604,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Ví dụ: Bo Mạch Phát Triển STM32F407VET6 Black Board"
-                    className="h-10 text-sm focus-visible:ring-cyan-500"
+                    className="h-10 text-sm focus-visible:ring-red-600"
                   />
                 </div>
 
@@ -634,7 +634,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                       id="phys-category"
                       value={categoryId}
                       onChange={(e) => setCategoryId(e.target.value)}
-                      className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none"
+                      className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm focus:border-red-600 focus:ring-2 focus:ring-red-600/20 outline-none"
                     >
                       <option value="">Chọn danh mục sản phẩm...</option>
                       {categories.map((c) => (
@@ -678,7 +678,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                       />
                     </div>
                     {price && !isNaN(parseInt(price, 10)) && (
-                      <p className="text-xs font-medium text-cyan-600 dark:text-cyan-400">
+                      <p className="text-xs font-medium text-red-600 dark:text-red-400">
                         {formatVND(parseInt(price, 10))}
                       </p>
                     )}
@@ -727,7 +727,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                       type="checkbox"
                       checked={unlimited}
                       onChange={(e) => setUnlimited(e.target.checked)}
-                      className="rounded border-border text-cyan-600 focus:ring-cyan-500"
+                      className="rounded border-border text-red-600 focus:ring-red-600"
                     />
                     <span>Không giới hạn số lượng tồn kho</span>
                   </label>
@@ -800,7 +800,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                         key={preset.name}
                         type="button"
                         onClick={() => setImageUrl(preset.url)}
-                        className="text-[11px] px-2 py-0.5 rounded-md border border-border/80 bg-muted/40 hover:bg-cyan-500/10 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors cursor-pointer"
+                        className="text-[11px] px-2 py-0.5 rounded-md border border-border/80 bg-muted/40 hover:bg-red-600/10 hover:border-red-600/50 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
                       >
                         + {preset.name}
                       </button>
@@ -824,7 +824,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
 
                 {/* PCB Specs (Optional) */}
                 <div className="p-4 rounded-xl border border-border/80 bg-muted/20 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-cyan-700 dark:text-cyan-400">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-red-700 dark:text-red-400">
                     <Layers className="h-4 w-4" />
                     <span>Thông Số Kỹ Thuật PCB (Nếu Có)</span>
                   </div>
@@ -931,7 +931,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 <Button
                   onClick={submit}
                   disabled={submitting || !name.trim()}
-                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold shadow-md px-6 h-10 cursor-pointer"
+                  className="bg-gradient-to-r from-emerald-600 to-rose-600 hover:from-emerald-700 hover:to-rose-700 text-white font-semibold shadow-md px-6 h-10 cursor-pointer"
                 >
                   {submitting ? (
                     <>
@@ -949,7 +949,7 @@ export function AddProductDialog({ open, onOpenChange, sellerId, shopId, categor
                 <Button
                   onClick={submit}
                   disabled={submitting || !name.trim() || !price || !categoryId}
-                  className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold shadow-md px-6 h-10 cursor-pointer"
+                  className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold shadow-md px-6 h-10 cursor-pointer"
                 >
                   {submitting ? (
                     <>

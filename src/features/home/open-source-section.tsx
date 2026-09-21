@@ -106,7 +106,7 @@ export function OpenSourceSection() {
           <Button
             variant="outline"
             onClick={() => goCategory('open-source')}
-            className="hidden sm:inline-flex items-center gap-2 border-cyan-300 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-800 dark:hover:text-cyan-300 self-start sm:self-auto shrink-0"
+            className="hidden sm:inline-flex items-center gap-2 border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-slate-800 hover:text-red-800 dark:hover:text-red-300 self-start sm:self-auto shrink-0"
           >
             <FileCode className="h-4 w-4" />
             {t('openSource.viewAll')}
@@ -124,15 +124,15 @@ export function OpenSourceSection() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.35, delay: i * 0.08 }}
               whileHover={{ y: -4 }}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 dark:border-slate-800 bg-card dark:bg-slate-900 transition-all duration-300 hover:border-cyan-300 dark:hover:border-cyan-600 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.35)]"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 dark:border-slate-800 bg-card dark:bg-slate-900 transition-all duration-300 hover:border-red-300 dark:hover:border-red-600 hover:shadow-[0_18px_50px_-20px_rgba(220,38,38,0.35)]"
             >
               {/* Top Accent Strip */}
-              <div className="h-1.5 w-full bg-gradient-to-r from-teal-500 via-cyan-400 to-emerald-400" />
+              <div className="h-1.5 w-full bg-gradient-to-r from-rose-500 via-red-400 to-emerald-400" />
 
               <div className="flex flex-col gap-3 p-5 flex-1">
                 {/* Header: Icon + License */}
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-cyan-400 text-white shadow-sm transition-transform duration-300 group-hover:scale-105">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-red-400 text-white shadow-sm transition-transform duration-300 group-hover:scale-105">
                     <FileCode className="h-5 w-5" />
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -145,7 +145,7 @@ export function OpenSourceSection() {
                 {/* Title */}
                 <h3
                   onClick={() => goCategory('open-source')}
-                  className="cursor-pointer text-base font-semibold leading-snug text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2"
+                  className="cursor-pointer text-base font-semibold leading-snug text-foreground group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2"
                 >
                   {proj.name}
                 </h3>
@@ -157,7 +157,7 @@ export function OpenSourceSection() {
 
                 {/* Tech Badges */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  <span className="inline-flex items-center gap-1 rounded-md bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/80 dark:border-cyan-800/60 px-2 py-0.5 text-[10px] font-medium text-cyan-700 dark:text-cyan-300">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-red-50 dark:bg-red-950/60 border border-red-200/80 dark:border-red-800/60 px-2 py-0.5 text-[10px] font-medium text-red-700 dark:text-red-300">
                     <Layers className="h-2.5 w-2.5" />
                     {proj.software}
                   </span>
@@ -172,12 +172,12 @@ export function OpenSourceSection() {
                 {/* Download CTA */}
                 <div className="pt-3 mt-2 border-t border-border/50 flex items-center justify-between">
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Download className="h-3.5 w-3.5 text-cyan-500" />
+                    <Download className="h-3.5 w-3.5 text-red-500" />
                     {proj.downloads.toLocaleString('vi-VN')} {t('openSource.downloads')}
                   </span>
                   <button
                     onClick={() => goCategory('open-source')}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 hover:underline transition-all"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:underline transition-all"
                   >
                     {t('openSource.downloadFree')}
                     <ArrowRight className="h-3 w-3" />
@@ -193,7 +193,7 @@ export function OpenSourceSection() {
           <Button
             variant="outline"
             onClick={() => goCategory('open-source')}
-            className="w-full border-cyan-300 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800"
+            className="w-full border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-slate-800"
           >
             <FileCode className="h-4 w-4 mr-2" />
             {t('openSource.viewAll')}

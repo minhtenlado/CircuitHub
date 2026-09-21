@@ -36,21 +36,21 @@ export function TrustSection() {
       icon: Cpu,
       title: 'Kiểm Tra Kỹ Thuật 100%',
       body: 'Trước khi gửi đi, mọi bo mạch đều được cấp nguồn, đo điện áp 3.3V/5V và nạp firmware kiểm tra cổng giao tiếp.',
-      accent: 'from-cyan-500 to-cyan-400',
+      accent: 'from-red-600 to-red-500',
       points: ['Đo kiểm áp & chống ngược cực', 'Test cổng nạp Type-C / MicroUSB', 'Kiểm tra kết nối Wi-Fi / Bluetooth'],
     },
     {
       icon: ShieldCheck,
       title: 'Kèm Sơ Đồ & Mã Nguồn Mẫu',
       body: 'Không lo mua về không biết dùng. Shop luôn cung cấp sơ đồ nguyên lý chân (pinout) và repository code mẫu cho bạn.',
-      accent: 'from-teal-500 to-aqua-400',
+      accent: 'from-rose-500 to-red-400',
       points: ['Code mẫu Arduino IDE & ESP-IDF', 'Sơ đồ đấu nối chân linh kiện', 'Thư viện Driver cảm biến sẵn có'],
     },
     {
       icon: Award,
       title: 'Hỗ Trợ Kỹ Thuật Trực Tiếp',
       body: 'Gặp lỗi nạp code hay mạch không nhận thiết bị? Chỉ cần nhắn qua Zalo, chủ shop sẽ trực tiếp hướng dẫn bạn gỡ lỗi.',
-      accent: 'from-sky-500 to-cyan-400',
+      accent: 'from-red-500 to-rose-500',
       points: ['Tư vấn chọn linh kiện phù hợp', 'Hỗ trợ debug lỗi cơ bản qua Zalo', 'Bảo hành 1 đổi 1 trong 7 ngày'],
     },
   ] as const;
@@ -60,7 +60,7 @@ export function TrustSection() {
       {/* Cyan glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-[300px] w-[800px] rounded-full bg-cyan-300/20 blur-[120px]"
+        className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-[300px] w-[800px] rounded-full bg-red-400/15 blur-[120px]"
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,7 +70,7 @@ export function TrustSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.45 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-500 via-cyan-500 to-teal-400 text-white shadow-[0_24px_70px_-24px_rgba(6,182,212,0.65)]"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-600 via-red-600 to-rose-500 text-white shadow-[0_24px_70px_-24px_rgba(220,38,38,0.55)]"
         >
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-px">
             {STATS.map((s, i) => {
@@ -114,11 +114,11 @@ export function TrustSection() {
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
-                className="group relative flex flex-col gap-4 rounded-2xl border border-border/70 bg-white dark:bg-slate-900 p-6 transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.35)]"
+                className="group relative flex flex-col gap-4 rounded-2xl border border-border/70 bg-white dark:bg-slate-900 p-6 transition-all duration-300 hover:border-red-300 hover:shadow-[0_18px_50px_-20px_rgba(220,38,38,0.25)]"
               >
                 {/* Icon */}
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${p.accent} text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${p.accent} text-white shadow-[0_8px_18px_-8px_rgba(220,38,38,0.5)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}
                 >
                   <Icon className="h-6 w-6" />
                 </div>
@@ -139,7 +139,7 @@ export function TrustSection() {
                       key={pt}
                       className="flex items-center gap-2 text-xs text-foreground"
                     >
-                      <CheckCircle2 className="h-3.5 w-3.5 text-cyan-500 shrink-0" />
+                      <CheckCircle2 className="h-3.5 w-3.5 text-red-500 shrink-0" />
                       <span>{pt}</span>
                     </li>
                   ))}

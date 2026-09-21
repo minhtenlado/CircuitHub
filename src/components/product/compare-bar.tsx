@@ -18,10 +18,10 @@ export function CompareBar() {
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-3xl"
         >
-          <div className="glass-card rounded-2xl shadow-[0_10px_40px_-8px_rgba(6,182,212,0.35)] border border-cyan-200/60 p-3 flex items-center gap-3">
+          <div className="glass-card rounded-2xl shadow-[0_10px_40px_-8px_rgba(220,38,38,0.35)] border border-red-200/60 p-3 flex items-center gap-3">
             {/* Icon + count */}
             <div className="flex items-center gap-2 flex-shrink-0">
-              <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-400 flex items-center justify-center">
+              <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-red-600 to-rose-500 flex items-center justify-center">
                 <GitCompare className="h-4 w-4 text-white" />
               </div>
               <div className="text-xs">
@@ -65,7 +65,7 @@ export function CompareBar() {
               <button
                 onClick={open}
                 disabled={items.length < 2}
-                className="flex items-center gap-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold px-3 py-2 transition-colors"
+                className="flex items-center gap-1.5 rounded-lg bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold px-3 py-2 transition-colors"
               >
                 Compare Now
                 <ArrowRight className="h-3 w-3" />

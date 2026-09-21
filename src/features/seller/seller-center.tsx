@@ -176,19 +176,19 @@ interface SidebarSection {
 const ORDER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
   PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
   PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
-  PAID: { label: 'Paid', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
-  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  PAID: { label: 'Paid', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
+  CONFIRMED: { label: 'Confirmed', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
   PACKING: { label: 'Packing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   READY_TO_SHIP: { label: 'Ready to ship', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   SHIPPING: { label: 'Shipping', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
-  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800', dot: 'bg-teal-500' },
+  DELIVERED: { label: 'Delivered', cls: 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800', dot: 'bg-rose-500' },
   COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
   CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
 
 const SHIPMENT_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
   PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
-  PICKED_UP: { label: 'Picked up', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  PICKED_UP: { label: 'Picked up', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
   IN_TRANSIT: { label: 'In transit', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   OUT_FOR_DELIVERY: { label: 'Out for delivery', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   DELIVERED: { label: 'Delivered', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
@@ -199,7 +199,7 @@ const SHIPMENT_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: 
 
 const WITHDRAWAL_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
   PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
-  APPROVED: { label: 'Approved', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  APPROVED: { label: 'Approved', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
   PROCESSING: { label: 'Processing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
   REJECTED: { label: 'Rejected', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
@@ -209,7 +209,7 @@ const WALLET_TX_CONFIG: Record<string, { label: string; cls: string; icon: typeo
   SALE: { label: 'Sale', cls: 'text-emerald-600', icon: TrendingUp },
   COMMISSION: { label: 'Commission', cls: 'text-amber-600', icon: Banknote },
   REFUND: { label: 'Refund', cls: 'text-rose-600', icon: ArrowDownRight },
-  ADJUSTMENT: { label: 'Adjustment', cls: 'text-cyan-600', icon: Cog },
+  ADJUSTMENT: { label: 'Adjustment', cls: 'text-red-600', icon: Cog },
   WITHDRAWAL: { label: 'Withdrawal', cls: 'text-slate-600', icon: Banknote },
   REVERSAL: { label: 'Reversal', cls: 'text-rose-600', icon: ArrowDownRight },
 };
@@ -604,9 +604,9 @@ function StatCard({
   hint?: string;
 }) {
   const accentMap: Record<string, string> = {
-    cyan: 'from-cyan-500 to-cyan-400 shadow-[0_10px_20px_-10px_rgba(6,182,212,0.55)]',
-    teal: 'from-teal-500 to-teal-400 shadow-[0_10px_20px_-10px_rgba(45,212,191,0.55)]',
-    aqua: 'from-cyan-400 to-teal-300 shadow-[0_10px_20px_-10px_rgba(34,211,238,0.55)]',
+    cyan: 'from-red-600 to-red-500 shadow-[0_10px_20px_-10px_rgba(220,38,38,0.55)]',
+    teal: 'from-rose-500 to-rose-500 shadow-[0_10px_20px_-10px_rgba(244,63,94,0.55)]',
+    aqua: 'from-red-400 to-rose-300 shadow-[0_10px_20px_-10px_rgba(220,38,38,0.55)]',
     amber: 'from-amber-500 to-amber-400 shadow-[0_10px_20px_-10px_rgba(245,158,11,0.55)]',
     rose: 'from-rose-500 to-rose-400 shadow-[0_10px_20px_-10px_rgba(244,63,94,0.55)]',
   };
@@ -615,11 +615,11 @@ function StatCard({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative overflow-hidden rounded-2xl border border-cyan-100/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-5 hover:shadow-md transition-shadow"
+      className="relative overflow-hidden rounded-2xl border border-red-100/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-5 hover:shadow-md transition-shadow"
     >
       <div
         aria-hidden
-        className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-cyan-100/40 to-teal-100/30 blur-2xl"
+        className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-red-100/40 to-rose-100/30 blur-2xl"
       />
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -666,7 +666,7 @@ function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 dark:bg-cyan-950/50 text-cyan-600 dark:text-cyan-400">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400">
         <Icon className="h-6 w-6" />
       </div>
       <div className="space-y-1">
@@ -674,7 +674,7 @@ function EmptyState({
         <p className="text-sm text-muted-foreground max-w-md">{description}</p>
       </div>
       {cta && onCta && (
-        <Button size="sm" variant="outline" className="mt-2 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onCta}>
+        <Button size="sm" variant="outline" className="mt-2 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-slate-800" onClick={onCta}>
           {cta}
         </Button>
       )}
@@ -685,7 +685,7 @@ function EmptyState({
 function ChartTooltip({ active, payload, label, valueFormatter }: any) {
   if (!active || !payload || !payload.length) return null;
   return (
-    <div className="rounded-lg border border-cyan-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
+    <div className="rounded-lg border border-red-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
       <p className="font-semibold text-foreground mb-1">{label}</p>
       {payload.map((entry: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
@@ -714,7 +714,7 @@ function SectionHeader({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
       <div className="flex items-center gap-2.5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-rose-500 text-white shadow-[0_8px_18px_-8px_rgba(220,38,38,0.5)]">
           <Icon className="h-5 w-5" />
         </div>
         <div>
@@ -772,10 +772,10 @@ function OverviewTab({
       </div>
 
       {/* Revenue chart */}
-      <Card className="border-cyan-100/70">
+      <Card className="border-red-100/70">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-cyan-600" />
+            <TrendingUp className="h-4 w-4 text-red-600" />
             Revenue (last 12 months)
           </CardTitle>
         </CardHeader>
@@ -804,17 +804,17 @@ function OverviewTab({
 
       <div className="grid lg:grid-cols-2 gap-4">
         {/* Top products */}
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-cyan-600" />
+              <BarChart3 className="h-4 w-4 text-red-600" />
               Top Products
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {topProducts.slice(0, 5).map((p: any, i: number) => (
               <div key={p.id} className="flex items-center gap-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-xs font-bold">
+                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-xs font-bold">
                   {i + 1}
                 </div>
                 <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-muted">
@@ -833,7 +833,7 @@ function OverviewTab({
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400">{formatVNDCompact((p.soldCount ?? 0) * (p.price ?? 0))}</p>
+                  <p className="text-sm font-semibold text-red-700 dark:text-red-400">{formatVNDCompact((p.soldCount ?? 0) * (p.price ?? 0))}</p>
                   <p className="text-[10px] text-muted-foreground">revenue</p>
                 </div>
               </div>
@@ -871,7 +871,7 @@ function OverviewTab({
         <Card className="border-border/60">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <Package className="h-4 w-4 text-cyan-600" />
+              <Package className="h-4 w-4 text-red-600" />
               Recent Orders
             </CardTitle>
           </CardHeader>
@@ -885,7 +885,7 @@ function OverviewTab({
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400">{formatVNDCompact(o.sellerRevenue ?? 0)}</p>
+                  <p className="text-sm font-semibold text-red-700 dark:text-red-400">{formatVNDCompact(o.sellerRevenue ?? 0)}</p>
                 </div>
                 <StatusPill status={o.status} config={ORDER_STATUS_CONFIG} />
               </div>
@@ -894,7 +894,7 @@ function OverviewTab({
         </Card>
 
         {/* Recent reviews */}
-        <Card className="border-cyan-100/70 dark:border-cyan-900/40">
+        <Card className="border-red-100/70 dark:border-red-900/40">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Star className="h-4 w-4 text-amber-500" />
@@ -921,7 +921,7 @@ function OverviewTab({
       </div>
 
       <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={goProducts} className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50">
+        <Button variant="outline" size="sm" onClick={goProducts} className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50">
           Manage products
           <ChevronRight className="h-3.5 w-3.5" />
         </Button>
@@ -962,7 +962,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
         action={
           <Button
             size="sm"
-            className="bg-cyan-500 hover:bg-cyan-600 text-white"
+            className="bg-red-600 hover:bg-red-600 text-white"
             onClick={() => setShowAddProduct(true)}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -979,7 +979,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
         categories={categories}
       />
 
-      <Card className="border-cyan-100/70">
+      <Card className="border-red-100/70">
         <CardContent className="pt-4 space-y-4">
           {/* Filter row */}
           <div className="flex flex-wrap items-center gap-3">
@@ -999,7 +999,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                   onClick={() => setType(f.id)}
                   className={cn(
                     'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                    type === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
+                    type === f.id ? 'bg-red-600 text-white' : 'text-muted-foreground hover:bg-red-50 dark:hover:bg-slate-800 hover:text-red-700 dark:hover:text-red-400',
                   )}
                 >
                   {f.label}
@@ -1027,7 +1027,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                 </thead>
                 <tbody>
                   {filtered.map((p) => (
-                    <tr key={p.id} className="border-b border-border/40 hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20 transition-colors">
+                    <tr key={p.id} className="border-b border-border/40 hover:bg-red-50/30 dark:hover:bg-red-950/20 transition-colors">
                       <td className="py-2.5 pr-3">
                         <button onClick={() => goProduct(p.slug)} className="flex items-center gap-2.5 text-left">
                           <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
@@ -1057,7 +1057,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                         )}
                       </td>
                       <td className="py-2.5 px-3 text-right">
-                        {p.unlimited ? <span className="text-xs text-teal-600 dark:text-teal-400">∞</span> : <span className="font-medium">{p.stockAvailable}</span>}
+                        {p.unlimited ? <span className="text-xs text-rose-600 dark:text-rose-500">∞</span> : <span className="font-medium">{p.stockAvailable}</span>}
                       </td>
                       <td className="py-2.5 px-3 text-right text-muted-foreground">{p.soldCount ?? 0}</td>
                       <td className="py-2.5 px-3">
@@ -1076,7 +1076,7 @@ function ProductsTab({ products, toast, goProduct, sellerId, shopId, categories 
                           <Button
                             size="icon"
                             variant="ghost"
-                            className="h-7 w-7 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                            className="h-7 w-7 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                             onClick={() => goProduct(p.slug)}
                             title="View"
                           >
@@ -1132,7 +1132,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
         action={
           <Button
             size="sm"
-            className="bg-cyan-500 hover:bg-cyan-600 text-white"
+            className="bg-red-600 hover:bg-red-600 text-white"
             onClick={() => toast({ title: 'Upload new version', description: 'Version upload dialog will open here.' })}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -1141,7 +1141,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
         }
       />
 
-      <Card className="border-cyan-100/70">
+      <Card className="border-red-100/70">
         <CardContent className="pt-4">
           {digitals.length === 0 ? (
             <EmptyState icon={FileCode} title="No digital assets yet" description="Digital products (KiCad projects, firmware bundles, design files) will appear here." />
@@ -1165,7 +1165,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                     const versions = DEMO_VERSIONS.default;
                     return (
                       <Fragment key={p.id}>
-                        <tr className="border-b border-border/40 hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20 transition-colors">
+                        <tr className="border-b border-border/40 hover:bg-red-50/30 dark:hover:bg-red-950/20 transition-colors">
                           <td className="py-2.5 pr-3">
                             <div className="flex items-center gap-2.5">
                               <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
@@ -1189,7 +1189,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                             <TechBadge label={p.software ?? 'Generic'} />
                           </td>
                           <td className="py-2.5 px-3">
-                            <Badge variant="outline" className="font-mono bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">
+                            <Badge variant="outline" className="font-mono bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800">
                               {p.currentVersion ?? p.softwareVersion ?? 'v1.0.0'}
                             </Badge>
                           </td>
@@ -1214,7 +1214,7 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="h-7 px-2 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                                className="h-7 px-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                                 onClick={() => toast({ title: 'Upload new version', description: p.name })}
                               >
                                 Upload new version
@@ -1236,13 +1236,13 @@ function DigitalAssetsTab({ products, toast }: { products: any[]; toast: any }) 
                             <td colSpan={7} className="px-4 pb-3 pt-1">
                               <div className="rounded-lg border border-border/60 bg-white dark:bg-slate-900 p-3">
                                 <p className="text-xs font-semibold text-foreground mb-2 flex items-center gap-1.5">
-                                  <FileText className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+                                  <FileText className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
                                   Version History
                                 </p>
                                 <div className="space-y-2">
                                   {versions.map((v) => (
                                     <div key={v.version} className="flex items-start gap-3 rounded-md border border-border/50 p-2">
-                                      <Badge variant="outline" className="font-mono bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 shrink-0">
+                                      <Badge variant="outline" className="font-mono bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 shrink-0">
                                         {v.version}
                                       </Badge>
                                       <div className="min-w-0 flex-1">
@@ -1292,7 +1292,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
           <Button
             size="sm"
             variant="outline"
-            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
+            className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
             onClick={() => toast({ title: 'Manage revisions', description: 'PCB revision manager will open here.' })}
           >
             <Cog className="h-3.5 w-3.5" />
@@ -1301,7 +1301,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
         }
       />
 
-      <Card className="border-cyan-100/70 dark:border-cyan-900/40">
+      <Card className="border-red-100/70 dark:border-red-900/40">
         <CardContent className="pt-4">
           {pcbs.length === 0 ? (
             <EmptyState icon={Layers} title="No PCB projects yet" description="Physical PCB products with layer/color/dimension specs will appear here." />
@@ -1323,7 +1323,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
                 </thead>
                 <tbody>
                   {pcbs.map((p) => (
-                    <tr key={p.id} className="border-b border-border/40 hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20 transition-colors">
+                    <tr key={p.id} className="border-b border-border/40 hover:bg-red-50/30 dark:hover:bg-red-950/20 transition-colors">
                       <td className="py-2.5 pr-3">
                         <div className="flex items-center gap-2.5">
                           <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
@@ -1344,7 +1344,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
                         </div>
                       </td>
                       <td className="py-2.5 px-3 text-center">
-                        <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 font-mono">
+                        <Badge variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 font-mono">
                           {p.pcbLayers ?? '—'}L
                         </Badge>
                       </td>
@@ -1373,7 +1373,7 @@ function PCBProjectsTab({ products, toast }: { products: any[]; toast: any }) {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 px-2 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                          className="h-7 px-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => toast({ title: 'Manage revisions', description: p.name })}
                         >
                           Revisions
@@ -1455,7 +1455,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
             onClick={() => setFilter(f.id)}
             className={cn(
               'rounded-md px-3 py-1 text-xs font-medium transition-colors',
-              filter === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
+              filter === f.id ? 'bg-red-600 text-white' : 'text-muted-foreground hover:bg-red-50 dark:hover:bg-slate-800 hover:text-red-700 dark:hover:text-red-400',
             )}
           >
             {f.label}
@@ -1464,7 +1464,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
       </div>
 
       {filtered.length === 0 ? (
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardContent>
             <EmptyState icon={ShoppingCart} title="No orders found" description="Orders matching the filter will appear here." />
           </CardContent>
@@ -1476,7 +1476,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
             const address = parseAddress(o);
             const stepIdx = ORDER_STATUS_TO_STEP[o.status] ?? 0;
             return (
-              <Card key={o.id} className="border-cyan-100/70 overflow-hidden">
+              <Card key={o.id} className="border-red-100/70 overflow-hidden">
                 <CardContent className="pt-4">
                   <button
                     onClick={() => setExpanded(isOpen ? null : o.id)}
@@ -1518,7 +1518,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                               <span className="font-medium text-foreground">{it.name}</span>
                               <span className="text-muted-foreground"> × {it.quantity}</span>
                             </p>
-                            <p className="text-xs font-medium text-cyan-700 dark:text-cyan-400">{formatVND(it.lineTotal ?? it.unitPrice * it.quantity)}</p>
+                            <p className="text-xs font-medium text-red-700 dark:text-red-400">{formatVND(it.lineTotal ?? it.unitPrice * it.quantity)}</p>
                           </div>
                         ))}
                       </div>
@@ -1527,7 +1527,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                       {address && (
                         <div className="rounded-lg border border-border/60 bg-slate-50/50 dark:bg-slate-800/50 p-2.5">
                           <p className="text-xs font-semibold text-foreground mb-1 flex items-center gap-1.5">
-                            <Truck className="h-3.5 w-3.5 text-cyan-600" />
+                            <Truck className="h-3.5 w-3.5 text-red-600" />
                             Shipping Address
                           </p>
                           <p className="text-xs text-muted-foreground">
@@ -1540,8 +1540,8 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
 
                       {/* Tracking */}
                       {o.status === 'SHIPPING' && (
-                        <div className="rounded-lg border border-cyan-100 dark:border-cyan-800 bg-cyan-50/50 dark:bg-cyan-950/40 p-2.5">
-                          <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5">
+                        <div className="rounded-lg border border-red-100 dark:border-red-800 bg-red-50/50 dark:bg-red-950/40 p-2.5">
+                          <p className="text-xs font-semibold text-red-700 dark:text-red-400 flex items-center gap-1.5">
                             <Truck className="h-3.5 w-3.5" />
                             Tracking
                           </p>
@@ -1562,15 +1562,15 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                                   <div
                                     className={cn(
                                       'h-2.5 w-2.5 rounded-full',
-                                      done ? 'bg-cyan-500' : current ? 'bg-cyan-500 ring-4 ring-cyan-100 dark:ring-cyan-900/40' : 'bg-slate-200 dark:bg-slate-700',
+                                      done ? 'bg-red-600' : current ? 'bg-red-600 ring-4 ring-red-100 dark:ring-red-900/40' : 'bg-slate-200 dark:bg-slate-700',
                                     )}
                                   />
-                                  <span className={cn('text-[10px]', done || current ? 'text-cyan-700 dark:text-cyan-400 font-medium' : 'text-muted-foreground')}>
+                                  <span className={cn('text-[10px]', done || current ? 'text-red-700 dark:text-red-400 font-medium' : 'text-muted-foreground')}>
                                     {step.label}
                                   </span>
                                 </div>
                                 {i < ORDER_TIMELINE_STEPS.length - 1 && (
-                                  <div className={cn('h-0.5 flex-1 -mt-3.5', done ? 'bg-cyan-500' : 'bg-slate-200 dark:bg-slate-700')} />
+                                  <div className={cn('h-0.5 flex-1 -mt-3.5', done ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-700')} />
                                 )}
                               </div>
                             );
@@ -1583,7 +1583,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                         {(o.status === 'PENDING' || o.status === 'PAID') && (
                           <Button
                             size="sm"
-                            className="bg-cyan-500 hover:bg-cyan-600 text-white h-7"
+                            className="bg-red-600 hover:bg-red-600 text-white h-7"
                             onClick={() => toast({ title: 'Order confirmed', description: o.code })}
                           >
                             <CheckCircle2 className="h-3.5 w-3.5" />
@@ -1594,7 +1594,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50 h-7"
+                            className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50 h-7"
                             onClick={() => toast({ title: 'Order packed', description: o.code })}
                           >
                             <Package className="h-3.5 w-3.5" />
@@ -1605,7 +1605,7 @@ function OrdersTab({ orders, toast }: { orders: any[]; toast: any }) {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50 h-7"
+                            className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50 h-7"
                             onClick={() => toast({ title: 'Order shipped', description: o.code })}
                           >
                             <Truck className="h-3.5 w-3.5" />
@@ -1656,7 +1656,7 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
             onClick={() => setFilter(f.id)}
             className={cn(
               'rounded-md px-3 py-1 text-xs font-medium transition-colors',
-              filter === f.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
+              filter === f.id ? 'bg-red-600 text-white' : 'text-muted-foreground hover:bg-red-50 dark:hover:bg-slate-800 hover:text-red-700 dark:hover:text-red-400',
             )}
           >
             {f.label}
@@ -1665,7 +1665,7 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
       </div>
 
       {filtered.length === 0 ? (
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardContent>
             <EmptyState icon={Truck} title="No shipments found" description="Active shipments matching the filter will appear here." />
           </CardContent>
@@ -1673,7 +1673,7 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
       ) : (
         <div className="grid sm:grid-cols-2 gap-3">
           {filtered.map((s) => (
-            <Card key={s.id} className="border-cyan-100/70">
+            <Card key={s.id} className="border-red-100/70">
               <CardContent className="pt-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
@@ -1685,7 +1685,7 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
                 <div className="rounded-lg border border-border/60 bg-slate-50/50 dark:bg-slate-800/50 p-2.5 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Provider</span>
-                    <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 font-mono">{s.provider}</Badge>
+                    <Badge variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 font-mono">{s.provider}</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Tracking #</span>
@@ -1703,7 +1703,7 @@ function ShippingTab({ shipments, toast }: { shipments: any[]; toast: any }) {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="w-full border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
+                  className="w-full border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
                   onClick={() => toast({ title: 'Track shipment', description: `Opening tracker for ${s.trackingNumber}` })}
                 >
                   <Truck className="h-3.5 w-3.5" />
@@ -1754,7 +1754,7 @@ function RevenueTab({ data }: { data: any }) {
                 onClick={() => setPeriod(p.id)}
                 className={cn(
                   'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                  period === p.id ? 'bg-cyan-500 text-white' : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
+                  period === p.id ? 'bg-red-600 text-white' : 'text-muted-foreground hover:bg-red-50 dark:hover:bg-slate-800 hover:text-red-700 dark:hover:text-red-400',
                 )}
               >
                 {p.label}
@@ -1772,10 +1772,10 @@ function RevenueTab({ data }: { data: any }) {
       </div>
 
       {/* Revenue line chart */}
-      <Card className="border-cyan-100/70 dark:border-cyan-900/40">
+      <Card className="border-red-100/70 dark:border-red-900/40">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-cyan-600" />
+            <TrendingUp className="h-4 w-4 text-red-600" />
             Revenue Over Time
           </CardTitle>
         </CardHeader>
@@ -1797,15 +1797,15 @@ function RevenueTab({ data }: { data: any }) {
       </Card>
 
       {/* Settlement note */}
-      <Card className="border-cyan-100/70 dark:border-cyan-900/40 bg-gradient-to-r from-cyan-50/40 to-teal-50/40 dark:from-cyan-950/30 dark:to-teal-950/30">
+      <Card className="border-red-100/70 dark:border-red-900/40 bg-gradient-to-r from-red-50/40 to-rose-50/40 dark:from-red-950/30 dark:to-rose-950/30">
         <CardContent className="pt-4 flex items-start gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-rose-500 text-white shrink-0">
             <Clock className="h-5 w-5" />
           </div>
           <div className="space-y-1">
             <p className="text-sm font-semibold text-foreground">Settlement Period</p>
             <p className="text-sm text-muted-foreground">
-              Funds become <span className="font-semibold text-cyan-700 dark:text-cyan-400">available for withdrawal 7 days</span> after order completion.
+              Funds become <span className="font-semibold text-red-700 dark:text-red-400">available for withdrawal 7 days</span> after order completion.
               Pending balance reflects recent sales awaiting settlement.
             </p>
           </div>
@@ -1846,7 +1846,7 @@ function WalletTab({
         title="Wallet"
         description="Balances and transaction ledger"
         action={
-          <Button size="sm" className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={onWithdrawClick}>
+          <Button size="sm" className="bg-red-600 hover:bg-red-600 text-white" onClick={onWithdrawClick}>
             <Banknote className="h-3.5 w-3.5" />
             Request Withdrawal
           </Button>
@@ -1861,10 +1861,10 @@ function WalletTab({
       </div>
 
       {/* Transactions ledger */}
-      <Card className="border-cyan-100/70">
+      <Card className="border-red-100/70">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <FileText className="h-4 w-4 text-cyan-600" />
+            <FileText className="h-4 w-4 text-red-600" />
             Transaction Ledger
           </CardTitle>
         </CardHeader>
@@ -1888,7 +1888,7 @@ function WalletTab({
                     const cfg = WALLET_TX_CONFIG[t.type] ?? { label: t.type, cls: 'text-slate-600', icon: FileText };
                     const Icon = cfg.icon;
                     return (
-                      <tr key={t.id} className="border-b border-border/40 hover:bg-cyan-50/30 transition-colors">
+                      <tr key={t.id} className="border-b border-border/40 hover:bg-red-50/30 transition-colors">
                         <td className="py-2.5 pr-3">
                           <span className="inline-flex items-center gap-1.5 text-xs font-medium">
                             <Icon className={cn('h-3.5 w-3.5', cfg.cls)} />
@@ -1946,7 +1946,7 @@ function WithdrawalsTab({
         title="Withdrawals"
         description={`${items.length} withdrawal requests`}
         action={
-          <Button size="sm" className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={onWithdrawClick}>
+          <Button size="sm" className="bg-red-600 hover:bg-red-600 text-white" onClick={onWithdrawClick}>
             <Plus className="h-3.5 w-3.5" />
             Request new withdrawal
           </Button>
@@ -1954,7 +1954,7 @@ function WithdrawalsTab({
       />
 
       {items.length === 0 ? (
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardContent>
             <EmptyState icon={Banknote} title="No withdrawals yet" description="Withdrawal requests will appear here." />
           </CardContent>
@@ -1964,11 +1964,11 @@ function WithdrawalsTab({
           {items.map((w) => {
             const bank = parseBank(w.bankInfo);
             return (
-              <Card key={w.id} className="border-cyan-100/70">
+              <Card key={w.id} className="border-red-100/70">
                 <CardContent className="pt-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shrink-0">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-rose-500 text-white shrink-0">
                         <Banknote className="h-5 w-5" />
                       </div>
                       <div>
@@ -2033,7 +2033,7 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
       <SectionHeader icon={Star} title="Reviews" description={`${items.length} product reviews`} />
 
       {items.length === 0 ? (
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardContent>
             <EmptyState icon={Star} title="No reviews yet" description="Customer reviews will appear here. Reply to reviews to engage with your customers." />
           </CardContent>
@@ -2049,7 +2049,7 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
                       {r.user?.avatarUrl ? (
                         <Image src={r.user.avatarUrl} alt={r.user.name ?? 'User'} fill className="object-cover" unoptimized />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-cyan-500 to-teal-400 text-white text-sm font-semibold">
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-red-600 to-rose-500 text-white text-sm font-semibold">
                           {(r.user?.name ?? '?').slice(0, 1).toUpperCase()}
                         </div>
                       )}
@@ -2057,7 +2057,7 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
                     <div>
                       <p className="text-sm font-semibold text-foreground">{r.user?.name ?? 'Anonymous'}</p>
                       <p className="text-xs text-muted-foreground">
-                        on <span className="font-medium text-cyan-700 dark:text-cyan-400">{r.product?.name ?? r.productName ?? 'Product'}</span>
+                        on <span className="font-medium text-red-700 dark:text-red-400">{r.product?.name ?? r.productName ?? 'Product'}</span>
                         {r.verifiedPurchase && (
                           <Badge variant="outline" className="ml-1.5 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 text-[10px]">
                             <CheckCircle2 className="h-2.5 w-2.5 mr-1" />
@@ -2075,8 +2075,8 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
                 <p className="text-sm text-foreground">{r.comment}</p>
 
                 {r.sellerReply ? (
-                  <div className="rounded-lg border border-cyan-100 dark:border-cyan-800 bg-cyan-50/40 dark:bg-cyan-950/40 p-2.5">
-                    <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5 mb-1">
+                  <div className="rounded-lg border border-red-100 dark:border-red-800 bg-red-50/40 dark:bg-red-950/40 p-2.5">
+                    <p className="text-xs font-semibold text-red-700 dark:text-red-400 flex items-center gap-1.5 mb-1">
                       <MessageSquare className="h-3.5 w-3.5" />
                       Your reply
                     </p>
@@ -2097,7 +2097,7 @@ function ReviewsTab({ reviews, toast }: { reviews: any[]; toast: any }) {
                     <div className="flex justify-end">
                       <Button
                         size="sm"
-                        className="bg-cyan-500 hover:bg-cyan-600 text-white h-7"
+                        className="bg-red-600 hover:bg-red-600 text-white h-7"
                         onClick={() => submitReply(r.id, r.product?.name ?? r.productName ?? 'product')}
                       >
                         <MessageSquare className="h-3.5 w-3.5" />
@@ -2145,10 +2145,10 @@ function AnalyticsTab({ data, products }: { data: any; products: any[] }) {
 
       <div className="grid lg:grid-cols-2 gap-4">
         {/* Revenue over time (area) */}
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-cyan-600" />
+              <TrendingUp className="h-4 w-4 text-red-600" />
               Revenue Over Time
             </CardTitle>
           </CardHeader>
@@ -2176,10 +2176,10 @@ function AnalyticsTab({ data, products }: { data: any; products: any[] }) {
         </Card>
 
         {/* Orders over time (bar) */}
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <ShoppingCart className="h-4 w-4 text-cyan-600" />
+              <ShoppingCart className="h-4 w-4 text-red-600" />
               Orders Over Time
             </CardTitle>
           </CardHeader>
@@ -2201,10 +2201,10 @@ function AnalyticsTab({ data, products }: { data: any; products: any[] }) {
         </Card>
 
         {/* Top products (horizontal bar) */}
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-cyan-600" />
+              <BarChart3 className="h-4 w-4 text-red-600" />
               Top Products (by sold count)
             </CardTitle>
           </CardHeader>
@@ -2226,10 +2226,10 @@ function AnalyticsTab({ data, products }: { data: any; products: any[] }) {
         </Card>
 
         {/* Sales by product type (pie) */}
-        <Card className="border-cyan-100/70">
+        <Card className="border-red-100/70">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <PieChart className="h-4 w-4 text-cyan-600" />
+              <PieChart className="h-4 w-4 text-red-600" />
               Sales by Product Type
             </CardTitle>
           </CardHeader>
@@ -2254,10 +2254,10 @@ function AnalyticsTab({ data, products }: { data: any; products: any[] }) {
       </div>
 
       {/* Traffic sources (mock) */}
-      <Card className="border-cyan-100/70">
+      <Card className="border-red-100/70">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <Activity className="h-4 w-4 text-cyan-600" />
+            <Activity className="h-4 w-4 text-red-600" />
             Traffic Sources
           </CardTitle>
         </CardHeader>
@@ -2278,7 +2278,7 @@ function AnalyticsTab({ data, products }: { data: any; products: any[] }) {
                   <span className="h-2 w-2 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
                   <span className="text-xs font-medium text-foreground">{s.source}</span>
                 </div>
-                <p className="text-sm font-bold text-cyan-700 dark:text-cyan-400 mt-0.5">{s.visits.toLocaleString('vi-VN')}</p>
+                <p className="text-sm font-bold text-red-700 dark:text-red-400 mt-0.5">{s.visits.toLocaleString('vi-VN')}</p>
                 <p className="text-[10px] text-muted-foreground">{s.pct}%</p>
               </div>
             ))}
@@ -2327,14 +2327,14 @@ function SettingsTab({ toast }: { toast: any }) {
         title="Settings"
         description="Shop profile & preferences"
         action={
-          <Button size="sm" className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={handleSave}>
+          <Button size="sm" className="bg-red-600 hover:bg-red-600 text-white" onClick={handleSave}>
             <CheckCircle2 className="h-3.5 w-3.5" />
             Save changes
           </Button>
         }
       />
 
-      <Card className="border-cyan-100/70">
+      <Card className="border-red-100/70">
         <CardHeader>
           <CardTitle className="text-base">Shop Profile</CardTitle>
         </CardHeader>
@@ -2378,12 +2378,12 @@ function SettingsTab({ toast }: { toast: any }) {
       </Card>
 
       {/* Logo / banner preview */}
-      <Card className="border-cyan-100/70">
+      <Card className="border-red-100/70">
         <CardHeader>
           <CardTitle className="text-base">Preview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="relative h-32 w-full overflow-hidden rounded-xl bg-gradient-to-r from-cyan-100 via-white to-teal-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+          <div className="relative h-32 w-full overflow-hidden rounded-xl bg-gradient-to-r from-red-100 via-white to-rose-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
             {form.bannerUrl && (
               <Image src={form.bannerUrl} alt="Banner" fill className="object-cover opacity-30" unoptimized />
             )}
@@ -2402,7 +2402,7 @@ function SettingsTab({ toast }: { toast: any }) {
       </Card>
 
       <div className="flex justify-end">
-        <Button size="sm" className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={handleSave}>
+        <Button size="sm" className="bg-red-600 hover:bg-red-600 text-white" onClick={handleSave}>
           <CheckCircle2 className="h-3.5 w-3.5" />
           Save changes
         </Button>
@@ -2498,16 +2498,16 @@ function WithdrawalDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Banknote className="h-4 w-4 text-cyan-600" />
+            <Banknote className="h-4 w-4 text-red-600" />
             Request Withdrawal
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Available balance hint */}
-          <div className="rounded-lg border border-cyan-100 dark:border-cyan-800 bg-cyan-50/50 dark:bg-cyan-950/40 p-3">
+          <div className="rounded-lg border border-red-100 dark:border-red-800 bg-red-50/50 dark:bg-red-950/40 p-3">
             <p className="text-xs text-muted-foreground">Available balance</p>
-            <p className="text-xl font-bold text-cyan-700 dark:text-cyan-400">{formatVND(available)}</p>
+            <p className="text-xl font-bold text-red-700 dark:text-red-400">{formatVND(available)}</p>
           </div>
 
           <div className="space-y-1.5">
@@ -2523,7 +2523,7 @@ function WithdrawalDialog({
             />
             {amountNum > 0 && (
               <p className="text-xs text-muted-foreground">
-                You will receive <span className="font-semibold text-cyan-700 dark:text-cyan-400">{formatVND(amountNum)}</span>
+                You will receive <span className="font-semibold text-red-700 dark:text-red-400">{formatVND(amountNum)}</span>
               </p>
             )}
           </div>
@@ -2548,7 +2548,7 @@ function WithdrawalDialog({
           <Button variant="outline" onClick={() => handleClose(false)} disabled={submitting}>
             Cancel
           </Button>
-          <Button className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={handleSubmit} disabled={submitting}>
+          <Button className="bg-red-600 hover:bg-red-600 text-white" onClick={handleSubmit} disabled={submitting}>
             {submitting ? 'Submitting...' : 'Submit request'}
           </Button>
         </DialogFooter>
@@ -2576,11 +2576,11 @@ function SidebarButton({
       className={cn(
         'w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors text-left',
         active
-          ? 'bg-cyan-500 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.5)]'
-          : 'text-muted-foreground hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-700 dark:hover:text-cyan-400',
+          ? 'bg-red-600 text-white shadow-[0_8px_18px_-8px_rgba(220,38,38,0.5)]'
+          : 'text-muted-foreground hover:bg-red-50 dark:hover:bg-slate-800 hover:text-red-700 dark:hover:text-red-400',
       )}
     >
-      <tab.icon className={cn('h-4 w-4 shrink-0', active ? 'text-white' : 'text-cyan-600')} />
+      <tab.icon className={cn('h-4 w-4 shrink-0', active ? 'text-white' : 'text-red-600')} />
       <span className="truncate">{tab.label}</span>
     </button>
   );
@@ -2600,7 +2600,7 @@ function MobilePill({
       onClick={onClick}
       className={cn(
         'flex-none flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium border transition-colors',
-        active ? 'bg-cyan-500 text-white border-cyan-500' : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60',
+        active ? 'bg-red-600 text-white border-red-600' : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60',
       )}
     >
       <tab.icon className="h-3.5 w-3.5" />
@@ -2672,7 +2672,7 @@ export function SellerCenter() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative overflow-hidden rounded-2xl border border-cyan-100 dark:border-cyan-900/50 bg-gradient-to-r from-cyan-50 via-white to-teal-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-cyan-950/40 p-5 sm:p-6 mb-6"
+          className="relative overflow-hidden rounded-2xl border border-red-100 dark:border-red-900/50 bg-gradient-to-r from-red-50 via-white to-rose-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-red-950/40 p-5 sm:p-6 mb-6"
         >
           <div
             aria-hidden
@@ -2688,14 +2688,14 @@ export function SellerCenter() {
               <Image src={SHOP_INFO.logoUrl} alt={SHOP_INFO.name} fill className="object-cover" unoptimized />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-cyan-600 dark:text-cyan-400 uppercase tracking-wide flex items-center gap-1.5">
+              <p className="text-xs font-medium text-red-600 dark:text-red-400 uppercase tracking-wide flex items-center gap-1.5">
                 <Store className="h-3 w-3" />
                 Seller Center
               </p>
               <div className="flex flex-wrap items-center gap-2 mt-0.5">
                 <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{SHOP_INFO.name}</h1>
                 {SHOP_INFO.verified && <VerifiedBadge />}
-                <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 font-mono">
+                <Badge variant="outline" className="bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 font-mono">
                   {(SHOP_INFO.commissionRate * 100).toFixed(0)}% commission
                 </Badge>
               </div>
@@ -2712,7 +2712,7 @@ export function SellerCenter() {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50" onClick={() => goShop(SHOP_INFO.slug)}>
+              <Button variant="outline" size="sm" className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50" onClick={() => goShop(SHOP_INFO.slug)}>
                 <Eye className="h-3.5 w-3.5" />
                 View shop
               </Button>
@@ -2750,8 +2750,8 @@ export function SellerCenter() {
                 </div>
               ))}
 
-              <div className="mt-2 rounded-xl border border-cyan-100 dark:border-cyan-800/60 bg-cyan-50/60 dark:bg-cyan-950/30 p-4">
-                <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5">
+              <div className="mt-2 rounded-xl border border-red-100 dark:border-red-800/60 bg-red-50/60 dark:bg-red-950/30 p-4">
+                <p className="text-xs font-semibold text-red-700 dark:text-red-400 flex items-center gap-1.5">
                   <Banknote className="h-3.5 w-3.5" />
                   Settlement Policy
                 </p>

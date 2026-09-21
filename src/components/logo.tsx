@@ -38,7 +38,7 @@ export function HeroCTA() {
     <Button
       onClick={() => goProducts()}
       size="lg"
-      className="bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white shadow-[0_8px_30px_-8px_rgba(6,182,212,0.6)]"
+      className="bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-600 hover:to-rose-500 text-white shadow-[0_8px_30px_-8px_rgba(220,38,38,0.6)]"
     >
       <Sparkles className="mr-2 h-4 w-4" />
       Explore Marketplace

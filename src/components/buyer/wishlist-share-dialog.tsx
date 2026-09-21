@@ -58,15 +58,15 @@ export function WishlistShareDialog({ open, onOpenChange }: WishlistShareDialogP
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Share2 className="h-5 w-5 text-cyan-600" />
+            <Share2 className="h-5 w-5 text-red-600" />
             Share Wishlist
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
           {/* Summary */}
-          <div className="rounded-lg bg-gradient-to-br from-cyan-50 to-teal-50 border border-cyan-200 p-4">
-            <p className="text-sm font-medium text-cyan-900">
+          <div className="rounded-lg bg-gradient-to-br from-red-50 to-rose-50 border border-red-200 p-4">
+            <p className="text-sm font-medium text-red-900">
               {items.length} {items.length === 1 ? 'item' : 'items'} in your wishlist
             </p>
             <div className="flex -space-x-2 mt-2">
@@ -81,7 +81,7 @@ export function WishlistShareDialog({ open, onOpenChange }: WishlistShareDialogP
                 </div>
               ))}
               {items.length > 5 && (
-                <div className="h-8 w-8 rounded-full border-2 border-white bg-cyan-500 text-white text-xs font-semibold flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full border-2 border-white bg-red-500 text-white text-xs font-semibold flex items-center justify-center">
                   +{items.length - 5}
                 </div>
               )}
@@ -103,7 +103,7 @@ export function WishlistShareDialog({ open, onOpenChange }: WishlistShareDialogP
               </div>
               <Button
                 onClick={copyLink}
-                className={copied ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-cyan-600 hover:bg-cyan-700 text-white'}
+                className={copied ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}
               >
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
@@ -123,7 +123,7 @@ export function WishlistShareDialog({ open, onOpenChange }: WishlistShareDialogP
             <Button
               variant="outline"
               onClick={shareViaEmail}
-              className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/50"
+              className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
             >
               <Mail className="h-4 w-4 mr-2" />
               Email

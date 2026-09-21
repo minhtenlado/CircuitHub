@@ -192,13 +192,13 @@ export function SellerOnboardingView() {
               <div key={s.id} className="flex flex-col items-center gap-1.5 flex-1">
                 <div
                   className={`h-10 w-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                    isCurrent ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/60 shadow-[0_4px_12px_-4px_rgba(6,182,212,0.4)]' :
+                    isCurrent ? 'border-red-600 bg-red-50 dark:bg-red-950/60 shadow-[0_4px_12px_-4px_rgba(220,38,38,0.4)]' :
                     isPast ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60' : 'border-border bg-card'
                   }`}
                 >
-                  {isPast ? <CheckCircle2 className="h-5 w-5 text-emerald-500" /> : <Icon className={`h-5 w-5 ${isCurrent ? 'text-cyan-600' : 'text-slate-400'}`} />}
+                  {isPast ? <CheckCircle2 className="h-5 w-5 text-emerald-500" /> : <Icon className={`h-5 w-5 ${isCurrent ? 'text-red-600' : 'text-slate-400'}`} />}
                 </div>
-                <span className={`text-[10px] font-medium hidden sm:block ${isCurrent ? 'text-cyan-700 dark:text-cyan-400' : isPast ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
+                <span className={`text-[10px] font-medium hidden sm:block ${isCurrent ? 'text-red-700 dark:text-red-400' : isPast ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
                   {s.label}
                 </span>
               </div>
@@ -218,7 +218,7 @@ export function SellerOnboardingView() {
             {/* Step 0: Welcome */}
             {step === 0 && (
               <div className="text-center py-8">
-                <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-400 flex items-center justify-center mx-auto mb-6 shadow-[0_8px_24px_-6px_rgba(6,182,212,0.5)]">
+                <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-red-600 to-rose-500 flex items-center justify-center mx-auto mb-6 shadow-[0_8px_24px_-6px_rgba(220,38,38,0.5)]">
                   <Store className="h-10 w-10 text-white" />
                 </div>
                 <h1 className="text-2xl sm:text-3xl font-bold mb-3">Xác Minh Mở Gian Hàng Bán Linh Kiện</h1>
@@ -234,7 +234,7 @@ export function SellerOnboardingView() {
                     const Icon = b.icon;
                     return (
                       <div key={i} className="rounded-xl border border-border/60 bg-card p-4 text-center">
-                        <Icon className="h-6 w-6 text-cyan-500 mx-auto mb-2" />
+                        <Icon className="h-6 w-6 text-red-600 mx-auto mb-2" />
                         <p className="text-sm font-semibold">{b.title}</p>
                         <p className="text-xs text-muted-foreground mt-0.5">{b.desc}</p>
                       </div>
@@ -257,7 +257,7 @@ export function SellerOnboardingView() {
                   <div>
                     <label className="text-sm font-medium mb-2 block">Front Side</label>
                     <div
-                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-cyan-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60 dark:bg-slate-900/60"
+                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-red-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60 dark:bg-slate-900/60"
                       onClick={() => document.getElementById('id-front')?.click()}
                     >
                       {idFront ? (
@@ -276,7 +276,7 @@ export function SellerOnboardingView() {
                   <div>
                     <label className="text-sm font-medium mb-2 block">Back Side</label>
                     <div
-                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-cyan-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60 dark:bg-slate-900/60"
+                      className="aspect-[1.6] rounded-xl border-2 border-dashed border-border/60 hover:border-red-400 transition-colors cursor-pointer overflow-hidden bg-slate-50/60 dark:bg-slate-900/60"
                       onClick={() => document.getElementById('id-back')?.click()}
                     >
                       {idBack ? (
@@ -302,7 +302,7 @@ export function SellerOnboardingView() {
                 <Button
                   onClick={verifyId}
                   disabled={!idFront || !idBack || idVerifying || idVerified}
-                  className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
                 >
                   {idVerifying ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
                   {idVerifying ? 'Verifying ID...' : idVerified ? 'Verified' : 'Verify ID'}
@@ -318,10 +318,10 @@ export function SellerOnboardingView() {
 
                 {!cameraOn && !biometricDone && (
                   <div className="flex flex-col items-center gap-4 py-8">
-                    <div className="h-24 w-24 rounded-full bg-cyan-50 border-2 border-cyan-200 flex items-center justify-center">
-                      <Camera className="h-10 w-10 text-cyan-500" />
+                    <div className="h-24 w-24 rounded-full bg-red-50 border-2 border-red-200 flex items-center justify-center">
+                      <Camera className="h-10 w-10 text-red-600" />
                     </div>
-                    <Button onClick={startCamera} className="bg-cyan-600 hover:bg-cyan-700 text-white">
+                    <Button onClick={startCamera} className="bg-red-600 hover:bg-red-700 text-white">
                       <Camera className="h-4 w-4 mr-2" />
                       Enable Camera
                     </Button>
@@ -330,14 +330,14 @@ export function SellerOnboardingView() {
 
                 {cameraOn && !biometricDone && (
                   <div className="flex flex-col items-center gap-4">
-                    <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-cyan-400 shadow-[0_0_30px_-8px_rgba(6,182,212,0.5)]">
+                    <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-red-400 shadow-[0_0_30px_-8px_rgba(220,38,38,0.5)]">
                       <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
                       {/* Scanning overlay */}
                       {scanning && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-cyan-900/30">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-900/30">
                           <div className="w-full px-4">
-                            <div className="h-1.5 bg-cyan-900/50 rounded-full overflow-hidden">
-                              <div className="h-full bg-cyan-400 rounded-full transition-all" style={{ width: `${scanProgress}%` }} />
+                            <div className="h-1.5 bg-red-900/50 rounded-full overflow-hidden">
+                              <div className="h-full bg-red-400 rounded-full transition-all" style={{ width: `${scanProgress}%` }} />
                             </div>
                           </div>
                         </div>
@@ -346,7 +346,7 @@ export function SellerOnboardingView() {
 
                     {scanning ? (
                       <div className="text-center">
-                        <p className="text-sm font-medium text-cyan-700 dark:text-cyan-400 mb-1">Scanning... {scanProgress}%</p>
+                        <p className="text-sm font-medium text-red-700 dark:text-red-400 mb-1">Scanning... {scanProgress}%</p>
                         <p className="text-xs text-muted-foreground">Keep looking at the camera</p>
                       </div>
                     ) : (
@@ -355,7 +355,7 @@ export function SellerOnboardingView() {
                           <p>Look at the camera and blink slowly</p>
                           <p>Turn your head left, then right</p>
                         </div>
-                        <Button onClick={startBiometricScan} className="bg-cyan-600 hover:bg-cyan-700 text-white">
+                        <Button onClick={startBiometricScan} className="bg-red-600 hover:bg-red-700 text-white">
                           <ScanFace className="h-4 w-4 mr-2" />
                           Start Biometric Scan
                         </Button>
@@ -386,15 +386,15 @@ export function SellerOnboardingView() {
 
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium">Shop Name *</label>
-                  <input value={shopName} onChange={e => setShopName(e.target.value)} placeholder="e.g. BoardForge Studio" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                  <input value={shopName} onChange={e => setShopName(e.target.value)} placeholder="e.g. BoardForge Studio" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium">Description *</label>
-                  <textarea value={shopDesc} onChange={e => setShopDesc(e.target.value)} placeholder="What do you sell? What makes your shop special?" rows={3} className="w-full px-3 py-2 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none resize-none" />
+                  <textarea value={shopDesc} onChange={e => setShopDesc(e.target.value)} placeholder="What do you sell? What makes your shop special?" rows={3} className="w-full px-3 py-2 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none resize-none" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium">Shop Category</label>
-                  <select value={shopCategory} onChange={e => setShopCategory(e.target.value)} className="w-full h-10 px-3 rounded-md border border-border/60 bg-background focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none">
+                  <select value={shopCategory} onChange={e => setShopCategory(e.target.value)} className="w-full h-10 px-3 rounded-md border border-border/60 bg-background focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none">
                     <option>PCB</option>
                     <option>Components</option>
                     <option>Dev Boards</option>
@@ -404,7 +404,7 @@ export function SellerOnboardingView() {
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium">Specializations (comma-separated)</label>
-                  <input value={specializations} onChange={e => setSpecializations(e.target.value)} placeholder="e.g. PCB Design, ESP32, KiCad, Firmware" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                  <input value={specializations} onChange={e => setSpecializations(e.target.value)} placeholder="e.g. PCB Design, ESP32, KiCad, Firmware" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                 </div>
               </div>
             )}
@@ -416,8 +416,8 @@ export function SellerOnboardingView() {
                 <p className="text-sm text-muted-foreground mb-4">Shipping partners will pick up your products from this address</p>
 
                 {/* Map placeholder */}
-                <div className="h-32 rounded-xl bg-gradient-to-br from-cyan-50 to-teal-50 border border-cyan-100 flex items-center justify-center mb-4">
-                  <div className="flex flex-col items-center text-cyan-600">
+                <div className="h-32 rounded-xl bg-gradient-to-br from-red-50 to-rose-50 border border-red-100 flex items-center justify-center mb-4">
+                  <div className="flex flex-col items-center text-red-600">
                     <MapPin className="h-6 w-6 mb-1" />
                     <span className="text-xs font-medium">Pickup location on map</span>
                   </div>
@@ -426,29 +426,29 @@ export function SellerOnboardingView() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium">Full Name *</label>
-                    <input value={addrName} onChange={e => setAddrName(e.target.value)} className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                    <input value={addrName} onChange={e => setAddrName(e.target.value)} className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium">Phone *</label>
-                    <input value={addrPhone} onChange={e => setAddrPhone(e.target.value)} placeholder="0901234567" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                    <input value={addrPhone} onChange={e => setAddrPhone(e.target.value)} placeholder="0901234567" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                   </div>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium">Address Line *</label>
-                  <input value={addrLine} onChange={e => setAddrLine(e.target.value)} placeholder="123 Nguyen Hue" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                  <input value={addrLine} onChange={e => setAddrLine(e.target.value)} placeholder="123 Nguyen Hue" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium">City *</label>
-                    <input value={addrCity} onChange={e => setAddrCity(e.target.value)} placeholder="Ho Chi Minh" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                    <input value={addrCity} onChange={e => setAddrCity(e.target.value)} placeholder="Ho Chi Minh" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium">District</label>
-                    <input value={addrDistrict} onChange={e => setAddrDistrict(e.target.value)} placeholder="District 1" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                    <input value={addrDistrict} onChange={e => setAddrDistrict(e.target.value)} placeholder="District 1" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium">Ward</label>
-                    <input value={addrWard} onChange={e => setAddrWard(e.target.value)} placeholder="Ben Nghe" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 outline-none" />
+                    <input value={addrWard} onChange={e => setAddrWard(e.target.value)} placeholder="Ben Nghe" className="w-full h-10 px-3 rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none" />
                   </div>
                 </div>
               </div>
@@ -489,12 +489,12 @@ export function SellerOnboardingView() {
           )}
 
           {step < STEPS.length - 1 ? (
-            <Button onClick={next} disabled={!canProceed()} className="bg-cyan-600 hover:bg-cyan-700 text-white">
+            <Button onClick={next} disabled={!canProceed()} className="bg-red-600 hover:bg-red-700 text-white">
               Next
               <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
           ) : (
-            <Button onClick={submitApplication} disabled={submitting} className="bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white">
+            <Button onClick={submitApplication} disabled={submitting} className="bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 text-white">
               {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
               {submitting ? 'Submitting...' : 'Submit Application'}
             </Button>

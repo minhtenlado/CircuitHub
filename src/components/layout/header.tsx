@@ -274,7 +274,7 @@ function CommerceNav({ onNavigate }: { onNavigate?: () => void }) {
           100% Linh kiện chuẩn
         </span>
         <span className="text-border">|</span>
-        <span className="inline-flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-medium">
+        <span className="inline-flex items-center gap-1 text-red-600 dark:text-red-400 font-medium">
           <Truck className="h-3 w-3" />
           Giao hàng 24-48h
         </span>
@@ -436,7 +436,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
         />
         {loading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-cyan-300 border-t-cyan-600" />
+            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-300 border-t-red-600" />
           </div>
         )}
         {!loading && query && (
@@ -483,9 +483,9 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                         <button
                           key={s}
                           onClick={() => { setQuery(s); submit(s); }}
-                          className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-left hover:bg-cyan-50 transition-colors group"
+                          className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-left hover:bg-red-50 transition-colors group"
                         >
-                          <Clock className="h-3.5 w-3.5 text-muted-foreground group-hover:text-cyan-600 flex-shrink-0" />
+                          <Clock className="h-3.5 w-3.5 text-muted-foreground group-hover:text-red-600 flex-shrink-0" />
                           <span className="flex-1 truncate text-slate-700">{s}</span>
                           <span
                             onClick={(e) => { e.stopPropagation(); searchHistory.remove(s); }}
@@ -507,7 +507,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                       <button
                         key={s}
                         onClick={() => { setQuery(s); submit(s); }}
-                        className="rounded-full border border-cyan-200/60 bg-cyan-50/60 px-2.5 py-1 text-xs font-medium text-cyan-800 transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                        className="rounded-full border border-red-200/60 bg-red-50/60 px-2.5 py-1 text-xs font-medium text-red-800 transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
                       >
                         {s}
                       </button>
@@ -527,7 +527,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
             {/* Loading */}
             {query.trim().length >= 2 && loading && (
               <div className="p-4 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
-                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-cyan-300 border-t-cyan-600" />
+                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-300 border-t-red-600" />
                 {t('common.searching')}
               </div>
             )}
@@ -550,7 +550,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                           onMouseEnter={() => setActiveIndex(idx)}
                           className={cn(
                             'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
-                            activeIndex === idx ? 'bg-cyan-50 dark:bg-cyan-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
+                            activeIndex === idx ? 'bg-red-50 dark:bg-red-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
                           )}
                         >
                           <div className="h-9 w-9 flex-shrink-0 overflow-hidden rounded-md bg-muted border border-border/40">
@@ -564,7 +564,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                               {p.brand ? `${p.brand} · ` : ''}{p.shopName ?? 'Shop'}
                             </p>
                           </div>
-                          <span className="text-xs font-bold text-cyan-700 dark:text-cyan-400 tabular-nums flex-shrink-0">
+                          <span className="text-xs font-bold text-red-700 dark:text-red-400 tabular-nums flex-shrink-0">
                             {new Intl.NumberFormat('vi-VN').format(p.price)}₫
                           </span>
                         </button>
@@ -588,11 +588,11 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                           onMouseEnter={() => setActiveIndex(idx)}
                           className={cn(
                             'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
-                            activeIndex === idx ? 'bg-cyan-50 dark:bg-cyan-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
+                            activeIndex === idx ? 'bg-red-50 dark:bg-red-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
                           )}
                         >
-                          <div className="h-8 w-8 flex-shrink-0 rounded-md bg-cyan-50 dark:bg-cyan-950/50 border border-cyan-100 dark:border-cyan-800 flex items-center justify-center">
-                            <Package className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+                          <div className="h-8 w-8 flex-shrink-0 rounded-md bg-red-50 dark:bg-red-950/50 border border-red-100 dark:border-red-800 flex items-center justify-center">
+                            <Package className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
                           </div>
                           <span className="text-sm font-medium flex-1">{c.name}</span>
                           <span className="text-[10px] text-muted-foreground">{t('common.categories')}</span>
@@ -617,7 +617,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                           onMouseEnter={() => setActiveIndex(idx)}
                           className={cn(
                             'flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors',
-                            activeIndex === idx ? 'bg-cyan-50 dark:bg-cyan-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
+                            activeIndex === idx ? 'bg-red-50 dark:bg-red-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60',
                           )}
                         >
                           <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full bg-muted border border-border/40">
@@ -628,7 +628,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate flex items-center gap-1">
                               {s.name}
-                              {s.verified && <span className="text-cyan-500 text-xs">✓</span>}
+                              {s.verified && <span className="text-red-500 text-xs">✓</span>}
                             </p>
                             <p className="text-xs text-muted-foreground">★ {s.rating.toFixed(1)}</p>
                           </div>
@@ -657,7 +657,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                               'rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
                               activeIndex === idx
                                 ? 'border-primary bg-primary text-primary-foreground'
-                                : 'border-cyan-200/60 bg-cyan-50/60 text-cyan-800 hover:border-primary',
+                                : 'border-red-200/60 bg-red-50/60 text-red-800 hover:border-primary',
                             )}
                           >
                             {b}
@@ -671,7 +671,7 @@ function SearchBar({ compact = false }: { compact?: boolean }) {
                 {/* View all results */}
                 <button
                   onClick={() => submit()}
-                  className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg border border-cyan-200 dark:border-cyan-800 bg-cyan-50/40 dark:bg-cyan-950/40 p-2 text-sm font-medium text-cyan-700 dark:text-cyan-300 transition-colors hover:bg-cyan-100/50 dark:hover:bg-cyan-900/50"
+                  className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg border border-red-200 dark:border-red-800 bg-red-50/40 dark:bg-red-950/40 p-2 text-sm font-medium text-red-700 dark:text-red-300 transition-colors hover:bg-red-100/50 dark:hover:bg-red-900/50"
                 >
                   <Search className="h-3.5 w-3.5" />
                   {t('common.viewAllResults').replace('{query}', query)}
@@ -757,14 +757,14 @@ function LanguageSwitcher() {
               onClick={() => setLang(l.code as Lang)}
               className={cn(
                 'flex items-center justify-between gap-2 cursor-pointer',
-                isActive && 'bg-cyan-50/60',
+                isActive && 'bg-red-50/60',
               )}
             >
               <span className="flex items-center gap-2">
                 <span className="text-base leading-none">{l.flag}</span>
                 <span className="text-sm">{l.label}</span>
               </span>
-              {isActive && <Check className="h-3.5 w-3.5 text-cyan-600" />}
+              {isActive && <Check className="h-3.5 w-3.5 text-red-600" />}
             </DropdownMenuItem>
           );
         })}
@@ -820,7 +820,7 @@ function ActionCart() {
 /* ---------- Notifications Bell + dropdown ---------- */
 /* ---------- Notifications Bell with pulse + mark-all-as-read ---------- */
 const NOTIF_ICON_MAP: Record<string, { icon: any; color: string; bg: string }> = {
-  ORDER_CREATED: { icon: Package, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/60' },
+  ORDER_CREATED: { icon: Package, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
   ORDER_SHIPPED: { icon: Truck, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-950/60' },
   PAYMENT_SUCCESS: { icon: DollarSign, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/60' },
   PAYMENT_FAILED: { icon: AlertCircle, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
@@ -832,8 +832,8 @@ const NOTIF_ICON_MAP: Record<string, { icon: any; color: string; bg: string }> =
   WITHDRAWAL_COMPLETED: { icon: CheckCircle2, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/60' },
   WITHDRAWAL_REJECTED: { icon: XCircle, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
   PROMOTION: { icon: Sparkles, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-50 dark:bg-violet-950/60' },
-  NEW_SELLER: { icon: Store, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/60' },
-  NEW_ORDER: { icon: Package, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/60' },
+  NEW_SELLER: { icon: Store, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
+  NEW_ORDER: { icon: Package, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/60' },
   DEFAULT: { icon: Bell, color: 'text-slate-600 dark:text-slate-400', bg: 'bg-slate-50 dark:bg-slate-800' },
 };
 
@@ -939,14 +939,14 @@ function NotificationsBell() {
       <DropdownMenuContent align="end" className="w-80 p-0">
         <DropdownMenuLabel className="flex items-center justify-between px-3 py-2 text-sm">
           <span className="flex items-center gap-1.5">
-            <Bell className="h-3.5 w-3.5 text-cyan-600" />
+            <Bell className="h-3.5 w-3.5 text-red-600" />
             {t('common.notifications')}
           </span>
           {unread > 0 && (
             <button
               onClick={markAllRead}
               disabled={markingRead}
-              className="text-[11px] font-medium text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors disabled:opacity-50"
+              className="text-[11px] font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors disabled:opacity-50"
             >
               {markingRead ? t('common.loading') : t('common.markAllRead')}
             </button>
@@ -971,7 +971,7 @@ function NotificationsBell() {
                   onClick={() => handleNotificationClick(n)}
                   className={cn(
                     'w-full flex gap-3 px-3 py-2.5 text-sm text-left transition-colors hover:bg-accent border-b border-border/30 last:border-0',
-                    !n.read && 'bg-cyan-50/40 dark:bg-cyan-950/15',
+                    !n.read && 'bg-red-50/40 dark:bg-red-950/15',
                   )}
                 >
                   <div className={cn('mt-0.5 h-7 w-7 shrink-0 rounded-full flex items-center justify-center', cfg.bg)}>
@@ -980,7 +980,7 @@ function NotificationsBell() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <span className="truncate font-medium text-foreground text-xs">{n.title}</span>
-                      {!n.read && <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500" />}
+                      {!n.read && <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-red-500" />}
                     </div>
                     <div className="line-clamp-2 text-[11px] text-muted-foreground mt-0.5">{n.body}</div>
                     <div className="mt-0.5 flex items-center justify-between">
@@ -1050,7 +1050,7 @@ function RoleSwitcher() {
             {active && (
               <motion.span
                 layoutId="role-pill"
-                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)]"
+                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-red-600 to-rose-500 shadow-[0_4px_14px_-4px_rgba(220,38,38,0.55)]"
                 transition={{ type: 'spring', stiffness: 320, damping: 28 }}
               />
             )}
@@ -1084,7 +1084,7 @@ function UserMenu() {
     return (
       <Button
         size="sm"
-        className="bg-gradient-to-r from-cyan-500 to-teal-400 text-white shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)] hover:from-cyan-600 hover:to-teal-500 cursor-pointer"
+        className="bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-[0_4px_14px_-4px_rgba(220,38,38,0.55)] hover:from-red-700 hover:to-rose-600 cursor-pointer"
         onClick={() => goAuth('login')}
       >
         <User className="h-4 w-4" />
@@ -1100,7 +1100,7 @@ function UserMenu() {
     >
       <Avatar className="h-7 w-7 ring-1 ring-primary/30">
         {user.avatarUrl ? <AvatarImage src={user.avatarUrl} alt={user.name} /> : null}
-        <AvatarFallback className="bg-cyan-100 text-xs font-semibold text-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-200">
+        <AvatarFallback className="bg-red-100 text-xs font-semibold text-red-800 dark:bg-red-950/50 dark:text-red-200">
           {initials(user.name)}
         </AvatarFallback>
       </Avatar>
@@ -1131,14 +1131,14 @@ function UserMenu() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {(user.role === 'SELLER' || user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
-          <DropdownMenuItem onClick={() => goSeller()} className="text-cyan-600 font-medium cursor-pointer">
+          <DropdownMenuItem onClick={() => goSeller()} className="text-red-600 font-medium cursor-pointer">
             <Store className="h-4 w-4" /> Quản Lý Cửa Hàng (Shop Admin)
           </DropdownMenuItem>
         )}
         {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => goAdmin()} className="text-cyan-600 font-medium">
+            <DropdownMenuItem onClick={() => goAdmin()} className="text-red-600 font-medium">
               <Shield className="h-4 w-4" /> Cổng Quản trị (Admin)
             </DropdownMenuItem>
           </>
@@ -1194,7 +1194,7 @@ function MobileMenu() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-80 max-w-[85vw] p-0">
-        <SheetHeader className="border-b border-border/60 bg-gradient-to-br from-cyan-50/60 to-teal-50/40 px-4 py-4 dark:from-cyan-950/20 dark:to-teal-950/10">
+        <SheetHeader className="border-b border-border/60 bg-gradient-to-br from-red-50/60 to-rose-50/40 px-4 py-4 dark:from-red-950/20 dark:to-rose-950/10">
           <SheetTitle className="flex items-center justify-between">
             <div onClick={() => setOpen(false)} role="presentation">
               <Logo size="sm" />
@@ -1254,7 +1254,7 @@ function MobileMenu() {
               />
               {(user.role === 'SELLER' || user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
                 <MobileLink
-                  icon={<Store className="h-4 w-4 text-cyan-500" />}
+                  icon={<Store className="h-4 w-4 text-red-500" />}
                   label="Quản Lý Cửa Hàng (Shop Admin)"
                   onClick={() => {
                     goSeller('seller');
@@ -1413,7 +1413,7 @@ export function Header() {
     <header
       className={cn(
         'sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-md transition-shadow',
-        scrolled && 'shadow-[0_8px_24px_-12px_rgba(6,182,212,0.35)]',
+        scrolled && 'shadow-[0_8px_24px_-12px_rgba(220,38,38,0.35)]',
       )}
     >
       {/* Top Announcement Bar / Ticker */}

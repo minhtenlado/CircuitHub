@@ -35,14 +35,14 @@ interface CatEntry {
 }
 
 const CATEGORIES: CatEntry[] = [
-  { slug: 'dev-boards', labelKey: 'categories.devBoards', icon: CircuitBoard, accent: 'from-cyan-500 to-cyan-400', hotTags: ['ESP32', 'STM32', 'RP2040'] },
-  { slug: 'pcb-boards', labelKey: 'categories.pcbBoards', icon: Layers, accent: 'from-teal-500 to-cyan-400', hotTags: ['4-Lớp', 'KiCad 9', 'Gerber'] },
-  { slug: 'components', labelKey: 'categories.components', icon: Cpu, accent: 'from-cyan-500 to-teal-400', hotTags: ['IC Nguồn', 'Mosfet', 'Diode'] },
-  { slug: 'sensors', labelKey: 'categories.sensors', icon: Radar, accent: 'from-sky-500 to-cyan-400', hotTags: ['BME280', 'MPU6050', 'SHT40'] },
-  { slug: 'modules', labelKey: 'categories.modules', icon: Box, accent: 'from-cyan-500 to-aqua-400', hotTags: ['OLED 0.96"', 'Relay', 'Sạc pin'] },
-  { slug: 'tools', labelKey: 'categories.tools', icon: Wrench, accent: 'from-teal-500 to-aqua-400', hotTags: ['Đồng hồ VOM', 'Mỏ hàn T12'] },
-  { slug: 'gerber-files', labelKey: 'categories.gerberFiles', icon: FileArchive, accent: 'from-teal-500 to-cyan-400', hotTags: ['Bo sạc', 'Nguồn xung'] },
-  { slug: 'firmware', labelKey: 'categories.firmware', icon: Binary, accent: 'from-cyan-500 to-cyan-400', hotTags: ['ESP-IDF', 'MicroPython'] },
+  { slug: 'dev-boards', labelKey: 'categories.devBoards', icon: CircuitBoard, accent: 'from-red-600 to-red-500', hotTags: ['ESP32', 'STM32', 'RP2040'] },
+  { slug: 'pcb-boards', labelKey: 'categories.pcbBoards', icon: Layers, accent: 'from-rose-500 to-red-500', hotTags: ['4-Lớp', 'KiCad 9', 'Gerber'] },
+  { slug: 'components', labelKey: 'categories.components', icon: Cpu, accent: 'from-red-600 to-rose-500', hotTags: ['IC Nguồn', 'Mosfet', 'Diode'] },
+  { slug: 'sensors', labelKey: 'categories.sensors', icon: Radar, accent: 'from-red-500 to-rose-500', hotTags: ['BME280', 'MPU6050', 'SHT40'] },
+  { slug: 'modules', labelKey: 'categories.modules', icon: Box, accent: 'from-red-600 to-aqua-400', hotTags: ['OLED 0.96"', 'Relay', 'Sạc pin'] },
+  { slug: 'tools', labelKey: 'categories.tools', icon: Wrench, accent: 'from-rose-500 to-aqua-400', hotTags: ['Đồng hồ VOM', 'Mỏ hàn T12'] },
+  { slug: 'gerber-files', labelKey: 'categories.gerberFiles', icon: FileArchive, accent: 'from-rose-500 to-red-500', hotTags: ['Bo sạc', 'Nguồn xung'] },
+  { slug: 'firmware', labelKey: 'categories.firmware', icon: Binary, accent: 'from-red-600 to-red-500', hotTags: ['ESP-IDF', 'MicroPython'] },
 ];
 
 export function CategoriesSection() {
@@ -95,7 +95,7 @@ export function CategoriesSection() {
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.35, delay: Math.min(i * 0.04, 0.4) }}
                 whileHover={{ y: -3 }}
-                className="group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-card dark:bg-slate-900 p-4 text-left transition-all duration-300 hover:border-cyan-400/60 dark:hover:border-cyan-500/50 hover:shadow-[0_12px_32px_-12px_rgba(6,182,212,0.3)] cursor-pointer"
+                className="group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-card dark:bg-slate-900 p-4 text-left transition-all duration-300 hover:border-red-500/50 dark:hover:border-red-600/50 hover:shadow-[0_12px_32px_-12px_rgba(220,38,38,0.25)] cursor-pointer"
               >
                 <div>
                   <div className="flex items-start justify-between">
@@ -107,14 +107,14 @@ export function CategoriesSection() {
                     </div>
 
                     {/* Hover arrow */}
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 dark:bg-cyan-950/50 dark:text-cyan-400 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
                       <ArrowUpRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
 
                   {/* Name + count */}
                   <div className="mt-3 flex flex-col gap-0.5 min-w-0">
-                    <span className="font-bold text-foreground text-sm leading-tight truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                    <span className="font-bold text-foreground text-sm leading-tight truncate group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
                       {t(cat.labelKey)}
                     </span>
                     <span className="text-[11px] text-muted-foreground tabular-nums font-mono">
@@ -132,7 +132,7 @@ export function CategoriesSection() {
                         e.stopPropagation();
                         goProducts({ q: tag });
                       }}
-                      className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 font-mono transition-colors"
+                      className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 font-mono transition-colors"
                     >
                       {tag}
                     </span>
@@ -169,7 +169,7 @@ export function SectionHeader({
     >
       <div className="flex flex-col gap-2 max-w-2xl">
         {eyebrow && (
-          <span className="text-xs font-semibold tracking-wider text-cyan-600 uppercase">
+          <span className="text-xs font-semibold tracking-wider text-red-600 uppercase">
             {eyebrow}
           </span>
         )}

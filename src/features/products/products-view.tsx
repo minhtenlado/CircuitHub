@@ -788,7 +788,7 @@ function FilterCard({
 }) {
   return (
     <Card className="py-3 px-3 gap-3 border-border/60 bg-card/90 dark:bg-slate-900/90 backdrop-blur-sm">
-      <div className="flex items-center gap-1.5 px-0 text-xs font-semibold uppercase tracking-wider text-cyan-700 dark:text-cyan-400">
+      <div className="flex items-center gap-1.5 px-0 text-xs font-semibold uppercase tracking-wider text-red-700 dark:text-red-400">
         <Icon className="h-3.5 w-3.5" />
         {title}
       </div>
@@ -813,14 +813,14 @@ function RadioRow({
       type="button"
       onClick={onCheck}
       className={cn(
-        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-left transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
-        checked && 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 font-medium',
+        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-left transition-colors hover:bg-red-50 dark:hover:bg-slate-800',
+        checked && 'bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 font-medium',
       )}
     >
       <span
         className={cn(
           'flex h-3.5 w-3.5 items-center justify-center rounded-full border transition-colors',
-          checked ? 'bg-cyan-500 border-cyan-500' : 'border-input bg-background',
+          checked ? 'bg-red-500 border-red-500' : 'border-input bg-background',
         )}
       >
         {checked && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
@@ -843,11 +843,11 @@ function CheckRow({
   return (
     <label
       className={cn(
-        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
-        checked && 'text-cyan-700 dark:text-cyan-300 font-medium',
+        'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-red-50 dark:hover:bg-slate-800',
+        checked && 'text-red-700 dark:text-red-300 font-medium',
       )}
     >
-      <Checkbox checked={checked} onCheckedChange={(v) => onCheck(!!v)} className="data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500" />
+      <Checkbox checked={checked} onCheckedChange={(v) => onCheck(!!v)} className="data-[state=checked]:bg-red-500 data-[state=checked]:border-red-500" />
       <span className="truncate">{label}</span>
     </label>
   );
@@ -879,8 +879,8 @@ function CategoryTreeRow({
     <div>
       <div
         className={cn(
-          'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
-          selected && 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 font-medium',
+          'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-red-50 dark:hover:bg-slate-800',
+          selected && 'bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 font-medium',
         )}
         onClick={() => onSelect(slug)}
       >
@@ -904,7 +904,7 @@ function CategoryTreeRow({
         <span
           className={cn(
             'flex h-3.5 w-3.5 items-center justify-center rounded-full border transition-colors',
-            selected ? 'bg-cyan-500 border-cyan-500' : 'border-input bg-background',
+            selected ? 'bg-red-500 border-red-500' : 'border-input bg-background',
           )}
         >
           {selected && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
@@ -926,14 +926,14 @@ function CategoryTreeRow({
                 key={ch.id}
                 onClick={() => onSelect(ch.slug)}
                 className={cn(
-                  'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-cyan-50 dark:hover:bg-slate-800',
-                  isChildSel && 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 font-medium',
+                  'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-red-50 dark:hover:bg-slate-800',
+                  isChildSel && 'bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 font-medium',
                 )}
               >
                 <span
                   className={cn(
                     'flex h-3 w-3 items-center justify-center rounded-full border transition-colors',
-                    isChildSel ? 'bg-cyan-500 border-cyan-500' : 'border-input bg-background',
+                    isChildSel ? 'bg-red-500 border-red-500' : 'border-input bg-background',
                   )}
                 >
                   {isChildSel && <span className="h-1 w-1 rounded-full bg-white" />}
@@ -973,7 +973,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
   const { t } = useI18n();
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-500 border border-cyan-100 dark:border-cyan-800/60">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-950/60 text-red-500 border border-red-100 dark:border-red-800/60">
         <PackageSearch className="h-8 w-8" />
       </div>
       <div>
@@ -982,7 +982,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
           {t('filter.noProductsHint')}
         </p>
       </div>
-      <Button variant="outline" className="border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onReset}>
+      <Button variant="outline" className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-slate-800" onClick={onReset}>
         <RotateCcw className="h-4 w-4" />
         {t('filter.reset')}
       </Button>

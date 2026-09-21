@@ -37,13 +37,13 @@ export function FlashSaleSection() {
   const products = data?.items ?? [];
 
   return (
-    <section className="relative py-6 sm:py-8 lg:py-10 border-b border-border/50 bg-gradient-to-b from-cyan-500/[0.03] via-transparent to-transparent">
+    <section className="relative py-6 sm:py-8 lg:py-10 border-b border-border/50 bg-gradient-to-b from-red-500/[0.03] via-transparent to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Countdown */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-5 border-b border-border/50">
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-cyan-500 text-white shadow-xs">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-600 text-white shadow-xs">
                 <Flame className="h-5 w-5" />
               </span>
               <div>
@@ -57,7 +57,7 @@ export function FlashSaleSection() {
             </div>
 
             {/* Countdown Badge */}
-            <div className="flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400">
+            <div className="flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-mono font-bold text-red-600 dark:text-red-400">
               <Clock className="h-3.5 w-3.5 mr-0.5" />
               <span>{t('flashSale.endsIn')}:</span>
               <span className="rounded bg-card px-1.5 py-0.5 shadow-xs border border-border/60">
@@ -78,7 +78,7 @@ export function FlashSaleSection() {
             variant="outline"
             size="sm"
             onClick={() => goProducts({ sort: 'trending' })}
-            className="self-start sm:self-auto h-8 px-3 rounded-lg border-cyan-500/40 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-500/10 hover:text-cyan-600 text-xs font-semibold gap-1.5 cursor-pointer"
+            className="self-start sm:self-auto h-8 px-3 rounded-lg border-red-500/40 text-red-700 dark:text-red-300 hover:bg-red-500/10 hover:text-red-600 text-xs font-semibold gap-1.5 cursor-pointer"
           >
             <span>{t('flashSale.viewAll')}</span>
             <ArrowRight className="h-3.5 w-3.5" />

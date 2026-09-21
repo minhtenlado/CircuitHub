@@ -87,10 +87,10 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.06, 0.4) }}
       whileHover={{ y: -4 }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-white dark:bg-slate-900 shadow-sm transition-all duration-300 hover:border-cyan-300 hover:shadow-[0_18px_50px_-20px_rgba(6,182,212,0.45)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-white dark:bg-slate-900 shadow-sm transition-all duration-300 hover:border-red-300 hover:shadow-[0_18px_50px_-20px_rgba(220,38,38,0.35)]"
     >
       {/* Banner */}
-      <div className="relative h-24 w-full overflow-hidden bg-gradient-to-br from-cyan-100 via-cyan-50 to-teal-50">
+      <div className="relative h-24 w-full overflow-hidden bg-gradient-to-br from-red-100 via-red-50 to-rose-50">
         {shop.bannerUrl ? (
           <img
             src={shop.bannerUrl}
@@ -100,7 +100,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
           />
         ) : (
           <div className="h-full w-full flex items-center justify-center">
-            <Store className="h-10 w-10 text-cyan-300" />
+            <Store className="h-10 w-10 text-red-300" />
           </div>
         )}
         {/* Verified badge (top-right) */}
@@ -120,7 +120,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
               className="h-full w-full object-cover"
             />
           ) : (
-            <span className="text-cyan-600 font-bold text-sm">
+            <span className="text-red-600 font-bold text-sm">
               {shop.name?.slice(0, 2).toUpperCase()}
             </span>
           )}
@@ -133,7 +133,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
         <div className="flex flex-col gap-1">
           <button
             onClick={() => goShop(shop.slug)}
-            className="text-left text-base font-semibold leading-tight text-foreground hover:text-cyan-700 dark:hover:text-cyan-400 transition-colors truncate"
+            className="text-left text-base font-semibold leading-tight text-foreground hover:text-red-700 dark:hover:text-red-400 transition-colors truncate"
             title={shop.name}
           >
             {shop.name}
@@ -146,7 +146,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-3 gap-1 rounded-xl bg-cyan-50/50 dark:bg-slate-800/60 border border-cyan-100/70 dark:border-slate-700/60 p-2.5">
+        <div className="grid grid-cols-3 gap-1 rounded-xl bg-red-50/50 dark:bg-slate-800/60 border border-red-100/70 dark:border-slate-700/60 p-2.5">
           <Stat
             icon={ShoppingBag}
             value={(shop.completedOrders ?? 0).toLocaleString('vi-VN')}
@@ -171,7 +171,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
               <Badge
                 key={s}
                 variant="outline"
-                className="bg-cyan-50 text-cyan-700 border-cyan-200 font-medium text-[10px] dark:bg-cyan-900/30 dark:text-cyan-300 dark:border-cyan-700/50"
+                className="bg-red-50 text-red-700 border-red-200 font-medium text-[10px] dark:bg-red-900/30 dark:text-red-300 dark:border-red-700/50"
               >
                 {s}
               </Badge>
@@ -185,7 +185,7 @@ function ShopCard({ shop, index }: { shop: any; index: number }) {
             onClick={() => goShop(shop.slug)}
             size="sm"
             variant="outline"
-            className="w-full border-cyan-200 text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800 dark:border-cyan-700/50 dark:text-cyan-300 dark:hover:bg-cyan-900/40"
+            className="w-full border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800 dark:border-red-700/50 dark:text-red-300 dark:hover:bg-red-900/40"
           >
             {t('topSellers.visitShop')}
             <ArrowRight className="h-3.5 w-3.5" />
@@ -207,7 +207,7 @@ function Stat({
 }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <Icon className="h-3.5 w-3.5 text-cyan-500 mb-0.5" />
+      <Icon className="h-3.5 w-3.5 text-red-500 mb-0.5" />
       <span className="text-[11px] font-bold text-foreground tabular-nums leading-tight">
         {value}
       </span>

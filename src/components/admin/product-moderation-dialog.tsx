@@ -58,7 +58,7 @@ const ACTION_CONFIG: Record<string, { title: string; description: string; icon: 
     title: 'Feature Product',
     description: 'This product will be highlighted on the homepage and category pages.',
     icon: Star,
-    color: 'text-cyan-600',
+    color: 'text-red-600',
     requireReason: false,
   },
   UNFEATURE: {
@@ -175,7 +175,7 @@ export function ProductModerationDialog({ open, onOpenChange, product, action }:
               action === 'APPROVE' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
               action === 'REJECT' ? 'bg-red-600 hover:bg-red-700 text-white' :
               action === 'SUSPEND' ? 'bg-amber-600 hover:bg-amber-700 text-white' :
-              'bg-cyan-600 hover:bg-cyan-700 text-white'
+              'bg-red-600 hover:bg-red-700 text-white'
             }
           >
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Icon className="h-4 w-4 mr-2" />}

@@ -100,11 +100,11 @@ export function CartDrawer() {
         side="right"
         className="w-full sm:max-w-lg p-0 flex flex-col gap-0"
       >
-        <SheetHeader className="px-5 py-4 border-b border-border/60 bg-gradient-to-br from-cyan-50/60 to-transparent dark:from-cyan-950/20">
+        <SheetHeader className="px-5 py-4 border-b border-border/60 bg-gradient-to-br from-red-50/60 to-transparent dark:from-red-950/20">
           <SheetTitle className="flex items-center gap-2 text-base">
-            <ShoppingCart className="h-4 w-4 text-cyan-600 dark:text-cyan-500" />
+            <ShoppingCart className="h-4 w-4 text-red-600 dark:text-red-500" />
             {t('cart.title')}
-            <Badge variant="secondary" className="ml-1 bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-400">
+            <Badge variant="secondary" className="ml-1 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400">
               {count} {count === 1 ? 'item' : 'items'}
             </Badge>
           </SheetTitle>
@@ -112,8 +112,8 @@ export function CartDrawer() {
 
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 py-12">
-            <div className="h-20 w-20 rounded-full bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-800 flex items-center justify-center">
-              <ShoppingCart className="h-9 w-9 text-cyan-400 dark:text-cyan-600" />
+            <div className="h-20 w-20 rounded-full bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 flex items-center justify-center">
+              <ShoppingCart className="h-9 w-9 text-red-400 dark:text-red-600" />
             </div>
             <div className="text-center">
               <p className="text-base font-semibold text-foreground">{t('cart.empty')}</p>
@@ -121,7 +121,7 @@ export function CartDrawer() {
                 Browse PCB boards, KiCad projects, components & services.
               </p>
             </div>
-            <Button onClick={handleBrowse} className="bg-cyan-600 hover:bg-cyan-700 text-white dark:bg-cyan-700 dark:hover:bg-cyan-600">
+            <Button onClick={handleBrowse} className="bg-red-600 hover:bg-red-700 text-white dark:bg-red-700 dark:hover:bg-red-600">
               <Package className="h-4 w-4 mr-2" />
               {t('cart.browseProducts')}
             </Button>
@@ -132,7 +132,7 @@ export function CartDrawer() {
               {byShop.map((group) => (
                 <div key={group.shopId} className="space-y-2">
                   <div className="flex items-center gap-2 px-1 pb-2 border-b border-border/40">
-                    <Store className="h-3.5 w-3.5 text-cyan-600" />
+                    <Store className="h-3.5 w-3.5 text-red-600" />
                     <span className="text-sm font-semibold text-foreground truncate">{group.shopName}</span>
                     <Badge variant="outline" className="ml-auto bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px]">
                       ✓ Verified
@@ -146,7 +146,7 @@ export function CartDrawer() {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
-                        className="flex gap-3 p-2 rounded-lg border border-border/40 hover:border-cyan-300/40 hover:bg-cyan-50/30 transition-colors"
+                        className="flex gap-3 p-2 rounded-lg border border-border/40 hover:border-red-300/40 hover:bg-red-50/30 transition-colors"
                       >
                         <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted flex-shrink-0 border border-border/40">
                           {item.imageUrl ? (
@@ -173,7 +173,7 @@ export function CartDrawer() {
                             <div className="flex items-center border border-border/60 rounded-md">
                               <button
                                 onClick={() => updateQty(item.productId, item.quantity - 1)}
-                                className="p-1.5 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 rounded-l-md transition-colors disabled:opacity-30"
+                                className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/40 text-muted-foreground hover:text-red-700 dark:hover:text-red-400 rounded-l-md transition-colors disabled:opacity-30"
                                 disabled={item.quantity <= 1}
                                 aria-label="Decrease quantity"
                               >
@@ -184,13 +184,13 @@ export function CartDrawer() {
                               </span>
                               <button
                                 onClick={() => updateQty(item.productId, item.quantity + 1)}
-                                className="p-1.5 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 text-muted-foreground hover:text-cyan-700 dark:hover:text-cyan-400 rounded-r-md transition-colors"
+                                className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/40 text-muted-foreground hover:text-red-700 dark:hover:text-red-400 rounded-r-md transition-colors"
                                 aria-label="Increase quantity"
                               >
                                 <Plus className="h-3 w-3" />
                               </button>
                             </div>
-                            <span className="text-sm font-bold text-cyan-700 dark:text-cyan-400 tabular-nums">
+                            <span className="text-sm font-bold text-red-700 dark:text-red-400 tabular-nums">
                               {formatVND(item.price * item.quantity)}
                             </span>
                           </div>
@@ -216,7 +216,7 @@ export function CartDrawer() {
                     value={voucherCode}
                     onChange={(e) => setVoucherCode(e.target.value)}
                     placeholder="Voucher code (e.g. WELCOME10)"
-                    className="w-full h-9 pl-8 pr-3 text-sm bg-background text-foreground rounded-md border border-border/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:focus:ring-cyan-900 outline-none"
+                    className="w-full h-9 pl-8 pr-3 text-sm bg-background text-foreground rounded-md border border-border/60 focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900 outline-none"
                   />
                 </div>
                 <Button
@@ -224,7 +224,7 @@ export function CartDrawer() {
                   onClick={applyVoucher}
                   disabled={voucherLoading || !voucherCode.trim()}
                   variant="outline"
-                  className="border-cyan-300 text-cyan-700 hover:bg-cyan-50 dark:border-cyan-800 dark:text-cyan-400 dark:hover:bg-cyan-900/30"
+                  className="border-red-300 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
                 >
                   {voucherLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Apply'}
                 </Button>
@@ -269,16 +269,16 @@ export function CartDrawer() {
                 </div>
                 <div className="flex justify-between pt-1 border-t border-border/40">
                   <span className="font-semibold text-foreground">Estimated Total</span>
-                  <span className="text-lg font-bold text-cyan-700 dark:text-cyan-400 tabular-nums">{formatVND(finalTotal)}</span>
+                  <span className="text-lg font-bold text-red-700 dark:text-red-400 tabular-nums">{formatVND(finalTotal)}</span>
                 </div>
               </div>
 
               <div className="flex gap-2">
-                <Button onClick={handleCheckout} className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white dark:bg-cyan-700 dark:hover:bg-cyan-600">
+                <Button onClick={handleCheckout} className="flex-1 bg-red-600 hover:bg-red-700 text-white dark:bg-red-700 dark:hover:bg-red-600">
                   <Lock className="h-3.5 w-3.5 mr-1.5" />
                   {t('cart.checkout')}
                 </Button>
-                <Button onClick={handleBrowse} variant="outline" className="border-cyan-200 text-cyan-700 hover:bg-cyan-50 dark:border-cyan-800 dark:text-cyan-400 dark:hover:bg-cyan-900/30">
+                <Button onClick={handleBrowse} variant="outline" className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30">
                   {t('cart.continueShopping')}
                 </Button>
               </div>

@@ -24,7 +24,7 @@ export function RecentlyViewedSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 flex items-center justify-center shadow-[0_4px_14px_-4px_rgba(6,182,212,0.5)]">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-red-600 to-rose-500 flex items-center justify-center shadow-[0_4px_14px_-4px_rgba(220,38,38,0.5)]">
               <History className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -47,7 +47,7 @@ export function RecentlyViewedSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.3) }}
               onClick={() => goProduct(item.slug)}
-              className="group flex-shrink-0 w-44 sm:w-52 snap-start text-left bg-card border border-border/70 rounded-xl overflow-hidden hover:border-cyan-400/50 hover:shadow-[0_10px_30px_-12px_rgba(6,182,212,0.3)] transition-all duration-300"
+              className="group flex-shrink-0 w-44 sm:w-52 snap-start text-left bg-card border border-border/70 rounded-xl overflow-hidden hover:border-red-500/50 hover:shadow-[0_10px_30px_-12px_rgba(220,38,38,0.25)] transition-all duration-300"
             >
               <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                 {item.imageUrl && (
@@ -58,10 +58,10 @@ export function RecentlyViewedSection() {
                 </div>
               </div>
               <div className="p-3 space-y-1">
-                <p className="text-sm font-semibold line-clamp-2 group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors">{item.name}</p>
+                <p className="text-sm font-semibold line-clamp-2 group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors">{item.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{item.shopName}</p>
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-sm font-bold text-cyan-700 dark:text-cyan-400">{formatVND(item.price)}</span>
+                  <span className="text-sm font-bold text-red-700 dark:text-red-400">{formatVND(item.price)}</span>
                   <span className="text-[10px] text-muted-foreground">{timeAgo(new Date(item.viewedAt))}</span>
                 </div>
               </div>

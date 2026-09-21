@@ -52,8 +52,8 @@ const BANNERS = [
     ctaText: 'Mua ngay combo',
     category: 'dev-boards',
     query: 'ESP32',
-    accent: 'from-cyan-950/80 via-slate-900 to-slate-950',
-    glowColor: 'bg-cyan-500/20',
+    accent: 'from-red-950/80 via-slate-900 to-slate-950',
+    glowColor: 'bg-red-500/20',
     tag: 'Bán chạy nhất',
   },
   {
@@ -66,8 +66,8 @@ const BANNERS = [
     ctaText: 'Xem bo mạch',
     category: 'dev-boards',
     query: 'STM32',
-    accent: 'from-teal-950/80 via-slate-900 to-slate-950',
-    glowColor: 'bg-teal-500/20',
+    accent: 'from-rose-950/80 via-slate-900 to-slate-950',
+    glowColor: 'bg-rose-500/20',
     tag: 'Dành cho Robot',
   },
   {
@@ -179,7 +179,7 @@ export function Hero() {
       {/* Subtle circuit background grid */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#0891b20a_1px,transparent_1px),linear-gradient(to_bottom,#0891b20a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,#000_70%,transparent_100%)] opacity-70"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#dc262608_1px,transparent_1px),linear-gradient(to_bottom,#dc262608_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,#000_70%,transparent_100%)] opacity-70"
       />
 
       <div className="relative mx-auto max-w-screen-2xl px-3 sm:px-4 lg:px-6 pt-3 sm:pt-4 pb-6 sm:pb-8">
@@ -192,12 +192,12 @@ export function Hero() {
           <div className="hidden lg:col-span-3 lg:flex flex-col rounded-2xl border border-border/70 bg-card p-3 shadow-xs">
             <div className="flex items-center justify-between pb-2.5 mb-1.5 border-b border-border/50">
               <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
-                <CircuitBoard className="h-4 w-4 text-cyan-500" />
+                <CircuitBoard className="h-4 w-4 text-red-600" />
                 Danh mục linh kiện
               </span>
               <button
                 onClick={() => goProducts()}
-                className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline font-medium cursor-pointer"
+                className="text-[11px] text-red-600 dark:text-red-400 hover:underline font-medium cursor-pointer"
               >
                 Tất cả →
               </button>
@@ -210,14 +210,14 @@ export function Hero() {
                   <li key={cat.slug}>
                     <div
                       onClick={() => goCategory(cat.slug)}
-                      className="group flex flex-col p-2 rounded-xl cursor-pointer hover:bg-cyan-50/80 dark:hover:bg-cyan-950/40 border border-transparent hover:border-cyan-500/20 transition-all"
+                      className="group flex flex-col p-2 rounded-xl cursor-pointer hover:bg-red-50/80 dark:hover:bg-red-950/40 border border-transparent hover:border-red-500/20 transition-all"
                     >
-                      <div className="flex items-center justify-between text-xs font-semibold text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400">
+                      <div className="flex items-center justify-between text-xs font-semibold text-foreground group-hover:text-red-600 dark:group-hover:text-red-400">
                         <div className="flex items-center gap-2">
-                          <Icon className="h-3.5 w-3.5 text-muted-foreground group-hover:text-cyan-500" />
+                          <Icon className="h-3.5 w-3.5 text-muted-foreground group-hover:text-red-600" />
                           <span>{cat.name}</span>
                         </div>
-                        <ChevronRight className="h-3 w-3 text-muted-foreground/50 group-hover:text-cyan-500 group-hover:translate-x-0.5 transition-all" />
+                        <ChevronRight className="h-3 w-3 text-muted-foreground/50 group-hover:text-red-600 group-hover:translate-x-0.5 transition-all" />
                       </div>
 
                       {/* Hot component tags */}
@@ -229,7 +229,7 @@ export function Hero() {
                               e.stopPropagation();
                               goProducts({ q: tag });
                             }}
-                            className="text-[10px] text-muted-foreground/80 hover:text-cyan-600 dark:hover:text-cyan-300 font-mono hover:underline cursor-pointer"
+                            className="text-[10px] text-muted-foreground/80 hover:text-red-600 dark:hover:text-red-300 font-mono hover:underline cursor-pointer"
                           >
                             {tag}
                           </span>
@@ -262,10 +262,10 @@ export function Hero() {
               >
                 {/* Eyebrow badge */}
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300 backdrop-blur-sm">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/20 border border-red-500/40 px-3 py-1 text-xs font-semibold tracking-wide text-red-300 backdrop-blur-sm">
                     {slide.eyebrow}
                   </span>
-                  <Badge className="bg-cyan-500/20 border-cyan-500/40 text-cyan-300 text-[10px] font-bold">
+                  <Badge className="bg-red-500/20 border-red-500/40 text-red-300 text-[10px] font-bold">
                     {slide.tag}
                   </Badge>
                 </div>
@@ -284,7 +284,7 @@ export function Hero() {
                 <div className="mt-auto pt-4 flex flex-wrap items-center gap-3">
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase text-slate-400 tracking-wider">Giá ưu đãi</span>
-                    <span className="text-lg sm:text-xl font-bold text-cyan-400 font-mono">
+                    <span className="text-lg sm:text-xl font-bold text-red-400 font-mono">
                       {slide.priceBadge}
                     </span>
                   </div>
@@ -295,7 +295,7 @@ export function Hero() {
                       else goProducts({ q: slide.query });
                     }}
                     size="lg"
-                    className="h-10 px-5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-[0_8px_20px_-6px_rgba(6,182,212,0.6)] gap-1.5 cursor-pointer"
+                    className="h-10 px-5 rounded-xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-[0_8px_20px_-6px_rgba(220,38,38,0.6)] gap-1.5 cursor-pointer"
                   >
                     <span>{slide.ctaText}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -323,7 +323,7 @@ export function Hero() {
                     onClick={() => setCurrentSlide(i)}
                     aria-label={`Slide ${i + 1}`}
                     className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      i === currentSlide ? 'w-6 bg-cyan-400' : 'w-2 bg-slate-700 hover:bg-slate-500'
+                      i === currentSlide ? 'w-6 bg-red-500' : 'w-2 bg-slate-700 hover:bg-slate-500'
                     }`}
                   />
                 ))}
@@ -350,12 +350,12 @@ export function Hero() {
           </div>
 
           {/* 3. RIGHT COLUMN: DAILY FLASH DEAL WIDGET */}
-          <div className="lg:col-span-3 flex flex-col justify-between rounded-2xl border border-cyan-500/30 bg-gradient-to-b from-cyan-500/5 via-card to-card p-4 shadow-xs">
+          <div className="lg:col-span-3 flex flex-col justify-between rounded-2xl border border-red-500/30 bg-gradient-to-b from-red-500/5 via-card to-card p-4 shadow-xs">
             {/* Header: Flash deal */}
             <div>
               <div className="flex items-center justify-between pb-2 border-b border-border/60">
-                <span className="flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">
-                  <Flame className="h-4 w-4 text-cyan-500" />
+                <span className="flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">
+                  <Flame className="h-4 w-4 text-red-600" />
                   Deal chớp nhoáng
                 </span>
                 <span className="text-[10px] font-bold rounded px-1.5 py-0.5 bg-red-500 text-white">
@@ -376,8 +376,8 @@ export function Hero() {
                 {/* Product Image */}
                 <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-900/60 border border-border/50 flex items-center justify-center">
                   <div className="flex flex-col items-center justify-center p-4 text-center">
-                    <CircuitBoard className="h-16 w-16 text-cyan-400 group-hover:scale-105 transition-transform" />
-                    <span className="text-[11px] font-mono text-cyan-300 mt-1">ESP32-WROOM-32E</span>
+                    <CircuitBoard className="h-16 w-16 text-red-400 group-hover:scale-105 transition-transform" />
+                    <span className="text-[11px] font-mono text-red-300 mt-1">ESP32-WROOM-32E</span>
                   </div>
                   <span className="absolute top-2 left-2 rounded-md bg-emerald-500 text-white font-bold text-[10px] px-1.5 py-0.5">
                     SẴN HÀNG
@@ -385,7 +385,7 @@ export function Hero() {
                 </div>
 
                 {/* Product Title & Rating */}
-                <h3 className="mt-2.5 text-xs sm:text-sm font-bold text-foreground line-clamp-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                <h3 className="mt-2.5 text-xs sm:text-sm font-bold text-foreground line-clamp-2 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
                   Bo mạch ESP32-WROOM-32E Wi-Fi / BLE 4MB Flash Chuẩn Công Nghiệp
                 </h3>
 
@@ -399,7 +399,7 @@ export function Hero() {
 
                 {/* Price block */}
                 <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-base sm:text-lg font-extrabold text-cyan-600 dark:text-cyan-400">
+                  <span className="text-base sm:text-lg font-extrabold text-red-600 dark:text-red-400">
                     {formatVND(65000)}
                   </span>
                   <span className="text-xs text-muted-foreground line-through">
@@ -414,7 +414,7 @@ export function Hero() {
                     <span className="text-red-500 font-semibold">Chỉ còn 8</span>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-cyan-500 rounded-full w-[84%]" />
+                    <div className="h-full bg-red-600 rounded-full w-[84%]" />
                   </div>
                 </div>
               </div>
@@ -424,7 +424,7 @@ export function Hero() {
             <div className="mt-3.5 pt-2 border-t border-border/50">
               <Button
                 onClick={handleAddFlashDeal}
-                className="w-full h-9 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-bold text-xs gap-1.5 shadow-sm cursor-pointer"
+                className="w-full h-9 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs gap-1.5 shadow-sm cursor-pointer"
               >
                 <ShoppingCart className="h-3.5 w-3.5" />
                 Thêm vào giỏ hàng
@@ -438,7 +438,7 @@ export function Hero() {
             ============================================================ */}
         <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
           <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:text-red-400">
               <Truck className="h-5 w-5" />
             </div>
             <div className="min-w-0">
@@ -448,7 +448,7 @@ export function Hero() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:text-red-400">
               <Shield className="h-5 w-5" />
             </div>
             <div className="min-w-0">
@@ -458,7 +458,7 @@ export function Hero() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:text-red-400">
               <RotateCcw className="h-5 w-5" />
             </div>
             <div className="min-w-0">
@@ -468,7 +468,7 @@ export function Hero() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl border border-border/70 bg-card/80 shadow-xs">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:text-red-400">
               <PackageCheck className="h-5 w-5" />
             </div>
             <div className="min-w-0">

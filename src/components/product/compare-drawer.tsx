@@ -45,12 +45,12 @@ interface SpecRow {
 
 const SPEC_ROWS: SpecRow[] = [
   // General
-  { label: 'Price', icon: Award, section: 'general', getter: (i) => <span className="font-bold text-cyan-700 dark:text-cyan-400">{formatVND(i.price)}</span> },
+  { label: 'Price', icon: Award, section: 'general', getter: (i) => <span className="font-bold text-red-700 dark:text-red-400">{formatVND(i.price)}</span> },
   { label: 'Type', section: 'general', getter: (i) => <ProductTypeBadge type={i.productType} className="text-[10px]" /> },
   { label: 'Brand', section: 'general', getter: (i) => i.brand || '—' },
   { label: 'Rating', section: 'general', getter: (i) => <Rating value={i.rating} count={i.ratingCount} size="xs" /> },
-  { label: 'Seller', section: 'general', getter: (i) => <span className="flex items-center gap-1">{i.shopName}{i.shopVerified && <span className="text-cyan-500 text-xs">✓</span>}</span> },
-  { label: 'Stock', section: 'general', getter: (i) => i.unlimited ? <Badge variant="outline" className="bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800 text-[10px]">Unlimited</Badge> : <span className="tabular-nums">{i.stockAvailable ?? 0}</span> },
+  { label: 'Seller', section: 'general', getter: (i) => <span className="flex items-center gap-1">{i.shopName}{i.shopVerified && <span className="text-red-600 text-xs">✓</span>}</span> },
+  { label: 'Stock', section: 'general', getter: (i) => i.unlimited ? <Badge variant="outline" className="bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 text-[10px]">Unlimited</Badge> : <span className="tabular-nums">{i.stockAvailable ?? 0}</span> },
   { label: 'Sold', section: 'general', getter: (i) => <span className="tabular-nums">{(i.soldCount ?? 0).toLocaleString('vi-VN')}</span> },
   // PCB
   { label: 'Layers', icon: Layers, section: 'pcb', getter: (i) => i.pcbLayers ? `${i.pcbLayers}L` : '—' },
@@ -98,11 +98,11 @@ export function CompareDrawer() {
         side="right"
         className="w-full sm:max-w-5xl p-0 flex flex-col gap-0"
       >
-        <SheetHeader className="px-5 py-4 border-b border-border/60 bg-gradient-to-br from-cyan-50/60 dark:from-cyan-950/40 to-transparent">
+        <SheetHeader className="px-5 py-4 border-b border-border/60 bg-gradient-to-br from-red-50/60 dark:from-red-950/40 to-transparent">
           <SheetTitle className="flex items-center gap-2 text-base">
-            <GitCompare className="h-4 w-4 text-cyan-600" />
+            <GitCompare className="h-4 w-4 text-red-600" />
             Product Comparison
-            <Badge variant="secondary" className="ml-1 bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300">
+            <Badge variant="secondary" className="ml-1 bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300">
               {items.length}/4
             </Badge>
             {items.length > 0 && (
@@ -116,8 +116,8 @@ export function CompareDrawer() {
 
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 py-12">
-            <div className="h-20 w-20 rounded-full bg-cyan-50 border border-cyan-200 flex items-center justify-center">
-              <GitCompare className="h-9 w-9 text-cyan-400" />
+            <div className="h-20 w-20 rounded-full bg-red-50 border border-red-200 flex items-center justify-center">
+              <GitCompare className="h-9 w-9 text-red-400" />
             </div>
             <div className="text-center">
               <p className="text-base font-semibold">No products to compare</p>
@@ -125,7 +125,7 @@ export function CompareDrawer() {
                 Add up to 4 products to see a side-by-side specification comparison.
               </p>
             </div>
-            <Button onClick={() => { close(); setView('products', {}); }} className="bg-cyan-600 hover:bg-cyan-700 text-white">
+            <Button onClick={() => { close(); setView('products', {}); }} className="bg-red-600 hover:bg-red-700 text-white">
               Browse Products
             </Button>
           </div>
@@ -144,7 +144,7 @@ export function CompareDrawer() {
                   <div key={item.productId} className="flex flex-col gap-2 px-2">
                     <button
                       onClick={() => { close(); goProduct(item.slug); }}
-                      className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted border border-border/40 hover:border-cyan-400/50 transition-colors group"
+                      className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted border border-border/40 hover:border-red-400/50 transition-colors group"
                     >
                       {item.imageUrl && (
                         <Image src={item.imageUrl} alt={item.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="200px" />
@@ -159,7 +159,7 @@ export function CompareDrawer() {
                     </button>
                     <button
                       onClick={() => { close(); goProduct(item.slug); }}
-                      className="text-sm font-semibold text-left line-clamp-2 hover:text-cyan-700 dark:hover:text-cyan-400 transition-colors"
+                      className="text-sm font-semibold text-left line-clamp-2 hover:text-red-700 dark:hover:text-red-400 transition-colors"
                     >
                       {item.name}
                     </button>
@@ -178,7 +178,7 @@ export function CompareDrawer() {
                 <div key={section.id} className="border-b border-border/40">
                   {/* Section header */}
                   <div className="flex items-center gap-2 px-4 py-2 bg-slate-50/60 dark:bg-slate-800/60">
-                    <SectionIcon className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+                    <SectionIcon className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
                     <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{section.label}</span>
                   </div>
                   {/* Rows */}
@@ -239,7 +239,7 @@ export function CompareDrawer() {
                         shopName: item.shopName,
                       });
                     }}
-                    className="w-full bg-cyan-600 hover:bg-cyan-700 text-white cursor-pointer"
+                    className="w-full bg-red-600 hover:bg-red-700 text-white cursor-pointer"
                   >
                     <ShoppingCart className="h-3 w-3 mr-1" />
                     Add to Cart

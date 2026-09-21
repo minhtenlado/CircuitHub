@@ -16,7 +16,7 @@ export default function AdminPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
       </div>
     );
   }

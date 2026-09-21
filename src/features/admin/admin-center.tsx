@@ -194,9 +194,9 @@ interface SidebarSection {
 
 const USER_ROLE_CONFIG: Record<string, { label: string; cls: string }> = {
   BUYER: { label: 'Buyer', cls: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
-  SELLER: { label: 'Seller', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800' },
+  SELLER: { label: 'Seller', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' },
   ADMIN: { label: 'Admin', cls: 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800' },
-  SUPPORT: { label: 'Support', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800' },
+  SUPPORT: { label: 'Support', cls: 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800' },
   MODERATOR: { label: 'Moderator', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800' },
   ACCOUNTANT: { label: 'Accountant', cls: 'bg-violet-50 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800' },
 };
@@ -205,18 +205,18 @@ const USER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: stri
   ACTIVE: { label: 'Active', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
   SUSPENDED: { label: 'Suspended', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
   PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
-  INVITED: { label: 'Invited', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  INVITED: { label: 'Invited', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
 };
 
 const ORDER_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
   PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
   PENDING_PAYMENT: { label: 'Pending payment', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
-  PAID: { label: 'Paid', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
-  CONFIRMED: { label: 'Confirmed', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  PAID: { label: 'Paid', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
+  CONFIRMED: { label: 'Confirmed', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
   PACKING: { label: 'Packing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   READY_TO_SHIP: { label: 'Ready to ship', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   SHIPPING: { label: 'Shipping', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
-  DELIVERED: { label: 'Delivered', cls: 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800', dot: 'bg-teal-500' },
+  DELIVERED: { label: 'Delivered', cls: 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800', dot: 'bg-rose-500' },
   COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
   CANCELLED: { label: 'Cancelled', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
 };
@@ -231,7 +231,7 @@ const PAYMENT_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: s
 
 const WITHDRAWAL_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: string }> = {
   PENDING: { label: 'Pending', cls: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500' },
-  APPROVED: { label: 'Approved', cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800', dot: 'bg-cyan-500' },
+  APPROVED: { label: 'Approved', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-600' },
   PROCESSING: { label: 'Processing', cls: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500' },
   COMPLETED: { label: 'Completed', cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500' },
   REJECTED: { label: 'Rejected', cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500' },
@@ -250,7 +250,7 @@ const SHOP_STATUS_CONFIG: Record<string, { label: string; cls: string; dot: stri
 };
 
 const AUDIT_ACTION_CONFIG: Record<string, { cls: string }> = {
-  LOGIN: { cls: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800' },
+  LOGIN: { cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' },
   LOGOUT: { cls: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
   SELLER_APPROVED: { cls: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
   SELLER_SUSPENDED: { cls: 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' },
@@ -454,9 +454,9 @@ function StatCard({
   hint?: string;
 }) {
   const accentMap: Record<string, string> = {
-    cyan: 'from-cyan-500 to-cyan-400 shadow-[0_8px_18px_-8px_rgba(6,182,212,0.55)]',
-    teal: 'from-teal-500 to-teal-400 shadow-[0_8px_18px_-8px_rgba(45,212,191,0.55)]',
-    aqua: 'from-cyan-400 to-teal-300 shadow-[0_8px_18px_-8px_rgba(34,211,238,0.55)]',
+    cyan: 'from-red-600 to-red-500 shadow-[0_8px_18px_-8px_rgba(220,38,38,0.55)]',
+    teal: 'from-rose-500 to-rose-500 shadow-[0_8px_18px_-8px_rgba(244,63,94,0.55)]',
+    aqua: 'from-red-400 to-rose-300 shadow-[0_8px_18px_-8px_rgba(220,38,38,0.55)]',
     amber: 'from-amber-500 to-amber-400 shadow-[0_8px_18px_-8px_rgba(245,158,11,0.55)]',
     rose: 'from-rose-500 to-rose-400 shadow-[0_8px_18px_-8px_rgba(244,63,94,0.55)]',
     slate: 'from-slate-700 to-slate-600 shadow-[0_8px_18px_-8px_rgba(51,65,85,0.55)]',
@@ -513,7 +513,7 @@ function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 dark:bg-cyan-950/50 text-cyan-600 dark:text-cyan-400">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400">
         <Icon className="h-6 w-6" />
       </div>
       <div className="space-y-1">
@@ -521,7 +521,7 @@ function EmptyState({
         <p className="text-sm text-muted-foreground max-w-md">{description}</p>
       </div>
       {cta && onCta && (
-        <Button size="sm" variant="outline" className="mt-2 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800" onClick={onCta}>
+        <Button size="sm" variant="outline" className="mt-2 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-slate-800" onClick={onCta}>
           {cta}
         </Button>
       )}
@@ -532,7 +532,7 @@ function EmptyState({
 function ChartTooltip({ active, payload, label, valueFormatter }: any) {
   if (!active || !payload || !payload.length) return null;
   return (
-    <div className="rounded-lg border border-cyan-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
+    <div className="rounded-lg border border-red-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg px-3 py-2 text-xs">
       <p className="font-semibold text-foreground mb-1">{label}</p>
       {payload.map((entry: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
@@ -561,7 +561,7 @@ function SectionHeader({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
       <div className="flex items-center gap-2.5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_6px_14px_-6px_rgba(6,182,212,0.5)]">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-rose-500 text-white shadow-[0_6px_14px_-6px_rgba(220,38,38,0.5)]">
           <Icon className="h-4.5 w-4.5" />
         </div>
         <div>
@@ -592,8 +592,8 @@ function FilterPills({
           className={cn(
             'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors',
             active === opt.id
-              ? 'bg-cyan-500 text-white border-cyan-500 shadow-sm'
-              : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60 hover:border-cyan-300 dark:hover:border-cyan-700 hover:text-cyan-600 dark:hover:text-cyan-400',
+              ? 'bg-red-600 text-white border-red-600 shadow-sm'
+              : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60 hover:border-red-300 dark:hover:border-red-700 hover:text-red-600 dark:hover:text-red-400',
           )}
         >
           {opt.label}
@@ -650,7 +650,7 @@ function PaginationFooter({
         <Button size="sm" variant="outline" className="h-7 px-2 text-[11px]" disabled>
           Prev
         </Button>
-        <Button size="sm" variant="outline" className="h-7 px-2 text-[11px] bg-cyan-50 dark:bg-cyan-950/50 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300" disabled>
+        <Button size="sm" variant="outline" className="h-7 px-2 text-[11px] bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300" disabled>
           1
         </Button>
         <Button size="sm" variant="outline" className="h-7 px-2 text-[11px]" disabled>
@@ -714,7 +714,7 @@ function OverviewTab({
         title="Platform Overview"
         description="Real-time metrics across all markets"
         action={
-          <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 gap-1.5">
+          <Badge variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 gap-1.5">
             <Activity className="h-3 w-3" />
             Live · updated 30s ago
           </Badge>
@@ -734,7 +734,7 @@ function OverviewTab({
         <Card className="lg:col-span-2 border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-cyan-600" />
+              <TrendingUp className="h-4 w-4 text-red-600" />
               GMV &amp; Platform Commission
               <span className="text-xs font-normal text-slate-400">· 12 months</span>
             </CardTitle>
@@ -767,7 +767,7 @@ function OverviewTab({
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <PieIcon className="h-4 w-4 text-teal-600" />
+              <PieIcon className="h-4 w-4 text-rose-600" />
               Sales by Product Type
             </CardTitle>
           </CardHeader>
@@ -808,7 +808,7 @@ function OverviewTab({
       <Card className="border-border/60 shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-cyan-600" />
+            <BarChart3 className="h-4 w-4 text-red-600" />
             Orders Over Time
             <span className="text-xs font-normal text-slate-400">· last 12 months</span>
           </CardTitle>
@@ -832,7 +832,7 @@ function OverviewTab({
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <Store className="h-4 w-4 text-cyan-600" />
+              <Store className="h-4 w-4 text-red-600" />
               Top Sellers
             </CardTitle>
           </CardHeader>
@@ -843,7 +843,7 @@ function OverviewTab({
               )}
               {topSellers.slice(0, 5).map((s: any, i: number) => (
                 <div key={s.id ?? i} className="flex items-center gap-3 rounded-lg p-2 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[11px] font-bold">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-[11px] font-bold">
                     {i + 1}
                   </span>
                   <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted">
@@ -881,10 +881,10 @@ function OverviewTab({
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <ShoppingCart className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+              <ShoppingCart className="h-4 w-4 text-red-600 dark:text-red-400" />
               Recent Orders
             </CardTitle>
-            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40" onClick={() => goTab('orders')}>
+            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40" onClick={() => goTab('orders')}>
               View all
               <ChevronRight className="h-3 w-3" />
             </Button>
@@ -916,10 +916,10 @@ function OverviewTab({
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <Package className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+              <Package className="h-4 w-4 text-red-600 dark:text-red-400" />
               Recent Products
             </CardTitle>
-            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40" onClick={() => goTab('products')}>
+            <Button size="sm" variant="ghost" className="h-7 px-2 text-[11px] text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40" onClick={() => goTab('products')}>
               View all
               <ChevronRight className="h-3 w-3" />
             </Button>
@@ -1035,12 +1035,12 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
               const roleCfg = USER_ROLE_CONFIG[u.role] ?? USER_ROLE_CONFIG.BUYER;
               const status = u.status ?? 'ACTIVE';
               return (
-                <TableRow key={u.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
+                <TableRow key={u.id} className="hover:bg-red-50/30 dark:hover:bg-red-950/20">
                   <TableCell>
                     <div className="flex items-center gap-2.5">
                       <Avatar className="h-8 w-8 border border-border/60">
                         {u.avatarUrl && <AvatarImage src={u.avatarUrl} alt={u.name} />}
-                        <AvatarFallback className="bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[10px] font-semibold">
+                        <AvatarFallback className="bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-[10px] font-semibold">
                           {initials(u.name ?? u.email ?? 'U')}
                         </AvatarFallback>
                       </Avatar>
@@ -1069,7 +1069,7 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                        className="h-7 w-7 p-0 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                         onClick={() => toast({ title: 'View profile', description: `Opening ${u.name}'s profile...` })}
                       >
                         <Eye className="h-3.5 w-3.5" />
@@ -1104,7 +1104,7 @@ function UsersTab({ toast, goTab }: { toast: any; goTab: (id: TabId) => void }) 
       </Card>
       <p className="text-[11px] text-slate-400">
         Tip: Switch role filter or refine search ·{' '}
-        <button onClick={() => goTab('audit')} className="text-cyan-700 dark:text-cyan-400 hover:underline">View audit log</button>
+        <button onClick={() => goTab('audit')} className="text-red-700 dark:text-red-400 hover:underline">View audit log</button>
       </p>
     </div>
   );
@@ -1162,7 +1162,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
         title="Sellers"
         description={`${filtered.length} of ${sellers.length} sellers`}
         action={
-          <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">
+          <Badge variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800">
             {sellers.filter((s) => !s.shop?.verified && s.shop?.status !== 'SUSPENDED').length} pending review
           </Badge>
         }
@@ -1195,7 +1195,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
               const shop = s.shop;
               const status = shop?.status ?? 'PENDING_REVIEW';
               return (
-                <TableRow key={s.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
+                <TableRow key={s.id} className="hover:bg-red-50/30 dark:hover:bg-red-950/20">
                   <TableCell>
                     <div className="flex items-center gap-2.5">
                       <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted">
@@ -1269,7 +1269,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 px-2 text-[11px] border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                          className="h-7 px-2 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => handleAction(shop?.id, 'REACTIVATE', shop?.name ?? 'Shop')}
                         >
                           <RotateCcw className="h-3 w-3" />
@@ -1304,7 +1304,7 @@ function SellersTab({ toast, queryClient }: { toast: any; queryClient: any }) {
               </div>
               <div className="flex flex-wrap gap-1 mt-2">
                 {(s.shop?.specializations ?? ['PCB Design', 'Embedded', 'Hardware Kits']).slice(0, 3).map((sp: string, i: number) => (
-                  <Badge key={i} variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 text-[10px]">
+                  <Badge key={i} variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 text-[10px]">
                     {sp}
                   </Badge>
                 ))}
@@ -1403,7 +1403,7 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
               </TableRow>
             )}
             {filtered.map((p) => (
-              <TableRow key={p.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
+              <TableRow key={p.id} className="hover:bg-red-50/30 dark:hover:bg-red-950/20">
                 <TableCell>
                   <div className="flex items-center gap-2.5">
                     <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
@@ -1418,7 +1418,7 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
                     <div className="min-w-0 max-w-[220px]">
                       <button
                         onClick={() => goProduct(p.slug)}
-                        className="text-xs font-semibold text-foreground truncate hover:text-cyan-700 dark:hover:text-cyan-400 hover:underline text-left"
+                        className="text-xs font-semibold text-foreground truncate hover:text-red-700 dark:hover:text-red-400 hover:underline text-left"
                       >
                         {p.name}
                       </button>
@@ -1443,7 +1443,7 @@ function ProductsTab({ toast, goProduct }: { toast: any; goProduct: (slug: strin
                 <TableCell className="text-xs text-muted-foreground">{p.shop?.name ?? '—'}</TableCell>
                 <TableCell className="text-right">
                   <div className="inline-flex items-center gap-1">
-                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40" onClick={() => goProduct(p.slug)} title="View product">
+                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40" onClick={() => goProduct(p.slug)} title="View product">
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
                     {p.isFeatured ? (
@@ -1572,13 +1572,13 @@ function OrdersTab({ toast }: { toast: any }) {
                 <>
                   <TableRow
                     key={o.id}
-                    className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/30 cursor-pointer"
+                    className="hover:bg-red-50/30 dark:hover:bg-red-950/30 cursor-pointer"
                     onClick={() => setExpanded(isOpen ? null : o.id)}
                   >
                     <TableCell className="text-center">
                       <ChevronDown className={cn('h-3.5 w-3.5 text-slate-400 transition-transform', isOpen && 'rotate-180')} />
                     </TableCell>
-                    <TableCell className="text-xs font-mono font-semibold text-cyan-700 dark:text-cyan-400">{o.code}</TableCell>
+                    <TableCell className="text-xs font-mono font-semibold text-red-700 dark:text-red-400">{o.code}</TableCell>
                     <TableCell className="text-xs text-slate-600 dark:text-slate-400">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3 text-slate-400" />
@@ -1649,11 +1649,11 @@ function OrdersTab({ toast }: { toast: any }) {
 
                             <p className="text-[11px] font-semibold text-foreground uppercase mt-3 mb-1.5">Shipment</p>
                             {o.sellerOrders?.some((so: any) => so.fulfillmentType === 'PHYSICAL') ? (
-                              <div className="rounded-md border border-cyan-200 dark:border-cyan-800 bg-cyan-50/60 dark:bg-cyan-950/40 p-2 text-[11px] text-cyan-800 dark:text-cyan-300">
+                              <div className="rounded-md border border-red-200 dark:border-red-800 bg-red-50/60 dark:bg-red-950/40 p-2 text-[11px] text-red-800 dark:text-red-300">
                                 <p className="flex items-center gap-1 font-medium">
                                   <RefreshCw className="h-3 w-3" /> Auto-tracking (mock provider)
                                 </p>
-                                <p className="text-cyan-700 dark:text-cyan-400 mt-0.5">Provider: GHN · ETA: 2-4 days</p>
+                                <p className="text-red-700 dark:text-red-400 mt-0.5">Provider: GHN · ETA: 2-4 days</p>
                               </div>
                             ) : (
                               <p className="text-[11px] text-slate-400">Digital only — no shipment</p>
@@ -1665,7 +1665,7 @@ function OrdersTab({ toast }: { toast: any }) {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-7 text-[11px] border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                            className="h-7 text-[11px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                             onClick={() => toast({ title: 'Order details', description: `Opening ${o.code} invoice...` })}
                           >
                             <FileText className="h-3 w-3" /> View invoice
@@ -1787,8 +1787,8 @@ function PaymentsTab({ toast }: { toast: any }) {
               </TableRow>
             )}
             {filtered.map((p) => (
-              <TableRow key={p.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
-                <TableCell className="text-xs font-mono font-semibold text-cyan-700 dark:text-cyan-400">{p.orderCode}</TableCell>
+              <TableRow key={p.id} className="hover:bg-red-50/30 dark:hover:bg-red-950/20">
+                <TableCell className="text-xs font-mono font-semibold text-red-700 dark:text-red-400">{p.orderCode}</TableCell>
                 <TableCell>
                   <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 text-[11px] font-mono">
                     {p.provider}
@@ -1807,7 +1807,7 @@ function PaymentsTab({ toast }: { toast: any }) {
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                    className="h-7 w-7 p-0 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                     onClick={() => toast({ title: 'Payment details', description: `Viewing ${p.transactionCode ?? p.id}` })}
                   >
                     <Eye className="h-3.5 w-3.5" />
@@ -1835,21 +1835,21 @@ function ReturnsTab({ toast }: { toast: any }) {
         title="Returns & Refunds"
         description="Returns require seller approval. Track all return requests here."
         action={
-          <Badge variant="outline" className="bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800">
+          <Badge variant="outline" className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800">
             {DEMO_RETURNS.length} active requests
           </Badge>
         }
       />
 
       {/* Empty state explanation banner */}
-      <Card className="border-cyan-200 dark:border-cyan-800/60 bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-950/30 dark:to-teal-950/30 shadow-sm">
+      <Card className="border-red-200 dark:border-red-800/60 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30 shadow-sm">
         <CardContent className="p-4 flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300">
             <AlertCircle className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-cyan-900 dark:text-cyan-200">How returns work</p>
-            <p className="text-xs text-cyan-700 dark:text-cyan-300 mt-0.5 leading-relaxed">
+            <p className="text-sm font-semibold text-red-900 dark:text-red-200">How returns work</p>
+            <p className="text-xs text-red-700 dark:text-red-300 mt-0.5 leading-relaxed">
               Returns require seller approval. Track all return requests here. Buyers must submit a return within 7 days of delivery.
               Sellers have 48 hours to approve or reject. If unresolved, the admin can intervene.
             </p>
@@ -1871,7 +1871,7 @@ function ReturnsTab({ toast }: { toast: any }) {
                 <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-semibold text-cyan-700 dark:text-cyan-400">{ret.code}</span>
+                      <span className="text-xs font-mono font-semibold text-red-700 dark:text-red-400">{ret.code}</span>
                       <StatusPill status={ret.status} config={statusCfg} />
                     </div>
                     <p className="text-sm font-semibold text-foreground mt-1">{ret.product}</p>
@@ -1901,7 +1901,7 @@ function ReturnsTab({ toast }: { toast: any }) {
                           'absolute -left-[10px] mt-1 flex h-3 w-3 items-center justify-center rounded-full border-2',
                           step.done
                             ? step.current
-                              ? 'border-cyan-500 bg-cyan-500'
+                              ? 'border-red-600 bg-red-600'
                               : 'border-emerald-500 bg-emerald-500'
                             : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800',
                         )}
@@ -1910,7 +1910,7 @@ function ReturnsTab({ toast }: { toast: any }) {
                         {step.current && <span className="h-1 w-1 rounded-full bg-white" />}
                       </span>
                       <div className="ml-2">
-                        <p className={cn('text-xs', step.current ? 'font-semibold text-cyan-700 dark:text-cyan-400' : step.done ? 'font-medium text-slate-700 dark:text-slate-300' : 'text-slate-400')}>
+                        <p className={cn('text-xs', step.current ? 'font-semibold text-red-700 dark:text-red-400' : step.done ? 'font-medium text-slate-700 dark:text-slate-300' : 'text-slate-400')}>
                           {step.status}
                         </p>
                         <p className="text-[10px] text-slate-400">
@@ -2074,12 +2074,12 @@ function WithdrawalsTab({ toast, queryClient }: { toast: any; queryClient: any }
               const isRejecting = rejecting === w.id;
               return (
                 <>
-                  <TableRow key={w.id} className={cn('hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20', isRejecting && 'bg-amber-50/30 dark:bg-amber-950/20')}>
+                  <TableRow key={w.id} className={cn('hover:bg-red-50/30 dark:hover:bg-red-950/20', isRejecting && 'bg-amber-50/30 dark:bg-amber-950/20')}>
                     <TableCell>
                       <div className="flex items-center gap-2.5">
                         <Avatar className="h-8 w-8 border border-border/60">
                           {w.seller?.avatarUrl && <AvatarImage src={w.seller.avatarUrl} alt={w.seller.name} />}
-                          <AvatarFallback className="bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[10px] font-semibold">
+                          <AvatarFallback className="bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-[10px] font-semibold">
                             {initials(w.seller?.name ?? 'S')}
                           </AvatarFallback>
                         </Avatar>
@@ -2240,7 +2240,7 @@ function ReviewsTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                 <div className="flex items-start gap-3">
                   <Avatar className="h-9 w-9 border border-border/60 shrink-0">
                     <AvatarImage src={r.avatarUrl} alt={r.user} />
-                    <AvatarFallback className="bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-[10px] font-semibold">
+                    <AvatarFallback className="bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-[10px] font-semibold">
                       {initials(r.user)}
                     </AvatarFallback>
                   </Avatar>
@@ -2280,7 +2280,7 @@ function ReviewsTab({ toast, queryClient }: { toast: any; queryClient: any }) {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 text-[11px] text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                          className="h-7 text-[11px] text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => toast({ title: 'View product', description: `Opening ${r.productName}...` })}
                         >
                           <Eye className="h-3 w-3" /> View product
@@ -2315,7 +2315,7 @@ function CategoriesTab({ toast }: { toast: any }) {
         action={
           <Button
             size="sm"
-            className="h-8 text-xs bg-cyan-500 hover:bg-cyan-600 text-white"
+            className="h-8 text-xs bg-red-600 hover:bg-red-600 text-white"
             onClick={() => toast({ title: 'Add category', description: 'Opening new category form...' })}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -2329,7 +2329,7 @@ function CategoriesTab({ toast }: { toast: any }) {
         <Card className="lg:col-span-2 border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <ListTree className="h-4 w-4 text-cyan-600" />
+              <ListTree className="h-4 w-4 text-red-600" />
               Category Tree
             </CardTitle>
           </CardHeader>
@@ -2345,10 +2345,10 @@ function CategoriesTab({ toast }: { toast: any }) {
               </TableHeader>
               <TableBody>
                 {categories.map((c) => (
-                  <TableRow key={c.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
+                  <TableRow key={c.id} className="hover:bg-red-50/30 dark:hover:bg-red-950/20">
                     <TableCell>
                       <div className={cn('flex items-center gap-2', !c.parentId && 'font-semibold')}>
-                        {!c.parentId && <span className="text-cyan-500">▸</span>}
+                        {!c.parentId && <span className="text-red-600">▸</span>}
                         {c.parentId && <span className="text-muted-foreground/50 pl-3">└─</span>}
                         <span className="text-xs text-foreground">{c.name}</span>
                         <Badge variant="outline" className="text-[10px] bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 font-mono">
@@ -2363,7 +2363,7 @@ function CategoriesTab({ toast }: { toast: any }) {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 w-7 p-0 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/40"
+                          className="h-7 w-7 p-0 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
                           onClick={() => toast({ title: 'Edit category', description: `Editing ${c.name}...` })}
                         >
                           <Pencil className="h-3.5 w-3.5" />
@@ -2389,7 +2389,7 @@ function CategoriesTab({ toast }: { toast: any }) {
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-teal-600 dark:text-cyan-400" />
+              <BarChart3 className="h-4 w-4 text-rose-600 dark:text-red-400" />
               Top Categories
             </CardTitle>
           </CardHeader>
@@ -2404,7 +2404,7 @@ function CategoriesTab({ toast }: { toast: any }) {
                     <span className="text-xs font-semibold text-foreground tabular-nums">{c.productCount ?? 0}</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-cyan-500 to-teal-400" style={{ width: `${pct}%` }} />
+                    <div className="h-full bg-gradient-to-r from-red-600 to-rose-500" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               );
@@ -2486,7 +2486,7 @@ function AuditTab() {
               const actionKey = Object.keys(AUDIT_ACTION_CONFIG).find((k) => k === l.action) ?? 'DEFAULT';
               const cfg = AUDIT_ACTION_CONFIG[actionKey];
               return (
-                <TableRow key={l.id} className="hover:bg-cyan-50/30 dark:hover:bg-cyan-950/20">
+                <TableRow key={l.id} className="hover:bg-red-50/30 dark:hover:bg-red-950/20">
                   <TableCell className="text-xs text-muted-foreground">
                     <div className="font-mono">{new Date(l.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh' })}</div>
                     <div className="text-[10px] text-slate-400">{timeAgo(l.createdAt)}</div>
@@ -2587,7 +2587,7 @@ function SettingsTab({ toast }: { toast: any }) {
         title="System Settings"
         description="Platform configuration & feature flags"
         action={
-          <Button size="sm" className="h-8 text-xs bg-cyan-500 hover:bg-cyan-600 text-white" onClick={handleSave}>
+          <Button size="sm" className="h-8 text-xs bg-red-600 hover:bg-red-600 text-white" onClick={handleSave}>
             <Check className="h-3.5 w-3.5" />
             Save changes
           </Button>
@@ -2599,7 +2599,7 @@ function SettingsTab({ toast }: { toast: any }) {
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-cyan-600" />
+              <Building2 className="h-4 w-4 text-red-600" />
               General
             </CardTitle>
           </CardHeader>
@@ -2631,7 +2631,7 @@ function SettingsTab({ toast }: { toast: any }) {
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <Percent className="h-4 w-4 text-teal-600" />
+              <Percent className="h-4 w-4 text-rose-600" />
               Finance
             </CardTitle>
           </CardHeader>
@@ -2676,7 +2676,7 @@ function SettingsTab({ toast }: { toast: any }) {
         <Card className={cn('border-border/60 shadow-sm', maintenanceMode && 'border-amber-200 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20')}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <AlertCircle className={cn('h-4 w-4', maintenanceMode ? 'text-amber-600 dark:text-amber-400' : 'text-cyan-600 dark:text-cyan-400')} />
+              <AlertCircle className={cn('h-4 w-4', maintenanceMode ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400')} />
               Maintenance Mode
             </CardTitle>
           </CardHeader>
@@ -2708,7 +2708,7 @@ function SettingsTab({ toast }: { toast: any }) {
         <Card className="border-border/60 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+              <ShieldCheck className="h-4 w-4 text-red-600 dark:text-red-400" />
               Feature Flags
             </CardTitle>
           </CardHeader>
@@ -2762,7 +2762,7 @@ function SettingsTab({ toast }: { toast: any }) {
             <RotateCcw className="h-3.5 w-3.5" />
             Reset to defaults
           </Button>
-          <Button size="sm" className="h-8 text-xs bg-cyan-500 hover:bg-cyan-600 text-white" onClick={handleSave}>
+          <Button size="sm" className="h-8 text-xs bg-red-600 hover:bg-red-600 text-white" onClick={handleSave}>
             <Check className="h-3.5 w-3.5" />
             Save changes
           </Button>
@@ -2791,11 +2791,11 @@ function SidebarButton({
       className={cn(
         'w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors text-left',
         active
-          ? 'bg-cyan-500 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.55)]'
-          : 'text-slate-300 hover:bg-slate-800 hover:text-cyan-300',
+          ? 'bg-red-600 text-white shadow-[0_8px_18px_-8px_rgba(220,38,38,0.55)]'
+          : 'text-slate-300 hover:bg-slate-800 hover:text-red-300',
       )}
     >
-      <tab.icon className={cn('h-4 w-4 shrink-0', active ? 'text-white' : 'text-cyan-500/80')} />
+      <tab.icon className={cn('h-4 w-4 shrink-0', active ? 'text-white' : 'text-red-600/80')} />
       <span className="truncate">{tab.label}</span>
       {active && <ChevronRight className="h-3.5 w-3.5 ml-auto" />}
     </button>
@@ -2816,7 +2816,7 @@ function MobilePill({
       onClick={onClick}
       className={cn(
         'flex-none flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium border transition-colors',
-        active ? 'bg-cyan-500 text-white border-cyan-500' : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60',
+        active ? 'bg-red-600 text-white border-red-600' : 'bg-card dark:bg-slate-900 text-muted-foreground border-border/60',
       )}
     >
       <tab.icon className="h-3.5 w-3.5" />
@@ -2858,7 +2858,7 @@ export function AdminCenter() {
   const activeSection = SIDEBAR_SECTIONS.find((s) => s.items.some((i) => i.id === activeTab));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50/30 dark:from-background dark:via-background dark:to-background text-foreground">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-red-50/30 dark:from-background dark:via-background dark:to-background text-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -2878,11 +2878,11 @@ export function AdminCenter() {
           />
           <div className="relative flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-400 text-white shadow-[0_8px_18px_-8px_rgba(6,182,212,0.55)]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-rose-500 text-white shadow-[0_8px_18px_-8px_rgba(220,38,38,0.55)]">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-red-300 flex items-center gap-1.5">
                   <Lock className="h-3 w-3" />
                   Admin Center
                 </p>
@@ -2898,7 +2898,7 @@ export function AdminCenter() {
               <div className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-1.5">
                 <Avatar className="h-7 w-7 border border-slate-600">
                   <AvatarImage src={user?.avatarUrl} alt={user?.name ?? 'Admin'} />
-                  <AvatarFallback className="bg-cyan-500 text-white text-[10px] font-bold">
+                  <AvatarFallback className="bg-red-600 text-white text-[10px] font-bold">
                     {initials(user?.name ?? 'AD')}
                   </AvatarFallback>
                 </Avatar>
@@ -2913,7 +2913,7 @@ export function AdminCenter() {
               <Button
                 size="sm"
                 variant="outline"
-                className="h-8 border-slate-600 bg-slate-800 text-slate-100 hover:bg-slate-700 hover:text-cyan-300"
+                className="h-8 border-slate-600 bg-slate-800 text-slate-100 hover:bg-slate-700 hover:text-red-300"
                 onClick={handleRefresh}
                 disabled={isAnalyticsFetching}
               >
@@ -2967,7 +2967,7 @@ export function AdminCenter() {
               ))}
 
               <div className="mt-2 rounded-xl border border-slate-700 bg-slate-800/60 p-3">
-                <p className="text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
+                <p className="text-xs font-semibold text-red-300 flex items-center gap-1.5">
                   <Activity className="h-3.5 w-3.5" />
                   System Status
                 </p>

@@ -77,7 +77,7 @@ export function CategoryView() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <button onClick={goHome} className="hover:text-cyan-600 dark:hover:text-cyan-400 flex items-center gap-1 text-muted-foreground transition-colors">
+                <button onClick={goHome} className="hover:text-red-600 dark:hover:text-red-400 flex items-center gap-1 text-muted-foreground transition-colors">
                   <Home className="h-3.5 w-3.5" />
                   {t('common.home')}
                 </button>
@@ -86,7 +86,7 @@ export function CategoryView() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <button onClick={goHome} className="hover:text-cyan-600 dark:hover:text-cyan-400 text-muted-foreground transition-colors">
+                <button onClick={goHome} className="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors">
                   {t('common.categories')}
                 </button>
               </BreadcrumbLink>
@@ -96,14 +96,14 @@ export function CategoryView() {
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <button className="hover:text-cyan-600 dark:hover:text-cyan-400 text-muted-foreground transition-colors">{parentName}</button>
+                    <button className="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors">{parentName}</button>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </>
             )}
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-cyan-600 dark:text-cyan-400 font-semibold">{name}</BreadcrumbPage>
+              <BreadcrumbPage className="text-red-600 dark:text-red-400 font-semibold">{name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -123,14 +123,14 @@ export function CategoryNotFound({ slug }: { slug?: string }) {
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center space-y-4 max-w-md">
-        <div className="flex h-20 w-20 mx-auto items-center justify-center rounded-3xl bg-cyan-50 text-cyan-500 border border-cyan-100">
+        <div className="flex h-20 w-20 mx-auto items-center justify-center rounded-3xl bg-red-50 text-red-600 border border-red-100">
           <PackageSearch className="h-10 w-10" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">Category not found</h1>
         <p className="text-sm text-muted-foreground">
           The category “{slug ?? 'unknown'}” doesn’t exist or has been removed.
         </p>
-        <Button onClick={goHome} className="bg-cyan-500 hover:bg-cyan-600 text-white">
+        <Button onClick={goHome} className="bg-red-600 hover:bg-red-600 text-white">
           Back to Home
         </Button>
       </div>

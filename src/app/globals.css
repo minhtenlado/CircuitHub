@@ -5,7 +5,7 @@
 
 /* ============================================================
    CircuitHub Design System
-   Theme: WHITE + CYAN + AQUA
+   Theme: WHITE + RED + ROSE
    Brand: CircuitHub — "Build it. Design it. Ship it."
    ============================================================ */
 
@@ -63,12 +63,12 @@
 :root {
   --radius: 0.625rem;
 
-  /* Brand palette — WHITE + CYAN + AQUA */
-  --brand-primary: #06b6d4;
-  --brand-primary-hover: #0891b2;
-  --brand-secondary: #22d3ee;
-  --brand-aqua: #2dd4bf;
-  --brand-soft: #ecfeff;
+  /* Brand palette — WHITE + RED + ROSE */
+  --brand-primary: #dc2626;
+  --brand-primary-hover: #b91c1c;
+  --brand-secondary: #ef4444;
+  --brand-aqua: #f43f5e;
+  --brand-soft: #fef2f2;
 
   /* Surfaces */
   --background: #ffffff;
@@ -79,20 +79,20 @@
   --popover-foreground: #0f172a;
 
   /* Brand-primary as UI primary */
-  --primary: #06b6d4;
+  --primary: #dc2626;
   --primary-foreground: #ffffff;
   --secondary: #f8fafc;
   --secondary-foreground: #0f172a;
   --muted: #f8fafc;
   --muted-foreground: #475569;
-  --accent: #ecfeff;
-  --accent-foreground: #0e7490;
+  --accent: #fef2f2;
+  --accent-foreground: #991b1b;
   --destructive: #ef4444;
 
   /* Borders & inputs */
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #06b6d4;
+  --ring: #dc2626;
 
   /* Status */
   --success: #10b981;
@@ -101,29 +101,29 @@
   --info: #3b82f6;
 
   /* Charts */
-  --chart-1: #06b6d4;
-  --chart-2: #2dd4bf;
-  --chart-3: #22d3ee;
-  --chart-4: #0891b2;
-  --chart-5: #14b8a6;
+  --chart-1: #dc2626;
+  --chart-2: #f43f5e;
+  --chart-3: #ef4444;
+  --chart-4: #b91c1c;
+  --chart-5: #e11d48;
 
   /* Sidebar */
   --sidebar: #f8fafc;
   --sidebar-foreground: #0f172a;
-  --sidebar-primary: #06b6d4;
+  --sidebar-primary: #dc2626;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ecfeff;
-  --sidebar-accent-foreground: #0e7490;
+  --sidebar-accent: #fef2f2;
+  --sidebar-accent-foreground: #991b1b;
   --sidebar-border: #e2e8f0;
-  --sidebar-ring: #06b6d4;
+  --sidebar-ring: #dc2626;
 }
 
 .dark {
-  --brand-primary: #22d3ee;
-  --brand-primary-hover: #06b6d4;
-  --brand-secondary: #67e8f9;
-  --brand-aqua: #5eead4;
-  --brand-soft: #083344;
+  --brand-primary: #ef4444;
+  --brand-primary-hover: #dc2626;
+  --brand-secondary: #f87171;
+  --brand-aqua: #fb7185;
+  --brand-soft: #450a0a;
 
   --background: #0b1220;
   --foreground: #e2e8f0;
@@ -132,39 +132,39 @@
   --popover: #111c2e;
   --popover-foreground: #e2e8f0;
 
-  --primary: #22d3ee;
-  --primary-foreground: #083344;
+  --primary: #ef4444;
+  --primary-foreground: #450a0a;
   --secondary: #1e293b;
   --secondary-foreground: #e2e8f0;
   --muted: #1e293b;
   --muted-foreground: #94a3b8;
-  --accent: #083344;
-  --accent-foreground: #67e8f9;
+  --accent: #450a0a;
+  --accent-foreground: #fca5a5;
   --destructive: #f87171;
 
   --border: #1e293b;
   --input: #1e293b;
-  --ring: #22d3ee;
+  --ring: #ef4444;
 
   --success: #34d399;
   --warning: #fbbf24;
   --danger: #f87171;
   --info: #60a5fa;
 
-  --chart-1: #22d3ee;
-  --chart-2: #5eead4;
-  --chart-3: #67e8f9;
-  --chart-4: #06b6d4;
-  --chart-5: #2dd4bf;
+  --chart-1: #ef4444;
+  --chart-2: #fb7185;
+  --chart-3: #f87171;
+  --chart-4: #dc2626;
+  --chart-5: #f43f5e;
 
   --sidebar: #0b1220;
   --sidebar-foreground: #e2e8f0;
-  --sidebar-primary: #22d3ee;
-  --sidebar-primary-foreground: #083344;
-  --sidebar-accent: #083344;
-  --sidebar-accent-foreground: #67e8f9;
+  --sidebar-primary: #ef4444;
+  --sidebar-primary-foreground: #450a0a;
+  --sidebar-accent: #450a0a;
+  --sidebar-accent-foreground: #fca5a5;
   --sidebar-border: #1e293b;
-  --sidebar-ring: #22d3ee;
+  --sidebar-ring: #ef4444;
 }
 
 @layer base {
@@ -190,27 +190,27 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #06b6d4, #2dd4bf);
+    background: linear-gradient(180deg, #dc2626, #f43f5e);
     border-radius: 999px;
     border: 2px solid var(--background);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #0891b2;
+    background: #b91c1c;
   }
 
   ::selection {
-    background: #06b6d4;
+    background: #dc2626;
     color: #ffffff;
   }
 }
 
 @layer components {
-  /* Soft cyan glow */
+  /* Soft red glow */
   .glow-cyan {
-    box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.15), 0 8px 32px -8px rgba(6, 182, 212, 0.35);
+    box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.15), 0 8px 32px -8px rgba(220, 38, 38, 0.35);
   }
   .glow-cyan-strong {
-    box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.3), 0 12px 48px -8px rgba(6, 182, 212, 0.55);
+    box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.3), 0 12px 48px -8px rgba(220, 38, 38, 0.55);
   }
 
   /* Glass card */
@@ -227,7 +227,7 @@
 
   /* Brand gradient text */
   .text-gradient-cyan {
-    background: linear-gradient(135deg, #06b6d4 0%, #2dd4bf 50%, #22d3ee 100%);
+    background: linear-gradient(135deg, #dc2626 0%, #f43f5e 50%, #ef4444 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -258,7 +258,7 @@
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.15), transparent);
+    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.15), transparent);
     animation: shimmer 1.6s infinite;
   }
   @keyframes shimmer {

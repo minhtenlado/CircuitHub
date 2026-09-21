@@ -46,7 +46,7 @@ export function HomeProductsGrid() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 mb-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400 mb-1">
               <Sparkles className="h-3.5 w-3.5" />
               CỬA HÀNG LINH KIỆN & KIT MAKER
             </div>
@@ -65,7 +65,7 @@ export function HomeProductsGrid() {
               if (currentTab.params.category) goCategory(currentTab.params.category);
               else goProducts(currentTab.params);
             }}
-            className="self-start md:self-auto h-9 px-4 rounded-xl border-cyan-500/40 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 text-xs font-semibold gap-1.5 cursor-pointer shadow-xs"
+            className="self-start md:self-auto h-9 px-4 rounded-xl border-red-500/40 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/40 text-xs font-semibold gap-1.5 cursor-pointer shadow-xs"
           >
             <span>{t('homeGrid.viewAll')}</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -83,7 +83,7 @@ export function HomeProductsGrid() {
                 className={cn(
                   'h-9 px-4 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 border',
                   isActive
-                    ? 'bg-cyan-500 text-white border-cyan-500 shadow-[0_4px_14px_-4px_rgba(6,182,212,0.55)]'
+                    ? 'bg-red-600 text-white border-red-600 shadow-[0_4px_14px_-4px_rgba(220,38,38,0.55)]'
                     : 'bg-card border-border/70 text-muted-foreground hover:text-foreground hover:bg-accent hover:border-border',
                 )}
               >

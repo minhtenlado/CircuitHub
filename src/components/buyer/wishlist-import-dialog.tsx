@@ -107,7 +107,7 @@ export function WishlistImportDialog({ open, onOpenChange, slugs }: WishlistImpo
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-6 w-6 animate-spin text-cyan-500" />
+            <Loader2 className="h-6 w-6 animate-spin text-red-600" />
             <span className="ml-2 text-sm text-muted-foreground">Loading shared items...</span>
           </div>
         ) : products.length === 0 ? (
@@ -127,7 +127,7 @@ export function WishlistImportDialog({ open, onOpenChange, slugs }: WishlistImpo
                 size="sm"
                 onClick={importAll}
                 disabled={importing || products.every((p) => wishlist.has(p.id))}
-                className="bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-700 hover:to-teal-600 text-white"
+                className="bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 text-white"
               >
                 {importing ? <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> : <Check className="h-3.5 w-3.5 mr-1" />}
                 {importing ? 'Importing...' : 'Add All to Wishlist'}
@@ -141,7 +141,7 @@ export function WishlistImportDialog({ open, onOpenChange, slugs }: WishlistImpo
                 return (
                   <div
                     key={p.id}
-                    className="flex items-center gap-3 rounded-lg border border-border/60 p-2.5 hover:border-cyan-300/50 transition-colors"
+                    className="flex items-center gap-3 rounded-lg border border-border/60 p-2.5 hover:border-red-300/50 transition-colors"
                   >
                     <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted border border-border/40">
                       {p.images?.[0]?.url && (
@@ -151,7 +151,7 @@ export function WishlistImportDialog({ open, onOpenChange, slugs }: WishlistImpo
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{p.name}</p>
                       <p className="text-xs text-muted-foreground">{p.shop?.name}</p>
-                      <p className="text-sm font-bold text-cyan-700 dark:text-cyan-400">{formatVND(p.price)}</p>
+                      <p className="text-sm font-bold text-red-700 dark:text-red-400">{formatVND(p.price)}</p>
                     </div>
                     <button
                       onClick={() => importOne(p.id, p)}

@@ -32,14 +32,14 @@ export function BomServiceBanner() {
       {/* Circuit overlay glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-32 -bottom-32 h-[400px] w-[400px] rounded-full bg-cyan-500/15 blur-[120px]"
+        className="pointer-events-none absolute -right-32 -bottom-32 h-[400px] w-[400px] rounded-full bg-red-500/15 blur-[120px]"
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col gap-4">
-            <div className="inline-flex items-center gap-2 w-fit rounded-full bg-cyan-500/20 border border-cyan-500/40 px-3 py-1 text-xs font-bold text-cyan-300">
+            <div className="inline-flex items-center gap-2 w-fit rounded-full bg-red-500/20 border border-red-500/40 px-3 py-1 text-xs font-bold text-red-300">
               <Zap className="h-3.5 w-3.5" />
               {t('bomBanner.badge')}
             </div>
@@ -55,11 +55,11 @@ export function BomServiceBanner() {
             {/* Key feature points */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
               <div className="flex items-center gap-2 text-xs text-slate-200">
-                <CheckCircle2 className="h-4 w-4 text-cyan-400 shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-red-400 shrink-0" />
                 <span>{t('bomBanner.feature1')}</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-200">
-                <CheckCircle2 className="h-4 w-4 text-teal-400 shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-rose-400 shrink-0" />
                 <span>{t('bomBanner.feature2')}</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-200">
@@ -73,7 +73,7 @@ export function BomServiceBanner() {
               <Button
                 onClick={() => goCategory('pcb-boards')}
                 size="lg"
-                className="h-10 px-5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white font-bold text-xs sm:text-sm gap-2 shadow-[0_8px_20px_-6px_rgba(6,182,212,0.6)] cursor-pointer"
+                className="h-10 px-5 rounded-xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-600 hover:to-rose-500 text-white font-bold text-xs sm:text-sm gap-2 shadow-[0_8px_20px_-6px_rgba(220,38,38,0.6)] cursor-pointer"
               >
                 <Upload className="h-4 w-4" />
                 {t('bomBanner.uploadBom')}
@@ -85,7 +85,7 @@ export function BomServiceBanner() {
                 size="lg"
                 className="h-10 px-4 rounded-xl border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-slate-800 hover:text-white text-xs font-semibold gap-1.5 cursor-pointer"
               >
-                <Layers className="h-4 w-4 text-cyan-400" />
+                <Layers className="h-4 w-4 text-red-400" />
                 {t('bomBanner.instantPcb')}
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
@@ -94,10 +94,10 @@ export function BomServiceBanner() {
 
           {/* Right Interactive Visual Simulation */}
           <div className="lg:col-span-5">
-            <div className="rounded-2xl border border-cyan-500/30 bg-slate-900/90 p-4 shadow-xl backdrop-blur-sm">
+            <div className="rounded-2xl border border-red-500/30 bg-slate-900/90 p-4 shadow-xl backdrop-blur-sm">
               <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                 <div className="flex items-center gap-2">
-                  <FileSpreadsheet className="h-4 w-4 text-cyan-400" />
+                  <FileSpreadsheet className="h-4 w-4 text-red-400" />
                   <span className="text-xs font-mono font-bold text-slate-200">BOM_ESP32_IoT_Project.xlsx</span>
                 </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
@@ -114,7 +114,7 @@ export function BomServiceBanner() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-slate-400">10 chiếc</span>
-                    <span className="text-cyan-400 font-bold">₫650.000</span>
+                    <span className="text-red-400 font-bold">₫650.000</span>
                   </div>
                 </div>
 
@@ -125,7 +125,7 @@ export function BomServiceBanner() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-slate-400">10 chiếc</span>
-                    <span className="text-cyan-400 font-bold">₫450.000</span>
+                    <span className="text-red-400 font-bold">₫450.000</span>
                   </div>
                 </div>
 
@@ -136,7 +136,7 @@ export function BomServiceBanner() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-slate-400">5 tấm</span>
-                    <span className="text-cyan-400 font-bold">₫140.000</span>
+                    <span className="text-red-400 font-bold">₫140.000</span>
                   </div>
                 </div>
               </div>
@@ -145,7 +145,7 @@ export function BomServiceBanner() {
               <div className="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] text-slate-400 block">Tổng trọn gói 3 hạng mục</span>
-                  <span className="text-sm font-extrabold text-cyan-400 font-mono">₫1.240.000</span>
+                  <span className="text-sm font-extrabold text-red-400 font-mono">₫1.240.000</span>
                 </div>
                 <span className="text-[10px] text-emerald-400 flex items-center gap-1">
                   <ShieldCheck className="h-3.5 w-3.5" />

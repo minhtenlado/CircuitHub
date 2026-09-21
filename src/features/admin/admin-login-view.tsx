@@ -55,7 +55,7 @@ export function AdminLoginView() {
         <div className="bg-slate-800/80 backdrop-blur-xl border border-slate-700 rounded-2xl p-8 shadow-2xl">
           {/* Shield icon */}
           <div className="flex justify-center mb-6">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-400 flex items-center justify-center shadow-[0_8px_24px_-6px_rgba(6,182,212,0.5)]">
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-red-600 to-rose-500 flex items-center justify-center shadow-[0_8px_24px_-6px_rgba(220,38,38,0.5)]">
               <Shield className="h-8 w-8 text-white" />
             </div>
           </div>
@@ -74,7 +74,7 @@ export function AdminLoginView() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="admin hoặc admin@circuithub.vn"
-                className="w-full h-11 px-4 rounded-lg bg-slate-900/60 border border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all"
+                className="w-full h-11 px-4 rounded-lg bg-slate-900/60 border border-slate-700 text-white placeholder:text-slate-500 focus:border-red-400 focus:ring-2 focus:ring-red-600/20 outline-none transition-all"
               />
             </div>
             <div className="space-y-1.5">
@@ -86,13 +86,13 @@ export function AdminLoginView() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full h-11 px-4 rounded-lg bg-slate-900/60 border border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all"
+                className="w-full h-11 px-4 rounded-lg bg-slate-900/60 border border-slate-700 text-white placeholder:text-slate-500 focus:border-red-400 focus:ring-2 focus:ring-red-600/20 outline-none transition-all"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 rounded-lg bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-600 hover:to-teal-500 text-white font-semibold disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              className="w-full h-11 rounded-lg bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-600 hover:to-rose-500 text-white font-semibold disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
               {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Shield className="h-4 w-4" />}
               {loading ? 'Verifying...' : 'Access Admin Panel'}
@@ -102,7 +102,7 @@ export function AdminLoginView() {
           <div className="mt-6 pt-6 border-t border-slate-700">
             <button
               onClick={() => setView('home', {})}
-              className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-cyan-400 transition-colors mx-auto"
+              className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-red-400 transition-colors mx-auto"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to marketplace

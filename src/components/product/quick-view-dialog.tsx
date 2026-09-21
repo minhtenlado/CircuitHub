@@ -246,10 +246,10 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                   return (
                     <div
                       key={i}
-                      className="flex flex-col gap-0.5 rounded-xl bg-slate-50/80 dark:bg-slate-900/80 border border-border/60 p-2.5 transition-colors hover:border-cyan-500/40"
+                      className="flex flex-col gap-0.5 rounded-xl bg-slate-50/80 dark:bg-slate-900/80 border border-border/60 p-2.5 transition-colors hover:border-red-500/40"
                     >
                       <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                        <Icon className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" />
+                        <Icon className="h-3.5 w-3.5 text-red-600 dark:text-red-400 shrink-0" />
                         <span className="truncate">{spec.label}</span>
                       </div>
                       <span className="text-xs font-bold text-foreground mt-0.5 truncate" title={spec.value}>
@@ -335,7 +335,7 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                     });
                     onOpenChange(false);
                   }}
-                  className="flex-1 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-sm shadow-md cursor-pointer"
+                  className="flex-1 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-sm shadow-md cursor-pointer"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   {t('productDetail.downloadFree')}
@@ -357,9 +357,9 @@ export function QuickViewDialog({ open, onOpenChange, product }: QuickViewDialog
                 size="lg"
                 variant="outline"
                 onClick={handleViewFullDetails}
-                className="h-12 rounded-xl border-border/80 hover:bg-cyan-50/60 dark:hover:bg-slate-800 text-foreground font-semibold text-sm cursor-pointer"
+                className="h-12 rounded-xl border-border/80 hover:bg-red-50/60 dark:hover:bg-slate-800 text-foreground font-semibold text-sm cursor-pointer"
               >
-                <Eye className="h-4 w-4 mr-2 text-cyan-600 dark:text-cyan-400" />
+                <Eye className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
                 {t('product.viewDetails')}
               </Button>
 

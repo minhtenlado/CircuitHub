@@ -78,7 +78,7 @@ function FooterBadge({
       className={
         'inline-flex items-center rounded-md border px-2 py-1 font-mono text-[10px] tracking-tight transition-colors ' +
         (highlight
-          ? 'border-cyan-300/60 bg-cyan-50/70 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300'
+          ? 'border-red-300/60 bg-red-50/70 dark:bg-red-900/30 text-red-700 dark:text-red-300'
           : 'border-border/60 bg-card/80 dark:bg-slate-900/80 text-muted-foreground')
       }
     >
@@ -153,14 +153,14 @@ export function Footer() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ delay: idx * 0.06, duration: 0.4, ease: 'easeOut' }}
-                className="group relative flex items-center gap-3 rounded-xl border border-border/60 bg-card/80 dark:bg-slate-900/80 px-4 py-3.5 backdrop-blur-sm transition-all hover:border-cyan-300/70 hover:shadow-[0_8px_24px_-12px_rgba(6,182,212,0.35)]"
+                className="group relative flex items-center gap-3 rounded-xl border border-border/60 bg-card/80 dark:bg-slate-900/80 px-4 py-3.5 backdrop-blur-sm transition-all hover:border-red-300/70 hover:shadow-[0_8px_24px_-12px_rgba(220,38,38,0.25)]"
               >
                 {/* Cyan-accented icon tile */}
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-900/50 dark:to-teal-900/50 text-cyan-600 dark:text-cyan-400 ring-1 ring-cyan-200/60 dark:ring-cyan-700/40 transition-all group-hover:from-cyan-500 group-hover:to-teal-400 group-hover:text-white group-hover:ring-transparent">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/50 dark:to-rose-900/50 text-red-600 dark:text-red-400 ring-1 ring-red-200/60 dark:ring-red-700/40 transition-all group-hover:from-red-600 group-hover:to-rose-500 group-hover:text-white group-hover:ring-transparent">
                   <item.icon className="h-4 w-4" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-semibold text-foreground group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors">
+                  <span className="block text-sm font-semibold text-foreground group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors">
                     {item.title}
                   </span>
                   <span className="block truncate text-[11px] text-muted-foreground">
@@ -178,7 +178,7 @@ export function Footer() {
               <Logo size="md" />
 
               {/* Tagline */}
-              <p className="mt-4 font-mono text-[13px] font-medium tracking-tight text-cyan-700/90 dark:text-cyan-400/90">
+              <p className="mt-4 font-mono text-[13px] font-medium tracking-tight text-red-700/90 dark:text-red-400/90">
                 {brand.tagline}
               </p>
 
@@ -191,7 +191,7 @@ export function Footer() {
               <div className="mt-4 space-y-1.5 text-xs text-muted-foreground">
                 <p className="flex items-center gap-2">
                   <span className="font-semibold text-foreground">Hotline / Zalo:</span>
-                  <a href={`tel:${brand.phone}`} className="text-cyan-600 dark:text-cyan-400 font-bold hover:underline">
+                  <a href={`tel:${brand.phone}`} className="text-red-600 dark:text-red-400 font-bold hover:underline">
                     {brand.phone}
                   </a>
                 </p>
@@ -217,7 +217,7 @@ export function Footer() {
                     rel="noopener noreferrer"
                     aria-label={s.label}
                     title={s.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-card dark:bg-slate-900 text-muted-foreground transition-all hover:border-cyan-300 hover:bg-cyan-50/60 hover:text-cyan-600 hover:shadow-[0_4px_18px_-8px_rgba(6,182,212,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-card dark:bg-slate-900 text-muted-foreground transition-all hover:border-red-300 hover:bg-red-50/60 hover:text-red-600 hover:shadow-[0_4px_18px_-8px_rgba(220,38,38,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/40"
                   >
                     <s.icon className="h-4 w-4" />
                   </a>
@@ -247,7 +247,7 @@ export function Footer() {
                   <Button
                     type="submit"
                     disabled={submitting}
-                    className="shrink-0 bg-gradient-to-r from-cyan-500 to-teal-400 text-white shadow-[0_4px_18px_-6px_rgba(6,182,212,0.5)] transition-all hover:from-cyan-600 hover:to-teal-500 hover:shadow-[0_6px_22px_-8px_rgba(6,182,212,0.55)]"
+                    className="shrink-0 bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-[0_4px_18px_-6px_rgba(220,38,38,0.4)] transition-all hover:from-red-700 hover:to-rose-600 hover:shadow-[0_6px_22px_-8px_rgba(220,38,38,0.55)]"
                   >
                     <span className="hidden sm:inline">{t('footer.subscribe')}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -278,7 +278,7 @@ export function Footer() {
                           <button
                             type="button"
                             onClick={() => handleNav(item)}
-                            className="group inline-flex items-center gap-1 text-left text-sm text-muted-foreground transition-colors hover:text-cyan-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 rounded"
+                            className="group inline-flex items-center gap-1 text-left text-sm text-muted-foreground transition-colors hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/40 rounded"
                           >
                             <span className="transition-transform group-hover:translate-x-0.5">
                               {label}
