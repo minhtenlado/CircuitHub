@@ -1,0 +1,11 @@
+{
+  "apiKey": "AIzaSyAKp9U8JGFMWmA4vq2vsTX1jCI4fI5aOps",
+  "authDomain": "smartaquarium-14b09.firebaseapp.com",
+  "databaseURL": "https://smartaquarium-14b09-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "smartaquarium-14b09",
+  "storageBucket": "smartaquarium-14b09.firebasestorage.app",
+  "messagingSenderId": "98452360677",
+  "appId": "1:98452360677:web:216f11b0b9e97fd822730c",
+  "measurementId": "G-LDPH4Y3XT1",
+  "backendMode": "spark"
+}

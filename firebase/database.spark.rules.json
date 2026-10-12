@@ -1,0 +1,374 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists()",
+        "profile": {
+          ".write": "auth != null && auth.uid === $uid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && newData.exists()",
+          ".validate": "newData.hasChildren(['displayName','avatarPath','createdAt','updatedAt'])",
+          "displayName": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80"
+          },
+          "avatarPath": {
+            ".validate": "newData.isString() && newData.val() === ''"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || (data.exists() && newData.val() === data.val()))"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() === now"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "preferences": {
+          ".write": "auth != null && auth.uid === $uid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && newData.exists()",
+          ".validate": "newData.hasChildren(['themeMode','notificationsEnabled','offlineAlerts','thresholdAlerts'])",
+          "themeMode": {
+            ".validate": "newData.val() === 'system' || newData.val() === 'light' || newData.val() === 'dark'"
+          },
+          "notificationsEnabled": {
+            ".validate": "newData.isBoolean()"
+          },
+          "offlineAlerts": {
+            ".validate": "newData.isBoolean()"
+          },
+          "thresholdAlerts": {
+            ".validate": "newData.isBoolean()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "sparkAquariums": {
+      "$ownerUid": {
+        ".read": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists()",
+        "$tankId": {
+          "meta": {
+            ".validate": "newData.hasChildren(['ownerUid','name','location','volumeLiters','createdAt','updatedAt'])",
+            "ownerUid": {
+              ".validate": "newData.isString() && newData.val() === $ownerUid && (!data.exists() || newData.val() === data.val())"
+            },
+            "name": {
+              ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && newData.exists()",
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80"
+            },
+            "location": {
+              ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && newData.exists()",
+              ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 120"
+            },
+            "volumeLiters": {
+              ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && newData.exists()",
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000000"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || (data.exists() && newData.val() === data.val()))"
+            },
+            "updatedAt": {
+              ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && newData.exists()",
+              ".validate": "newData.isNumber() && newData.val() === now"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "systems": {
+            "$systemId": {
+              ".validate": "newData.hasChildren(['meta','desired','config']) && newData.child('config').hasChildren(['servo','thresholds']) && $systemId.matches(/^[A-Za-z0-9_-]{8,64}$/)",
+              "desired": {
+                ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                ".validate": "newData.hasChildren(['airPump', 'fan', 'relay', 'led1', 'led2', 'led3'])",
+                "airPump": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "fan": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "relay": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "led1": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "led2": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "led3": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "$other": {
+                  ".validate": false
+                }
+              },
+              "config": {
+                "servo": {
+                  ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                  ".validate": "newData.hasChildren(['minAngle', 'maxAngle']) && newData.child('minAngle').val() < newData.child('maxAngle').val()",
+                  "minAngle": {
+                    ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 180"
+                  },
+                  "maxAngle": {
+                    ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 180"
+                  },
+                  "$other": {
+                    ".validate": false
+                  }
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "thresholds": {
+                  ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                  ".validate": "newData.hasChildren(['minWaterTemperature','maxWaterTemperature','maxTds','minAdapterVoltage']) && newData.child('minWaterTemperature').val() < newData.child('maxWaterTemperature').val()",
+                  "minWaterTemperature": {
+                    ".validate": "newData.isNumber() && newData.val() >= -55 && newData.val() <= 125"
+                  },
+                  "maxWaterTemperature": {
+                    ".validate": "newData.isNumber() && newData.val() >= -55 && newData.val() <= 125"
+                  },
+                  "maxTds": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000"
+                  },
+                  "minAdapterVoltage": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 60"
+                  },
+                  "$other": {
+                    ".validate": false
+                  }
+                },
+                ".validate": "newData.hasChildren(['servo','thresholds'])"
+              },
+              "reported": {
+                "outputs": {
+                  ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                  ".validate": "newData.hasChildren(['airPump', 'fan', 'relay', 'led1', 'led2', 'led3'])",
+                  "airPump": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "fan": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "relay": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "led1": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "led2": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "led3": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "$other": {
+                    ".validate": false
+                  }
+                },
+                "sensors": {
+                  "waterTemperature": {
+                    ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                    ".validate": "newData.hasChildren(['valid', 'updatedAt']) && ((newData.child('valid').val() === false && !newData.child('value').exists()) || (newData.child('valid').val() === true && newData.child('value').isNumber()))",
+                    "valid": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "value": {
+                      ".validate": "newData.isNumber() && newData.val() >= -55 && newData.val() <= 125"
+                    },
+                    "updatedAt": {
+                      ".validate": "newData.isNumber() && newData.val() === now"
+                    },
+                    "$other": {
+                      ".validate": false
+                    }
+                  },
+                  "ambientTemperature": {
+                    ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                    ".validate": "newData.hasChildren(['valid', 'updatedAt']) && ((newData.child('valid').val() === false && !newData.child('value').exists()) || (newData.child('valid').val() === true && newData.child('value').isNumber()))",
+                    "valid": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "value": {
+                      ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 50"
+                    },
+                    "updatedAt": {
+                      ".validate": "newData.isNumber() && newData.val() === now"
+                    },
+                    "$other": {
+                      ".validate": false
+                    }
+                  },
+                  "humidity": {
+                    ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                    ".validate": "newData.hasChildren(['valid', 'updatedAt']) && ((newData.child('valid').val() === false && !newData.child('value').exists()) || (newData.child('valid').val() === true && newData.child('value').isNumber()))",
+                    "valid": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "value": {
+                      ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+                    },
+                    "updatedAt": {
+                      ".validate": "newData.isNumber() && newData.val() === now"
+                    },
+                    "$other": {
+                      ".validate": false
+                    }
+                  },
+                  "tds": {
+                    ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                    ".validate": "newData.hasChildren(['valid', 'updatedAt']) && ((newData.child('valid').val() === false && !newData.child('value').exists()) || (newData.child('valid').val() === true && newData.child('value').isNumber()))",
+                    "valid": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "value": {
+                      ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000"
+                    },
+                    "updatedAt": {
+                      ".validate": "newData.isNumber() && newData.val() === now"
+                    },
+                    "$other": {
+                      ".validate": false
+                    }
+                  },
+                  "adapterVoltage": {
+                    ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                    ".validate": "newData.hasChildren(['valid', 'updatedAt']) && ((newData.child('valid').val() === false && !newData.child('value').exists()) || (newData.child('valid').val() === true && newData.child('value').isNumber()))",
+                    "valid": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "value": {
+                      ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 60"
+                    },
+                    "updatedAt": {
+                      ".validate": "newData.isNumber() && newData.val() === now"
+                    },
+                    "$other": {
+                      ".validate": false
+                    }
+                  },
+                  "$other": {
+                    ".validate": false
+                  }
+                },
+                "lastSeen": {
+                  ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.isNumber() && newData.val() === now",
+                  ".validate": "newData.isNumber() && newData.val() === now"
+                },
+                "$other": {
+                  ".validate": false
+                }
+              },
+              "commands": {
+                ".indexOn": [
+                  "createdAt"
+                ],
+                "$commandId": {
+                  ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && !data.exists() && newData.exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('reported').child('lastSeen').isNumber() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('reported').child('lastSeen').val() >= now - 30000 && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('reported').child('lastSeen').val() <= now",
+                  ".validate": "newData.hasChildren(['id', 'type', 'createdAt', 'expiresAt', 'requestedBy']) && ((newData.child('type').val() === 'servo' && newData.hasChild('angle') && !newData.hasChild('durationMs')) || (newData.child('type').val() === 'buzzer' && newData.hasChild('durationMs') && !newData.hasChild('angle')))",
+                  "id": {
+                    ".validate": "newData.isString() && newData.val() === $commandId && newData.val().matches(/^[A-Za-z0-9_-]{8,64}$/)"
+                  },
+                  "type": {
+                    ".validate": "newData.val() === 'servo' || newData.val() === 'buzzer'"
+                  },
+                  "angle": {
+                    ".validate": "newData.isNumber() && newData.val() % 1 === 0 && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('config').child('servo').hasChildren(['minAngle', 'maxAngle']) && newData.val() >= root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('config').child('servo').child('minAngle').val() && newData.val() <= root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('config').child('servo').child('maxAngle').val()"
+                  },
+                  "durationMs": {
+                    ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 100 && newData.val() <= 5000"
+                  },
+                  "createdAt": {
+                    ".validate": "newData.isNumber() && newData.val() === now"
+                  },
+                  "expiresAt": {
+                    ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() > now && newData.val() <= now + 15000 && newData.val() <= newData.parent().child('createdAt').val() + 15000"
+                  },
+                  "requestedBy": {
+                    ".validate": "newData.isString() && newData.val() === auth.uid"
+                  },
+                  "$other": {
+                    ".validate": false
+                  }
+                }
+              },
+              "acks": {
+                "$commandId": {
+                  ".write": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('commands').child($commandId).exists() && newData.exists() && ((!data.exists() && ((newData.child('status').val() === 'accepted' && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('commands').child($commandId).child('expiresAt').val() > now) || (newData.child('status').val() === 'expired' && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('commands').child($commandId).child('expiresAt').val() <= now) || newData.child('status').val() === 'error')) || (data.child('status').val() === 'accepted' && ((newData.child('status').val() === 'executing' && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('commands').child($commandId).child('expiresAt').val() > now) || (newData.child('status').val() === 'expired' && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('commands').child($commandId).child('expiresAt').val() <= now) || newData.child('status').val() === 'error')) || (data.child('status').val() === 'executing' && (newData.child('status').val() === 'applied' || newData.child('status').val() === 'error')))",
+                  ".validate": "newData.hasChildren(['status', 'processedAt'])",
+                  "status": {
+                    ".validate": "newData.val() === 'accepted' || newData.val() === 'executing' || newData.val() === 'applied' || newData.val() === 'error' || newData.val() === 'expired'"
+                  },
+                  "processedAt": {
+                    ".validate": "newData.isNumber() && newData.val() === now"
+                  },
+                  "message": {
+                    ".validate": "newData.isString() && newData.val().length <= 200"
+                  },
+                  "$other": {
+                    ".validate": false
+                  }
+                }
+              },
+              ".read": "auth != null && root.child('sparkDeviceAccounts').child(auth.uid).val() === true && root.child('sparkDevices').child(auth.uid).child('enabled').val() === true && root.child('sparkDevices').child(auth.uid).child('ownerUid').val() === $ownerUid && root.child('sparkDevices').child(auth.uid).child('tankId').val() === $tankId && root.child('sparkDevices').child(auth.uid).child('systemId').val() === $systemId && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists()",
+              "meta": {
+                ".validate": "newData.hasChildren(['name','createdAt','updatedAt'])",
+                "name": {
+                  ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                  ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80"
+                },
+                "updatedAt": {
+                  ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && root.child('sparkAquariums').child($ownerUid).child($tankId).child('systems').child($systemId).child('meta').exists() && newData.exists()",
+                  ".validate": "newData.isNumber() && newData.val() === now"
+                },
+                "createdAt": {
+                  ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || (data.exists() && newData.val() === data.val()))"
+                },
+                "$other": {
+                  ".validate": false
+                }
+              },
+              "$other": {
+                ".validate": false
+              },
+              ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && root.child('sparkAquariums').child($ownerUid).child($tankId).child('meta').child('ownerUid').val() === $ownerUid && ((!data.exists() && newData.hasChildren(['meta','desired','config']) && !newData.hasChild('reported') && !newData.hasChild('commands') && !newData.hasChild('acks')) || !newData.exists())"
+            }
+          },
+          "$other": {
+            ".validate": false
+          },
+          ".write": "auth != null && auth.uid === $ownerUid && auth.token.aquariumDevice !== true && !root.child('devices').child(auth.uid).exists() && !root.child('sparkDevices').child(auth.uid).exists() && root.child('sparkDeviceAccounts').child(auth.uid).val() !== true && !root.child('accountDeletion').child(auth.uid).exists() && !root.child('deletedAccounts').child(auth.uid).exists() && ((!data.exists() && newData.hasChild('meta') && !newData.hasChild('systems')) || !newData.exists())",
+          ".validate": "newData.hasChild('meta') && $tankId.matches(/^[A-Za-z0-9_-]{8,64}$/)"
+        }
+      }
+    },
+    "sparkDeviceAccounts": {
+      ".read": false,
+      ".write": false,
+      "$deviceUid": {
+        ".read": "auth != null && auth.uid === $deviceUid"
+      }
+    },
+    "sparkDevices": {
+      ".read": false,
+      ".write": false
+    },
+    "accountDeletion": {
+      ".read": false,
+      ".write": false
+    },
+    "deletedAccounts": {
+      ".read": false,
+      ".write": false
+    },
+    "$other": {
+      ".validate": false
+    }
+  }
+}
