@@ -1,6 +1,6 @@
 # AquariumControl
 
-Website tiếng Việt để theo dõi và điều khiển bể cá qua Safari trên iPhone, iPad hoặc trình duyệt máy tính. Mã nguồn này thay website CircuitHub cũ trong repo; tên miền triển khai dự kiến là [circuithub.io.vn](https://circuithub.io.vn/).
+Website tiếng Việt để theo dõi và điều khiển bể cá qua Safari trên iPhone, iPad hoặc trình duyệt máy tính. Mã nguồn này thay website CircuitHub cũ trong repo, đang chạy tại [circuithub.io.vn](https://circuithub.io.vn/).
 
 ## Chạy trên máy
 
@@ -41,6 +41,8 @@ Kết quả build ở `dist/`. `vercel.json` cấu hình framework Vite, cài đ
 `public/firebase-config.json` chứa cấu hình Web SDK công khai, gồm API key nhận diện project. Đây không phải khóa quản trị; quyền dữ liệu được kiểm soát bằng Authentication và Rules. [Giải thích chính thức của Firebase](https://firebase.google.com/docs/projects/api-keys).
 
 Không đưa mật khẩu người dùng/thiết bị, service account, database secret hoặc token CLI vào repo hay mã frontend. Chủ bể chỉ được truy cập bể của mình; `reported` và ACK chỉ do thiết bị được gán ghi. Web không tự gửi lại lệnh một lần khi mất mạng. Thông báo hiện trong trang khi đang mở; phiên bản này chưa có push nền iOS.
+
+Lockfile giữ phiên bản thư viện cố định. Override `@grpc/grpc-js` vá dependency Node đi kèm Firestore trong Firebase SDK; web hiện chỉ dùng Auth và Realtime Database. Chạy `npm audit` khi cập nhật dependency và xem lại override khi Firebase nâng dependency gốc.
 
 Trên iPhone, mở website HTTPS bằng Safari rồi chọn **Chia sẻ → Thêm vào Màn hình chính**. Website vẫn cần mạng để tải giao diện, nhận dữ liệu thật và điều khiển.
 
