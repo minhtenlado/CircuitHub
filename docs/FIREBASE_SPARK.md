@@ -6,13 +6,17 @@ Web dùng project **`smartaquarium-14b09`** với Realtime Database tại Singap
 https://smartaquarium-14b09-default-rtdb.asia-southeast1.firebasedatabase.app
 ```
 
-Firebase Authentication Email/Password đã bật; project được kiểm tra vẫn chưa liên kết billing. Web dùng **Spark miễn phí** trong hạn mức của dịch vụ. Vercel phục vụ giao diện tĩnh; repo này không triển khai Cloud Functions, Cloud Storage, Scheduler hoặc Firebase Hosting.
+Firebase Authentication Email/Password và Google đã bật; project được kiểm tra vẫn chưa liên kết billing. Web dùng **Spark miễn phí** trong hạn mức của dịch vụ. Vercel phục vụ giao diện tĩnh; repo này không triển khai Cloud Functions, Cloud Storage, Scheduler hoặc Firebase Hosting.
 
 `public/firebase-config.json` chứa cấu hình Web SDK, gồm `databaseURL` và `backendMode: "spark"`. API key Firebase dùng để nhận diện project, không cấp quyền quản trị hay đọc/ghi Database. Việc bảo vệ dữ liệu dựa trên Authentication và Security Rules. [Tài liệu API key Firebase](https://firebase.google.com/docs/projects/api-keys).
 
 ## Cấu hình và triển khai Rules
 
 Các hostname `circuithub.io.vn`, `www.circuithub.io.vn` và `circuit-hub-khaki.vercel.app` đã được thêm vào Authentication → Settings → Authorized domains. Nếu đổi tên miền, thêm hostname mới trong [Firebase Console](https://console.firebase.google.com/project/smartaquarium-14b09/authentication/settings); không nhập giao thức hay đường dẫn. Authorized domains không thay thế quyền Database.
+
+Google dùng OAuth client do Firebase tạo, với handler mặc định `https://smartaquarium-14b09.firebaseapp.com/__/auth/handler`; không cần tạo API key mới. Client secret thuộc cấu hình provider phía Firebase, không đưa vào Web SDK hoặc repo. Popup được chọn theo [hướng dẫn Firebase cho trình duyệt chặn lưu trữ bên thứ ba](https://firebase.google.com/docs/auth/web/redirect-best-practices), vì giao diện đang chạy trên Vercel. Không chuyển sang redirect nếu chưa cấu hình proxy/helper cùng origin và OAuth redirect URI.
+
+Lần đầu đăng nhập Google, Firebase tự tạo Auth user; web tạo profile/preferences ở UID đó mà không ghi đè hồ sơ đã có. Firebase SDK lưu phiên tại trình duyệt; web đợi trạng thái Auth và khởi tạo dữ liệu trước khi báo đăng nhập thành công. Các quyền chủ bể/thiết bị trong Rules áp dụng như nhau cho Google và Email/Password. Nếu Google báo tài khoản đã dùng provider khác, đăng nhập bằng phương thức cũ; web không tự liên kết dựa trên email.
 
 File `firebase.json` ở gốc repo trỏ đến `firebase/database.spark.rules.json`; `.firebaserc` chọn project `smartaquarium-14b09`. Khi cần cập nhật Rules, chạy từ gốc repo bằng tài khoản quản trị project:
 

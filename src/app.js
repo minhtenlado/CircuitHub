@@ -16,6 +16,7 @@ let state = {mode:'demo',user:null,tanks:[],notifications:[],connected:true,serv
 let tab = 'overview', selectedTank = '', selectedSystem = '', client, demoClient, liveClient, firebaseConfig = null, liveState = null;
 let servoAngle = 90, theme = readLocal('aquarium-theme') || 'light', samples = [], sampleKey = '', lastSampleAt = 0;
 let toastTimer, liveRequested = false, configDirty = false, buzzerDuration = 500;
+let authTaskPending = false;
 
 function readLocal(key) { try {return localStorage.getItem(key);} catch {return null;} }
 function writeLocal(key,value) { try {localStorage.setItem(key,value);} catch {} }
@@ -148,12 +149,89 @@ async function handle(name,el) {
   if(name==='connect')return loginModal();
   if(name==='logout')return confirm('Đăng xuất?','Bạn sẽ quay lại bản demo trên trình duyệt này.',async()=>{await liveClient?.logout();liveRequested=false;client=demoClient;receive(demoClient.getState?demoClient.getState():demoSnapshot);},'Đăng xuất');
 }
+function syncAuthControls() {
+  const form = modal.querySelector('#auth-form');
+  if (!form) return;
+  form.setAttribute('aria-busy', String(authTaskPending));
+  form.querySelectorAll('button, input').forEach(control => { control.disabled = authTaskPending; });
+}
 function loginModal(register=false) {
-  if(!firebaseConfig)return openModal('Kết nối bể cá thật',`<div class="connect-illustration">${icon('wifi')}</div><p class="modal-description">Trang web đang ở giai đoạn demo. Khi project Firebase được cấu hình, bạn có thể đăng nhập bằng tài khoản đang dùng trên app Android để theo dõi và điều khiển cùng bể cá.</p><div class="notice">Hiện chưa kết nối với Firebase hoặc thiết bị thật.</div><button class="button primary full-width" data-cancel>Tiếp tục trải nghiệm demo</button>`);
-  openModal(register?'Tạo tài khoản':'Đăng nhập bể cá của bạn',`<p class="modal-description">${firebaseConfig.backendMode==='spark'?'Đăng nhập tài khoản bể cá của bạn. Dữ liệu thật được lưu riêng cho từng người dùng trên Firebase.':'Dùng chung tài khoản với ứng dụng AquariumControl trên Android.'}</p><form>${register?'<label>Tên hiển thị<input name="name" required maxlength="80" autocomplete="name"></label>':''}<label>Email<input name="email" type="email" required autocomplete="email"></label><label>Mật khẩu<input name="password" type="password" required minlength="6" autocomplete="${register?'new-password':'current-password'}"></label><p id="auth-error" class="form-error" role="alert"></p><button type="submit" class="button primary full-width">${register?'Tạo tài khoản':'Đăng nhập'}</button><div class="auth-links"><button type="button" id="auth-toggle" class="text-button">${register?'Đã có tài khoản? Đăng nhập':'Chưa có tài khoản? Đăng ký'}</button>${!register?'<button type="button" id="reset-password" class="text-button">Quên mật khẩu</button>':''}</div></form>`);
-  modal.querySelector('#auth-toggle').onclick=()=>loginModal(!register);
-  modal.querySelector('#reset-password')?.addEventListener('click',async()=>{const email=modal.querySelector('[name=email]').value;if(!email)return toast('Nhập email trước để đặt lại mật khẩu.');await action(()=>liveClient.resetPassword(email),'Nếu email hợp lệ, hướng dẫn đặt lại mật khẩu sẽ được gửi.');});
-  modal.querySelector('form').onsubmit=async event=>{event.preventDefault();const data=new FormData(event.target),b=event.target.querySelector('[type=submit]');b.disabled=true;try {liveRequested=true;const result=await(register?liveClient.register(data.get('name'),data.get('email'),data.get('password')):liveClient.login(data.get('email'),data.get('password')));client=liveClient;if(liveState?.user)receive(liveState);modal.close();toast(result?.profilePending?'Đã tạo tài khoản. Bạn có thể lưu lại tên hiển thị trong Tài khoản.':'Đã đăng nhập. Đang tải bể cá của bạn.');}catch(error){liveRequested=false;modal.querySelector('#auth-error').textContent=error.message;}finally{b.disabled=false;}};
+  if (!firebaseConfig) return openModal('Kết nối bể cá thật',`<div class="connect-illustration">${icon('wifi')}</div><p class="modal-description">Trang web đang ở giai đoạn demo. Khi project Firebase được cấu hình, bạn có thể đăng nhập bằng tài khoản đang dùng trên app Android để theo dõi và điều khiển cùng bể cá.</p><div class="notice">Hiện chưa kết nối với Firebase hoặc thiết bị thật.</div><button class="button primary full-width" data-cancel>Tiếp tục trải nghiệm demo</button>`);
+  const googleLogo = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M21.6 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.38a4.61 4.61 0 0 1-2 3.02v2.51h3.23c1.89-1.74 2.99-4.3 2.99-7.36Z"/><path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.61-2.41l-3.23-2.51c-.9.6-2.05.97-3.38.97-2.6 0-4.81-1.76-5.6-4.12H3.06v2.59A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 13.93a6 6 0 0 1 0-3.86V7.48H3.06a10 10 0 0 0 0 9.04l3.34-2.59Z"/><path fill="#EA4335" d="M12 5.95c1.48 0 2.81.51 3.86 1.51l2.9-2.89A9.63 9.63 0 0 0 12 2a10 10 0 0 0-8.94 5.48l3.34 2.59C7.19 7.71 9.4 5.95 12 5.95Z"/></svg>`;
+  openModal(register ? 'Tạo tài khoản' : 'Đăng nhập bể cá của bạn', `
+    <p class="modal-description">${firebaseConfig.backendMode==='spark' ? 'Đăng nhập tài khoản bể cá của bạn. Dữ liệu thật được lưu riêng cho từng người dùng trên Firebase.' : 'Dùng chung tài khoản với ứng dụng AquariumControl trên Android.'}</p>
+    <form id="auth-form">
+      <button type="button" id="google-signin" class="button google-signin full-width">${googleLogo}<span>Đăng nhập bằng Google</span></button>
+      <p class="auth-google-note">Lần đầu dùng Google, tài khoản bể cá sẽ được tạo tự động.</p>
+      ${liveState?.persistence === 'session' ? '<p class="notice">Trình duyệt này chỉ giữ đăng nhập đến khi đóng tab. Cho phép lưu dữ liệu website để giữ phiên lâu hơn.</p>' : liveState?.persistence === 'memory' ? '<p class="notice">Trình duyệt đang chặn lưu dữ liệu. Bạn sẽ cần đăng nhập lại khi tải lại trang.</p>' : ''}
+      <div class="auth-divider"><span>hoặc dùng email</span></div>
+      ${register ? '<label>Tên hiển thị<input name="name" required maxlength="80" autocomplete="name"></label>' : ''}
+      <label>Email<input name="email" type="email" required autocomplete="email"></label>
+      <label>Mật khẩu<input name="password" type="password" required minlength="6" autocomplete="${register ? 'new-password' : 'current-password'}"></label>
+      <p id="auth-error" class="form-error" role="alert"></p>
+      <button type="submit" class="button primary full-width">${register ? 'Tạo tài khoản' : 'Đăng nhập'}</button>
+      <div class="auth-links">
+        <button type="button" id="auth-toggle" class="text-button">${register ? 'Đã có tài khoản? Đăng nhập' : 'Chưa có tài khoản? Đăng ký'}</button>
+        ${!register ? '<button type="button" id="reset-password" class="text-button">Quên mật khẩu</button>' : ''}
+      </div>
+    </form>`);
+  const form = modal.querySelector('#auth-form');
+  const errorEl = form.querySelector('#auth-error');
+  const googleButton = form.querySelector('#google-signin');
+  const submitButton = form.querySelector('[type=submit]');
+  const resetButton = form.querySelector('#reset-password');
+  const isCurrentModal = () => modal.open && modal.contains(form);
+  syncAuthControls();
+
+  async function runAuth(operation, kind, label) {
+    if (authTaskPending) return;
+    authTaskPending = true;
+    syncAuthControls();
+    errorEl.textContent = '';
+    const originalLabel = label.textContent;
+    label.textContent = kind === 'reset' ? 'Đang gửi…' : 'Đang đăng nhập…';
+    try {
+      if (kind !== 'reset') liveRequested = true;
+      // Invoke now, within the click gesture, so Safari can open the Google popup.
+      const result = await operation();
+      if (kind === 'reset') {
+        toast('Nếu email hợp lệ, hướng dẫn đặt lại mật khẩu sẽ được gửi.');
+        return;
+      }
+      client = liveClient;
+      if (liveState?.user) receive(liveState);
+      if (isCurrentModal()) modal.close();
+      toast(result?.profilePending ? 'Đã tạo tài khoản. Bạn có thể lưu lại tên hiển thị trong Tài khoản.'
+        : result?.isNewUser ? 'Đã tạo tài khoản bằng Google. Thêm bể cá đầu tiên của bạn.'
+        : 'Đã đăng nhập. Đang tải bể cá của bạn.');
+    } catch (error) {
+      if (kind !== 'reset') liveRequested = Boolean(liveState?.user);
+      const message = error.message || 'Chưa đăng nhập được. Vui lòng thử lại.';
+      if (isCurrentModal()) errorEl.textContent = message;
+      else toast(message);
+    } finally {
+      authTaskPending = false;
+      if (form.isConnected) label.textContent = originalLabel;
+      syncAuthControls();
+    }
+  }
+  googleButton.onclick = () => runAuth(() => liveClient.loginWithGoogle(), 'google', googleButton.querySelector('span'));
+  form.querySelector('#auth-toggle').onclick = () => { if (!authTaskPending) loginModal(!register); };
+  resetButton?.addEventListener('click', () => {
+    if (authTaskPending) return;
+    const emailInput = form.elements.email;
+    if (!emailInput.value.trim()) { errorEl.textContent = 'Nhập email trước để đặt lại mật khẩu.'; emailInput.focus(); return; }
+    if (!emailInput.reportValidity()) return;
+    runAuth(() => liveClient.resetPassword(emailInput.value), 'reset', resetButton);
+  });
+  form.onsubmit = event => {
+    event.preventDefault();
+    if (authTaskPending) return;
+    const data = new FormData(form);
+    runAuth(() => register
+      ? liveClient.register(data.get('name'), data.get('email'), data.get('password'))
+      : liveClient.login(data.get('email'), data.get('password')), 'email', submitButton);
+  };
 }
 function bind() {
   app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{configDirty=false;tab=b.dataset.tab;history.replaceState(null,'',`#${tab}`);render();window.scrollTo({top:0,behavior:'instant'});});

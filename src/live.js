@@ -3,6 +3,7 @@ import {
   validateOutput, validateProfileName, validateTank,
 } from './policy.js';
 import { createSparkOperations, sparkSystemPath } from './spark.js';
+import { authProfileName, createGoogleSignIn } from './auth.js';
 
 const errorMessages = {
   'invalid-email': 'Địa chỉ email chưa hợp lệ.',
@@ -16,6 +17,13 @@ const errorMessages = {
   'user-disabled': 'Tài khoản đã bị vô hiệu hóa.',
   'operation-not-allowed': 'Phương thức đăng nhập này chưa được bật trong Firebase.',
   'configuration-not-found': 'Authentication chưa được khởi tạo cho project. Cần bật Email/Password trong Firebase Console.',
+  'popup-blocked': 'Trình duyệt đã chặn cửa sổ Google. Cho phép cửa sổ bật lên cho website này rồi thử lại.',
+  'popup-closed-by-user': 'Bạn đã đóng cửa sổ Google trước khi đăng nhập xong. Có thể thử lại.',
+  'cancelled-popup-request': 'Một lần đăng nhập Google đang được xử lý. Hãy hoàn tất cửa sổ đang mở.',
+  'unauthorized-domain': 'Tên miền này chưa được cho phép đăng nhập trong Firebase.',
+  'account-exists-with-different-credential': 'Email này đã dùng một cách đăng nhập khác. Hãy đăng nhập bằng phương thức đã dùng trước đây.',
+  'operation-not-supported-in-this-environment': 'Hãy mở website bằng Safari, Chrome hoặc Edge để đăng nhập Google.',
+  'web-storage-unsupported': 'Trình duyệt đang chặn dữ liệu website. Cho phép lưu dữ liệu rồi thử lại bằng Safari, Chrome hoặc Edge.',
   'unauthenticated': 'Vui lòng đăng nhập lại để tiếp tục.',
   'permission-denied': 'Tài khoản không có quyền truy cập hoặc cấu hình Firebase chưa đúng.',
   'PERMISSION_DENIED': 'Tài khoản không có quyền truy cập hoặc cấu hình Firebase chưa đúng.',
@@ -60,16 +68,21 @@ export async function createLiveClient(config, onState, onError = () => {}) {
   const appName = `aquarium-web-${config.projectId}`;
   const app = appSdk.getApps().find(item => item.name === appName) || appSdk.initializeApp(config, appName);
   const auth = authSdk.getAuth(app);
+  auth.languageCode = 'vi';
   const db = dbSdk.getDatabase(app, databaseUrl);
   const functionsSdk = spark ? null : await import('firebase/functions');
   const functions = functionsSdk?.getFunctions(app, 'asia-southeast1');
+  let persistence = 'local';
   try { await authSdk.setPersistence(auth, authSdk.browserLocalPersistence); }
-  catch { await authSdk.setPersistence(auth, authSdk.inMemoryPersistence); }
+  catch {
+    try { await authSdk.setPersistence(auth, authSdk.browserSessionPersistence); persistence = 'session'; }
+    catch { await authSdk.setPersistence(auth, authSdk.inMemoryPersistence); persistence = 'memory'; }
+  }
 
   let disposed = false;
   let generation = 0;
   let cachedOffset = null;
-  let state = { mode: 'live', backendMode: spark ? 'spark' : 'functions', user: null, tanks: [], notifications: [], connected: false, serverOffset: null };
+  let state = { mode: 'live', backendMode: spark ? 'spark' : 'functions', persistence, user: null, tanks: [], notifications: [], connected: false, serverOffset: null };
   const sessionListeners = [];
   const tankListeners = new Map();
   const tankMap = new Map();
@@ -232,7 +245,7 @@ export async function createLiveClient(config, onState, onError = () => {}) {
         report(userError('Tài khoản thiết bị không dùng để quản lý bể. Hãy dùng tài khoản chủ bể.'));
         await authSdk.signOut(auth); return;
       }
-      state.user = { uid: user.uid, email: user.email ?? '', displayName: user.displayName || user.email?.split('@')[0] || 'Người dùng', emailVerified: user.emailVerified };
+      state.user = { uid: user.uid, email: user.email ?? '', displayName: authProfileName(user), emailVerified: user.emailVerified };
       emit();
       listen(`users/${user.uid}/profile`, snapshot => {
         if (snapshot.exists()) state.user = { ...state.user, displayName: snapshot.val().displayName || state.user.displayName };
@@ -297,8 +310,10 @@ export async function createLiveClient(config, onState, onError = () => {}) {
   emit();
 
   const sparkOperations = spark ? createSparkOperations({db, dbSdk, auth, requireConnected, ownTank, ownSystem}) : null;
+  const googleSignIn = createGoogleSignIn({ auth, authSdk, awaitSession, isActive: () => !disposed });
   return {
     ready,
+    loginWithGoogle: () => execute(googleSignIn),
     login: (email, password) => execute(async () => {
       const credential = await authSdk.signInWithEmailAndPassword(auth, email.trim(), password);
       await awaitSession(credential.user);

@@ -18,7 +18,9 @@ Web đã nối Firebase project `smartaquarium-14b09`. Hộp thoại đăng nh�
 
 ## Kết nối bể thật
 
-Đăng ký bằng email/mật khẩu, tạo bể và thêm hệ thống. Firebase **Spark miễn phí** cung cấp Authentication và Realtime Database; Vercel phục vụ giao diện tĩnh. Cấu hình hiện tại không cần Cloud Functions, Cloud Storage hoặc tài khoản thanh toán Firebase.
+Chọn **Đăng nhập bằng Google** hoặc đăng ký bằng email/mật khẩu, rồi tạo bể và thêm hệ thống. Lần đầu dùng Google, Firebase tự tạo tài khoản và web tạo hồ sơ theo UID; những lần sau giữ bể đã có. Firebase **Spark miễn phí** cung cấp Authentication và Realtime Database; Vercel phục vụ giao diện tĩnh. Cấu hình hiện tại không cần Cloud Functions, Cloud Storage hoặc tài khoản thanh toán Firebase.
+
+Phiên đăng nhập được Firebase SDK lưu tại trình duyệt trên cùng tên miền và khôi phục khi tải lại trang. Nếu trình duyệt chặn lưu dữ liệu, web thông báo giới hạn của phiên. Google mở cửa sổ đăng nhập từ nút bấm; khi bị chặn, cho phép popup hoặc mở trang bằng Safari/Chrome/Edge. Web không lưu OAuth access token vào dữ liệu bể và không tự nối các tài khoản chỉ vì trùng email.
 
 Pico W cần tài khoản thiết bị riêng, được quản trị viên gán và có firmware theo [hướng dẫn Firebase Spark](docs/FIREBASE_SPARK.md). Chưa có thiết bị thật được cấp quyền trong repo này. Hệ thống chưa gửi heartbeat sẽ hiển thị mất liên lạc và khóa điều khiển.
 
